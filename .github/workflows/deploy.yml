@@ -56,7 +56,7 @@ jobs:
           JAR_FILE=build/libs/*.jar
           
           # SSH into the home server and prepare the deployment directory
-          ssh -p $SERVER_PORT $SERVER_HOST << EOF
+          ssh -t -p $SERVER_PORT $SERVER_HOST << EOF
             mkdir -p $DEPLOY_DIR
             rm -rf $DEPLOY_DIR/*
           EOF
@@ -65,7 +65,7 @@ jobs:
           scp -P $SERVER_PORT $JAR_FILE $SERVER_HOST:$DEPLOY_DIR
           
           # Restart the Spring Boot application using Java
-          ssh -p $SERVER_PORT $SERVER_HOST << EOF
+          ssh -t -p $SERVER_PORT $SERVER_HOST << EOF
             cd $DEPLOY_DIR
             nohup java -jar *.jar --spring.datasource.url=$DB_URL \
               --spring.datasource.username=$DB_USERNAME \
