@@ -36,10 +36,11 @@ jobs:
       # Deploy to the home server
       - name: Deploy to Home Server
         env:
+          SERVER_HOST: ${{ secrets.SERVER_HOST }}
+          SERVER_PORT: ${{ secrets.SERVER_PORT }}
           DB_URL: ${{ secrets.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          HOME_SERVER_HOST: ${{ secrets.HOME_SERVER_HOST }}
           NGINX_PATH: ${{ secrets.NGINX_PATH }}
         run: |
           # Define variables
@@ -48,16 +49,16 @@ jobs:
           JAR_FILE=build/libs/*.jar
           
           # SSH into the home server and deploy
-          ssh $HOME_SERVER_HOST << EOF
+          ssh $SERVER_HOST -p $SERVER_PORT << EOF
             mkdir -p $DEPLOY_DIR
             rm -rf $DEPLOY_DIR/*
           EOF
           
           # Copy the built jar to the home server
-          scp $JAR_FILE $HOME_SERVER_HOST:$DEPLOY_DIR
+          scp $JAR_FILE $SERVER_HOST:$DEPLOY_DIR
           
           # Restart the Spring Boot application using Java
-          ssh $HOME_SERVER_HOST << EOF
+          ssh $SERVER_HOST -p $SERVER_PORT << EOF
             cd $DEPLOY_DIR
             nohup java -jar *.jar --spring.datasource.url=$DB_URL \
               --spring.datasource.username=$DB_USERNAME \
