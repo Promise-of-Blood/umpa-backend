@@ -33,12 +33,14 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
 
-        # Add the SSH private key to authenticate with the server
+      # Add the SSH private key to authenticate with the server
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/umpa_key
           chmod 600 ~/.ssh/umpa_key
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/umpa_key
           ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
 
       # Deploy to the home server
