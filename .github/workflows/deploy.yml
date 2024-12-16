@@ -33,6 +33,14 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
 
+        # Add the SSH private key to authenticate with the server
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -p ${{ secrets.SERVER_PORT }} ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
       # Deploy to the home server
       - name: Deploy to Home Server
         env:
@@ -41,29 +49,27 @@ jobs:
           DB_URL: ${{ secrets.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          NGINX_PATH: ${{ secrets.NGINX_PATH }}
         run: |
           # Define variables
           APP_NAME=umpa-backend
           DEPLOY_DIR=~/umpa/$APP_NAME
           JAR_FILE=build/libs/*.jar
           
-          # SSH into the home server and deploy
-          ssh $SERVER_HOST -p $SERVER_PORT << EOF
+          # SSH into the home server and prepare the deployment directory
+          ssh -p $SERVER_PORT $SERVER_HOST << EOF
             mkdir -p $DEPLOY_DIR
             rm -rf $DEPLOY_DIR/*
           EOF
           
           # Copy the built jar to the home server
-          scp $JAR_FILE $SERVER_HOST:$DEPLOY_DIR
+          scp -P $SERVER_PORT $JAR_FILE $SERVER_HOST:$DEPLOY_DIR
           
           # Restart the Spring Boot application using Java
-          ssh $SERVER_HOST -p $SERVER_PORT << EOF
+          ssh -p $SERVER_PORT $SERVER_HOST << EOF
             cd $DEPLOY_DIR
             nohup java -jar *.jar --spring.datasource.url=$DB_URL \
               --spring.datasource.username=$DB_USERNAME \
               --spring.datasource.password=$DB_PASSWORD \
               > $DEPLOY_DIR/app.log 2>&1 &
           EOF
-          
         
