@@ -25,10 +25,7 @@ jobs:
           DB_URL: ${{ secrets.DB_URL }}
           DB_USERNAME: ${{ secrets.DB_USERNAME }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        run: ./gradlew build \
-          -PDB_URL=${{ secrets.DB_URL }} \
-          -PDB_USERNAME=${{ secrets.DB_USERNAME }} \
-          -PDB_PASSWORD=${{ secrets.DB_PASSWORD }}
+        run: ./gradlew build -PDB_URL=${{ secrets.DB_URL }} -PDB_USERNAME=${{ secrets.DB_USERNAME }} -PDB_PASSWORD=${{ secrets.DB_PASSWORD }}
 
   dependency-submission:
     runs-on: ubuntu-latest
