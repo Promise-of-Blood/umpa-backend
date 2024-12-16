@@ -1,0 +1,68 @@
+name: Deploy to Home Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Set up Java
+      - name: Set up Java 17
+        uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: 'temurin'
+
+      # Cache Gradle dependencies
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: gradle-
+
+      # Build the project
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # Deploy to the home server
+      - name: Deploy to Home Server
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          HOME_SERVER_HOST: ${{ secrets.HOME_SERVER_HOST }}
+          NGINX_PATH: ${{ secrets.NGINX_PATH }}
+        run: |
+          # Define variables
+          APP_NAME=umpa-backend
+          DEPLOY_DIR=~/umpa/$APP_NAME
+          JAR_FILE=build/libs/*.jar
+          
+          # SSH into the home server and deploy
+          ssh $HOME_SERVER_HOST << EOF
+            mkdir -p $DEPLOY_DIR
+            rm -rf $DEPLOY_DIR/*
+          EOF
+          
+          # Copy the built jar to the home server
+          scp $JAR_FILE $HOME_SERVER_HOST:$DEPLOY_DIR
+          
+          # Restart the Spring Boot application using Java
+          ssh $HOME_SERVER_HOST << EOF
+            cd $DEPLOY_DIR
+            nohup java -jar *.jar --spring.datasource.url=$DB_URL \
+              --spring.datasource.username=$DB_USERNAME \
+              --spring.datasource.password=$DB_PASSWORD \
+              > $DEPLOY_DIR/app.log 2>&1 &
+          EOF
+          
+        
