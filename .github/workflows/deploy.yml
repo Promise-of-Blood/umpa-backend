@@ -31,7 +31,7 @@ jobs:
 
       # Build the project
       - name: Build with Gradle
-        run: ./gradlew -Dskip.tests build
+        run: ./gradlew build -x test
 
       # Deploy to the home server
       - name: Deploy to Home Server
