@@ -37,7 +37,7 @@ jobs:
       - name: Set up SSH
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/umpa_key
+          echo "${{ secrets.SERVER_KEY }}" > ~/.ssh/umpa_key
           chmod 600 ~/.ssh/umpa_key
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/umpa_key
