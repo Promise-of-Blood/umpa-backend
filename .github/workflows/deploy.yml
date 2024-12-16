@@ -74,4 +74,3 @@ jobs:
               --spring.datasource.password=$DB_PASSWORD \
               > $DEPLOY_DIR/app.log 2>&1 &
           EOF
-        
