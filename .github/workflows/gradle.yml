@@ -44,6 +44,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: umpa-backend-${{ github.sha }}
+          path: build/libs/
       - name: Deploy to Remote Server using SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
