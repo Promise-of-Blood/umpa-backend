@@ -52,6 +52,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SERVER_KEY }}
           script: |
-            cd ~/umpa/backend
-            scp -r -i ${{ secrets.SERVER_KEY }} $GITHUB_WORKSPACE/build/libs/*.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/umpa/backend
+            cd ~/umpa/umpa-backend
+            scp -r $GITHUB_WORKSPACE/build/libs/*.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/umpa/umpa-backend
             echo "File copied to remote server"
