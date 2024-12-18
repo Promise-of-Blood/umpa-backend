@@ -45,7 +45,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Debugging - List Files
-        run: ls -R builds/
+        run: ls -R $GITHUB_WORKSPACE/builds/
       - name: Download Build Artifact
         uses: actions/download-artifact@v4
         with:
