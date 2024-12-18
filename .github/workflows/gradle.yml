@@ -48,7 +48,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: umpa-backend-${{ github.sha }}
-          path: builds/
+          path: builds/umpa-backend-${{ github.sha }}
       - name: Deploy to Remote Server using SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
