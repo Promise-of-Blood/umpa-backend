@@ -21,10 +21,7 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
       - name: Build with Gradle Wrapper
-        run: ./gradlew build \
-          -PDB_URL=${{ secrets.DB_URL }} \
-          -PDB_USERNAME=${{ secrets.DB_USERNAME }} \
-          -PDB_PASSWORD=${{ secrets.DB_PASSWORD }}
+        run: ./gradlew build -PDB_URL=${{ secrets.DB_URL }} -PDB_USERNAME=${{ secrets.DB_USERNAME }} -PDB_PASSWORD=${{ secrets.DB_PASSWORD }}
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
         with:
