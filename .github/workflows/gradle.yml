@@ -29,7 +29,7 @@ jobs:
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: build-artifact
+          name: umpa-backend-${{ github.sha }}
           path: build/libs/*.jar
 
   deploy:
@@ -52,8 +52,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SERVER_KEY }}
           script: |
-            whoami
-#            cd ~/umpa/umpa-backend
-#            scp /path/to/artifacts/your-project.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/path/to/server/directory/
-#            sudo systemctl restart your-service-name
-#            echo "Deployment successful!"
+            cd ~/umpa/backend
+            scp -r -i ${{ secrets.SERVER_KEY }} $GITHUB_WORKSPACE/build/libs/*.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/umpa/backend
+            echo "File copied to remote server"
