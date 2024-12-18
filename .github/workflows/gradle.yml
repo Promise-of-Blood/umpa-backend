@@ -44,6 +44,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+      - name: Debugging - List Files
+        run: ls -R builds/
       - name: Download Build Artifact
         uses: actions/download-artifact@v3
         with:
