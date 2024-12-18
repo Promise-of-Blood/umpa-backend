@@ -45,12 +45,12 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
       - name: Deploy to Remote Server using SSH
-        uses: appleboy/ssh-action@v0.1.1
+        uses: appleboy/ssh-action@v1.2.0
         with:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           port: ${{ secrets.SERVER_PORT }}
-          key: ${{ secrets.SERVER_SSH_KEY }}
+          key: ${{ secrets.SERVER_KEY }}
           script: |
             whoami
 #            cd ~/umpa/umpa-backend
