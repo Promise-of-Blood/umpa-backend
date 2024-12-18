@@ -22,9 +22,9 @@ jobs:
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582
       - name: Build with Gradle Wrapper
         env:
-            DB_URL: ${{ secrets.DB_URL }}
-            DB_USERNAME: ${{ secrets.DB_USERNAME }}
-            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: ./gradlew build
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v3
@@ -58,5 +58,4 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           script: |
             cd ~/umpa/umpa-backend
-            scp -r $GITHUB_WORKSPACE/builds ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/umpa/umpa-backend
-            echo "File copied to remote server"
+            scp -r $GITHUB_WORKSPACE/builds/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/umpa/umpa-backend
