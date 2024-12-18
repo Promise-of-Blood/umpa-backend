@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: umpa-backend-${{ github.sha }}
-          path: build/libs/*.jar
+          path: builds/
 
   deploy:
     runs-on: ubuntu-latest
@@ -48,7 +48,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: umpa-backend-${{ github.sha }}
-          path: build/libs/
+          path: builds/
       - name: Deploy to Remote Server using SSH
         uses: appleboy/ssh-action@v1.2.0
         with:
@@ -58,5 +58,5 @@ jobs:
           key: ${{ secrets.SERVER_KEY }}
           script: |
             cd ~/umpa/umpa-backend
-            scp -r $GITHUB_WORKSPACE/build/libs/*.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/umpa/umpa-backend
+            scp -r $GITHUB_WORKSPACE/builds/*.jar ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:~/umpa/umpa-backend
             echo "File copied to remote server"
