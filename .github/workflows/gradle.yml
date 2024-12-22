@@ -30,7 +30,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: umpa-backend-${{ github.sha }}
-          path: build/libs/*.jar
+          path: build/libs/!(*-plain).jar
 
   deploy:
     runs-on: ubuntu-latest
