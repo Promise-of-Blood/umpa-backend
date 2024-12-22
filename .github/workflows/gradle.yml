@@ -48,7 +48,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: umpa-backend-${{ github.sha }}
-          path: ./build/libs/*.jar
+          path: ./build/libs
       - name: SCP 파일 전송
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -56,5 +56,5 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SERVER_KEY }}
-          source: ./build/libs
+          source: ./build/libs/*.jar
           target: ~/umpa/umpa-backend
