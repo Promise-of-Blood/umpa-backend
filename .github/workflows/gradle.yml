@@ -56,5 +56,6 @@ jobs:
           username: ${{ secrets.SERVER_USER }}
           port: ${{ secrets.SERVER_PORT }}
           key: ${{ secrets.SERVER_KEY }}
+          timeout: '120s'
           source: ./build/libs/*.jar
           target: ~/umpa/umpa-backend
