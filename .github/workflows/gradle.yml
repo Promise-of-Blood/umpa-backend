@@ -29,8 +29,8 @@ jobs:
       - name: 빌드 결과물 업로드
         uses: actions/upload-artifact@v4
         with:
-          name: umpa-backend
-          path: build/libs/!(*-plain).jar
+          name: umpa-backend-${{ github.sha }}
+          path: build/libs/umpa-backend-*.jar
 
   deploy:
     runs-on: ubuntu-latest
@@ -47,7 +47,7 @@ jobs:
       - name: 빌드 결과물 다운로드
         uses: actions/download-artifact@v4
         with:
-          name: umpa-backend
+          name: umpa-backend-${{ github.sha }}
           path: ./build/libs
       - name: SCP 파일 전송
         uses: appleboy/scp-action@v0.1.7

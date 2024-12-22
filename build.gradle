@@ -5,12 +5,16 @@ plugins {
 }
 
 group = 'promise-of-blood'
-version = '0.0.1-SNAPSHOT'
+version = '0.1.0'
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(17)
     }
+}
+
+jar {
+    enabled = false
 }
 
 configurations {
