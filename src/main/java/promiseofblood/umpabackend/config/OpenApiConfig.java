@@ -20,7 +20,7 @@ public class OpenApiConfig {
         .info(
             new io.swagger.v3.oas.models.info.Info()
                 .title("음파 서버 API")
-                .version("1.0")
+                .version("0.1.0")
                 .description("음- 하면서 내쉬고, 파- 하면서 들이쉬세요."));
   }
 }
