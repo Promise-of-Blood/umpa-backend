@@ -8,3 +8,8 @@ VALUES ('피아노'),
        ('전자음악'),
        ('관악');
 
+
+INSERT INTO university (name)
+VALUES ('서울대학교'),
+       ('연세대학교'),
+       ('고려대학교');
