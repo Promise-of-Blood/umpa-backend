@@ -25,10 +25,10 @@ spring:
 # OpenAPI
 springdoc:
   api-docs:
-    path: /openapi-json
+    path: /api/docs/openapi-json
 
   swagger-ui:
-    path: /swagger-ui
+    path: /api/docs
     layout: BaseLayout
     tags-sorter: alpha
     operations-sorter: alpha
