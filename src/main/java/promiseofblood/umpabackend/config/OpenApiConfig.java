@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @OpenAPIDefinition(
     servers = {
-      @Server(url = "http://localhost:8080", description = "로컬 서버"),
+      @Server(url = "http://localhost:8000", description = "로컬 서버"),
       @Server(url = "https://tgoddessana.duckdns.org", description = "프로덕션 서버")
     })
 public class OpenApiConfig {
