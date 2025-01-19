@@ -16,6 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/universities")
 @Tag(name = "학교 API")
+//
 public class UniversityController {
   private final UserService userService;
 
