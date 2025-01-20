@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "university")
-public class University {
+@Table(name = "colleges")
+public class College {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
