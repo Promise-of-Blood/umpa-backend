@@ -20,15 +20,7 @@ public class UserService {
     return majorRepository.findAll().stream().map(MajorDto::of).toList();
   }
 
-  public List<CollegeDto> listColleges(List<Long> excludeIds) {
-
-    if (excludeIds == null) {
-      return collegeRepository.findAll().stream().map(CollegeDto::of).toList();
-    } else {
-      return collegeRepository.findAll().stream()
-          .filter(college -> !excludeIds.contains(college.getId()))
-          .map(CollegeDto::of)
-          .toList();
-    }
+  public List<CollegeDto> listColleges() {
+    return collegeRepository.findAll().stream().map(CollegeDto::of).toList();
   }
 }
