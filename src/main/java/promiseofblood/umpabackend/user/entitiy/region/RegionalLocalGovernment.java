@@ -1,12 +1,15 @@
-package promiseofblood.umpabackend.user.entitiy;
+package promiseofblood.umpabackend.user.entitiy.region;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import promiseofblood.umpabackend.common.entitiy.IdEntitiy;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -15,4 +18,7 @@ import promiseofblood.umpabackend.common.entitiy.IdEntitiy;
 public class RegionalLocalGovernment extends IdEntitiy {
 
   private String name;
+
+  @OneToMany(mappedBy = "regionalLocalGovernment")
+  private List<BasicLocalGovernment> basicLocalGovernments;
 }

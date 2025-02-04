@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.user.entitiy;
+package promiseofblood.umpabackend.user.entitiy.region;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
