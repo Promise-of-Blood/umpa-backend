@@ -10,16 +10,18 @@ spring:
     url: ${DB_URL}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: create
     defer-datasource-initialization: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
 
   sql:
     init:
       mode: always
-      schema-locations: classpath:db/initial-data.sql
+      data-locations: classpath:db/initial-data.sql
 
 # server
 server:
