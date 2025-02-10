@@ -12,7 +12,7 @@ import lombok.experimental.SuperBuilder;
 @MappedSuperclass
 @NoArgsConstructor
 @SuperBuilder
-public class IdEntity {
+public abstract class IdEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

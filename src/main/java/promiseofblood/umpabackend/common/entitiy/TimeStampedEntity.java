@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @NoArgsConstructor
 @SuperBuilder
-public class TimeStampedEntity extends IdEntitiy {
+public abstract class TimeStampedEntity extends IdEntity {
 
   @Column(updatable = false, nullable = false)
   private LocalDateTime createdAt;
