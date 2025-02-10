@@ -374,4 +374,4 @@ VALUES ('강남구', (SELECT id FROM regional_local_governments WHERE name = '�
        ('함양군', (SELECT id FROM regional_local_governments WHERE name = '경상남도')),
        ('합천군', (SELECT id FROM regional_local_governments WHERE name = '경상남도')),
        ('서귀포시', (SELECT id FROM regional_local_governments WHERE name = '제주특별자치도')),
-       ('제주시', (SELECT id FROM regional_local_governments WHERE name = '제주특별자치도'));
+       ('제주시', (SELECT id FROM regional_local_governments WHERE name = '제주특별자치도'))
