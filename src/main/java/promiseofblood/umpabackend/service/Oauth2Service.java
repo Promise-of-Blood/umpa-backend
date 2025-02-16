@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.HttpHeaders;
-import promiseofblood.umpabackend.dto.request.RegisterRequest;
+import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.external.NaverProfileResponse;
 import promiseofblood.umpabackend.dto.external.NaverTokenResponse;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -33,12 +33,12 @@ public class Oauth2Service {
   private final Oauth2ProviderRepository oauth2ProviderRepository;
 
   @Transactional
-  public UserDto register(RegisterRequest registerRequest) {
+  public UserDto register(Oauth2RegisterRequest oauth2RegisterRequest) {
     Oauth2Provider naver = oauth2ProviderRepository.getByName("NAVER");
 
     // 네이버 accessToken 으로 Me api 호출
     HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Bearer " + registerRequest.getAccessToken());
+    headers.add("Authorization", "Bearer " + oauth2RegisterRequest.getAccessToken());
     HttpEntity<String> request = new HttpEntity<>(headers);
     ResponseEntity<NaverProfileResponse> response = restTemplate.exchange(
             naver.getProfileUri(),
@@ -50,7 +50,7 @@ public class Oauth2Service {
 
     // User 객체 생성
     User user = User.builder()
-            .name(registerRequest.getName())
+            .name(oauth2RegisterRequest.getName())
             .profileImageUrl(naverProfileApiResponseDto.getResponse().getProfileImage())
             .build();
     userRepository.save(user);
@@ -58,8 +58,8 @@ public class Oauth2Service {
     // SocialUser 객체 생성
     SocialUser socialUser = SocialUser.builder()
             .socialId(naverProfileApiResponseDto.getResponse().getId())
-            .accessToken(registerRequest.getAccessToken())
-            .refreshToken(registerRequest.getRefreshToken())
+            .accessToken(oauth2RegisterRequest.getAccessToken())
+            .refreshToken(oauth2RegisterRequest.getRefreshToken())
             .user(user)
             .oauth2Provider(oauth2ProviderRepository.getByName("NAVER"))
             .build();

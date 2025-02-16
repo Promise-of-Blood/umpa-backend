@@ -1,15 +1,14 @@
 package promiseofblood.umpabackend.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import promiseofblood.umpabackend.dto.request.RegisterRequest;
+import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.external.NaverTokenResponse;
-import promiseofblood.umpabackend.dto.response.NaverLoginUrlResponse;
+import promiseofblood.umpabackend.dto.response.Oauth2ProviderLoginUrlResponse;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.service.Oauth2Service;
 
@@ -20,18 +19,17 @@ import promiseofblood.umpabackend.service.Oauth2Service;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-  private final Oauth2Service oAuth2Service;
+  private final Oauth2Service oauth2Service;
 
   @Operation(
           summary = "소셜 회원가입",
           description = "소셜 로그인을 통해 회원가입합니다."
   )
-  @PostMapping("/register/oauth2/{oauth2Provider}")
+  @PostMapping("/register/oauth2")
   public ResponseEntity<UserDto> registerWithNaver(
-          @Parameter(description = "OAuth2 소셜 로그인 제공자의 이름.") @PathVariable String oauth2Provider,
-          @RequestBody RegisterRequest registerRequest
+          @RequestBody Oauth2RegisterRequest oauth2RegisterRequest
   ) {
-    UserDto socialUserDto = oAuth2Service.register(registerRequest);
+    UserDto socialUserDto = oauth2Service.register(oauth2RegisterRequest);
 
     return ResponseEntity.ok(socialUserDto);
   }
@@ -44,7 +42,7 @@ public class AuthController {
   @GetMapping("/register/oauth2/naver/access-token")
   public NaverTokenResponse getAccessToken(@RequestParam String code) {
 
-    return oAuth2Service.getAccessToken(code);
+    return oauth2Service.getAccessToken(code);
   }
 
   @Operation(
@@ -53,9 +51,9 @@ public class AuthController {
                   "개발용으로만 사용하세요."
   )
   @GetMapping("/register/oauth2/naver/url")
-  public NaverLoginUrlResponse getNaverUrl() {
+  public Oauth2ProviderLoginUrlResponse getNaverUrl() {
 
-    return new NaverLoginUrlResponse(oAuth2Service.getLoginUrl());
+    return new Oauth2ProviderLoginUrlResponse(oauth2Service.getLoginUrl());
   }
 
 }

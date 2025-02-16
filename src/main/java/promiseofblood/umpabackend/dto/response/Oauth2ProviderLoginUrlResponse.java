@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class NaverLoginUrlResponse {
+public class Oauth2ProviderLoginUrlResponse {
   private String url;
 }
