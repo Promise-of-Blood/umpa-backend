@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.user.dto.oauth2.naver;
+package promiseofblood.umpabackend.user.dto.user.oauth2.naver;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;

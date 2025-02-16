@@ -7,8 +7,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import promiseofblood.umpabackend.user.dto.RegisterRequestDto;
-import promiseofblood.umpabackend.user.dto.oauth2.naver.NaverTokenApiResponseDto;
-import promiseofblood.umpabackend.user.dto.oauth2.naver.NaverLoginUrlResponseDto;
+import promiseofblood.umpabackend.user.dto.user.oauth2.naver.NaverTokenApiResponseDto;
+import promiseofblood.umpabackend.user.dto.user.oauth2.naver.NaverLoginUrlResponseDto;
 import promiseofblood.umpabackend.user.dto.user.UserDto;
 import promiseofblood.umpabackend.user.service.OAuth2Service;
 

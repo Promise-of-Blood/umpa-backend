@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.user.dto.oauth2.naver;
+package promiseofblood.umpabackend.user.dto.user.oauth2.naver;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

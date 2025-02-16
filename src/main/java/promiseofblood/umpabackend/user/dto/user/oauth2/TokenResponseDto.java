@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.user.dto.oauth2;
+package promiseofblood.umpabackend.user.dto.user.oauth2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
