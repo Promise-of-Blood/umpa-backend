@@ -7,7 +7,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import promiseofblood.umpabackend.common.entitiy.IdEntitiy;
+import promiseofblood.umpabackend.common.entitiy.IdEntity;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Table(name = "regional_local_governments") // 지역자치단체 (도, 광역시, 특별시, 특별자치시, 특별자치도)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RegionalLocalGovernment extends IdEntitiy {
+public class RegionalLocalGovernment extends IdEntity {
 
   private String name;
 

@@ -11,24 +11,22 @@ import promiseofblood.umpabackend.common.entitiy.TimeStampedEntity;
 @Entity
 @Getter
 @SuperBuilder
-@Table(name = "users")
+@Table(name = "social_users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends TimeStampedEntity {
+public class SocialUser extends TimeStampedEntity {
 
-  private String name;
+  private String socialId;
 
-  private String profileImageUrl;
+  private String accessToken;
 
-  @OneToOne
-  @JoinColumn(name = "major_id")
-  private Major major;
+  private String refreshToken;
 
   @OneToOne
-  @JoinColumn(name = "user_type_id")
-  private UserType userType;
+  @JoinColumn(name = "user_id")
+  private User user;
 
-  @OneToOne
-  @JoinColumn(name = "college_id")
-  private College college;
-  
+  @ManyToOne
+  @JoinColumn(name = "oauth2_provider_id")
+  private Oauth2Provider oauth2Provider;
+
 }
