@@ -4,16 +4,13 @@ import jakarta.persistence.*;
 
 import lombok.*;
 import lombok.NoArgsConstructor;
+import promiseofblood.umpabackend.common.entitiy.IdEntity;
 
 @Entity
 @Getter
 @Table(name = "majors")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Major {
-
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+public class Major extends IdEntity {
 
   private String name;
 }

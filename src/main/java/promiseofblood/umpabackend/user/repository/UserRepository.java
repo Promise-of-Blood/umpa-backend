@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 import promiseofblood.umpabackend.user.entitiy.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {}
+public interface UserRepository extends JpaRepository<User, Long> {
+}
