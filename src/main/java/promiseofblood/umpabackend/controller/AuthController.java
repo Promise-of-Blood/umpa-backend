@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.external.NaverTokenResponse;
-import promiseofblood.umpabackend.dto.response.Oauth2ProviderLoginUrlResponse;
+import promiseofblood.umpabackend.dto.response.Oauth2LoginUrlResponse;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.service.Oauth2Service;
 
@@ -40,9 +40,9 @@ public class AuthController {
                   "내부 개발용으로만 사용하세요."
   )
   @GetMapping("/register/oauth2/naver/access-token")
-  public NaverTokenResponse getAccessToken(@RequestParam String code) {
+  public ResponseEntity<NaverTokenResponse> getAccessToken(@RequestParam String code) {
 
-    return oauth2Service.getAccessToken(code);
+    return ResponseEntity.ok(oauth2Service.getAccessToken(code));
   }
 
   @Operation(
@@ -51,9 +51,9 @@ public class AuthController {
                   "개발용으로만 사용하세요."
   )
   @GetMapping("/register/oauth2/naver/url")
-  public Oauth2ProviderLoginUrlResponse getNaverUrl() {
+  public ResponseEntity<Oauth2LoginUrlResponse> getNaverUrl() {
 
-    return new Oauth2ProviderLoginUrlResponse(oauth2Service.getLoginUrl());
+    return ResponseEntity.ok(oauth2Service.getLoginUrl());
   }
 
 }

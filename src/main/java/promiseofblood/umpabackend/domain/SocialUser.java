@@ -19,11 +19,7 @@ public class SocialUser extends TimeStampedEntity {
   private String accessToken;
 
   private String refreshToken;
-
-  @OneToOne
-  @JoinColumn(name = "user_id")
-  private User user;
-
+  
   @ManyToOne
   @JoinColumn(name = "oauth2_provider_id")
   private Oauth2Provider oauth2Provider;

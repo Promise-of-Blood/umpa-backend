@@ -13,11 +13,13 @@ public class UserDto {
   private Long id;
   private String name;
   private String profileImageUrl;
+  private SocialUserDto socialUser;
 
   public static UserDto of(User user) {
     return UserDto.builder()
             .id(user.getId())
             .name(user.getName())
+            .socialUser(SocialUserDto.of(user.getSocialUser()))
             .profileImageUrl(user.getProfileImageUrl())
             .build();
   }

@@ -36,6 +36,10 @@ public class User extends TimeStampedEntity {
   @JoinColumn(name = "college_id")
   private College college;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "social_user_id")
+  private SocialUser socialUser;
+
   @OneToOne
   @JoinColumn(name = "user_type_id")
   private UserType userType;

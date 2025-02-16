@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 @Getter
 @AllArgsConstructor
-public class Oauth2ProviderLoginUrlResponse {
+public class Oauth2LoginUrlResponse {
   private String url;
 }

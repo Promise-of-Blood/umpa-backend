@@ -14,6 +14,9 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Oauth2RegisterRequest {
   @NotBlank
+  private String oauth2ProviderName;
+
+  @NotBlank
   @Size(min = 2, max = 20)
   @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "이름은 영문, 숫자, 한글만 가능합니다.")
   private String name;

@@ -17,6 +17,7 @@ import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.domain.Oauth2Provider;
 import promiseofblood.umpabackend.domain.SocialUser;
 import promiseofblood.umpabackend.domain.User;
+import promiseofblood.umpabackend.dto.response.Oauth2LoginUrlResponse;
 import promiseofblood.umpabackend.repository.Oauth2ProviderRepository;
 import promiseofblood.umpabackend.repository.SocialUserRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
@@ -29,19 +30,18 @@ public class Oauth2Service {
 
   private final RestTemplate restTemplate;
   private final UserRepository userRepository;
-  private final SocialUserRepository socialUserRepository;
   private final Oauth2ProviderRepository oauth2ProviderRepository;
 
   @Transactional
   public UserDto register(Oauth2RegisterRequest oauth2RegisterRequest) {
-    Oauth2Provider naver = oauth2ProviderRepository.getByName("NAVER");
+    Oauth2Provider oauth2Provider = oauth2ProviderRepository.getByName(oauth2RegisterRequest.getOauth2ProviderName());
 
     // 네이버 accessToken 으로 Me api 호출
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + oauth2RegisterRequest.getAccessToken());
     HttpEntity<String> request = new HttpEntity<>(headers);
     ResponseEntity<NaverProfileResponse> response = restTemplate.exchange(
-            naver.getProfileUri(),
+            oauth2Provider.getProfileUri(),
             HttpMethod.GET,
             request,
             NaverProfileResponse.class
@@ -52,18 +52,16 @@ public class Oauth2Service {
     User user = User.builder()
             .name(oauth2RegisterRequest.getName())
             .profileImageUrl(naverProfileApiResponseDto.getResponse().getProfileImage())
+            .socialUser(
+                    SocialUser.builder()
+                            .socialId(naverProfileApiResponseDto.getResponse().getId())
+                            .accessToken(oauth2RegisterRequest.getAccessToken())
+                            .refreshToken(oauth2RegisterRequest.getRefreshToken())
+                            .oauth2Provider(oauth2Provider)
+                            .build()
+            )
             .build();
     userRepository.save(user);
-
-    // SocialUser 객체 생성
-    SocialUser socialUser = SocialUser.builder()
-            .socialId(naverProfileApiResponseDto.getResponse().getId())
-            .accessToken(oauth2RegisterRequest.getAccessToken())
-            .refreshToken(oauth2RegisterRequest.getRefreshToken())
-            .user(user)
-            .oauth2Provider(oauth2ProviderRepository.getByName("NAVER"))
-            .build();
-    socialUserRepository.save(socialUser);
 
     return UserDto.of(user);
   }
@@ -84,20 +82,23 @@ public class Oauth2Service {
             NaverTokenResponse.class
     );
     log.info("response: {}", response);
+
     return response;
   }
 
-  public String getLoginUrl() {
+  public Oauth2LoginUrlResponse getLoginUrl() {
     Oauth2Provider naver = oauth2ProviderRepository.getByName("NAVER");
 
     String clientId = naver.getClientId();
     String redirectUri = naver.getRedirectUris().get(0);
     String baseUrl = naver.getLoginUrl();
 
-    return baseUrl +
-            "?response_type=code" +
-            "&client_id=" + clientId +
-            "&redirect_uri=" + redirectUri;
+    return Oauth2LoginUrlResponse.builder()
+            .url(baseUrl +
+                    "?response_type=code" +
+                    "&client_id=" + clientId +
+                    "&redirect_uri=" + redirectUri)
+            .build();
   }
 
 }

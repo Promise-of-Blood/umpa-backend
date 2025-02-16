@@ -16,8 +16,6 @@ public class SocialUserDto {
 
   private String refreshToken;
 
-  private Long userId;
-
   private Long oauth2ProviderId;
 
   public static SocialUserDto of(SocialUser socialUser) {
@@ -25,7 +23,6 @@ public class SocialUserDto {
             .socialId(socialUser.getSocialId())
             .accessToken(socialUser.getAccessToken())
             .refreshToken(socialUser.getRefreshToken())
-            .userId(socialUser.getUser().getId())
             .oauth2ProviderId(socialUser.getOauth2Provider().getId())
             .build();
   }
