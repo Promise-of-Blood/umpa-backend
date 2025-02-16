@@ -33,13 +33,15 @@ public class OAuth2Service {
   private final Oauth2ProviderRepository oauth2ProviderRepository;
 
   @Transactional
-  public UserDto registerWithNaver(RegisterRequestDto registerRequestDto) {
+  public UserDto register(RegisterRequestDto registerRequestDto) {
+    Oauth2Provider naver = oauth2ProviderRepository.getByName("NAVER");
+
     // 네이버 accessToken 으로 Me api 호출
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + registerRequestDto.getAccessToken());
     HttpEntity<String> request = new HttpEntity<>(headers);
     ResponseEntity<NaverProfileApiResponseDto> response = restTemplate.exchange(
-            "https://openapi.naver.com/v1/nid/me",
+            naver.getProfileUri(),
             HttpMethod.GET,
             request,
             NaverProfileApiResponseDto.class

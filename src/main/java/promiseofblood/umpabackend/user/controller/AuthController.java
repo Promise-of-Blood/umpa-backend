@@ -1,6 +1,7 @@
 package promiseofblood.umpabackend.user.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,29 +23,16 @@ public class AuthController {
   private final OAuth2Service oAuth2Service;
 
   @Operation(
-          summary = "구글로 회원가입",
-          description = "구글에서 발급한 토큰을 받아 회원가입합니다."
+          summary = "소셜 회원가입",
+          description = "소셜 로그인을 통해 회원가입합니다."
   )
-  @PostMapping("/register/oauth2/google")
-  public void registerWithGoogle() {
-  }
+  @PostMapping("/register/oauth2/{oauth2Provider}")
+  public ResponseEntity<UserDto> registerWithNaver(
+          @Parameter(description = "OAuth2 소셜 로그인 제공자의 이름.") @PathVariable String oauth2Provider,
+          @RequestBody RegisterRequestDto registerRequestDto
+  ) {
 
-  @Operation(
-          summary = "카카오로 회원가입",
-          description = "카카오에서 발급한 토큰을 받아 회원가입합니다."
-  )
-  @PostMapping("/register/oauth2/kakao")
-  public void registerWithKakao() {
-  }
-
-  @Operation(
-          summary = "네이버로 회원가입",
-          description = "네이버에서 발급한 토큰을 받아 회원가입합니다."
-  )
-  @PostMapping("/register/oauth2/naver")
-  public ResponseEntity<UserDto> registerWithNaver(@RequestBody RegisterRequestDto registerRequestDto) {
-
-    UserDto socialUserDto = oAuth2Service.registerWithNaver(registerRequestDto);
+    UserDto socialUserDto = oAuth2Service.register(registerRequestDto);
 
     return ResponseEntity.ok(socialUserDto);
   }
