@@ -13,7 +13,6 @@ import org.springframework.http.HttpHeaders;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.external.NaverProfileResponse;
 import promiseofblood.umpabackend.dto.external.NaverTokenResponse;
-import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.domain.Oauth2Provider;
 import promiseofblood.umpabackend.domain.SocialUser;
 import promiseofblood.umpabackend.domain.User;
