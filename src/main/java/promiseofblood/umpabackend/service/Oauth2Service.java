@@ -18,9 +18,7 @@ import promiseofblood.umpabackend.domain.Oauth2Provider;
 import promiseofblood.umpabackend.domain.SocialUser;
 import promiseofblood.umpabackend.domain.User;
 import promiseofblood.umpabackend.dto.response.Oauth2LoginUrlResponse;
-import promiseofblood.umpabackend.repository.Oauth2ProviderRepository;
-import promiseofblood.umpabackend.repository.SocialUserRepository;
-import promiseofblood.umpabackend.repository.UserRepository;
+import promiseofblood.umpabackend.repository.*;
 
 
 @Slf4j
@@ -29,12 +27,15 @@ import promiseofblood.umpabackend.repository.UserRepository;
 public class Oauth2Service {
 
   private final RestTemplate restTemplate;
+  private final UserTypeRepository userTypeRepository;
+  private final CollegeRepository collegeRepository;
   private final UserRepository userRepository;
+  private final MajorRepository majorRepository;
   private final Oauth2ProviderRepository oauth2ProviderRepository;
 
   @Transactional
   public UserDto register(Oauth2RegisterRequest oauth2RegisterRequest) {
-    Oauth2Provider oauth2Provider = oauth2ProviderRepository.getByName(oauth2RegisterRequest.getOauth2ProviderName());
+    Oauth2Provider oauth2Provider = oauth2ProviderRepository.getByName(oauth2RegisterRequest.getOauth2Provider());
 
     // 네이버 accessToken 으로 Me api 호출
     HttpHeaders headers = new HttpHeaders();
@@ -52,6 +53,13 @@ public class Oauth2Service {
     User user = User.builder()
             .name(oauth2RegisterRequest.getName())
             .profileImageUrl(naverProfileApiResponseDto.getResponse().getProfileImage())
+            .userType(userTypeRepository.getByName(oauth2RegisterRequest.getUserType()))
+            .major(majorRepository.getByName(oauth2RegisterRequest.getMajor()))
+            .wantedColleges(
+                    oauth2RegisterRequest.getWantedColleges().stream()
+                            .map(collegeRepository::getByName)
+                            .toList()
+            )
             .socialUser(
                     SocialUser.builder()
                             .socialId(naverProfileApiResponseDto.getResponse().getId())

@@ -6,4 +6,5 @@ import promiseofblood.umpabackend.domain.Major;
 
 @Repository
 public interface MajorRepository extends JpaRepository<Major, Long> {
+  Major getByName(String name);
 }

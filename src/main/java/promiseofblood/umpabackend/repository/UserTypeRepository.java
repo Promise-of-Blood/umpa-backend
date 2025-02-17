@@ -2,9 +2,10 @@ package promiseofblood.umpabackend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import promiseofblood.umpabackend.domain.College;
+import promiseofblood.umpabackend.domain.UserType;
+
 
 @Repository
-public interface CollegeRepository extends JpaRepository<College, Long> {
-  College getByName(String name);
+public interface UserTypeRepository extends JpaRepository<UserType, Long> {
+  UserType getByName(String name);
 }

@@ -3,6 +3,7 @@ package promiseofblood.umpabackend.dto.request;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Oauth2RegisterRequest {
   @NotBlank
-  private String oauth2ProviderName;
+  private String oauth2Provider;
+
+  @NotNull
+  private String userType;
 
   @NotBlank
   @Size(min = 2, max = 20)
@@ -22,10 +26,10 @@ public class Oauth2RegisterRequest {
   private String name;
 
   @NotBlank
-  private Long majorId;
+  private String major;
 
   @Size(min = 3, max = 3)
-  private List<Long> collegeIds;
+  private List<String> wantedColleges;
 
   @NotBlank
   private String accessToken;
