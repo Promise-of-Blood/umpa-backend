@@ -18,6 +18,7 @@ import promiseofblood.umpabackend.domain.Oauth2Provider;
 import promiseofblood.umpabackend.domain.SocialUser;
 import promiseofblood.umpabackend.domain.User;
 import promiseofblood.umpabackend.dto.response.Oauth2LoginUrlResponse;
+import promiseofblood.umpabackend.dto.response.Oauth2RegisterResponse;
 import promiseofblood.umpabackend.repository.*;
 
 
@@ -34,7 +35,7 @@ public class Oauth2Service {
   private final Oauth2ProviderRepository oauth2ProviderRepository;
 
   @Transactional
-  public UserDto register(Oauth2RegisterRequest oauth2RegisterRequest) {
+  public Oauth2RegisterResponse register(Oauth2RegisterRequest oauth2RegisterRequest) {
     Oauth2Provider oauth2Provider = oauth2ProviderRepository.getByName(oauth2RegisterRequest.getOauth2Provider());
 
     // 네이버 accessToken 으로 Me api 호출
@@ -71,7 +72,7 @@ public class Oauth2Service {
             .build();
     userRepository.save(user);
 
-    return UserDto.of(user);
+    return Oauth2RegisterResponse.of(user);
   }
 
   public NaverTokenResponse getAccessToken(String code) {

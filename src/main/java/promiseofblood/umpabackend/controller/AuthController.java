@@ -10,6 +10,7 @@ import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.external.NaverTokenResponse;
 import promiseofblood.umpabackend.dto.response.Oauth2LoginUrlResponse;
 import promiseofblood.umpabackend.dto.UserDto;
+import promiseofblood.umpabackend.dto.response.Oauth2RegisterResponse;
 import promiseofblood.umpabackend.service.Oauth2Service;
 
 @Slf4j
@@ -26,12 +27,12 @@ public class AuthController {
           description = "소셜 로그인을 통해 회원가입합니다."
   )
   @PostMapping("/register/oauth2")
-  public ResponseEntity<UserDto> registerWithNaver(
+  public ResponseEntity<Oauth2RegisterResponse> registerWithNaver(
           @RequestBody Oauth2RegisterRequest oauth2RegisterRequest
   ) {
-    UserDto socialUserDto = oauth2Service.register(oauth2RegisterRequest);
+    Oauth2RegisterResponse oauth2RegisterResponse = oauth2Service.register(oauth2RegisterRequest);
 
-    return ResponseEntity.ok(socialUserDto);
+    return ResponseEntity.ok(oauth2RegisterResponse);
   }
 
   @Operation(
