@@ -20,11 +20,12 @@ public class Oauth2RegisterResponse {
   private String major;
   private List<String> wantedColleges;
   private String oauth2Provider;
-
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
-  public static Oauth2RegisterResponse of(User user) {
+  JwtResponse jwt;
+
+  public static Oauth2RegisterResponse of(User user, String accessToken) {
     return Oauth2RegisterResponse.builder()
             .userType(user.getUserType().getName())
             .name(user.getName())
@@ -38,6 +39,11 @@ public class Oauth2RegisterResponse {
             .oauth2Provider(user.getSocialUser().getOauth2Provider().getName())
             .createdAt(user.getCreatedAt())
             .updatedAt(user.getUpdatedAt())
+            .jwt(JwtResponse.builder()
+                    .accessToken(accessToken)
+                    .refreshToken(null)
+                    .build()
+            )
             .build();
   }
 }

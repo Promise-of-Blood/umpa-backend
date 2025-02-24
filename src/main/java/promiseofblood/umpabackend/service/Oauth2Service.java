@@ -19,6 +19,7 @@ import promiseofblood.umpabackend.domain.User;
 import promiseofblood.umpabackend.dto.response.Oauth2LoginUrlResponse;
 import promiseofblood.umpabackend.dto.response.Oauth2RegisterResponse;
 import promiseofblood.umpabackend.repository.*;
+import promiseofblood.umpabackend.utils.JwtUtils;
 
 
 @Slf4j
@@ -71,7 +72,8 @@ public class Oauth2Service {
             .build();
     userRepository.save(user);
 
-    return Oauth2RegisterResponse.of(user);
+    String accessToken = JwtUtils.createJwt(user.getId(), user.getName());
+    return Oauth2RegisterResponse.of(user, accessToken);
   }
 
   public NaverTokenResponse getAccessToken(String code) {
