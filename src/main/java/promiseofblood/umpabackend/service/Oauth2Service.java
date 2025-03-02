@@ -72,7 +72,7 @@ public class Oauth2Service {
             .build();
     userRepository.save(user);
 
-    String accessToken = JwtUtils.createJwt(user.getId(), user.getName());
+    String accessToken = JwtUtils.createAccessToken(user.getId(), user.getName());
     return Oauth2RegisterResponse.of(user, accessToken);
   }
 
@@ -84,16 +84,13 @@ public class Oauth2Service {
     String clientSecret = naver.getClientSecret();
     String BaseUrl = naver.getTokenUri();
 
-    NaverTokenResponse response = restTemplate.getForObject(
+    return restTemplate.getForObject(
             BaseUrl + "?grant_type=" + grantType +
                     "&client_id=" + clientId +
                     "&client_secret=" + clientSecret +
                     "&code=" + code,
             NaverTokenResponse.class
     );
-    log.info("response: {}", response);
-
-    return response;
   }
 
   public Oauth2LoginUrlResponse getLoginUrl() {

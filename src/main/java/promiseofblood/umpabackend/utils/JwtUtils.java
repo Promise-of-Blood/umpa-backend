@@ -12,7 +12,7 @@ import java.util.Date;
 @RequiredArgsConstructor
 public class JwtUtils {
 
-  public static String createJwt(Long id, String name) {
+  public static String createAccessToken(Long id, String name) {
     String secretKey = "secretKeysecretKeysecretKeysecretKeysecretKey";
     Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
 
