@@ -17,11 +17,11 @@ public class JwtUtils {
     Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
 
     return Jwts.builder()
-            .claim("id", id)
-            .claim("name", name)
-            .issuedAt(new Date(System.currentTimeMillis()))
-            .expiration(new Date(System.currentTimeMillis() + 3600000))
-            .signWith(key)
-            .compact();
+      .claim("id", id)
+      .claim("name", name)
+      .issuedAt(new Date(System.currentTimeMillis()))
+      .expiration(new Date(System.currentTimeMillis() + 3600000 * 24 * 7))
+      .signWith(key)
+      .compact();
   }
 }
