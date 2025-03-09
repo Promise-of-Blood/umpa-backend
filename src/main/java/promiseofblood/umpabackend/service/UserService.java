@@ -2,10 +2,12 @@ package promiseofblood.umpabackend.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import promiseofblood.umpabackend.domain.User;
 import promiseofblood.umpabackend.dto.CollegeDto;
 import promiseofblood.umpabackend.dto.MajorDto;
 import promiseofblood.umpabackend.dto.RegionalLocalGovernmentDto;
 import promiseofblood.umpabackend.dto.response.UserResponse;
+import promiseofblood.umpabackend.exception.NotFoundException;
 import promiseofblood.umpabackend.repository.CollegeRepository;
 import promiseofblood.umpabackend.repository.MajorRepository;
 import promiseofblood.umpabackend.repository.RegionRepository;
@@ -28,8 +30,10 @@ public class UserService {
   }
 
   public void deleteUser(Long id) {
-    
-    userRepository.deleteById(id);
+    User user = userRepository.findById(id)
+      .orElseThrow(() -> new NotFoundException("삭제하려는 사용자를 찾을 수 없습니다."));
+
+    userRepository.delete(user);
   }
 
   public List<MajorDto> listMajors() {
