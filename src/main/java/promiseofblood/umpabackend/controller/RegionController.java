@@ -9,8 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import promiseofblood.umpabackend.dto.RegionalLocalGovernmentDto;
-import promiseofblood.umpabackend.service.UserService;
+import promiseofblood.umpabackend.dto.RegionCategoryDto;
+import promiseofblood.umpabackend.domain.service.UserService;
 
 import java.util.List;
 
@@ -20,11 +20,12 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/regions")
 public class RegionController {
+
   private final UserService userService;
 
   @Operation(summary = "지역 목록 조회")
   @GetMapping("")
-  public ResponseEntity<List<RegionalLocalGovernmentDto>> regions() {
+  public ResponseEntity<List<RegionCategoryDto>> regions() {
 
     return ResponseEntity.ok(userService.listRegions());
   }

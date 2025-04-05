@@ -2,10 +2,9 @@ package promiseofblood.umpabackend.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import promiseofblood.umpabackend.domain.UserType;
-
+import promiseofblood.umpabackend.domain.entitiy.Oauth2User;
 
 @Repository
-public interface UserTypeRepository extends JpaRepository<UserType, Long> {
-  UserType getByName(String name);
+public interface Oauth2UserRepository extends JpaRepository<Oauth2User, Long> {
+
 }

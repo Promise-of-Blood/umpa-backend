@@ -3,9 +3,9 @@ package promiseofblood.umpabackend.dto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import promiseofblood.umpabackend.domain.User;
 
 import java.time.LocalDateTime;
+import promiseofblood.umpabackend.domain.entitiy.User;
 
 @Builder
 @Getter
@@ -19,21 +19,13 @@ public class UserDto {
   private String fullDescription;
   private String url;
   private String major;
-  private SocialUserDto socialUser;
+  private Oauth2UserDto oauth2UserDto;
 
   private LocalDateTime createdAt;
   private LocalDateTime updatedAt;
 
   public static UserDto of(User user) {
-    return UserDto.builder()
-            .id(user.getId())
-            .name(user.getName())
-            .profileImageUrl(user.getProfileImageUrl())
-            .oneLineDescription(user.getOneLineDescription())
-            .fullDescription(user.getFullDescription())
-            .url(user.getUrl())
-            .major(user.getMajor().getName())
-            .socialUser(SocialUserDto.of(user.getSocialUser()))
-            .build();
+    // todo
+    return null;
   }
 }

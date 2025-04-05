@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain;
+package promiseofblood.umpabackend.domain.entitiy;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
@@ -7,16 +7,17 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import promiseofblood.umpabackend.domain.entitiy.abs.IdEntity;
 
 @Entity
 @Getter
-@Table(name = "basic_local_governments") // 기초자치단체 (시군구)
+@Table(name = "regions")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class BasicLocalGovernment extends IdEntity {
+public class Region extends IdEntity {
 
   @ManyToOne
-  @JoinColumn(name = "regional_local_government_id")
-  private RegionalLocalGovernment regionalLocalGovernment;
+  @JoinColumn(name = "region_category_id")
+  private RegionCategory regionCategory;
 
   private String name;
 }

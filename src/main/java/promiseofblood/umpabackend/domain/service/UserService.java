@@ -1,11 +1,10 @@
-package promiseofblood.umpabackend.service;
+package promiseofblood.umpabackend.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import promiseofblood.umpabackend.domain.User;
 import promiseofblood.umpabackend.dto.CollegeDto;
 import promiseofblood.umpabackend.dto.MajorDto;
-import promiseofblood.umpabackend.dto.RegionalLocalGovernmentDto;
+import promiseofblood.umpabackend.dto.RegionCategoryDto;
 import promiseofblood.umpabackend.dto.response.UserResponse;
 import promiseofblood.umpabackend.exception.NotFoundException;
 import promiseofblood.umpabackend.repository.CollegeRepository;
@@ -46,9 +45,9 @@ public class UserService {
     return collegeRepository.findAll().stream().map(CollegeDto::of).toList();
   }
 
-  public List<RegionalLocalGovernmentDto> listRegions() {
+  public List<RegionCategoryDto> listRegions() {
 
-    return regionRepository.findAll().stream().map(RegionalLocalGovernmentDto::of).toList();
+    return regionRepository.findAll().stream().map(RegionCategoryDto::of).toList();
   }
 
 }

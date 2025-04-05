@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain;
+package promiseofblood.umpabackend.domain.entitiy;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
@@ -8,15 +8,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import promiseofblood.umpabackend.domain.entitiy.abs.IdEntity;
 
 @Entity
 @Getter
-@Table(name = "regional_local_governments") // 지역자치단체 (도, 광역시, 특별시, 특별자치시, 특별자치도)
+@Table(name = "region_categories")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RegionalLocalGovernment extends IdEntity {
+public class RegionCategory extends IdEntity {
 
   private String name;
 
   @OneToMany(mappedBy = "regionalLocalGovernment")
-  private List<BasicLocalGovernment> basicLocalGovernments;
+  private List<Region> regions;
 }

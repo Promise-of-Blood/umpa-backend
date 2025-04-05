@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain;
+package promiseofblood.umpabackend.domain.entitiy;
 
 
 import jakarta.persistence.Entity;
@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import promiseofblood.umpabackend.domain.entitiy.abs.IdEntity;
 
 @Entity
 @Getter

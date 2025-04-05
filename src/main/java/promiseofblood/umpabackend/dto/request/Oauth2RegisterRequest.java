@@ -14,8 +14,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class Oauth2RegisterRequest {
+
   @NotBlank
-  private String oauth2Provider;
+  private String oauth2ProviderName;
 
   @NotNull
   private String userType;

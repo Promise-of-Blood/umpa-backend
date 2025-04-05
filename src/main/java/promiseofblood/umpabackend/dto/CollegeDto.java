@@ -1,12 +1,13 @@
 package promiseofblood.umpabackend.dto;
 
 import lombok.*;
-import promiseofblood.umpabackend.domain.College;
+import promiseofblood.umpabackend.domain.entitiy.College;
 
 @Builder
 @Getter
 @AllArgsConstructor
 public class CollegeDto {
+
   private Long id;
   private String name;
 

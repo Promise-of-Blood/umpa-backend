@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.dto.MajorDto;
-import promiseofblood.umpabackend.service.UserService;
+import promiseofblood.umpabackend.domain.service.UserService;
 
 import java.util.List;
 
