@@ -15,9 +15,7 @@ import promiseofblood.umpabackend.domain.entitiy.abs.IdEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Region extends IdEntity {
 
-  @ManyToOne
-  @JoinColumn(name = "region_category_id")
-  private RegionCategory regionCategory;
+  private Long regionCategoryId;
 
   private String name;
 }

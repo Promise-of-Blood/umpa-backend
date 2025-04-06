@@ -17,7 +17,5 @@ import promiseofblood.umpabackend.domain.entitiy.abs.IdEntity;
 public class RegionCategory extends IdEntity {
 
   private String name;
-
-  @OneToMany(mappedBy = "regionalLocalGovernment")
-  private List<Region> regions;
+  
 }
