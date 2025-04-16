@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.dto.response;
+package promiseofblood.umpabackend.dto.response.common;
 
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
