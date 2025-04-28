@@ -41,7 +41,7 @@ jobs:
         run: ./gradlew bootJar -Pspring.profiles.active=prod
 
       - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Package
           path: build/libs/*.jar
