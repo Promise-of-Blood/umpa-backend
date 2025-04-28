@@ -1,31 +1,34 @@
 package promiseofblood.umpabackend.controller;
 
-
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import promiseofblood.umpabackend.dto.RegionalLocalGovernmentDto;
-import promiseofblood.umpabackend.service.UserService;
+import promiseofblood.umpabackend.domain.vo.RegionCategory;
+import promiseofblood.umpabackend.dto.RegionCategoryDto;
+import promiseofblood.umpabackend.dto.RegionDto;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-@Slf4j
-@RequiredArgsConstructor
-@Tag(name = "지역 API")
 @RestController
-@RequestMapping("/api/regions")
 public class RegionController {
-  private final UserService userService;
 
-  @Operation(summary = "지역 목록 조회")
-  @GetMapping("")
-  public ResponseEntity<List<RegionalLocalGovernmentDto>> regions() {
-
-    return ResponseEntity.ok(userService.listRegions());
+  @GetMapping("/regions")
+  public List<RegionCategoryDto> getRegions() {
+    return Stream.of(RegionCategory.values())
+      .map(regionCategory -> RegionCategoryDto.builder()
+        .code(regionCategory.getCode())
+        .name(regionCategory.getKoreanName())
+        .regions(
+          regionCategory.getRegions().stream()
+            .map(region -> RegionDto.builder()
+              .code(region.getCode())
+              .name(region.getKoreanName())
+              .build())
+            .collect(Collectors.toList())
+        )
+        .build()
+      )
+      .collect(Collectors.toList());
   }
 }
