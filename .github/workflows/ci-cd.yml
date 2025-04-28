@@ -61,10 +61,13 @@ jobs:
           username: ${{ secrets.DEPLOY_USERNAME }}
           key: ${{ secrets.DEPLOY_SSH_KEY }}
           source: "*.jar"
-          target: "/home/ubuntu/umpa-backend"
+          target: ${{ secrets.DEPLOY_PATH }}
 
       - name: Execute remote commands
         uses: appleboy/ssh-action@master
         with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
           script: |
-            /home/ubuntu/umpa-backend/deploy.sh
+            ${{ secrets.DEPLOY_PATH }}/deploy.sh
