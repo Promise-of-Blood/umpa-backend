@@ -1,10 +1,7 @@
 name: CI/CD Pipeline
 
 on:
-  push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+  pull_request
 
 jobs:
   build:
@@ -46,36 +43,32 @@ jobs:
           name: Package
           path: build/libs/*.jar
 
-  # Deployment job - uncomment and configure when ready to deploy
-  # deploy:
-  #   needs: build
-  #   runs-on: ubuntu-latest
-  #   if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
-  #   
-  #   steps:
-  #     - name: Download build artifacts
-  #       uses: actions/download-artifact@v3
-  #       with:
-  #         name: Package
-  #         path: ./
-  #     
-  #     - name: Deploy to production server
-  #       uses: appleboy/scp-action@master
-  #       with:
-  #         host: ${{ secrets.DEPLOY_HOST }}
-  #         username: ${{ secrets.DEPLOY_USERNAME }}
-  #         key: ${{ secrets.DEPLOY_SSH_KEY }}
-  #         source: "*.jar"
-  #         target: "/path/to/deployment/directory"
-  #     
-  #     - name: Execute remote commands
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.DEPLOY_HOST }}
-  #         username: ${{ secrets.DEPLOY_USERNAME }}
-  #         key: ${{ secrets.DEPLOY_SSH_KEY }}
-  #         script: |
-  #           cd /path/to/deployment/directory
-  #           # Stop the existing application
-  #           # Start the new application with production profile
-  #           java -jar umpa-backend-*.jar --spring.profiles.active=prod
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: Package
+          path: ./
+
+      - name: Deploy to production server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          source: "*.jar"
+          target: "/home/ubuntu/umpa-backend"
+
+      - name: Execute remote commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USERNAME }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/umpa-backend
+            java -jar umpa-backend-*.jar --spring.profiles.active=prod
