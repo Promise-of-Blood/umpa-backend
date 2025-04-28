@@ -8,6 +8,8 @@ import lombok.experimental.SuperBuilder;
 
 import promiseofblood.umpabackend.domain.entitiy.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Gender;
+import promiseofblood.umpabackend.domain.vo.LessonStyle;
+import promiseofblood.umpabackend.domain.vo.Major;
 
 
 @Entity
@@ -22,6 +24,15 @@ public class User extends TimeStampedEntity {
   // 성별
   @Enumerated(EnumType.STRING)
   private Gender gender;
+  // 프로필 사진
+  private String profileImageUrl;
+
+  // 전공종류, 지역, 수업방식
+  @Enumerated(EnumType.STRING)
+  private Major major;
+
+  @Enumerated(EnumType.STRING)
+  private LessonStyle lessonStyle;
 
   // 학생, 선생님 프로필
   private Long TeacherProfileId;

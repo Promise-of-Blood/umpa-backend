@@ -3,7 +3,7 @@ package promiseofblood.umpabackend.dto.response.common;
 
 import java.util.List;
 
-public class ListApiResponse<T> {
+public class PaginatedApiResponse<T> extends ApiResponse<T> {
 
   private int count;
 
