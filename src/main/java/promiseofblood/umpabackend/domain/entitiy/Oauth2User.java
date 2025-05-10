@@ -21,8 +21,4 @@ public class Oauth2User extends TimeStampedEntity {
 
   private String refreshToken;
 
-  @ManyToOne
-  @JoinColumn(name = "oauth2_provider_id")
-  private Oauth2Provider oauth2Provider;
-
 }
