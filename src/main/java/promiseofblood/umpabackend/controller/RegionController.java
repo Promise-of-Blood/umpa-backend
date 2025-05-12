@@ -1,7 +1,7 @@
 package promiseofblood.umpabackend.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import promiseofblood.umpabackend.controller.common.RestControllerV1;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.dto.RegionCategoryDto;
 import promiseofblood.umpabackend.dto.RegionDto;
@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-@RestController
+@RestControllerV1
 public class RegionController {
 
   @GetMapping("/regions")

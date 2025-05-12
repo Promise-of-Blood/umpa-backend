@@ -1,20 +1,13 @@
 package promiseofblood.umpabackend.domain.entitiy;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.springframework.stereotype.Component;
 
-import java.util.List;
-import promiseofblood.umpabackend.domain.entitiy.abs.IdEntity;
-
-@Entity
 @Getter
-@Table(name = "oauth2_providers")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Oauth2Provider extends IdEntity {
+@Setter
+@Component
+public class Oauth2Provider {
 
   private String name;
 
@@ -24,10 +17,17 @@ public class Oauth2Provider extends IdEntity {
 
   private String loginUrl;
 
-  private List<String> redirectUris;
-
   private String tokenUri;
-
+  
   private String profileUri;
+
+  private String redirectUri;
+
+  @Override
+  public String toString() {
+    return "Oauth2Provider{" +
+      "name='" + name + '\'' +
+      '}';
+  }
 
 }

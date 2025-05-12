@@ -25,6 +25,37 @@ springdoc:
     tags-sorter: alpha
     operations-sorter: alpha
 
+oauth2-providers:
+  google:
+    name: google
+    clientId: ${OAUTH2_GOOGLE_CLIENT_ID}
+    clientSecret: ${OAUTH2_GOOGLE_CLIENT_SECRET}
+    loginUrl: https://accounts.google.com/o/oauth2/v2/auth
+    tokenUri: https://oauth2.googleapis.com/token
+    profileUri: https://www.googleapis.com/oauth2/v3/userinfo
+  kakao:
+    name: kakao
+    clientId: ${OAUTH2_KAKAO_CLIENT_ID}
+    clientSecret: ${OAUTH2_KAKAO_CLIENT_SECRET}
+    loginUrl: https://kauth.kakao.com/oauth/authorize
+    tokenUri: https://kauth.kakao.com/oauth/token
+    profileUri: https://kapi.kakao.com/v2/user/me
+  naver:
+    name: naver
+    clientId: ${OAUTH2_NAVER_CLIENT_ID}
+    clientSecret: ${OAUTH2_NAVER_CLIENT_SECRET}
+    loginUrl: https://nid.naver.com/oauth2.0/authorize
+    tokenUri: https://nid.naver.com/oauth2.0/token
+    profileUri: https://openapi.naver.com/v1/nid/me
+  apple:
+    name: apple
+    clientId: ${OAUTH2_APPLE_CLIENT_ID}
+    clientSecret: ${OAUTH2_APPLE_CLIENT_SECRET}
+    loginUrl: https://appleid.apple.com/auth/authorize
+    tokenUri: https://appleid.apple.com/auth/token
+    profileUri: https://appleid.apple.com/auth/userinfo
+
+
 ---
 
 spring:
@@ -44,3 +75,13 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
+oauth2-providers:
+  naver:
+    redirect-uri: http://localhost:8080/api/v1/oauth2/naver/callback
+  google:
+    redirect-uri: http://localhost:8080/api/v1/oauth2/google/callback
+  kakao:
+    redirect-uri: http://localhost:8080/api/v1/oauth2/kakao/callback
+  apple:
+    redirect-uri: http://localhost:8080/api/v1/oauth2/apple/callback
