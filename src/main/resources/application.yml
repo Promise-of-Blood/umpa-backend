@@ -66,6 +66,16 @@ spring:
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
 
+oauth2-providers:
+  naver:
+    redirect-uri: https://um-pa.duckdns.org/api/v1/oauth2/naver/callback
+  google:
+    redirect-uri: https://um-pa.duckdns.org/api/v1/oauth2/google/callback
+  kakao:
+    redirect-uri: https://um-pa.duckdns.org/api/v1/oauth2/kakao/callback
+  apple:
+    redirect-uri: https://um-pa.duckdns.org/api/v1/oauth2/apple/callback
+
 ---
 
 spring:
