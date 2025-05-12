@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import promiseofblood.umpabackend.controller.common.RestControllerV1;
 import promiseofblood.umpabackend.domain.service.Oauth2LoginService;
+import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 
 
 @RestControllerV1
@@ -21,13 +22,16 @@ public class UserController {
   }
 
   @GetMapping("/oauth2/{provider}/authorize")
-  public void getAccessToken(@PathVariable String provider, String code) {
-    oauth2LoginService.getAccessToken(provider, code);
+  public void getAccessToken(
+    @PathVariable String accessToken
+  ) {
+    
   }
 
 
   @GetMapping("/oauth2/{provider}/callback")
-  public Map<String, Object> getAccessTokenCallback(@PathVariable String provider, String code) {
-    return oauth2LoginService.getAccessToken(provider, code);
+  public Oauth2ProfileResponse getAccessTokenCallback(@PathVariable String provider, String code) {
+
+    return oauth2LoginService.getOauth2Profile(provider, code);
   }
 }

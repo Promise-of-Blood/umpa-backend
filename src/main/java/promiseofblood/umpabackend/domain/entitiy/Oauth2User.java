@@ -15,10 +15,10 @@ import promiseofblood.umpabackend.domain.entitiy.abs.TimeStampedEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Oauth2User extends TimeStampedEntity {
 
-  private String socialId;
+  private String providerUid;
 
-  private String accessToken;
+  private String profileImageUrl;
 
-  private String refreshToken;
+  private String username;
 
 }

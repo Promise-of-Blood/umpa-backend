@@ -10,11 +10,17 @@ import org.springframework.stereotype.Component;
 public class Oauth2Provider {
 
   private String name;
+
   private String clientId;
+
   private String clientSecret;
+
   private String loginUrl;
+
   private String tokenUri;
+  
   private String profileUri;
+
   private String redirectUri;
 
   @Override

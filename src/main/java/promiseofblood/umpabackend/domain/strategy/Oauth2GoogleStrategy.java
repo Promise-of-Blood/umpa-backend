@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.domain.strategy;
 
 import org.springframework.stereotype.Component;
 import promiseofblood.umpabackend.domain.entitiy.Oauth2Provider;
+import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 
 @Component
 public class Oauth2GoogleStrategy implements Oauth2Strategy {
@@ -16,12 +17,13 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
   }
 
   @Override
-  public String getAccessToken(String code, String redirectUri) {
+  public String getAccessToken(String code, Oauth2Provider oauth2Provider) {
+    //
     return "";
   }
 
   @Override
-  public String getUserInfo(String accessToken) {
-    return "";
+  public Oauth2ProfileResponse getUserInfo(String accessToken, Oauth2Provider oauth2Provider) {
+    return null;
   }
 }
