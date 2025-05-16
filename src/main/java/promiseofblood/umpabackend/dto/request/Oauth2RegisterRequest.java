@@ -1,40 +1,45 @@
 package promiseofblood.umpabackend.dto.request;
 
 import java.util.List;
-
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+
 
 @Builder
 @Getter
 @AllArgsConstructor
 public class Oauth2RegisterRequest {
+  /*
+   * 1. 닉네임
+   * 2. 전공
+   * 3. 희망 학교 (3개)
+   * 4. 프로필 입력
+   *  - 프로필사진
+   *  - 학년 (중3 고1 고2 고3, n수생, 대학생, 사회인)
+   *  - 성별 (남자, 여자)
+   * 5. 희망 과목 <- 한가지만 선택가능
+   * 6. 수업 요청서
+   *  - 수업방식(대면, 비대면)
+   *  - 레슨 가능한 요일
+   *  - 원하는 수업 방향(텍스트)
+   */
 
-  @NotBlank
-  private String oauth2ProviderName;
+  private String username;
 
-  @NotNull
-  private String userType;
-
-  @NotBlank
-  @Size(min = 2, max = 20)
-  @Pattern(regexp = "^[a-zA-Z0-9가-힣]*$", message = "이름은 영문, 숫자, 한글만 가능합니다.")
-  private String name;
-
-  @NotBlank
   private String major;
 
-  @Size(min = 3, max = 3)
-  private List<String> wantedColleges;
+  private List<String> preferredColleges;
 
-  @NotBlank
-  private String accessToken;
+  private StudentProfileRequest studentProfileRequest;
 
-  @NotBlank
-  private String refreshToken;
+  static class StudentProfileRequest {
+
+    private String profileImage;
+
+    private String grade;
+
+    private String gender;
+    
+  }
 }
