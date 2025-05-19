@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.dto;
 
+import java.time.LocalDateTime;
 import lombok.*;
 import promiseofblood.umpabackend.domain.entitiy.User;
 
@@ -20,6 +21,10 @@ public class UserDto {
 
   private String lessonStyle;
 
+  private LocalDateTime createdAt;
+
+  private LocalDateTime updatedAt;
+
   private Oauth2UserDto oauth2User;
 
   private TeacherProfileDto teacherProfile;
@@ -31,6 +36,8 @@ public class UserDto {
       .gender(user.getGender().name())
       .profileImageUrl(user.getProfileImageUrl())
       .major(user.getMajor().name())
+      .createdAt(user.getCreatedAt())
+      .updatedAt(user.getUpdatedAt())
       .oauth2User(Oauth2UserDto.of(user.getOauth2User()))
       .teacherProfile(TeacherProfileDto.of(user.getTeacherProfile()))
       .build();
