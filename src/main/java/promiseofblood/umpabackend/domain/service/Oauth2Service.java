@@ -23,7 +23,6 @@ import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2TeacherRegisterRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest.TeacherCareerRequest;
 import promiseofblood.umpabackend.dto.response.JwtResponse;
-import promiseofblood.umpabackend.dto.Oauth2UserDto;
 import promiseofblood.umpabackend.repository.Oauth2UserRepository;
 import promiseofblood.umpabackend.repository.TeacherCareerRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
@@ -31,7 +30,7 @@ import promiseofblood.umpabackend.utils.JwtUtils;
 
 @Service
 @RequiredArgsConstructor
-public class Oauth2LoginService {
+public class Oauth2Service {
 
   private final Oauth2StrategyFactory oauth2StrategyFactory;
   private final Oauth2ProvidersConfig oauth2ProvidersConfig;
