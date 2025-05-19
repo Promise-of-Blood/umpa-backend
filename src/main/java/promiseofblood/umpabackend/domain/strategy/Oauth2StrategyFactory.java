@@ -7,6 +7,7 @@ import promiseofblood.umpabackend.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.domain.entitiy.Oauth2Provider;
 
 import java.util.Map;
+import promiseofblood.umpabackend.exception.NotSupportedOauth2ProviderException;
 
 @Component
 @RequiredArgsConstructor
@@ -19,7 +20,7 @@ public class Oauth2StrategyFactory {
 
     Oauth2Provider provider = oauth2ProvidersConfig.getOauth2ProviderByName(providerName);
     if (provider == null) {
-      throw new IllegalArgumentException("Unknown OAuth2 provider: " + providerName);
+      throw new NotSupportedOauth2ProviderException(providerName + "는(은) 지원되지 않는 oauth2 제공자입니다.");
     }
 
     String strategyKey = resolveKey(providerName);
