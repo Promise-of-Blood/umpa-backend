@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class JwtResponse {
+public class LessonStyleResponse {
 
-  String accessToken;
+  private String code;
 
-  String refreshToken;
+  private String name;
 
 }

@@ -3,12 +3,12 @@ package promiseofblood.umpabackend.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 
-@Getter
 @Builder
-public class JwtResponse {
+@Getter
+public class SubjectResponse {
 
-  String accessToken;
+  private String code;
 
-  String refreshToken;
+  private String name;
 
 }

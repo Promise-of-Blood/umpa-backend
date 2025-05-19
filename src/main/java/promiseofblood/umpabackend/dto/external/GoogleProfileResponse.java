@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.dto.external;
 
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +9,14 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class Oauth2TokenResponse {
+public class GoogleProfileResponse {
 
-  @JsonProperty("access_token")
-  private String accessToken;
+  private String sub;
+
+  private String name;
+
+  @JsonProperty("given_name")
+  private String givenName;
+
+  private String picture;
 }

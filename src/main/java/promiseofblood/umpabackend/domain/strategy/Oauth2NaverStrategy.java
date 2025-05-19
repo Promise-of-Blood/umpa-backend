@@ -55,6 +55,7 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
     );
 
     return Oauth2ProfileResponse.builder()
+      .externalAccessToken(accessToken)
       .providerUid(response.getBody().getResponse().getId())
       .profileImageUrl(response.getBody().getResponse().getProfileImage())
       .username(response.getBody().getResponse().getNickname())
