@@ -5,10 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class JwtResponse {
+public class RegisterCompleteResponse {
 
-  String accessToken;
+  private String accessToken;
 
-  String refreshToken;
-
+  private String refreshToken;
+  
 }

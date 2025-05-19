@@ -66,6 +66,7 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
     );
 
     return Oauth2ProfileResponse.builder()
+      .externalAccessToken(accessToken)
       .providerUid(response.getBody().getId())
       .profileImageUrl(response.getBody().getProperties().getProfileImage())
       .username(response.getBody().getProperties().getNickname())

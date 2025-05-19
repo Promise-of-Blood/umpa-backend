@@ -68,6 +68,7 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
     );
 
     return Oauth2ProfileResponse.builder()
+      .externalAccessToken(accessToken)
       .providerUid(response.getBody().getSub())
       .profileImageUrl(response.getBody().getPicture())
       .username(response.getBody().getName())

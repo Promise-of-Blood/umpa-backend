@@ -7,6 +7,8 @@ import lombok.*;
 @ToString
 public class Oauth2ProfileResponse {
 
+  private String externalAccessToken;
+
   private String providerUid;
 
   private String profileImageUrl;

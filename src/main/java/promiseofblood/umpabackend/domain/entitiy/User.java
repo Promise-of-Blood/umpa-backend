@@ -34,10 +34,18 @@ public class User extends TimeStampedEntity {
   @Enumerated(EnumType.STRING)
   private LessonStyle lessonStyle;
 
-  // 학생, 선생님 프로필
-  private Long TeacherProfileId;
-  private Long StudentProfileId;
+  // 학생 프로필
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "student_profile_id")
+  private StudentProfile studentProfile;
+
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "teacher_profile_id")
+  private TeacherProfile teacherProfile;
 
   // 소셜 로그인 유저
-  private Long oauth2UserId;
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "oauth2_user_id")
+  private Oauth2User oauth2User;
+  
 }
