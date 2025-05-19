@@ -18,9 +18,13 @@ import promiseofblood.umpabackend.domain.entitiy.abs.TimeStampedEntity;
 public class TeacherLink extends TimeStampedEntity {
 
   private String link;
-  
+
   @ManyToOne
   @JoinColumn(name = "teacher_profile_id")
   private TeacherProfile teacherProfile;
+
+  public void setProfile(TeacherProfile teacherProfile) {
+    this.teacherProfile = teacherProfile;
+  }
 
 }
