@@ -23,7 +23,6 @@ import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2TeacherRegisterRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest.TeacherCareerRequest;
 import promiseofblood.umpabackend.dto.response.JwtResponse;
-import promiseofblood.umpabackend.dto.Oauth2UserDto;
 import promiseofblood.umpabackend.repository.Oauth2UserRepository;
 import promiseofblood.umpabackend.repository.TeacherCareerRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
@@ -31,7 +30,7 @@ import promiseofblood.umpabackend.utils.JwtUtils;
 
 @Service
 @RequiredArgsConstructor
-public class Oauth2LoginService {
+public class Oauth2Service {
 
   private final Oauth2StrategyFactory oauth2StrategyFactory;
   private final Oauth2ProvidersConfig oauth2ProvidersConfig;
@@ -50,12 +49,20 @@ public class Oauth2LoginService {
     Oauth2Provider provider = oauth2ProvidersConfig.getOauth2ProviderByName(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.create(providerName);
 
-    // 1. access token 으로 me api 호출 후 프로필 정보 받아오기
+    // access token 으로 me api 호출 후 프로필 정보 받아오기
     String externalAccessToken = oauth2TeacherRegisterRequest.getExternalAccessToken();
     Oauth2ProfileResponse oauth2ProfileResponse =
       oauth2Strategy.getUserInfo(externalAccessToken, provider);
 
-    // 2. CareerRequest 를 TeacherCareer 로 변환
+    // 받아온 프로필 정보로 Oauth2User 생성
+    Oauth2User newOauth2User = Oauth2User.builder()
+      .providerName(provider.getName())
+      .providerUid(oauth2ProfileResponse.getProviderUid())
+      .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
+      .username(oauth2TeacherRegisterRequest.getUsername())
+      .build();
+
+    // TeacherCareer, TeacherLink 생성
     List<TeacherCareer> teacherCareers = new ArrayList<>();
     for (TeacherCareerRequest career : oauth2TeacherRegisterRequest.getTeacherProfileRequest()
       .getCareers()) {
@@ -67,7 +74,6 @@ public class Oauth2LoginService {
         .build();
       teacherCareers.add(teacherCareer);
     }
-
     List<TeacherLink> teacherLinks = new ArrayList<>();
     for (String link : oauth2TeacherRegisterRequest.getTeacherProfileRequest().getLinks()) {
       TeacherLink teacherLink = TeacherLink.builder()
@@ -76,23 +82,24 @@ public class Oauth2LoginService {
       teacherLinks.add(teacherLink);
     }
 
-    // 3. TeacherCareer 를 TeacherProfile 로 변환
+    // TeacherProfile 생성
     TeacherProfile teacherProfile = TeacherProfile.builder()
       .lessonRegion(
-        Region.valueOf(oauth2TeacherRegisterRequest.getTeacherProfileRequest().getLessonRegion()))
+        Region.valueOf(oauth2TeacherRegisterRequest.getTeacherProfileRequest().getLessonRegion())
+      )
       .careers(teacherCareers)
       .links(teacherLinks)
       .build();
 
-    // 4. 받아온 프로필 정보로 Oauth2User 생성
-    Oauth2User newOauth2User = Oauth2User.builder()
-      .providerName(provider.getName())
-      .providerUid(oauth2ProfileResponse.getProviderUid())
-      .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
-      .username(oauth2TeacherRegisterRequest.getUsername())
-      .build();
+    // TeacherCareer, TeacherLink 의 teacherProfile 필드에 TeacherProfile 객체 설정
+    for (TeacherLink teacherLink : teacherLinks) {
+      teacherLink.setProfile(teacherProfile);
+    }
+    for (TeacherCareer teacherCareer : teacherCareers) {
+      teacherCareer.setProfile(teacherProfile);
+    }
 
-    // 5. User 객체 생성
+    // User 객체 생성
     User newUser = User.builder()
       .username(oauth2TeacherRegisterRequest.getUsername())
       .gender(Gender.valueOf(oauth2TeacherRegisterRequest.getGender()))
@@ -103,7 +110,7 @@ public class Oauth2LoginService {
       .build();
     User user = userRepository.save(newUser);
 
-    // 6. JWT 발급
+    // JWT 발급
     String accessToken = jwtUtils.createAccessToken(user.getId(), user.getUsername());
     String refreshToken = jwtUtils.createRefreshToken(user.getId());
     JwtResponse jwtResponse = JwtResponse.builder()
