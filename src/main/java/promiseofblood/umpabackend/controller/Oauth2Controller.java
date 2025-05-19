@@ -20,7 +20,7 @@ import promiseofblood.umpabackend.dto.response.JwtResponse;
 @RestController
 @RequestMapping("/api/v1/oauth2")
 @RequiredArgsConstructor
-public class UserController {
+public class Oauth2Controller {
 
   private final Oauth2Service oauth2Service;
 
@@ -36,18 +36,22 @@ public class UserController {
     @RequestPart Oauth2TeacherRegisterRequest oauth2RegisterRequest
 //    @RequestPart MultipartFile profileImage
   ) {
+
     return oauth2Service.oauth2Register(providerName, oauth2RegisterRequest);
   }
 
   @GetMapping("/{providerName}/callback")
-  public Oauth2ProfileResponse getAccessTokenCallback(@PathVariable String providerName,
-    String code) {
+  public Oauth2ProfileResponse getAccessTokenCallback(
+    @PathVariable String providerName,
+    String code
+  ) {
 
     return oauth2Service.getOauth2Profile(providerName, code);
   }
 
   @PostMapping("/token/refresh")
   public JwtResponse refreshToken(@RequestBody TokenRefreshRequest request) {
+
     return oauth2Service.refreshToken(request.getRefreshToken());
   }
 }
