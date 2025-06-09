@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.utils;
+package promiseofblood.umpabackend.domain.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -7,28 +7,26 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import java.security.Key;
+import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.security.Key;
-import java.util.Date;
-
 @Component
 @RequiredArgsConstructor
-public class JwtUtils {
+public class JwtService {
 
   @Value("${jwt.secret:secretKeysecretKeysecretKeysecretKeysecretKey}")
-  private String secretKey;
+  private String secretKeyValue;
 
-  // Access token expiration: 1 hour
   private static final long ACCESS_TOKEN_EXPIRATION = 3600000;
 
-  // Refresh token expiration: 7 days
   private static final long REFRESH_TOKEN_EXPIRATION = 3600000 * 24 * 7;
 
+
   public String createAccessToken(Long id, String name) {
-    Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    Key key = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
 
     return Jwts.builder()
       .claim("id", id)
@@ -40,7 +38,7 @@ public class JwtUtils {
   }
 
   public String createRefreshToken(Long id) {
-    Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
+    Key key = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
 
     return Jwts.builder()
       .claim("id", id)
@@ -52,14 +50,19 @@ public class JwtUtils {
 
   public Claims validateToken(String token) {
     try {
-      Key key = Keys.hmacShaKeyFor(secretKey.getBytes());
-      // Use the same pattern as in createAccessToken
+      Key key = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
       return Jwts.parser()
         .setSigningKey(key)
         .build()
         .parseClaimsJws(token)
         .getBody();
-    } catch (SignatureException | MalformedJwtException | ExpiredJwtException | UnsupportedJwtException | IllegalArgumentException e) {
+    } catch (
+      SignatureException |
+      MalformedJwtException |
+      ExpiredJwtException |
+      UnsupportedJwtException |
+      IllegalArgumentException e
+    ) {
       throw new RuntimeException("Invalid JWT token: " + e.getMessage());
     }
   }
