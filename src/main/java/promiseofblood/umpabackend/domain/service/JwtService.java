@@ -1,13 +1,11 @@
 package promiseofblood.umpabackend.domain.service;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SignatureException;
-import java.security.Key;
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
+import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
+import com.auth0.jwt.interfaces.DecodedJWT;
+import com.auth0.jwt.interfaces.JWTVerifier;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,57 +24,46 @@ public class JwtService {
 
 
   public String createAccessToken(Long id, String name) {
-    Key key = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
-
-    return Jwts.builder()
-      .claim("id", id)
-      .claim("name", name)
-      .issuedAt(new Date(System.currentTimeMillis()))
-      .expiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
-      .signWith(key)
-      .compact();
+    Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
+    return JWT.create()
+      .withClaim("id", id)
+      .withClaim("name", name)
+      .withIssuedAt(new Date(System.currentTimeMillis()))
+      .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
+      .sign(algorithm);
   }
 
   public String createRefreshToken(Long id) {
-    Key key = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
-
-    return Jwts.builder()
-      .claim("id", id)
-      .issuedAt(new Date(System.currentTimeMillis()))
-      .expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
-      .signWith(key)
-      .compact();
+    Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
+    return JWT.create()
+      .withClaim("id", id)
+      .withIssuedAt(new Date(System.currentTimeMillis()))
+      .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
+      .sign(algorithm);
   }
 
-  public Claims validateToken(String token) {
+  public DecodedJWT validateToken(String token) {
     try {
-      Key key = Keys.hmacShaKeyFor(secretKeyValue.getBytes());
-      return Jwts.parser()
-        .setSigningKey(key)
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
-    } catch (
-      SignatureException |
-      MalformedJwtException |
-      ExpiredJwtException |
-      UnsupportedJwtException |
-      IllegalArgumentException e
-    ) {
+      Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
+      JWTVerifier verifier = JWT.require(algorithm).build();
+      return verifier.verify(token);
+    } catch (TokenExpiredException e) {
+      throw new RuntimeException("Expired JWT token: " + e.getMessage());
+    } catch (JWTVerificationException e) {
       throw new RuntimeException("Invalid JWT token: " + e.getMessage());
     }
   }
 
   public Long getUserIdFromToken(String token) {
-    Claims claims = validateToken(token);
-    return claims.get("id", Long.class);
+    DecodedJWT jwt = validateToken(token);
+    return jwt.getClaim("id").asLong();
   }
 
   public boolean isTokenExpired(String token) {
     try {
-      Claims claims = validateToken(token);
-      return claims.getExpiration().before(new Date());
-    } catch (ExpiredJwtException e) {
+      DecodedJWT jwt = validateToken(token);
+      return jwt.getExpiresAt().before(new Date());
+    } catch (TokenExpiredException e) {
       return true;
     } catch (Exception e) {
       throw new RuntimeException("Error checking token expiration: " + e.getMessage());
