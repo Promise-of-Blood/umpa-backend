@@ -1,17 +1,23 @@
 package promiseofblood.umpabackend.domain.strategy;
 
+
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import promiseofblood.umpabackend.domain.entitiy.Oauth2Provider;
-import promiseofblood.umpabackend.dto.external.GoogleProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
 
@@ -31,7 +37,7 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
   }
 
   @Override
-  public String getAccessToken(String code, Oauth2Provider oauth2Provider) {
+  public Oauth2TokenResponse getToken(String code, Oauth2Provider oauth2Provider) {
 
     // x-www-form-urlencoded 바디 생성
     MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
@@ -45,33 +51,43 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
-    Oauth2TokenResponse response = restTemplate.postForObject(
+    return restTemplate.postForObject(
       oauth2Provider.getTokenUri(),
       new HttpEntity<>(body, headers),
       Oauth2TokenResponse.class
     );
-
-    return response.getAccessToken();
   }
 
   @Override
-  public Oauth2ProfileResponse getUserInfo(String accessToken, Oauth2Provider oauth2Provider) {
+  public Oauth2ProfileResponse getOauth2UserProfile(String code,
+    Oauth2Provider oauth2Provider) {
 
-    HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Bearer " + accessToken);
+    Oauth2TokenResponse oauth2TokenResponse = this.getToken(code, oauth2Provider);
+    System.out.println("oauth2TokenResponse = " + oauth2TokenResponse);
 
-    ResponseEntity<GoogleProfileResponse> response = restTemplate.exchange(
-      oauth2Provider.getProfileUri(),
-      HttpMethod.GET,
-      new HttpEntity<>(headers),
-      GoogleProfileResponse.class
-    );
-
-    return Oauth2ProfileResponse.builder()
-      .externalAccessToken(accessToken)
-      .providerUid(response.getBody().getSub())
-      .profileImageUrl(response.getBody().getPicture())
-      .username(response.getBody().getName())
+    GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(),
+      new GsonFactory())
+      .setAudience(Collections.singletonList(
+        "603931353875-q677h2s52f8vs9dne4iqqgmmp44j3ct4.apps.googleusercontent.com"))
       .build();
+
+    try {
+      GoogleIdToken idToken = verifier.verify(oauth2TokenResponse.getIdToken());
+      Payload payload = idToken.getPayload();
+      return Oauth2ProfileResponse.builder()
+        .externalIdToken(oauth2TokenResponse.getIdToken())
+        .externalAccessToken(oauth2TokenResponse.getAccessToken())
+        .externalRefreshToken(oauth2TokenResponse.getRefreshToken())
+        .providerUid(payload.getSubject())
+        .profileImageUrl((String) payload.get("picture"))
+        .username((String) payload.get("given_name"))
+        .build();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return null;
   }
+
+
 }

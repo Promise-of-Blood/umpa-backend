@@ -25,6 +25,7 @@ configurations {
 
 repositories {
     mavenCentral()
+    google()
 }
 
 dependencies {
@@ -40,6 +41,7 @@ dependencies {
     // jwt
     implementation 'com.auth0:java-jwt:4.5.0'
     implementation 'com.auth0:jwks-rsa:0.22.1'
+    implementation 'com.google.api-client:google-api-client:1.33.0'
 
     // lombok
     compileOnly 'org.projectlombok:lombok'
