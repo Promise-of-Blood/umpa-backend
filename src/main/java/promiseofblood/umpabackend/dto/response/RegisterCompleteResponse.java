@@ -1,14 +1,15 @@
 package promiseofblood.umpabackend.dto.response;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
+
+import promiseofblood.umpabackend.dto.UserDto;
 
 @Getter
 @Builder
 public class RegisterCompleteResponse {
 
-  private String accessToken;
+  private UserDto user;
 
-  private String refreshToken;
-  
+  private JwtResponse jwtPair;
+
 }

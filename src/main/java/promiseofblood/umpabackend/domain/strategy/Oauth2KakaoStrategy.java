@@ -9,6 +9,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
@@ -81,6 +82,26 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
       .build();
   }
 
+  @Override
+  public Oauth2ProfileResponse getOauth2UserProfileByIdToken(
+    String externalIdToken,
+    String externalAccessToken,
+    String externalRefreshToken,
+    Oauth2Provider oauth2Provider) {
+
+    DecodedJWT jwt = validateExternalIdToken(externalIdToken);
+
+    return Oauth2ProfileResponse.builder()
+      .externalIdToken(externalIdToken)
+      .externalAccessToken(externalAccessToken)
+      .externalRefreshToken(externalRefreshToken)
+      .providerUid(jwt.getClaim("sub").asString())
+      .profileImageUrl(jwt.getClaim("picture").asString())
+      .username(jwt.getClaim("nickname").asString())
+      .build();
+
+  }
+
   private DecodedJWT validateExternalIdToken(String externalIdToken) {
     DecodedJWT jwtOrigin = JWT.decode(externalIdToken);
     JwkProvider provider = new JwkProviderBuilder("https://kauth.kakao.com")
@@ -90,7 +111,7 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
     try {
       Jwk jwk = provider.get(jwtOrigin.getKeyId());
       Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
-      JWTVerifier verifier = JWT.require(algorithm)
+      JWTVerifier verifier = JWT.require(algorithm).ignoreIssuedAt()
         .build();
       return verifier.verify(externalIdToken);
     } catch (Exception e) {

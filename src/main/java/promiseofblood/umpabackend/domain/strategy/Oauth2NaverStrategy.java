@@ -7,6 +7,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriBuilder;
 import promiseofblood.umpabackend.domain.entitiy.Oauth2Provider;
 import promiseofblood.umpabackend.dto.external.NaverProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
@@ -27,26 +28,28 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
   }
 
   @Override
-  public String getAccessToken(String code, Oauth2Provider oauth2Provider) {
+  public Oauth2TokenResponse getToken(String code, Oauth2Provider oauth2Provider) {
 
     Oauth2TokenResponse response = restTemplate.getForObject(
       oauth2Provider.getTokenUri()
         + "?grant_type=authorization_code"
         + "&client_id=" + oauth2Provider.getClientId()
         + "&client_secret=" + oauth2Provider.getClientSecret()
-        + "&redirect_uri=" + oauth2Provider.getRedirectUri()
         + "&code=" + code,
       Oauth2TokenResponse.class
     );
 
-    return response.getAccessToken();
+    return response;
   }
 
   @Override
-  public Oauth2ProfileResponse getUserInfo(String accessToken, Oauth2Provider oauth2Provider) {
+  public Oauth2ProfileResponse getOauth2UserProfile(String code,
+    Oauth2Provider oauth2Provider) {
+
+    Oauth2TokenResponse oauth2TokenResponse = getToken(code, oauth2Provider);
 
     HttpHeaders headers = new HttpHeaders();
-    headers.add("Authorization", "Bearer " + accessToken);
+    headers.add("Authorization", "Bearer " + oauth2TokenResponse.getAccessToken());
 
     ResponseEntity<NaverProfileResponse> response = restTemplate.postForEntity(
       oauth2Provider.getProfileUri(),
@@ -55,10 +58,40 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
     );
 
     return Oauth2ProfileResponse.builder()
-      .externalAccessToken(accessToken)
+      .externalAccessToken(oauth2TokenResponse.getIdToken())
+      .externalAccessToken(oauth2TokenResponse.getAccessToken())
+      .externalRefreshToken(oauth2TokenResponse.getRefreshToken())
       .providerUid(response.getBody().getResponse().getId())
       .profileImageUrl(response.getBody().getResponse().getProfileImage())
       .username(response.getBody().getResponse().getNickname())
       .build();
+  }
+
+  @Override
+  public Oauth2ProfileResponse getOauth2UserProfileByIdToken(String externalIdToken,
+    String externalAccessToken,
+    String externalRefreshToken,
+    Oauth2Provider oauth2Provider) {
+
+    HttpHeaders headers = new HttpHeaders();
+    headers.add("Authorization", "Bearer " + externalAccessToken);
+
+    ResponseEntity<NaverProfileResponse> response = restTemplate.postForEntity(
+      oauth2Provider.getProfileUri(),
+      new HttpEntity<>(null, headers),
+      NaverProfileResponse.class
+    );
+
+    NaverProfileResponse.Response profileResponse = response.getBody().getResponse();
+
+    return Oauth2ProfileResponse.builder()
+      .externalAccessToken(externalIdToken)
+      .externalAccessToken(externalAccessToken)
+      .externalRefreshToken(externalRefreshToken)
+      .providerUid(profileResponse.getId())
+      .profileImageUrl(profileResponse.getProfileImage())
+      .username(profileResponse.getNickname())
+      .build();
+
   }
 }

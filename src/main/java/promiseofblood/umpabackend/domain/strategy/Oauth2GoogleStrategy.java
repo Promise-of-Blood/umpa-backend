@@ -89,5 +89,37 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
     return null;
   }
 
+  @Override
+  public Oauth2ProfileResponse getOauth2UserProfileByIdToken(
+    String externalIdToken,
+    String externalAccessToken,
+    String externalRefreshToken,
+    Oauth2Provider oauth2Provider
+  ) {
+
+    GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(),
+      new GsonFactory())
+      .setAudience(Collections.singletonList(oauth2Provider.getClientId()))
+      .build();
+
+    try {
+      GoogleIdToken idToken = verifier.verify(externalIdToken);
+      Payload payload = idToken.getPayload();
+      return Oauth2ProfileResponse.builder()
+        .externalIdToken(externalIdToken)
+        .externalAccessToken(externalAccessToken)
+        .externalRefreshToken(externalRefreshToken)
+        .providerUid(payload.getSubject())
+        .profileImageUrl((String) payload.get("picture"))
+        .username((String) payload.get("given_name"))
+        .build();
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+
+    return null;
+  }
+
 
 }

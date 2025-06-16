@@ -27,8 +27,6 @@ public class UserDto {
 
   private Oauth2UserDto oauth2User;
 
-  private TeacherProfileDto teacherProfile;
-
   static public UserDto of(User user) {
     return UserDto.builder()
       .id(user.getId())
@@ -36,10 +34,9 @@ public class UserDto {
       .gender(user.getGender().name())
       .profileImageUrl(user.getProfileImageUrl())
       .major(user.getMajor().name())
+      .oauth2User(Oauth2UserDto.of(user.getOauth2User()))
       .createdAt(user.getCreatedAt())
       .updatedAt(user.getUpdatedAt())
-      .oauth2User(Oauth2UserDto.of(user.getOauth2User()))
-      .teacherProfile(TeacherProfileDto.of(user.getTeacherProfile()))
       .build();
   }
 }
