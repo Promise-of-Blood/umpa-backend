@@ -28,11 +28,10 @@ public class Oauth2Controller {
     return oauth2Service.generateAuthorizationUrls();
   }
 
-  @PostMapping(value = "/{providerName}/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PostMapping(value = "/{providerName}/register")
   public ResponseEntity<RegisterCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
-    @Parameter(content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
-    Oauth2RegisterRequest oauth2RegisterRequest
+    @RequestBody Oauth2RegisterRequest oauth2RegisterRequest
   ) {
 
     RegisterCompleteResponse registerCompleteResponse = oauth2Service.registerOauth2User(

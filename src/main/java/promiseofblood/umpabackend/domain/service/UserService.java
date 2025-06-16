@@ -16,14 +16,14 @@ public class UserService {
 
     List<UserDto> users = userRepository.findAll()
       .stream()
-      .map(UserDto::of)
+      .map(UserDto::ofInitialUser)
       .toList();
 
     return users;
   }
 
   public void deleteUsers() {
-    
+
     userRepository.deleteAll();
   }
 }

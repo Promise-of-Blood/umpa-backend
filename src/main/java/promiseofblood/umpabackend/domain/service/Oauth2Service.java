@@ -10,8 +10,6 @@ import promiseofblood.umpabackend.domain.entitiy.Oauth2User;
 import promiseofblood.umpabackend.domain.entitiy.User;
 import promiseofblood.umpabackend.domain.strategy.Oauth2Strategy;
 import promiseofblood.umpabackend.domain.strategy.Oauth2StrategyFactory;
-import promiseofblood.umpabackend.domain.vo.Gender;
-import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
@@ -39,7 +37,6 @@ public class Oauth2Service {
     String providerName,
     Oauth2RegisterRequest oauth2RegisterRequest
   ) {
-
     Oauth2Provider oauth2Provider = oauth2ProvidersConfig.getOauth2ProviderByName(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.create(providerName);
 
@@ -47,7 +44,6 @@ public class Oauth2Service {
     Oauth2ProfileResponse oauth2ProfileResponse = oauth2Strategy.getOauth2UserProfileByIdToken(
       oauth2RegisterRequest.getExternalIdToken(),
       oauth2RegisterRequest.getExternalAccessToken(),
-      oauth2RegisterRequest.getExternalRefreshToken(),
       oauth2Provider
     );
 
@@ -56,20 +52,13 @@ public class Oauth2Service {
       throw new Oauth2UserAlreadyExists("Oauth2 제공자: " + providerName + "(으)로 이미 가입된 사용자가 있습니다.");
     }
 
-    // 받아온 프로필 정보로 Oauth2User 생성
     Oauth2User newOauth2User = Oauth2User.builder()
       .providerName(oauth2Provider.getName())
       .providerUid(oauth2ProfileResponse.getProviderUid())
       .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
-      .username(oauth2RegisterRequest.getUsername())
+      .username(oauth2ProfileResponse.getUsername())
       .build();
-
-    // User 객체 생성
     User newUser = User.builder()
-      .username(oauth2RegisterRequest.getUsername())
-      .gender(Gender.valueOf(oauth2RegisterRequest.getGender()))
-      .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
-      .major(Major.valueOf(oauth2RegisterRequest.getMajor()))
       .oauth2User(newOauth2User)
       .build();
     User user = userRepository.save(newUser);
@@ -79,7 +68,7 @@ public class Oauth2Service {
     String refreshToken = jwtService.createRefreshToken(user.getId());
 
     return RegisterCompleteResponse.builder()
-      .user(UserDto.of(user))
+      .user(UserDto.ofInitialUser(user))
       .jwtPair(JwtResponse.builder()
         .accessToken(accessToken)
         .refreshToken(refreshToken)
@@ -142,7 +131,7 @@ public class Oauth2Service {
       .build();
   }
 
-  private boolean isOauth2UserAlreadyExists(String providerName, String providerUid) {
+  public boolean isOauth2UserAlreadyExists(String providerName, String providerUid) {
 
     return oauth2UserRepository.existsByProviderUidAndProviderName(providerUid, providerName);
   }

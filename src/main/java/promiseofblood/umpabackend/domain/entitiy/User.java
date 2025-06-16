@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.domain.entitiy;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -27,18 +28,12 @@ public class User extends TimeStampedEntity {
   // 프로필 사진
   private String profileImageUrl;
 
-  // 전공종류, 지역, 수업방식
-  @Enumerated(EnumType.STRING)
-  private Major major;
-
-  @Enumerated(EnumType.STRING)
-  private LessonStyle lessonStyle;
-
   // 학생 프로필
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "student_profile_id")
   private StudentProfile studentProfile;
 
+  // 선생님 프로필
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "teacher_profile_id")
   private TeacherProfile teacherProfile;
@@ -47,5 +42,5 @@ public class User extends TimeStampedEntity {
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "oauth2_user_id")
   private Oauth2User oauth2User;
-  
+
 }

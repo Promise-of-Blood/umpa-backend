@@ -77,7 +77,6 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
       return Oauth2ProfileResponse.builder()
         .externalIdToken(oauth2TokenResponse.getIdToken())
         .externalAccessToken(oauth2TokenResponse.getAccessToken())
-        .externalRefreshToken(oauth2TokenResponse.getRefreshToken())
         .providerUid(payload.getSubject())
         .profileImageUrl((String) payload.get("picture"))
         .username((String) payload.get("given_name"))
@@ -93,7 +92,6 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
   public Oauth2ProfileResponse getOauth2UserProfileByIdToken(
     String externalIdToken,
     String externalAccessToken,
-    String externalRefreshToken,
     Oauth2Provider oauth2Provider
   ) {
 
@@ -108,7 +106,6 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
       return Oauth2ProfileResponse.builder()
         .externalIdToken(externalIdToken)
         .externalAccessToken(externalAccessToken)
-        .externalRefreshToken(externalRefreshToken)
         .providerUid(payload.getSubject())
         .profileImageUrl((String) payload.get("picture"))
         .username((String) payload.get("given_name"))

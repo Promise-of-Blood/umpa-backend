@@ -60,7 +60,6 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
     return Oauth2ProfileResponse.builder()
       .externalAccessToken(oauth2TokenResponse.getIdToken())
       .externalAccessToken(oauth2TokenResponse.getAccessToken())
-      .externalRefreshToken(oauth2TokenResponse.getRefreshToken())
       .providerUid(response.getBody().getResponse().getId())
       .profileImageUrl(response.getBody().getResponse().getProfileImage())
       .username(response.getBody().getResponse().getNickname())
@@ -68,9 +67,9 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
   }
 
   @Override
-  public Oauth2ProfileResponse getOauth2UserProfileByIdToken(String externalIdToken,
+  public Oauth2ProfileResponse getOauth2UserProfileByIdToken(
+    String externalIdToken,
     String externalAccessToken,
-    String externalRefreshToken,
     Oauth2Provider oauth2Provider) {
 
     HttpHeaders headers = new HttpHeaders();
@@ -87,7 +86,6 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
     return Oauth2ProfileResponse.builder()
       .externalAccessToken(externalIdToken)
       .externalAccessToken(externalAccessToken)
-      .externalRefreshToken(externalRefreshToken)
       .providerUid(profileResponse.getId())
       .profileImageUrl(profileResponse.getProfileImage())
       .username(profileResponse.getNickname())

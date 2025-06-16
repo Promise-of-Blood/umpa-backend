@@ -25,7 +25,6 @@ public interface Oauth2Strategy {
   Oauth2ProfileResponse getOauth2UserProfileByIdToken(
     String externalIdToken,
     String externalAccessToken,
-    String externalRefreshToken,
     Oauth2Provider oauth2Provider
   );
 

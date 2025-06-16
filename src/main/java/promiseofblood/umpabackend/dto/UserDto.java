@@ -17,23 +17,15 @@ public class UserDto {
 
   private String profileImageUrl;
 
-  private String major;
-
-  private String lessonStyle;
-
   private LocalDateTime createdAt;
 
   private LocalDateTime updatedAt;
 
   private Oauth2UserDto oauth2User;
 
-  static public UserDto of(User user) {
+  static public UserDto ofInitialUser(User user) {
     return UserDto.builder()
       .id(user.getId())
-      .username(user.getUsername())
-      .gender(user.getGender().name())
-      .profileImageUrl(user.getProfileImageUrl())
-      .major(user.getMajor().name())
       .oauth2User(Oauth2UserDto.of(user.getOauth2User()))
       .createdAt(user.getCreatedAt())
       .updatedAt(user.getUpdatedAt())

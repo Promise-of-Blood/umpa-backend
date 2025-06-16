@@ -75,7 +75,6 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
     return Oauth2ProfileResponse.builder()
       .externalIdToken(externalIdToken)
       .externalAccessToken(externalAccessToken)
-      .externalRefreshToken(externalRefreshToken)
       .providerUid(jwt.getClaim("sub").asString())
       .profileImageUrl(jwt.getClaim("picture").asString())
       .username(jwt.getClaim("nickname").asString())
@@ -86,7 +85,6 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
   public Oauth2ProfileResponse getOauth2UserProfileByIdToken(
     String externalIdToken,
     String externalAccessToken,
-    String externalRefreshToken,
     Oauth2Provider oauth2Provider) {
 
     DecodedJWT jwt = validateExternalIdToken(externalIdToken);
@@ -94,7 +92,6 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
     return Oauth2ProfileResponse.builder()
       .externalIdToken(externalIdToken)
       .externalAccessToken(externalAccessToken)
-      .externalRefreshToken(externalRefreshToken)
       .providerUid(jwt.getClaim("sub").asString())
       .profileImageUrl(jwt.getClaim("picture").asString())
       .username(jwt.getClaim("nickname").asString())
