@@ -14,7 +14,9 @@ import promiseofblood.umpabackend.dto.response.common.ExceptionResponse;
 public class GlobalExceptionHandler {
 
   @ExceptionHandler(RuntimeException.class)
-  public ResponseEntity<ExceptionResponse> handleGlobalException(Exception ex, WebRequest request) {
+  public ResponseEntity<ExceptionResponse> handleGlobalException(
+    Exception ex, WebRequest request
+  ) {
     log.error("서버 내부 오류가 발생했습니다: {}", ex.getMessage(), ex);
 
     ExceptionResponse ExceptionResponse = new ExceptionResponse(
@@ -27,7 +29,10 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(NotFoundException.class)
-  public ResponseEntity<ExceptionResponse> handleNotFound(Exception ex, WebRequest request) {
+  public ResponseEntity<ExceptionResponse> handleNotFoundException(
+    Exception ex,
+    WebRequest request
+  ) {
     log.error(ex.getMessage(), ex);
     ExceptionResponse ExceptionResponse = new ExceptionResponse(ex.getMessage());
 
@@ -37,8 +42,10 @@ public class GlobalExceptionHandler {
   }
 
   @ExceptionHandler(NotSupportedOauth2ProviderException.class)
-  public ResponseEntity<ExceptionResponse> handleNotSupportedOauth2Provider(Exception ex,
-    WebRequest request) {
+  public ResponseEntity<ExceptionResponse> handleNotSupportedOauth2Provider(
+    Exception ex,
+    WebRequest request
+  ) {
     log.error(ex.getMessage(), ex);
     ExceptionResponse ExceptionResponse = new ExceptionResponse(
       ex.getMessage()
@@ -48,4 +55,20 @@ public class GlobalExceptionHandler {
       .status(HttpStatus.BAD_REQUEST)
       .body(ExceptionResponse);
   }
+
+  @ExceptionHandler(Oauth2UserAlreadyExists.class)
+  public ResponseEntity<ExceptionResponse> handleOauth2UserAlreadyExists(
+    Exception ex,
+    WebRequest request
+  ) {
+    log.error(ex.getMessage(), ex);
+    ExceptionResponse ExceptionResponse = new ExceptionResponse(
+      ex.getMessage()
+    );
+
+    return ResponseEntity
+      .status(HttpStatus.BAD_REQUEST)
+      .body(ExceptionResponse);
+  }
+
 }
