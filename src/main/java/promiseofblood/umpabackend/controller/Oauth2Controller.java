@@ -1,20 +1,18 @@
 package promiseofblood.umpabackend.controller;
 
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.dto.request.Oauth2TeacherRegisterRequest;
+import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
 import promiseofblood.umpabackend.dto.response.JwtResponse;
+import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 
 
 @RestController
@@ -30,18 +28,22 @@ public class Oauth2Controller {
     return oauth2Service.generateAuthorizationUrls();
   }
 
-  @PostMapping(value = "/{providerName}/register/teachers", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public Map<String, Object> registerTeacher(
+  @PostMapping(value = "/{providerName}/register", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<RegisterCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
-    @RequestPart Oauth2TeacherRegisterRequest oauth2RegisterRequest
-//    @RequestPart MultipartFile profileImage
+    @Parameter(content = @Content(mediaType = MediaType.MULTIPART_FORM_DATA_VALUE))
+    Oauth2RegisterRequest oauth2RegisterRequest
   ) {
 
-    return oauth2Service.oauth2Register(providerName, oauth2RegisterRequest);
+    RegisterCompleteResponse registerCompleteResponse = oauth2Service.registerOauth2User(
+      providerName, oauth2RegisterRequest);
+
+    return ResponseEntity.ok(registerCompleteResponse);
   }
 
+
   @GetMapping("/{providerName}/callback")
-  public Oauth2ProfileResponse getAccessTokenCallback(
+  public Oauth2ProfileResponse oauth2AuthorizationCallback(
     @PathVariable String providerName,
     String code
   ) {

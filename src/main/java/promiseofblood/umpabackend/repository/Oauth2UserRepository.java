@@ -7,4 +7,6 @@ import promiseofblood.umpabackend.domain.entitiy.Oauth2User;
 @Repository
 public interface Oauth2UserRepository extends JpaRepository<Oauth2User, Long> {
 
+  boolean existsByProviderUidAndProviderName(String providerUid, String providerName);
+
 }
