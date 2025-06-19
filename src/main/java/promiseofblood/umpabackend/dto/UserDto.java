@@ -2,7 +2,7 @@ package promiseofblood.umpabackend.dto;
 
 import java.time.LocalDateTime;
 import lombok.*;
-import promiseofblood.umpabackend.domain.entitiy.User;
+import promiseofblood.umpabackend.domain.entity.User;
 
 @Getter
 @Builder

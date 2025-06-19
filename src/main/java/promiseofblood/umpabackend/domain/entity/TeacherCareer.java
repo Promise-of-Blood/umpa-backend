@@ -1,23 +1,35 @@
-package promiseofblood.umpabackend.domain.entitiy;
+package promiseofblood.umpabackend.domain.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.YearMonth;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import promiseofblood.umpabackend.domain.entitiy.abs.TimeStampedEntity;
+import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
+
 
 @Entity
 @Getter
 @SuperBuilder
-@Table(name = "teacher_links")
+@ToString
+@Table(name = "teacher_careers")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TeacherLink extends TimeStampedEntity {
+public class TeacherCareer extends TimeStampedEntity {
 
-  private String link;
+  private boolean isRepresentative;
+
+  private String title;
+
+  private YearMonth start;
+
+  @Column(name = "\"end\"")
+  private YearMonth end;
 
   @ManyToOne
   @JoinColumn(name = "teacher_profile_id")

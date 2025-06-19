@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.entitiy.abs;
+package promiseofblood.umpabackend.domain.entity.abs;
 
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

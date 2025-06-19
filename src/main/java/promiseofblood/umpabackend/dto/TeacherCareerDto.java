@@ -5,7 +5,7 @@ import java.time.YearMonth;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-import promiseofblood.umpabackend.domain.entitiy.TeacherCareer;
+import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 
 @Getter
 @Builder
