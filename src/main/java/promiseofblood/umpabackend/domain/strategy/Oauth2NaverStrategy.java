@@ -1,19 +1,19 @@
 package promiseofblood.umpabackend.domain.strategy;
 
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.util.UriBuilder;
-import promiseofblood.umpabackend.domain.entitiy.Oauth2Provider;
+import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.dto.external.NaverProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 
 @Component
+@ToString
 @RequiredArgsConstructor
 public class Oauth2NaverStrategy implements Oauth2Strategy {
 
@@ -28,25 +28,23 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
   }
 
   @Override
-  public Oauth2TokenResponse getToken(String code, Oauth2Provider oauth2Provider) {
+  public Oauth2TokenResponse getToken(Oauth2Provider oauth2Provider, String authorizationCode) {
 
-    Oauth2TokenResponse response = restTemplate.getForObject(
+    return restTemplate.getForObject(
       oauth2Provider.getTokenUri()
         + "?grant_type=authorization_code"
         + "&client_id=" + oauth2Provider.getClientId()
         + "&client_secret=" + oauth2Provider.getClientSecret()
-        + "&code=" + code,
+        + "&code=" + authorizationCode,
       Oauth2TokenResponse.class
     );
-
-    return response;
   }
 
   @Override
-  public Oauth2ProfileResponse getOauth2UserProfile(String code,
-    Oauth2Provider oauth2Provider) {
+  public Oauth2ProfileResponse getOauth2UserProfile(Oauth2Provider oauth2Provider,
+    String authorizationCode) {
 
-    Oauth2TokenResponse oauth2TokenResponse = getToken(code, oauth2Provider);
+    Oauth2TokenResponse oauth2TokenResponse = this.getToken(oauth2Provider, authorizationCode);
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + oauth2TokenResponse.getAccessToken());
@@ -67,10 +65,8 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
   }
 
   @Override
-  public Oauth2ProfileResponse getOauth2UserProfileByIdToken(
-    String externalIdToken,
-    String externalAccessToken,
-    Oauth2Provider oauth2Provider) {
+  public Oauth2ProfileResponse getOauth2UserProfile(
+    Oauth2Provider oauth2Provider, String externalAccessToken, String externalIdToken) {
 
     HttpHeaders headers = new HttpHeaders();
     headers.add("Authorization", "Bearer " + externalAccessToken);
@@ -90,6 +86,5 @@ public class Oauth2NaverStrategy implements Oauth2Strategy {
       .profileImageUrl(profileResponse.getProfileImage())
       .username(profileResponse.getNickname())
       .build();
-
   }
 }

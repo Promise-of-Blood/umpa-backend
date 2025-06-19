@@ -28,7 +28,7 @@ public class UserController {
   @DeleteMapping("/users")
   public ResponseEntity<Void> deleteUser() {
     userService.deleteUsers();
-    
+
     return ResponseEntity.noContent().build();
   }
 

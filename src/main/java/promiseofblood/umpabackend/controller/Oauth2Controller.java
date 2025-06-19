@@ -1,13 +1,11 @@
 package promiseofblood.umpabackend.controller;
 
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.media.Content;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
+import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
@@ -23,7 +21,7 @@ public class Oauth2Controller {
   private final Oauth2Service oauth2Service;
 
   @GetMapping("/urls")
-  public Map<String, String> getAuthorizationUrls() {
+  public Map<String, Oauth2ProviderDto> getAuthorizationUrls() {
 
     return oauth2Service.generateAuthorizationUrls();
   }
