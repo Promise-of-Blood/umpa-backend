@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -24,6 +25,7 @@ import promiseofblood.umpabackend.dto.response.WeekdayResponse;
 
 @RestController
 @RequestMapping("api/v1/constants")
+@Tag(name = "상수 API", description = "서버에서 필요한 상수 값들을 조회하는 API")
 public class ConstantsController {
 
   @GetMapping("/majors")
