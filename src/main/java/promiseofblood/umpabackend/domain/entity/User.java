@@ -17,12 +17,19 @@ import promiseofblood.umpabackend.domain.vo.Gender;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends TimeStampedEntity {
 
-  // 닉네임
+  // 로그인용 ID, 비밀번호(일반 회원가입)
+  @Column(unique = true)
+  private String loginId;
+
+  private String password;
+
+  // 닉네임, 성별, 프로필사진
+  @Column(unique = true)
   private String username;
-  // 성별
+
   @Enumerated(EnumType.STRING)
   private Gender gender;
-  // 프로필 사진
+
   private String profileImageUrl;
 
   // 학생 프로필
