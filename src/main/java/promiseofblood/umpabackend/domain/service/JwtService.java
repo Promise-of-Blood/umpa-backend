@@ -10,42 +10,55 @@ import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import promiseofblood.umpabackend.dto.JwtPairDto;
 
 @Component
 @RequiredArgsConstructor
 public class JwtService {
 
-  @Value("${jwt.secret:secretKeysecretKeysecretKeysecretKeysecretKey}")
-  private String secretKeyValue;
+  @Value("${jwt.secret}")
+  String secretKeyString;
 
-  private static final long ACCESS_TOKEN_EXPIRATION = 3600000;
+  @Value("${jwt.access-token-expiration}")
+  long accessTokenExpiration;
 
-  private static final long REFRESH_TOKEN_EXPIRATION = 3600000 * 24 * 7;
+  @Value("${jwt.refresh-token-expiration}")
+  long refreshTokenExpiration;
 
+  public JwtPairDto createJwtPair(Long id) {
 
-  public String createAccessToken(Long id, String name) {
-    Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
+    String accessToken = createAccessToken(id);
+    String refreshToken = createRefreshToken(id);
+
+    return JwtPairDto.builder()
+      .accessToken(accessToken)
+      .refreshToken(refreshToken)
+      .build();
+  }
+
+  public String createAccessToken(Long id) {
+
     return JWT.create()
+      .withClaim("type", "access")
       .withClaim("id", id)
-      .withClaim("name", name)
       .withIssuedAt(new Date(System.currentTimeMillis()))
-      .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
-      .sign(algorithm);
+      .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenExpiration))
+      .sign(this.jwtAlgorithm());
   }
 
   public String createRefreshToken(Long id) {
-    Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
+
     return JWT.create()
+      .withClaim("type", "refresh")
       .withClaim("id", id)
       .withIssuedAt(new Date(System.currentTimeMillis()))
-      .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
-      .sign(algorithm);
+      .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenExpiration))
+      .sign(this.jwtAlgorithm());
   }
 
   public DecodedJWT validateToken(String token) {
     try {
-      Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
-      JWTVerifier verifier = JWT.require(algorithm).build();
+      JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
       return verifier.verify(token);
     } catch (TokenExpiredException e) {
       throw new RuntimeException("Expired JWT token: " + e.getMessage());
@@ -68,5 +81,10 @@ public class JwtService {
     } catch (Exception e) {
       throw new RuntimeException("Error checking token expiration: " + e.getMessage());
     }
+  }
+
+  public Algorithm jwtAlgorithm() {
+
+    return Algorithm.HMAC256(secretKeyString.getBytes());
   }
 }

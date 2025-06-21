@@ -26,7 +26,7 @@ public class UserDto {
   static public UserDto ofInitialUser(User user) {
     return UserDto.builder()
       .id(user.getId())
-      .oauth2User(Oauth2UserDto.of(user.getOauth2User()))
+      .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
       .createdAt(user.getCreatedAt())
       .updatedAt(user.getUpdatedAt())
       .build();

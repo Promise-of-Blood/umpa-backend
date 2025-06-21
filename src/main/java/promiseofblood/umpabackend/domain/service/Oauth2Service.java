@@ -15,7 +15,7 @@ import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
-import promiseofblood.umpabackend.dto.response.JwtResponse;
+import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.exception.InvalidJwtException;
 import promiseofblood.umpabackend.exception.NotSupportedOauth2ProviderException;
@@ -42,7 +42,6 @@ public class Oauth2Service {
     Oauth2Provider oauth2Provider = oauth2Providers.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 
-    // access token 으로 me api 호출 후 프로필 정보 받아오기
     Oauth2ProfileResponse oauth2ProfileResponse = oauth2Strategy.getOauth2UserProfile(
       oauth2Provider,
       oauth2RegisterRequest.getExternalAccessToken(),
@@ -64,15 +63,11 @@ public class Oauth2Service {
       .build();
     User user = userRepository.save(newUser);
 
-    // JWT 발급
-    String accessToken = jwtService.createAccessToken(user.getId(), user.getUsername());
-    String refreshToken = jwtService.createRefreshToken(user.getId());
-
     return RegisterCompleteResponse.builder()
       .user(UserDto.ofInitialUser(user))
-      .jwtPair(JwtResponse.builder()
-        .accessToken(accessToken)
-        .refreshToken(refreshToken)
+      .jwtPair(JwtPairDto.builder()
+        .accessToken(jwtService.createAccessToken(user.getId()))
+        .refreshToken(jwtService.createRefreshToken(user.getId()))
         .build())
       .build();
   }
@@ -112,7 +107,7 @@ public class Oauth2Service {
   }
 
   @Transactional
-  public JwtResponse refreshToken(String refreshToken) {
+  public JwtPairDto refreshToken(String refreshToken) {
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
     if (jwtService.isTokenExpired(refreshToken)) {
@@ -122,10 +117,10 @@ public class Oauth2Service {
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-    String newAccessToken = jwtService.createAccessToken(user.getId(), user.getUsername());
+    String newAccessToken = jwtService.createAccessToken(user.getId());
     String newRefreshToken = jwtService.createRefreshToken(user.getId());
 
-    return JwtResponse.builder()
+    return JwtPairDto.builder()
       .accessToken(newAccessToken)
       .refreshToken(newRefreshToken)
       .build();
