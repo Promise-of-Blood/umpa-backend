@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.vo;
+package promiseofblood.umpabackend.config;
 
 
 import java.util.List;
@@ -6,13 +6,14 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.exception.NotSupportedOauth2ProviderException;
 
 @Getter
 @Setter
 @Configuration
 @ConfigurationProperties(prefix = "oauth2")
-public class Oauth2Providers {
+public class Oauth2ProvidersConfig {
 
   private List<Oauth2Provider> providers;
 

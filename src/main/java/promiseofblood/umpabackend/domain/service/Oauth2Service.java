@@ -5,7 +5,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import promiseofblood.umpabackend.domain.vo.Oauth2Providers;
+import promiseofblood.umpabackend.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.entity.Oauth2User;
 import promiseofblood.umpabackend.domain.entity.User;
@@ -17,7 +17,6 @@ import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
-import promiseofblood.umpabackend.exception.InvalidJwtException;
 import promiseofblood.umpabackend.exception.NotSupportedOauth2ProviderException;
 import promiseofblood.umpabackend.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.repository.Oauth2UserRepository;
@@ -28,7 +27,7 @@ import promiseofblood.umpabackend.repository.UserRepository;
 public class Oauth2Service {
 
   private final Oauth2StrategyFactory oauth2StrategyFactory;
-  private final Oauth2Providers oauth2Providers;
+  private final Oauth2ProvidersConfig oauth2ProvidersConfig;
   private final UserRepository userRepository;
   private final Oauth2UserRepository oauth2UserRepository;
   private final JwtService jwtService;
@@ -39,7 +38,7 @@ public class Oauth2Service {
     String providerName,
     Oauth2RegisterRequest oauth2RegisterRequest
   ) {
-    Oauth2Provider oauth2Provider = oauth2Providers.get(providerName);
+    Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 
     Oauth2ProfileResponse oauth2ProfileResponse = oauth2Strategy.getOauth2UserProfile(
@@ -75,7 +74,7 @@ public class Oauth2Service {
 
   @Transactional
   public Oauth2ProfileResponse getOauth2Profile(String providerName, String code) {
-    Oauth2Provider oauth2Provider = oauth2Providers.get(providerName);
+    Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 
     return oauth2Strategy.getOauth2UserProfile(oauth2Provider, code);
@@ -85,7 +84,7 @@ public class Oauth2Service {
   public Map<String, Oauth2ProviderDto> generateAuthorizationUrls() {
     Map<String, Oauth2ProviderDto> oauth2ProviderNameToInfo = new HashMap<>();
 
-    for (Oauth2Provider oauth2Provider : oauth2Providers.getProviders()) {
+    for (Oauth2Provider oauth2Provider : oauth2ProvidersConfig.getProviders()) {
       try {
         Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(oauth2Provider.getName());
         oauth2ProviderNameToInfo.put(

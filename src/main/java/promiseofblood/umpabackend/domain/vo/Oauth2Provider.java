@@ -1,13 +1,13 @@
 package promiseofblood.umpabackend.domain.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
-@ToString
+@EqualsAndHashCode
 @Component
 public class Oauth2Provider {
 
@@ -25,11 +25,12 @@ public class Oauth2Provider {
 
   private String redirectUri;
 
-//  @Override
-//  public String toString() {
-//    return "Oauth2Provider{" +
-//      "name='" + name + '\'' +
-//      '}';
-//  }
+  @Override
+  public String toString() {
+    return "Oauth2Provider{" +
+      "name='" + name + '\'' +
+      ", clientId='" + clientId + '\'' +
+      '}';
+  }
 
 }
