@@ -30,18 +30,16 @@ public class OpenApiConfig {
       )
       .components(getComponents())
       .addSecurityItem(
-        new SecurityRequirement().addList("Password Flow")
+        new SecurityRequirement().addList("Bearer Token")
       );
   }
 
   private Components getComponents() {
-    SecurityScheme passwordFlowScheme = new SecurityScheme()
-      .type(SecurityScheme.Type.OAUTH2)
-      .flows(
-        new OAuthFlows().password(
-          new OAuthFlow().tokenUrl("http://localhost:8080/api/v1/users/token"))
-      );
+    SecurityScheme bearerTokenScheme = new SecurityScheme()
+      .type(SecurityScheme.Type.HTTP)
+      .scheme("bearer")
+      .bearerFormat("JWT");
 
-    return new Components().securitySchemes(Map.of("Password Flow", passwordFlowScheme));
+    return new Components().securitySchemes(Map.of("Bearer Token", bearerTokenScheme));
   }
 }

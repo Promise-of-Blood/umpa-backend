@@ -6,15 +6,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
@@ -103,7 +98,7 @@ public class UserController {
   @PostMapping("/token")
   public ResponseEntity<JwtPairDto> createToken(@RequestBody GeneralLoginRequest request) {
 
-    JwtPairDto jwtPairDto = userService.getToken(request.getLoginId(), request.getPassword());
+    JwtPairDto jwtPairDto = userService.generateJwt(request.getLoginId(), request.getPassword());
 
     return ResponseEntity.ok(jwtPairDto);
   }

@@ -10,6 +10,7 @@ import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 
 @Component
@@ -38,28 +39,18 @@ public class JwtService {
 
   public String createAccessToken(Long id) {
 
-    return JWT.create()
-      .withClaim("type", "access")
-      .withClaim("id", id)
-      .withIssuedAt(new Date(System.currentTimeMillis()))
-      .withExpiresAt(new Date(System.currentTimeMillis() + accessTokenExpiration))
-      .sign(this.jwtAlgorithm());
+    return createJwt("access", id, Role.USER, accessTokenExpiration);
   }
 
   public String createRefreshToken(Long id) {
 
-    return JWT.create()
-      .withClaim("type", "refresh")
-      .withClaim("id", id)
-      .withIssuedAt(new Date(System.currentTimeMillis()))
-      .withExpiresAt(new Date(System.currentTimeMillis() + refreshTokenExpiration))
-      .sign(this.jwtAlgorithm());
+    return createJwt("refresh", id, Role.USER, refreshTokenExpiration);
   }
 
-  public DecodedJWT validateToken(String token) {
+  private DecodedJWT decodeJwt(String jwt) {
     try {
       JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
-      return verifier.verify(token);
+      return verifier.verify(jwt);
     } catch (TokenExpiredException e) {
       throw new RuntimeException("Expired JWT token: " + e.getMessage());
     } catch (JWTVerificationException e) {
@@ -67,14 +58,30 @@ public class JwtService {
     }
   }
 
+  public boolean isValidJwt(String token) {
+    try {
+      JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
+      verifier.verify(token);
+      return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
   public Long getUserIdFromToken(String token) {
-    DecodedJWT jwt = validateToken(token);
+    DecodedJWT jwt = this.decodeJwt(token);
     return jwt.getClaim("id").asLong();
+  }
+
+  public Role getRoleFromToken(String token) {
+    DecodedJWT jwt = this.decodeJwt(token);
+    return Role.valueOf(jwt.getClaim("role").asString());
   }
 
   public boolean isTokenExpired(String token) {
     try {
-      DecodedJWT jwt = validateToken(token);
+      DecodedJWT jwt = this.decodeJwt(token);
       return jwt.getExpiresAt().before(new Date());
     } catch (TokenExpiredException e) {
       return true;
@@ -83,8 +90,21 @@ public class JwtService {
     }
   }
 
-  public Algorithm jwtAlgorithm() {
+  private Algorithm jwtAlgorithm() {
 
     return Algorithm.HMAC256(secretKeyString.getBytes());
   }
+
+  private String createJwt(
+    String type, Long id, Role role, long expiration) {
+
+    return JWT.create()
+      .withClaim("type", type)
+      .withClaim("id", id)
+      .withClaim("role", role.name())
+      .withIssuedAt(new Date(System.currentTimeMillis()))
+      .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
+      .sign(this.jwtAlgorithm());
+  }
+
 }

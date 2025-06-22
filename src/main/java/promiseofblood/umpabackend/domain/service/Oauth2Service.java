@@ -110,10 +110,6 @@ public class Oauth2Service {
   public JwtPairDto refreshToken(String refreshToken) {
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
-    if (jwtService.isTokenExpired(refreshToken)) {
-      throw new InvalidJwtException("리프레시 토큰이 만료되었습니다.");
-    }
-
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 

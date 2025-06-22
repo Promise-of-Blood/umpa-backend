@@ -2,6 +2,9 @@ package promiseofblood.umpabackend.domain.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import promiseofblood.umpabackend.domain.entity.User;
@@ -13,7 +16,7 @@ import promiseofblood.umpabackend.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
   private final JwtService jwtService;
   private final PasswordEncoder passwordEncoder;
@@ -24,6 +27,7 @@ public class UserService {
     User user = User.builder()
       .loginId(generalRegisterRequest.getLoginId())
       .password(passwordEncoder.encode(generalRegisterRequest.getPassword()))
+      .role(promiseofblood.umpabackend.domain.vo.Role.USER)
       .build();
     user = userRepository.save(user);
 
@@ -40,12 +44,10 @@ public class UserService {
 
   public List<UserDto> getUsers() {
 
-    List<UserDto> users = userRepository.findAll()
+    return userRepository.findAll()
       .stream()
       .map(UserDto::ofInitialUser)
       .toList();
-
-    return users;
   }
 
   public void deleteUsers() {
@@ -53,7 +55,7 @@ public class UserService {
     userRepository.deleteAll();
   }
 
-  public JwtPairDto getToken(String loginId, String password) {
+  public JwtPairDto generateJwt(String loginId, String password) {
     User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -63,4 +65,11 @@ public class UserService {
 
     return jwtService.createJwtPair(user.getId());
   }
+
+  @Override
+  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+    return null;
+  }
+
 }
