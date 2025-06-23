@@ -1,11 +1,11 @@
-package promiseofblood.umpabackend.dto.response;
+package promiseofblood.umpabackend.dto;
 
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class JwtResponse {
+public class JwtPairDto {
 
   String accessToken;
 

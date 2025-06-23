@@ -1,31 +1,29 @@
 package promiseofblood.umpabackend.domain.strategy;
 
-
 import com.auth0.jwk.Jwk;
 import com.auth0.jwk.JwkProvider;
 import com.auth0.jwk.JwkProviderBuilder;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import promiseofblood.umpabackend.domain.entitiy.Oauth2Provider;
+import org.springframework.web.client.RestTemplate;
+import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
 import java.security.interfaces.RSAPublicKey;
 
 @Component
+@ToString
 @RequiredArgsConstructor
 public class Oauth2KakaoStrategy implements Oauth2Strategy {
 
@@ -41,14 +39,14 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
   }
 
   @Override
-  public Oauth2TokenResponse getToken(String code, Oauth2Provider oauth2Provider) {
+  public Oauth2TokenResponse getToken(Oauth2Provider oauth2Provider, String authorizationCode) {
     // x-www-form-urlencoded 바디 생성
     MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
     body.add("grant_type", "authorization_code");
     body.add("client_id", oauth2Provider.getClientId());
     body.add("redirect_uri", oauth2Provider.getRedirectUri());
     body.add("client_secret", oauth2Provider.getClientSecret());
-    body.add("code", code);
+    body.add("code", authorizationCode);
 
     // 헤더 설정 (Content-Type: application/x-www-form-urlencoded)
     HttpHeaders headers = new HttpHeaders();
@@ -62,9 +60,10 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
   }
 
   @Override
-  public Oauth2ProfileResponse getOauth2UserProfile(String code, Oauth2Provider oauth2Provider) {
+  public Oauth2ProfileResponse getOauth2UserProfile(Oauth2Provider oauth2Provider,
+    String authorizationCode) {
 
-    Oauth2TokenResponse oauth2TokenResponse = this.getToken(code, oauth2Provider);
+    Oauth2TokenResponse oauth2TokenResponse = this.getToken(oauth2Provider, authorizationCode);
 
     String externalIdToken = oauth2TokenResponse.getIdToken();
     String externalAccessToken = oauth2TokenResponse.getAccessToken();
@@ -75,26 +74,22 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
     return Oauth2ProfileResponse.builder()
       .externalIdToken(externalIdToken)
       .externalAccessToken(externalAccessToken)
-      .externalRefreshToken(externalRefreshToken)
       .providerUid(jwt.getClaim("sub").asString())
       .profileImageUrl(jwt.getClaim("picture").asString())
       .username(jwt.getClaim("nickname").asString())
       .build();
+
   }
 
   @Override
-  public Oauth2ProfileResponse getOauth2UserProfileByIdToken(
-    String externalIdToken,
-    String externalAccessToken,
-    String externalRefreshToken,
-    Oauth2Provider oauth2Provider) {
+  public Oauth2ProfileResponse getOauth2UserProfile(
+    Oauth2Provider oauth2Provider, String externalAccessToken, String externalIdToken) {
 
     DecodedJWT jwt = validateExternalIdToken(externalIdToken);
 
     return Oauth2ProfileResponse.builder()
       .externalIdToken(externalIdToken)
       .externalAccessToken(externalAccessToken)
-      .externalRefreshToken(externalRefreshToken)
       .providerUid(jwt.getClaim("sub").asString())
       .profileImageUrl(jwt.getClaim("picture").asString())
       .username(jwt.getClaim("nickname").asString())

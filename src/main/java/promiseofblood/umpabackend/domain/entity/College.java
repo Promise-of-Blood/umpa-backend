@@ -1,8 +1,8 @@
-package promiseofblood.umpabackend.domain.entitiy;
+package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-import promiseofblood.umpabackend.domain.entitiy.abs.IdEntity;
+import promiseofblood.umpabackend.domain.entity.abs.IdEntity;
 
 @Entity
 @Getter

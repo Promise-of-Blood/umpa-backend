@@ -1,11 +1,13 @@
-package promiseofblood.umpabackend.domain.entitiy;
+package promiseofblood.umpabackend.domain.vo;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
 @Getter
 @Setter
+@EqualsAndHashCode
 @Component
 public class Oauth2Provider {
 
@@ -18,7 +20,7 @@ public class Oauth2Provider {
   private String loginUrl;
 
   private String tokenUri;
-  
+
   private String profileUri;
 
   private String redirectUri;
@@ -27,6 +29,7 @@ public class Oauth2Provider {
   public String toString() {
     return "Oauth2Provider{" +
       "name='" + name + '\'' +
+      ", clientId='" + clientId + '\'' +
       '}';
   }
 

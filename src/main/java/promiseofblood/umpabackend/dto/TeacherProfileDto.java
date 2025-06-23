@@ -1,10 +1,9 @@
 package promiseofblood.umpabackend.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import promiseofblood.umpabackend.domain.entitiy.TeacherProfile;
+import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 
 @Builder
 @Getter

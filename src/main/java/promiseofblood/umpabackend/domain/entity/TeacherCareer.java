@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.entitiy;
+package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
-import promiseofblood.umpabackend.domain.entitiy.abs.TimeStampedEntity;
+import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 
 
 @Entity
@@ -34,9 +34,5 @@ public class TeacherCareer extends TimeStampedEntity {
   @ManyToOne
   @JoinColumn(name = "teacher_profile_id")
   private TeacherProfile teacherProfile;
-
-  public void setProfile(TeacherProfile teacherProfile) {
-    this.teacherProfile = teacherProfile;
-  }
 
 }

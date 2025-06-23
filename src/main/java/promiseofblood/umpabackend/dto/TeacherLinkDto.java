@@ -2,7 +2,7 @@ package promiseofblood.umpabackend.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import promiseofblood.umpabackend.domain.entitiy.TeacherLink;
+import promiseofblood.umpabackend.domain.entity.TeacherLink;
 
 @Builder
 @Getter

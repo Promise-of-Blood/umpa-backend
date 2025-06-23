@@ -10,43 +10,47 @@ import java.util.Date;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.dto.JwtPairDto;
 
 @Component
 @RequiredArgsConstructor
 public class JwtService {
 
-  @Value("${jwt.secret:secretKeysecretKeysecretKeysecretKeysecretKey}")
-  private String secretKeyValue;
+  @Value("${jwt.secret}")
+  String secretKeyString;
 
-  private static final long ACCESS_TOKEN_EXPIRATION = 3600000;
+  @Value("${jwt.access-token-expiration}")
+  long accessTokenExpiration;
 
-  private static final long REFRESH_TOKEN_EXPIRATION = 3600000 * 24 * 7;
+  @Value("${jwt.refresh-token-expiration}")
+  long refreshTokenExpiration;
 
+  public JwtPairDto createJwtPair(Long id) {
 
-  public String createAccessToken(Long id, String name) {
-    Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
-    return JWT.create()
-      .withClaim("id", id)
-      .withClaim("name", name)
-      .withIssuedAt(new Date(System.currentTimeMillis()))
-      .withExpiresAt(new Date(System.currentTimeMillis() + ACCESS_TOKEN_EXPIRATION))
-      .sign(algorithm);
+    String accessToken = createAccessToken(id);
+    String refreshToken = createRefreshToken(id);
+
+    return JwtPairDto.builder()
+      .accessToken(accessToken)
+      .refreshToken(refreshToken)
+      .build();
+  }
+
+  public String createAccessToken(Long id) {
+
+    return createJwt("access", id, Role.USER, accessTokenExpiration);
   }
 
   public String createRefreshToken(Long id) {
-    Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
-    return JWT.create()
-      .withClaim("id", id)
-      .withIssuedAt(new Date(System.currentTimeMillis()))
-      .withExpiresAt(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRATION))
-      .sign(algorithm);
+
+    return createJwt("refresh", id, Role.USER, refreshTokenExpiration);
   }
 
-  public DecodedJWT validateToken(String token) {
+  private DecodedJWT decodeJwt(String jwt) {
     try {
-      Algorithm algorithm = Algorithm.HMAC256(secretKeyValue.getBytes());
-      JWTVerifier verifier = JWT.require(algorithm).build();
-      return verifier.verify(token);
+      JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
+      return verifier.verify(jwt);
     } catch (TokenExpiredException e) {
       throw new RuntimeException("Expired JWT token: " + e.getMessage());
     } catch (JWTVerificationException e) {
@@ -54,14 +58,30 @@ public class JwtService {
     }
   }
 
+  public boolean isValidJwt(String token) {
+    try {
+      JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
+      verifier.verify(token);
+      return true;
+    } catch (Exception e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
   public Long getUserIdFromToken(String token) {
-    DecodedJWT jwt = validateToken(token);
+    DecodedJWT jwt = this.decodeJwt(token);
     return jwt.getClaim("id").asLong();
+  }
+
+  public Role getRoleFromToken(String token) {
+    DecodedJWT jwt = this.decodeJwt(token);
+    return Role.valueOf(jwt.getClaim("role").asString());
   }
 
   public boolean isTokenExpired(String token) {
     try {
-      DecodedJWT jwt = validateToken(token);
+      DecodedJWT jwt = this.decodeJwt(token);
       return jwt.getExpiresAt().before(new Date());
     } catch (TokenExpiredException e) {
       return true;
@@ -69,4 +89,22 @@ public class JwtService {
       throw new RuntimeException("Error checking token expiration: " + e.getMessage());
     }
   }
+
+  private Algorithm jwtAlgorithm() {
+
+    return Algorithm.HMAC256(secretKeyString.getBytes());
+  }
+
+  private String createJwt(
+    String type, Long id, Role role, long expiration) {
+
+    return JWT.create()
+      .withClaim("type", type)
+      .withClaim("id", id)
+      .withClaim("role", role.name())
+      .withIssuedAt(new Date(System.currentTimeMillis()))
+      .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
+      .sign(this.jwtAlgorithm());
+  }
+
 }

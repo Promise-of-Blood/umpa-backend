@@ -16,7 +16,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
-import promiseofblood.umpabackend.config.StorageConfig;
+import promiseofblood.umpabackend.core.config.StorageConfig;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -80,7 +80,7 @@ public class FileSystemStorageService implements StorageService {
       } else {
         throw new RuntimeException("Could not read file: " + filename);
       }
-      
+
     } catch (MalformedURLException e) {
       throw new RuntimeException("Could not read file: " + filename, e);
     }

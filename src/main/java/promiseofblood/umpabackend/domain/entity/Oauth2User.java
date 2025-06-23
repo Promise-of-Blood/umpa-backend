@@ -1,11 +1,11 @@
-package promiseofblood.umpabackend.domain.entitiy;
+package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import promiseofblood.umpabackend.domain.entitiy.abs.TimeStampedEntity;
+import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 
 
 @Entity

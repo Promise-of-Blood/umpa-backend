@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.config;
+package promiseofblood.umpabackend.core.config;
 
 import lombok.Getter;
 import lombok.Setter;
