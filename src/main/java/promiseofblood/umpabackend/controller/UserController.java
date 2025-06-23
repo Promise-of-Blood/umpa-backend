@@ -9,6 +9,7 @@ import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
@@ -71,7 +72,12 @@ public class UserController {
 
   @GetMapping("/me")
   public ResponseEntity<UserDto> getCurrentUser() {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (!(principal instanceof Long userId)) {
+      throw new RuntimeException("인증된 사용자 정보를 찾을 수 없습니다.");
+    }
     UserDto user = userService.getUsers().stream()
+      .filter(u -> u.getId().equals(userId))
       .findFirst()
       .orElseThrow(() -> new RuntimeException("No current user found"));
 

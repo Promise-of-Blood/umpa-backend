@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.filter;
+package promiseofblood.umpabackend.core.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

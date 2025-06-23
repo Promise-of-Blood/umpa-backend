@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.config;
+package promiseofblood.umpabackend.core.config;
 
 import java.util.List;
 import org.springframework.context.annotation.Configuration;

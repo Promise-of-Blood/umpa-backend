@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.config;
+package promiseofblood.umpabackend.core.config;
 
 
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.filter.JwtFilter;
+import promiseofblood.umpabackend.core.security.JwtFilter;
 
 @Configuration
 @EnableWebSecurity
