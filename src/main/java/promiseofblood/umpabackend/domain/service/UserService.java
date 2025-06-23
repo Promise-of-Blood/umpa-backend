@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.dto.UserDto;
+import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
@@ -37,7 +38,7 @@ public class UserService implements UserDetailsService {
       .build();
 
     return RegisterCompleteResponse.builder()
-      .user(UserDto.ofInitialUser(user))
+      .user(UserDto.of(user))
       .jwtPair(jwtPairDto)
       .build();
   }
@@ -46,13 +47,32 @@ public class UserService implements UserDetailsService {
 
     return userRepository.findAll()
       .stream()
-      .map(UserDto::ofInitialUser)
+      .map(UserDto::of)
       .toList();
   }
 
   public void deleteUsers() {
 
     userRepository.deleteAll();
+  }
+
+  public UserDto getUserById(Long userId) {
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    return UserDto.of(user);
+  }
+
+  public UserDto patchDefaultProfile(Long userId, DefaultProfileRequest defaultProfileRequest) {
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    user.patchDefaultProfile(defaultProfileRequest.getUsername(),
+      defaultProfileRequest.getProfileImage().getOriginalFilename());
+
+    User updatedUser = userRepository.save(user);
+    System.out.println(updatedUser);
+    return UserDto.of(updatedUser);
   }
 
   public JwtPairDto generateJwt(String loginId, String password) {

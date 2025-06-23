@@ -35,8 +35,4 @@ public class TeacherCareer extends TimeStampedEntity {
   @JoinColumn(name = "teacher_profile_id")
   private TeacherProfile teacherProfile;
 
-  public void setProfile(TeacherProfile teacherProfile) {
-    this.teacherProfile = teacherProfile;
-  }
-
 }

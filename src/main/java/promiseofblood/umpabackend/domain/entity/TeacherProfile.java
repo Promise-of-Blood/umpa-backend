@@ -29,8 +29,7 @@ public class TeacherProfile extends TimeStampedEntity {
 
   @Enumerated(EnumType.STRING)
   private LessonStyle lessonStyle;
-
-
+  
   @Enumerated(EnumType.STRING)
   private Region lessonRegion;
 

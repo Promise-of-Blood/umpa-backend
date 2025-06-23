@@ -3,7 +3,6 @@ package promiseofblood.umpabackend.domain.entity;
 import jakarta.persistence.*;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -57,6 +56,13 @@ public class User extends TimeStampedEntity implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
+  public User patchDefaultProfile(String username, String profileImageUrl) {
+    this.username = username;
+    this.profileImageUrl = profileImageUrl;
+
+    return this;
+  }
+
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return Collections.singletonList(
@@ -68,12 +74,6 @@ public class User extends TimeStampedEntity implements UserDetails {
   public String getPassword() {
 
     return password;
-  }
-
-  @Override
-  public String getUsername() {
-
-    return loginId;
   }
 
   @Override

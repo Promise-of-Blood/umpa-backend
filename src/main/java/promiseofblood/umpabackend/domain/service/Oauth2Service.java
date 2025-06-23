@@ -63,7 +63,7 @@ public class Oauth2Service {
     User user = userRepository.save(newUser);
 
     return RegisterCompleteResponse.builder()
-      .user(UserDto.ofInitialUser(user))
+      .user(UserDto.of(user))
       .jwtPair(JwtPairDto.builder()
         .accessToken(jwtService.createAccessToken(user.getId()))
         .refreshToken(jwtService.createRefreshToken(user.getId()))

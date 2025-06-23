@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralLoginRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
@@ -82,6 +84,30 @@ public class UserController {
       .orElseThrow(() -> new RuntimeException("No current user found"));
 
     return ResponseEntity.ok(user);
+  }
+
+  @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<UserDto> patchDefaultProfile(
+    @ModelAttribute DefaultProfileRequest request) {
+
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (!(principal instanceof Long userId)) {
+      throw new RuntimeException("인증된 사용자 정보를 찾을 수 없습니다.");
+    }
+
+    UserDto updatedUser = userService.patchDefaultProfile(userId, request);
+
+    return ResponseEntity.ok(updatedUser);
+  }
+
+  @PatchMapping("/me/student-profile")
+  public ResponseEntity<UserDto> patchTeacherProfile(@RequestBody UserDto userDto) {
+    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    if (!(principal instanceof Long userId)) {
+      throw new RuntimeException("인증된 사용자 정보를 찾을 수 없습니다.");
+    }
+
+    return ResponseEntity.ok(null);
   }
 
   @DeleteMapping("")

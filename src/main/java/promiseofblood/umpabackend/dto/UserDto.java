@@ -23,9 +23,13 @@ public class UserDto {
 
   private Oauth2UserDto oauth2User;
 
-  static public UserDto ofInitialUser(User user) {
+  static public UserDto of(User user) {
+    
     return UserDto.builder()
       .id(user.getId())
+      .username(user.getUsername())
+      .gender(user.getGender() == null ? null : user.getGender().name())
+      .profileImageUrl(user.getProfileImageUrl())
       .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
       .createdAt(user.getCreatedAt())
       .updatedAt(user.getUpdatedAt())
