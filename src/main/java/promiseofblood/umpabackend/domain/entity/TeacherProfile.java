@@ -28,9 +28,6 @@ public class TeacherProfile extends TimeStampedEntity {
   private Major major;
 
   @Enumerated(EnumType.STRING)
-  private LessonStyle lessonStyle;
-  
-  @Enumerated(EnumType.STRING)
   private Region lessonRegion;
 
   @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
