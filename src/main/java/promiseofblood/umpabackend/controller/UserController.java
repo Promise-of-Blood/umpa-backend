@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
+import promiseofblood.umpabackend.domain.service.StorageService;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -33,6 +34,7 @@ public class UserController {
 
   private final UserService userService;
   private final Oauth2Service oauth2Service;
+  private final StorageService storageService;
 
   @PostMapping("/register/general")
   public ResponseEntity<RegisterCompleteResponse> registerUser(

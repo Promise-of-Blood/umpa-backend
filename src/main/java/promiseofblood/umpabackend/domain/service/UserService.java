@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.domain.service;
 
+import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ public class UserService implements UserDetailsService {
   private final JwtService jwtService;
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
+  private final StorageService storageService;
 
   public RegisterCompleteResponse registerUser(GeneralRegisterRequest generalRegisterRequest) {
 
@@ -67,11 +69,18 @@ public class UserService implements UserDetailsService {
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    user.patchDefaultProfile(defaultProfileRequest.getUsername(),
-      defaultProfileRequest.getProfileImage().getOriginalFilename());
-
+    if (defaultProfileRequest.getUsername() != null) {
+      user.patchUsername(defaultProfileRequest.getUsername());
+    }
+    if (defaultProfileRequest.getGender() != null) {
+      user.patchGender(defaultProfileRequest.getGender());
+    }
+    if (defaultProfileRequest.getProfileImage() != null) {
+      Path storedFilePath = storageService.store(defaultProfileRequest.getProfileImage());
+      user.patchProfileImageUrl(storedFilePath.toString());
+    }
     User updatedUser = userRepository.save(user);
-    System.out.println(updatedUser);
+
     return UserDto.of(updatedUser);
   }
 
@@ -88,8 +97,10 @@ public class UserService implements UserDetailsService {
 
   @Override
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-    return null;
+    // username은 loginId로 사용 (일반 로그인)
+    // 소셜 로그인 사용자는 loginId가 null이므로 제외됨
+    return userRepository.findByLoginId(username)
+      .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
   }
 
 }

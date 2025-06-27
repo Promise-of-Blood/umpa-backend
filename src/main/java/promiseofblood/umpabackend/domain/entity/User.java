@@ -56,11 +56,16 @@ public class User extends TimeStampedEntity implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  public User patchDefaultProfile(String username, String profileImageUrl) {
+  public void patchUsername(String username) {
     this.username = username;
-    this.profileImageUrl = profileImageUrl;
+  }
 
-    return this;
+  public void patchGender(Gender gender) {
+    this.gender = gender;
+  }
+
+  public void patchProfileImageUrl(String profileImageUrl) {
+    this.profileImageUrl = profileImageUrl;
   }
 
   @Override
