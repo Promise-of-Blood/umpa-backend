@@ -22,5 +22,8 @@ public abstract class ServicePost extends TimeStampedEntity {
 
   private String description;
 
+  private Long userId;
+
+  abstract String getCostAndUnit();
 
 }

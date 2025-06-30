@@ -37,5 +37,8 @@ public class AccompanimentServicePost extends ServicePost {
   @ElementCollection
   private List<String> videoUrls;
 
-
+  @Override
+  public String getCostAndUnit() {
+    return "";
+  }
 }

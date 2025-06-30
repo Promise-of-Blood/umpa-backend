@@ -24,5 +24,10 @@ public class ScoreProductionRegistration extends ServicePost {
   private String softwareUsed;
 
   private String sampleScoreUrl;
+
+  @Override
+  public String getCostAndUnit() {
+    return "";
+  }
 }
 

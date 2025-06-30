@@ -42,4 +42,9 @@ public class LessonServicePost extends ServicePost {
 
 //  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 //  private List<LessonCurriculum> curriculum;
+
+  @Override
+  public String getCostAndUnit() {
+    return serviceCost.getCost() + " " + serviceCost.getUnit();
+  }
 }
