@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
@@ -18,6 +19,7 @@ import promiseofblood.umpabackend.repository.UserRepository;
 public class UserService {
 
   private final JwtService jwtService;
+  private final UsernameService usernameService;
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
   private final StorageService storageService;
@@ -27,7 +29,8 @@ public class UserService {
     User user = User.builder()
       .loginId(generalRegisterRequest.getLoginId())
       .password(passwordEncoder.encode(generalRegisterRequest.getPassword()))
-      .role(promiseofblood.umpabackend.domain.vo.Role.USER)
+      .username(usernameService.generateRandomUsername())
+      .role(Role.USER)
       .build();
     user = userRepository.save(user);
 
@@ -42,6 +45,11 @@ public class UserService {
       .build();
   }
 
+  /**
+   * 사용자 목록을 조회합니다.
+   *
+   * @return 사용자 목록
+   */
   public List<UserDto> getUsers() {
 
     return userRepository.findAll()

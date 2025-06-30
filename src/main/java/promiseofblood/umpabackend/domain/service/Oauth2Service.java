@@ -6,19 +6,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.core.config.Oauth2ProvidersConfig;
-import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
+import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
+import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.domain.entity.Oauth2User;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.strategy.Oauth2Strategy;
 import promiseofblood.umpabackend.domain.strategy.Oauth2StrategyFactory;
+import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
+import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
-import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
-import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.repository.Oauth2UserRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
 
@@ -30,6 +31,7 @@ public class Oauth2Service {
   private final Oauth2ProvidersConfig oauth2ProvidersConfig;
   private final UserRepository userRepository;
   private final Oauth2UserRepository oauth2UserRepository;
+  private final UsernameService usernameService;
   private final JwtService jwtService;
 
 
@@ -59,6 +61,8 @@ public class Oauth2Service {
       .build();
     User newUser = User.builder()
       .oauth2User(newOauth2User)
+      .username(usernameService.generateRandomUsername())
+      .role(Role.USER)
       .build();
     User user = userRepository.save(newUser);
 
