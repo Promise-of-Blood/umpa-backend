@@ -63,6 +63,14 @@ public class UserService {
       .toList();
   }
 
+  public UserDto getUserByLoginId(String loginId) {
+
+    User user = userRepository.findByLoginId(loginId)
+      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    return UserDto.of(user);
+  }
+
   public void deleteUsers() {
 
     userRepository.deleteAll();
@@ -135,9 +143,19 @@ public class UserService {
       teacherProfile.setLessonRegion(teacherProfileRequest.getLessonRegion());
       teacherProfile.getCareers().clear();
       teacherProfile.getCareers().addAll(teacherCareers);
+      for (TeacherCareer career : teacherCareers) {
+        career.setTeacherProfile(teacherProfile);
+      }
+
       teacherProfile.getLinks().clear();
       teacherProfile.getLinks().addAll(teacherLinks);
+      for (TeacherLink link : teacherLinks) {
+        link.setTeacherProfile(teacherProfile);
+      }
+
+      user.patchTeacherProfile(teacherProfile);
     }
+    user = userRepository.save(user);
 
     return TeacherProfileDto.of(user.getTeacherProfile());
   }

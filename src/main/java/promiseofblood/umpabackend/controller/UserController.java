@@ -85,12 +85,14 @@ public class UserController {
     return ResponseEntity.ok(user);
   }
 
-//  @GetMapping("/me")
-//  public ResponseEntity<UserDto> getCurrentUser(
-//    @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
-//
-//    return ResponseEntity.ok(UserDto.of(securityUserDetails.getUser()));
-//  }
+  @GetMapping("/me")
+  public ResponseEntity<UserDto> getCurrentUser(
+    @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    return ResponseEntity.ok(
+      userService.getUserByLoginId(securityUserDetails.getUsername())
+    );
+  }
 
   @PatchMapping("/me/teacher-profile")
   public ResponseEntity<TeacherProfileDto> patchTeacherProfile(
