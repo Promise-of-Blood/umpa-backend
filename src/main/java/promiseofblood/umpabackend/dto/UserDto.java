@@ -31,6 +31,7 @@ public class UserDto {
 
     return UserDto.builder()
       .id(user.getId())
+      .loginId(user.getLoginId())
       .username(user.getUsername())
       .gender(user.getGender() == null ? null : user.getGender().name())
       .profileImageUrl(user.getProfileImageUrl())
