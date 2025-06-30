@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
@@ -13,11 +14,13 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 @SuperBuilder
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "service_type")
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public abstract class ServiceRegistration extends TimeStampedEntity {
+public abstract class ServicePost extends TimeStampedEntity {
 
   private String title;
 
   private String description;
+
 
 }

@@ -16,7 +16,7 @@ import promiseofblood.umpabackend.domain.vo.LessonStyle;
 @Entity
 @DiscriminatorValue("LESSON")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class LessonRegistration extends ServiceRegistration {
+public class LessonServicePost extends ServicePost {
 
   @Embedded
   private ServiceCost serviceCost;

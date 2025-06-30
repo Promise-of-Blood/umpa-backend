@@ -4,38 +4,32 @@ import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import promiseofblood.umpabackend.domain.vo.Instrument;
+
 
 @Entity
-@DiscriminatorValue("ACCOMPANIMENT")
+@DiscriminatorValue("MR_PRODUCTION")
 @Getter
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class AccompanimentRegistration extends ServiceRegistration {
+public class MrProductionServicePost extends ServicePost {
 
   @Embedded
   private ServiceCost serviceCost;
 
-  @Enumerated(EnumType.STRING)
-  private Instrument instrument;
+  private String additionalCostPolicy;
 
-  private int includedPracticeCount;
+  private int freeRevisionCount;
 
-  private int additionalPracticeCost;
+  @Embedded
+  private DurationRange averageDuration;
 
-  private boolean isMrIncluded;
-
-  private String practiceLocation;
+  private String softwareUsed;
 
   @ElementCollection
-  private List<String> videoUrls;
-
-
+  private List<String> sampleMrUrls;
 }
