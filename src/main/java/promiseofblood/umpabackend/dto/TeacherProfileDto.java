@@ -5,8 +5,8 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
-import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.domain.vo.Region;
+import promiseofblood.umpabackend.dto.response.MajorResponse;
+import promiseofblood.umpabackend.dto.response.RegionResponse;
 
 @Builder
 @Getter
@@ -14,15 +14,16 @@ public class TeacherProfileDto {
 
   private String description;
 
-  private Major major;
+  private MajorResponse major;
 
-  private Region lessonRegion;
+  private RegionResponse lessonRegion;
 
   private List<TeacherCareerDto> careers;
 
   private List<String> links;
 
   public static TeacherProfileDto of(TeacherProfile teacherProfile) {
+
     List<TeacherCareerDto> teacherCareerDtos = teacherProfile.getCareers() == null
       ? null
       : teacherProfile.getCareers().stream()
@@ -37,8 +38,8 @@ public class TeacherProfileDto {
 
     return TeacherProfileDto.builder()
       .description(teacherProfile.getDescription())
-      .major(teacherProfile.getMajor())
-      .lessonRegion(teacherProfile.getLessonRegion())
+      .major(MajorResponse.of(teacherProfile.getMajor()))
+      .lessonRegion(RegionResponse.of(teacherProfile.getLessonRegion()))
       .careers(teacherCareerDtos)
       .links(
         teacherLinkDtos == null
