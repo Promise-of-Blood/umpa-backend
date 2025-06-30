@@ -31,7 +31,6 @@ public class Oauth2Service {
   private final Oauth2ProvidersConfig oauth2ProvidersConfig;
   private final UserRepository userRepository;
   private final Oauth2UserRepository oauth2UserRepository;
-  private final UsernameService usernameService;
   private final JwtService jwtService;
 
 
@@ -60,8 +59,8 @@ public class Oauth2Service {
       .username(oauth2ProfileResponse.getUsername())
       .build();
     User newUser = User.builder()
+      .loginId(oauth2ProfileResponse.getUsername() + System.currentTimeMillis())
       .oauth2User(newOauth2User)
-      .username(usernameService.generateRandomUsername())
       .role(Role.USER)
       .build();
     User user = userRepository.save(newUser);
@@ -69,8 +68,8 @@ public class Oauth2Service {
     return RegisterCompleteResponse.builder()
       .user(UserDto.of(user))
       .jwtPair(JwtPairDto.builder()
-        .accessToken(jwtService.createAccessToken(user.getId()))
-        .refreshToken(jwtService.createRefreshToken(user.getId()))
+        .accessToken(jwtService.createAccessToken(user.getId(), user.getLoginId()))
+        .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
         .build())
       .build();
   }
@@ -116,8 +115,8 @@ public class Oauth2Service {
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-    String newAccessToken = jwtService.createAccessToken(user.getId());
-    String newRefreshToken = jwtService.createRefreshToken(user.getId());
+    String newAccessToken = jwtService.createAccessToken(user.getId(), user.getLoginId());
+    String newRefreshToken = jwtService.createRefreshToken(user.getId(), user.getLoginId());
 
     return JwtPairDto.builder()
       .accessToken(newAccessToken)
