@@ -86,20 +86,19 @@ public class UserController {
   @GetMapping("/me")
   public ResponseEntity<UserDto> getCurrentUser(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
-    
+
     return ResponseEntity.ok(UserDto.of(securityUserDetails.getUser()));
   }
 
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UserDto> patchDefaultProfile(
-    @ModelAttribute DefaultProfileRequest request) {
+    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+    @ModelAttribute DefaultProfileRequest defaultProfileRequest
+  ) {
 
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (!(principal instanceof Long userId)) {
-      throw new RuntimeException("인증된 사용자 정보를 찾을 수 없습니다.");
-    }
-
-    UserDto updatedUser = userService.patchDefaultProfile(userId, request);
+    UserDto updatedUser = userService.patchDefaultProfile(
+      securityUserDetails.getUser(), defaultProfileRequest
+    );
 
     return ResponseEntity.ok(updatedUser);
   }

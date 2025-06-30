@@ -1,6 +1,5 @@
 package promiseofblood.umpabackend.domain.service;
 
-import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,10 +67,7 @@ public class UserService {
     return UserDto.of(user);
   }
 
-  public UserDto patchDefaultProfile(Long userId, DefaultProfileRequest defaultProfileRequest) {
-    User user = userRepository.findById(userId)
-      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
+  public UserDto patchDefaultProfile(User user, DefaultProfileRequest defaultProfileRequest) {
     if (defaultProfileRequest.getUsername() != null) {
       user.patchUsername(defaultProfileRequest.getUsername());
     }
@@ -79,8 +75,13 @@ public class UserService {
       user.patchGender(defaultProfileRequest.getGender());
     }
     if (defaultProfileRequest.getProfileImage() != null) {
-      Path storedFilePath = storageService.store(defaultProfileRequest.getProfileImage());
-      user.patchProfileImageUrl(storedFilePath.toString());
+      String storedFilePath = storageService.store(
+        defaultProfileRequest.getProfileImage(),
+        "users",
+        user.getId().toString(),
+        "default-profile"
+      );
+      user.patchProfileImageUrl(storedFilePath);
     }
     User updatedUser = userRepository.save(user);
 

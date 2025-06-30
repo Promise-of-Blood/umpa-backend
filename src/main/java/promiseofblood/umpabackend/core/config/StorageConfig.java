@@ -11,6 +11,8 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties("storage")
 public class StorageConfig {
 
-  private String location = "upload-dir";
+  private String fileLocation = "upload-dir";
 
+  private String proxyPrefix = "static/upload-dir";
+  
 }
