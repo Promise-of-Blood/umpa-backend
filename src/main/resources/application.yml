@@ -55,7 +55,7 @@ oauth2:
       loginUrl: https://kauth.kakao.com/oauth/authorize
       tokenUri: https://kauth.kakao.com/oauth/token
       profileUri: https://kapi.kakao.com/v2/user/me
-      redirect-uri: https://um-pa.duckdns.org/api/v1/oauth2/kakao/callback
+      redirect-uri: https://um-pa.duckdns.org/api/v1/users/callback/kakao
     - name: naver
       clientId: ${OAUTH2_NAVER_CLIENT_ID}
       clientSecret: ${OAUTH2_NAVER_CLIENT_SECRET}
@@ -89,7 +89,7 @@ oauth2:
       loginUrl: https://kauth.kakao.com/oauth/authorize
       tokenUri: https://kauth.kakao.com/oauth/token
       profileUri: https://kapi.kakao.com/v2/user/me
-      redirect-uri: http://localhost:8080/api/v1/oauth2/kakao/callback
+      redirect-uri: http://localhost:8080/api/v1/users/callback/kakao
     - name: naver
       clientId: ${OAUTH2_NAVER_CLIENT_ID}
       clientSecret: ${OAUTH2_NAVER_CLIENT_SECRET}
