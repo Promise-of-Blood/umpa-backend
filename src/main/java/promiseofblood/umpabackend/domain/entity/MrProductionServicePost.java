@@ -32,4 +32,9 @@ public class MrProductionServicePost extends ServicePost {
 
   @ElementCollection
   private List<String> sampleMrUrls;
+
+  @Override
+  public String getCostAndUnit() {
+    return serviceCost.getCost() + " " + serviceCost.getUnit();
+  }
 }
