@@ -3,19 +3,24 @@ package promiseofblood.umpabackend.dto.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.YearMonth;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
+import promiseofblood.umpabackend.domain.vo.Major;
+import promiseofblood.umpabackend.domain.vo.Region;
 
 @Builder
 @Getter
 @AllArgsConstructor
 public class TeacherProfileRequest {
 
+  @Schema(description = "선생님 전공", example = "ELECTRONIC_MUSIC")
+  private Major major;
+
   @Schema(description = "레슨 지역", example = "SEOUL_GWANGJINGU")
-  private String lessonRegion;
+  private Region lessonRegion;
 
   @Schema(
     description = "경력",

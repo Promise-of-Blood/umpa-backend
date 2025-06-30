@@ -70,4 +70,12 @@ public class User extends TimeStampedEntity {
     this.profileImageUrl = profileImageUrl;
   }
 
+  public void patchStudentProfile(StudentProfile studentProfile) {
+    this.studentProfile = studentProfile;
+  }
+
+  public void patchTeacherProfile(TeacherProfile teacherProfile) {
+    this.teacherProfile = teacherProfile;
+  }
+
 }

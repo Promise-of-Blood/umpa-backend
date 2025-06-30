@@ -1,15 +1,23 @@
 package promiseofblood.umpabackend.domain.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.domain.entity.TeacherCareer;
+import promiseofblood.umpabackend.domain.entity.TeacherLink;
+import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.dto.JwtPairDto;
+import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
+import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
+import promiseofblood.umpabackend.dto.request.TeacherProfileRequest.TeacherCareerRequest;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
@@ -60,14 +68,10 @@ public class UserService {
     userRepository.deleteAll();
   }
 
-  public UserDto getUserById(Long userId) {
-    User user = userRepository.findById(userId)
+  public UserDto patchDefaultProfile(String loginId, DefaultProfileRequest defaultProfileRequest) {
+    User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    return UserDto.of(user);
-  }
-
-  public UserDto patchDefaultProfile(User user, DefaultProfileRequest defaultProfileRequest) {
     if (defaultProfileRequest.getUsername() != null) {
       user.patchUsername(defaultProfileRequest.getUsername());
     }
@@ -86,6 +90,54 @@ public class UserService {
     User updatedUser = userRepository.save(user);
 
     return UserDto.of(updatedUser);
+  }
+
+  @Transactional
+  public TeacherProfileDto patchTeacherProfile(
+    String loginId, TeacherProfileRequest teacherProfileRequest
+  ) {
+    User user = userRepository.findByLoginId(loginId)
+      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    TeacherProfile teacherProfile = user.getTeacherProfile();
+
+    List<TeacherCareer> teacherCareers = new ArrayList<>(List.of());
+    for (TeacherCareerRequest teacherCareerRequest : teacherProfileRequest.getCareers()) {
+      TeacherCareer newCareer = TeacherCareer.builder()
+        .title(teacherCareerRequest.getTitle())
+        .isRepresentative(teacherCareerRequest.isRepresentative())
+        .start(teacherCareerRequest.getStartDate())
+        .end(teacherCareerRequest.getEndDate())
+        .build();
+      teacherCareers.add(newCareer);
+    }
+
+    List<TeacherLink> teacherLinks = new ArrayList<>(List.of());
+    for (String teacherLink : teacherProfileRequest.getLinks()) {
+      TeacherLink newLink = TeacherLink.builder()
+        .link(teacherLink)
+        .build();
+      teacherLinks.add(newLink);
+    }
+
+    if (teacherProfile == null) {
+      teacherProfile = TeacherProfile.builder()
+        .major(teacherProfileRequest.getMajor())
+        .lessonRegion(teacherProfileRequest.getLessonRegion())
+        .careers(teacherCareers)
+        .links(teacherLinks)
+        .build();
+      user.patchTeacherProfile(teacherProfile);
+    } else {
+      teacherProfile.setMajor(teacherProfileRequest.getMajor());
+      teacherProfile.setLessonRegion(teacherProfileRequest.getLessonRegion());
+      teacherProfile.getCareers().clear();
+      teacherProfile.getCareers().addAll(teacherCareers);
+      teacherProfile.getLinks().clear();
+      teacherProfile.getLinks().addAll(teacherLinks);
+    }
+
+    return TeacherProfileDto.of(user.getTeacherProfile());
   }
 
   public JwtPairDto generateJwt(String loginId, String password) {

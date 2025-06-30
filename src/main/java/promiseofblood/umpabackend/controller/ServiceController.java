@@ -15,10 +15,12 @@ import promiseofblood.umpabackend.domain.entity.DurationRange;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
+import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.dto.request.MrProductionRegisterRequest;
 import promiseofblood.umpabackend.dto.response.MrProductionServicePostResponse;
 import promiseofblood.umpabackend.dto.response.ServiceResponse;
 import promiseofblood.umpabackend.repository.ServiceRegistrationRepository;
+import promiseofblood.umpabackend.repository.UserRepository;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -26,6 +28,7 @@ import promiseofblood.umpabackend.repository.ServiceRegistrationRepository;
 @RequiredArgsConstructor
 public class ServiceController {
 
+  private final UserRepository userRepository;
   private final ServiceRegistrationRepository serviceRegistrationRepository;
 
   // all services list
@@ -71,8 +74,12 @@ public class ServiceController {
     @RequestBody MrProductionRegisterRequest mrProductionRegisterRequest
   ) {
 
+    String loginId = securityUserDetails.getUsername();
+    User user = userRepository.findByLoginId(loginId)
+      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
     MrProductionServicePost mrProductionRegistration = MrProductionServicePost.builder()
-      .userId(securityUserDetails.getUser().getId())
+      .userId(user.getId())
       .title(mrProductionRegisterRequest.getTitle())
       .description(mrProductionRegisterRequest.getDescription())
       .serviceCost(

@@ -26,12 +26,14 @@ import promiseofblood.umpabackend.domain.service.StorageService;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
+import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralLoginRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
+import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 
@@ -83,11 +85,24 @@ public class UserController {
     return ResponseEntity.ok(user);
   }
 
-  @GetMapping("/me")
-  public ResponseEntity<UserDto> getCurrentUser(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+//  @GetMapping("/me")
+//  public ResponseEntity<UserDto> getCurrentUser(
+//    @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+//
+//    return ResponseEntity.ok(UserDto.of(securityUserDetails.getUser()));
+//  }
 
-    return ResponseEntity.ok(UserDto.of(securityUserDetails.getUser()));
+  @PatchMapping("/me/teacher-profile")
+  public ResponseEntity<TeacherProfileDto> patchTeacherProfile(
+    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+    @RequestBody TeacherProfileRequest teacherProfileRequest
+  ) {
+
+    TeacherProfileDto teacherProfileDto = userService.patchTeacherProfile(
+      securityUserDetails.getUsername(), teacherProfileRequest
+    );
+
+    return ResponseEntity.ok(teacherProfileDto);
   }
 
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -97,7 +112,7 @@ public class UserController {
   ) {
 
     UserDto updatedUser = userService.patchDefaultProfile(
-      securityUserDetails.getUser(), defaultProfileRequest
+      securityUserDetails.getUsername(), defaultProfileRequest
     );
 
     return ResponseEntity.ok(updatedUser);
