@@ -3,22 +3,19 @@ package promiseofblood.umpabackend.domain.service;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
   private final JwtService jwtService;
   private final PasswordEncoder passwordEncoder;
@@ -94,13 +91,4 @@ public class UserService implements UserDetailsService {
 
     return jwtService.createJwtPair(user.getId());
   }
-
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-    // username은 loginId로 사용 (일반 로그인)
-    // 소셜 로그인 사용자는 loginId가 null이므로 제외됨
-    return userRepository.findByLoginId(username)
-      .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-  }
-
 }
