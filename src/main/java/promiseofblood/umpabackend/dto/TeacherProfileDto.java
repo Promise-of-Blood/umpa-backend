@@ -12,6 +12,8 @@ import promiseofblood.umpabackend.domain.vo.Region;
 @Getter
 public class TeacherProfileDto {
 
+  private String description;
+
   private Major major;
 
   private Region lessonRegion;
@@ -34,6 +36,7 @@ public class TeacherProfileDto {
         .toList();
 
     return TeacherProfileDto.builder()
+      .description(teacherProfile.getDescription())
       .major(teacherProfile.getMajor())
       .lessonRegion(teacherProfile.getLessonRegion())
       .careers(teacherCareerDtos)

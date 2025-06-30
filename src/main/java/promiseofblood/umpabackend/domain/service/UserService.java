@@ -122,6 +122,7 @@ public class UserService {
 
     if (teacherProfile == null) {
       teacherProfile = TeacherProfile.builder()
+        .description(teacherProfileRequest.getDescription())
         .major(teacherProfileRequest.getMajor())
         .lessonRegion(teacherProfileRequest.getLessonRegion())
         .careers(teacherCareers)
@@ -129,6 +130,7 @@ public class UserService {
         .build();
       user.patchTeacherProfile(teacherProfile);
     } else {
+      teacherProfile.setDescription(teacherProfileRequest.getDescription());
       teacherProfile.setMajor(teacherProfileRequest.getMajor());
       teacherProfile.setLessonRegion(teacherProfileRequest.getLessonRegion());
       teacherProfile.getCareers().clear();

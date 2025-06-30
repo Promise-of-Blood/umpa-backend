@@ -25,6 +25,8 @@ import promiseofblood.umpabackend.domain.vo.Region;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherProfile extends TimeStampedEntity {
 
+  private String description;
+
   @Enumerated(EnumType.STRING)
   private Major major;
 
