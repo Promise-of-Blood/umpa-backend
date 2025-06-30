@@ -45,7 +45,7 @@ public class SecurityConfig {
       (authorizeRequests) -> authorizeRequests
         .requestMatchers("/api/docs/**").permitAll()
         .requestMatchers("/api/swagger-ui/**").permitAll()
-        .requestMatchers("api/v1/constants/**").permitAll()
+        .requestMatchers("/api/v1/constants/**").permitAll()
         .requestMatchers("/api/v1/users/**").permitAll() // TODO: 인가 처리하기
         .anyRequest().authenticated()
     );

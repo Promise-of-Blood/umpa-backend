@@ -1,16 +1,18 @@
 package promiseofblood.umpabackend.domain.entity;
 
-import jakarta.persistence.*;
-import java.util.Collection;
-import java.util.Collections;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.Role;
@@ -21,7 +23,7 @@ import promiseofblood.umpabackend.domain.vo.Role;
 @SuperBuilder
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends TimeStampedEntity implements UserDetails {
+public class User extends TimeStampedEntity {
 
   // 로그인용 ID, 비밀번호(일반 회원가입)
   @Column(unique = true)
@@ -30,7 +32,7 @@ public class User extends TimeStampedEntity implements UserDetails {
   private String password;
 
   // 닉네임, 성별, 프로필사진
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
   private String username;
 
   @Enumerated(EnumType.STRING)
@@ -56,47 +58,16 @@ public class User extends TimeStampedEntity implements UserDetails {
   @Enumerated(EnumType.STRING)
   private Role role;
 
-  public User patchDefaultProfile(String username, String profileImageUrl) {
+  public void patchUsername(String username) {
     this.username = username;
+  }
+
+  public void patchGender(Gender gender) {
+    this.gender = gender;
+  }
+
+  public void patchProfileImageUrl(String profileImageUrl) {
     this.profileImageUrl = profileImageUrl;
-
-    return this;
   }
 
-  @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return Collections.singletonList(
-      new SimpleGrantedAuthority("ROLE_" + this.getRole().name())
-    );
-  }
-
-  @Override
-  public String getPassword() {
-
-    return password;
-  }
-
-  @Override
-  public boolean isAccountNonExpired() {
-
-    return UserDetails.super.isAccountNonExpired();
-  }
-
-  @Override
-  public boolean isAccountNonLocked() {
-
-    return UserDetails.super.isAccountNonLocked();
-  }
-
-  @Override
-  public boolean isCredentialsNonExpired() {
-
-    return UserDetails.super.isCredentialsNonExpired();
-  }
-
-  @Override
-  public boolean isEnabled() {
-
-    return UserDetails.super.isEnabled();
-  }
 }

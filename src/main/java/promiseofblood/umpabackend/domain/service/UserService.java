@@ -1,40 +1,40 @@
 package promiseofblood.umpabackend.domain.service;
 
+import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements UserDetailsService {
+public class UserService {
 
   private final JwtService jwtService;
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
+  private final StorageService storageService;
 
   public RegisterCompleteResponse registerUser(GeneralRegisterRequest generalRegisterRequest) {
 
     User user = User.builder()
       .loginId(generalRegisterRequest.getLoginId())
       .password(passwordEncoder.encode(generalRegisterRequest.getPassword()))
-      .role(promiseofblood.umpabackend.domain.vo.Role.USER)
+      .role(Role.USER)
       .build();
     user = userRepository.save(user);
 
     JwtPairDto jwtPairDto = JwtPairDto.builder()
-      .accessToken(jwtService.createAccessToken(user.getId()))
-      .refreshToken(jwtService.createRefreshToken(user.getId()))
+      .accessToken(jwtService.createAccessToken(user.getId(), user.getLoginId()))
+      .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
       .build();
 
     return RegisterCompleteResponse.builder()
@@ -43,6 +43,11 @@ public class UserService implements UserDetailsService {
       .build();
   }
 
+  /**
+   * 사용자 목록을 조회합니다.
+   *
+   * @return 사용자 목록
+   */
   public List<UserDto> getUsers() {
 
     return userRepository.findAll()
@@ -67,11 +72,18 @@ public class UserService implements UserDetailsService {
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    user.patchDefaultProfile(defaultProfileRequest.getUsername(),
-      defaultProfileRequest.getProfileImage().getOriginalFilename());
-
+    if (defaultProfileRequest.getUsername() != null) {
+      user.patchUsername(defaultProfileRequest.getUsername());
+    }
+    if (defaultProfileRequest.getGender() != null) {
+      user.patchGender(defaultProfileRequest.getGender());
+    }
+    if (defaultProfileRequest.getProfileImage() != null) {
+      Path storedFilePath = storageService.store(defaultProfileRequest.getProfileImage());
+      user.patchProfileImageUrl(storedFilePath.toString());
+    }
     User updatedUser = userRepository.save(user);
-    System.out.println(updatedUser);
+
     return UserDto.of(updatedUser);
   }
 
@@ -83,13 +95,6 @@ public class UserService implements UserDetailsService {
       throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
 
-    return jwtService.createJwtPair(user.getId());
+    return jwtService.createJwtPair(user.getId(), user.getLoginId());
   }
-
-  @Override
-  public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-    return null;
-  }
-
 }

@@ -34,7 +34,7 @@ public class FileSystemStorageService implements StorageService {
   }
 
   @Override
-  public void store(MultipartFile file) {
+  public Path store(MultipartFile file) {
     try {
       if (file.isEmpty()) {
         throw new RuntimeException("Failed to store empty file.");
@@ -48,8 +48,9 @@ public class FileSystemStorageService implements StorageService {
       try (InputStream inputStream = file.getInputStream()) {
         Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
       }
-
+      return destinationFile;
     } catch (IOException e) {
+      e.printStackTrace();
       throw new RuntimeException("Failed to store file.", e);
     }
   }
@@ -67,6 +68,7 @@ public class FileSystemStorageService implements StorageService {
 
   @Override
   public Path load(String filename) {
+
     return rootLocation.resolve(filename);
   }
 
@@ -88,6 +90,7 @@ public class FileSystemStorageService implements StorageService {
 
   @Override
   public void deleteAll() {
+
     FileSystemUtils.deleteRecursively(rootLocation.toFile());
   }
 

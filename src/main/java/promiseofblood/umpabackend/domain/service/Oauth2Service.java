@@ -6,19 +6,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.core.config.Oauth2ProvidersConfig;
-import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
+import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
+import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.domain.entity.Oauth2User;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.strategy.Oauth2Strategy;
 import promiseofblood.umpabackend.domain.strategy.Oauth2StrategyFactory;
+import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
+import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
-import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
-import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.repository.Oauth2UserRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
 
@@ -58,15 +59,17 @@ public class Oauth2Service {
       .username(oauth2ProfileResponse.getUsername())
       .build();
     User newUser = User.builder()
+      .loginId(oauth2ProfileResponse.getUsername() + System.currentTimeMillis())
       .oauth2User(newOauth2User)
+      .role(Role.USER)
       .build();
     User user = userRepository.save(newUser);
 
     return RegisterCompleteResponse.builder()
       .user(UserDto.of(user))
       .jwtPair(JwtPairDto.builder()
-        .accessToken(jwtService.createAccessToken(user.getId()))
-        .refreshToken(jwtService.createRefreshToken(user.getId()))
+        .accessToken(jwtService.createAccessToken(user.getId(), user.getLoginId()))
+        .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
         .build())
       .build();
   }
@@ -112,8 +115,8 @@ public class Oauth2Service {
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-    String newAccessToken = jwtService.createAccessToken(user.getId());
-    String newRefreshToken = jwtService.createRefreshToken(user.getId());
+    String newAccessToken = jwtService.createAccessToken(user.getId(), user.getLoginId());
+    String newRefreshToken = jwtService.createRefreshToken(user.getId(), user.getLoginId());
 
     return JwtPairDto.builder()
       .accessToken(newAccessToken)

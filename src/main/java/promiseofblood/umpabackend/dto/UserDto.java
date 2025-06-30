@@ -1,7 +1,9 @@
 package promiseofblood.umpabackend.dto;
 
 import java.time.LocalDateTime;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 import promiseofblood.umpabackend.domain.entity.User;
 
 @Getter
@@ -10,6 +12,8 @@ import promiseofblood.umpabackend.domain.entity.User;
 public class UserDto {
 
   private Long id;
+
+  private String loginId;
 
   private String username;
 
@@ -24,9 +28,10 @@ public class UserDto {
   private Oauth2UserDto oauth2User;
 
   static public UserDto of(User user) {
-    
+
     return UserDto.builder()
       .id(user.getId())
+      .loginId(user.getLoginId())
       .username(user.getUsername())
       .gender(user.getGender() == null ? null : user.getGender().name())
       .profileImageUrl(user.getProfileImageUrl())

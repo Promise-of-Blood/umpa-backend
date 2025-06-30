@@ -28,6 +28,7 @@ public class GlobalExceptionHandler {
       .body(ExceptionResponse);
   }
 
+  // 404
   @ExceptionHandler(NotFoundException.class)
   public ResponseEntity<ExceptionResponse> handleNotFoundException(
     Exception ex,
@@ -38,6 +39,22 @@ public class GlobalExceptionHandler {
 
     return ResponseEntity
       .status(HttpStatus.NOT_FOUND)
+      .body(ExceptionResponse);
+  }
+
+  // 401
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<ExceptionResponse> handleUnauthorizedException(
+    Exception ex,
+    WebRequest request
+  ) {
+    log.error(ex.getMessage(), ex);
+    ExceptionResponse ExceptionResponse = new ExceptionResponse(
+      ex.getMessage()
+    );
+
+    return ResponseEntity
+      .status(HttpStatus.UNAUTHORIZED)
       .body(ExceptionResponse);
   }
 
