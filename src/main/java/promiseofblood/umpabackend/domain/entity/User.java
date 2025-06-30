@@ -32,7 +32,7 @@ public class User extends TimeStampedEntity {
   private String password;
 
   // 닉네임, 성별, 프로필사진
-  @Column(unique = true)
+  @Column(unique = true, nullable = false)
   private String username;
 
   @Enumerated(EnumType.STRING)
