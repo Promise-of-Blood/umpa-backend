@@ -8,8 +8,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import promiseofblood.umpabackend.core.config.JwtConfig;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 
@@ -17,14 +17,7 @@ import promiseofblood.umpabackend.dto.JwtPairDto;
 @RequiredArgsConstructor
 public class JwtService {
 
-  @Value("${jwt.secret}")
-  String secretKeyString;
-
-  @Value("${jwt.access-token-expiration}")
-  long accessTokenExpiration;
-
-  @Value("${jwt.refresh-token-expiration}")
-  long refreshTokenExpiration;
+  private final JwtConfig jwtConfig;
 
   public JwtPairDto createJwtPair(Long id, String loginId) {
 
@@ -36,12 +29,12 @@ public class JwtService {
 
   public String createAccessToken(Long id, String loginId) {
 
-    return createJwt("access", id, loginId, Role.USER, accessTokenExpiration);
+    return createJwt("access", id, loginId, Role.USER, jwtConfig.getAccessTokenExpiration());
   }
 
   public String createRefreshToken(Long id, String loginId) {
 
-    return createJwt("refresh", id, loginId, Role.USER, refreshTokenExpiration);
+    return createJwt("refresh", id, loginId, Role.USER, jwtConfig.getRefreshTokenExpiration());
   }
 
   public boolean isValidJwt(String token) {
@@ -78,7 +71,7 @@ public class JwtService {
 
   private Algorithm jwtAlgorithm() {
 
-    return Algorithm.HMAC256(secretKeyString.getBytes());
+    return Algorithm.HMAC256(jwtConfig.getSecretKey().getBytes());
   }
 
   private String createJwt(String type, Long id, String loginId, Role role, long expiration) {

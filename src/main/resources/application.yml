@@ -2,9 +2,6 @@ spring:
   application:
     name: umpa-backend
 
-  profiles:
-    active: dev
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -25,10 +22,6 @@ springdoc:
     tags-sorter: alpha
     operations-sorter: alpha
 
-jwt:
-  secret: ${JWT_SECRET}
-  access-token-expiration: 3600000
-  refresh-token-expiration: 604800000
 
 ---
 
@@ -39,6 +32,11 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
+jwt:
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration: 3600000
+  refresh-token-expiration: 604800000
 
 oauth2:
   providers:
@@ -73,6 +71,11 @@ spring:
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
+
+jwt:
+  secret-key: test-jwt-secret-key
+  access-token-expiration: 3600000
+  refresh-token-expiration: 604800000
 
 oauth2:
   providers:
@@ -117,7 +120,7 @@ spring:
         format_sql: true
 
 jwt:
-  secret: test-jwt-secret-key
+  secret-key: test-jwt-secret-key
   access-token-expiration: 3600000
   refresh-token-expiration: 604800000
 
