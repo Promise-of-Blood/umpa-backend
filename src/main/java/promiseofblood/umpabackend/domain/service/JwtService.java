@@ -26,36 +26,22 @@ public class JwtService {
   @Value("${jwt.refresh-token-expiration}")
   long refreshTokenExpiration;
 
-  public JwtPairDto createJwtPair(Long id) {
+  public JwtPairDto createJwtPair(Long id, String loginId) {
 
-    String accessToken = createAccessToken(id);
-    String refreshToken = createRefreshToken(id);
+    String accessToken = createAccessToken(id, loginId);
+    String refreshToken = createRefreshToken(id, loginId);
 
-    return JwtPairDto.builder()
-      .accessToken(accessToken)
-      .refreshToken(refreshToken)
-      .build();
+    return JwtPairDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
   }
 
-  public String createAccessToken(Long id) {
+  public String createAccessToken(Long id, String loginId) {
 
-    return createJwt("access", id, Role.USER, accessTokenExpiration);
+    return createJwt("access", id, loginId, Role.USER, accessTokenExpiration);
   }
 
-  public String createRefreshToken(Long id) {
+  public String createRefreshToken(Long id, String loginId) {
 
-    return createJwt("refresh", id, Role.USER, refreshTokenExpiration);
-  }
-
-  private DecodedJWT decodeJwt(String jwt) {
-    try {
-      JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
-      return verifier.verify(jwt);
-    } catch (TokenExpiredException e) {
-      throw new RuntimeException("Expired JWT token: " + e.getMessage());
-    } catch (JWTVerificationException e) {
-      throw new RuntimeException("Invalid JWT token: " + e.getMessage());
-    }
+    return createJwt("refresh", id, loginId, Role.USER, refreshTokenExpiration);
   }
 
   public boolean isValidJwt(String token) {
@@ -74,19 +60,19 @@ public class JwtService {
     return jwt.getClaim("id").asLong();
   }
 
-  public Role getRoleFromToken(String token) {
+  public String getLoginIdFromToken(String token) {
     DecodedJWT jwt = this.decodeJwt(token);
-    return Role.valueOf(jwt.getClaim("role").asString());
+    return jwt.getClaim("loginId").asString();
   }
 
-  public boolean isTokenExpired(String token) {
+  private DecodedJWT decodeJwt(String jwt) {
     try {
-      DecodedJWT jwt = this.decodeJwt(token);
-      return jwt.getExpiresAt().before(new Date());
+      JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
+      return verifier.verify(jwt);
     } catch (TokenExpiredException e) {
-      return true;
-    } catch (Exception e) {
-      throw new RuntimeException("Error checking token expiration: " + e.getMessage());
+      throw new RuntimeException("Expired JWT token: " + e.getMessage());
+    } catch (JWTVerificationException e) {
+      throw new RuntimeException("Invalid JWT token: " + e.getMessage());
     }
   }
 
@@ -95,16 +81,12 @@ public class JwtService {
     return Algorithm.HMAC256(secretKeyString.getBytes());
   }
 
-  private String createJwt(
-    String type, Long id, Role role, long expiration) {
+  private String createJwt(String type, Long id, String loginId, Role role, long expiration) {
 
-    return JWT.create()
-      .withClaim("type", type)
-      .withClaim("id", id)
-      .withClaim("role", role.name())
+    return JWT.create().withClaim("type", type).withClaim("loginId", loginId).withClaim("id", id)
+      .withClaim("username", "정재균").withClaim("role", role.name())
       .withIssuedAt(new Date(System.currentTimeMillis()))
-      .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
-      .sign(this.jwtAlgorithm());
+      .withExpiresAt(new Date(System.currentTimeMillis() + expiration)).sign(this.jwtAlgorithm());
   }
 
 }

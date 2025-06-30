@@ -6,15 +6,25 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
-
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.StorageService;
 import promiseofblood.umpabackend.domain.service.UserService;
+import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
@@ -23,7 +33,6 @@ import promiseofblood.umpabackend.dto.request.GeneralLoginRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 
 @RestController
@@ -75,17 +84,10 @@ public class UserController {
   }
 
   @GetMapping("/me")
-  public ResponseEntity<UserDto> getCurrentUser() {
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (!(principal instanceof Long userId)) {
-      throw new RuntimeException("인증된 사용자 정보를 찾을 수 없습니다.");
-    }
-    UserDto user = userService.getUsers().stream()
-      .filter(u -> u.getId().equals(userId))
-      .findFirst()
-      .orElseThrow(() -> new RuntimeException("No current user found"));
-
-    return ResponseEntity.ok(user);
+  public ResponseEntity<UserDto> getCurrentUser(
+    @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+    
+    return ResponseEntity.ok(UserDto.of(securityUserDetails.getUser()));
   }
 
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

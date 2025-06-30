@@ -19,7 +19,6 @@ import promiseofblood.umpabackend.repository.UserRepository;
 public class UserService {
 
   private final JwtService jwtService;
-  private final UsernameService usernameService;
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
   private final StorageService storageService;
@@ -29,14 +28,13 @@ public class UserService {
     User user = User.builder()
       .loginId(generalRegisterRequest.getLoginId())
       .password(passwordEncoder.encode(generalRegisterRequest.getPassword()))
-      .username(usernameService.generateRandomUsername())
       .role(Role.USER)
       .build();
     user = userRepository.save(user);
 
     JwtPairDto jwtPairDto = JwtPairDto.builder()
-      .accessToken(jwtService.createAccessToken(user.getId()))
-      .refreshToken(jwtService.createRefreshToken(user.getId()))
+      .accessToken(jwtService.createAccessToken(user.getId(), user.getLoginId()))
+      .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
       .build();
 
     return RegisterCompleteResponse.builder()
@@ -97,6 +95,6 @@ public class UserService {
       throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
     }
 
-    return jwtService.createJwtPair(user.getId());
+    return jwtService.createJwtPair(user.getId(), user.getLoginId());
   }
 }
