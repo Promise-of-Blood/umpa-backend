@@ -7,60 +7,78 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Objects;
 import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.core.config.StorageConfig;
 
 @Service
 public class FileSystemStorageService implements StorageService {
 
-  private final Path rootLocation;
+  private final Path fileLocation;
 
   @Autowired
   public FileSystemStorageService(StorageConfig storageConfig) {
 
-    if (storageConfig.getLocation().trim().isEmpty()) {
+    if (storageConfig.getFileLocation().trim().isEmpty()) {
       throw new RuntimeException("File upload location can not be Empty.");
     }
 
-    this.rootLocation = Paths.get(storageConfig.getLocation());
+    this.fileLocation = Paths.get(storageConfig.getFileLocation());
   }
 
   @Override
-  public Path store(MultipartFile file) {
-    try {
-      if (file.isEmpty()) {
-        throw new RuntimeException("Failed to store empty file.");
-      }
-      Path destinationFile = this.rootLocation.resolve(
-        Paths.get(Objects.requireNonNull(file.getOriginalFilename()))).normalize().toAbsolutePath();
-
-      if (!destinationFile.getParent().equals(this.rootLocation.toAbsolutePath())) {
-        throw new RuntimeException("Cannot store file outside current directory.");
-      }
-      try (InputStream inputStream = file.getInputStream()) {
-        Files.copy(inputStream, destinationFile, StandardCopyOption.REPLACE_EXISTING);
-      }
-      return destinationFile;
-    } catch (IOException e) {
-      e.printStackTrace();
-      throw new RuntimeException("Failed to store file.", e);
+  public String store(MultipartFile file, String... filePaths) {
+    if (file.isEmpty() || file.getOriginalFilename() == null) {
+      throw new RuntimeException("Empty file");
     }
+
+    String filename = StringUtils.cleanPath(
+      file.getOriginalFilename().replace(" ", "")
+        + System.currentTimeMillis()
+    );
+
+    Path targetDirectory = fileLocation;
+    for (String pathPart : filePaths) {
+      if (pathPart == null || pathPart.contains("..")) {
+        throw new RuntimeException("Invalid path segment: " + pathPart);
+      }
+      targetDirectory = targetDirectory.resolve(pathPart);
+    }
+
+    Path destination = targetDirectory.resolve(filename).normalize().toAbsolutePath();
+
+    if (!destination.startsWith(fileLocation.toAbsolutePath())) {
+      throw new RuntimeException("Invalid file path traversal attempt");
+    }
+
+    try {
+      Files.createDirectories(targetDirectory);
+      try (InputStream inputStream = file.getInputStream()) {
+        Files.copy(inputStream, destination, StandardCopyOption.REPLACE_EXISTING);
+      }
+    } catch (IOException e) {
+      throw new RuntimeException("File storage failed", e);
+    }
+
+    return Paths
+      .get(fileLocation + "/" + String.join("/", filePaths))
+      .resolve(filename).toString()
+      .replace("\\", "/");
   }
+
 
   @Override
   public Stream<Path> loadAll() {
     try {
-      return Files.walk(this.rootLocation, 1)
-        .filter(path -> !path.equals(this.rootLocation))
-        .map(this.rootLocation::relativize);
+      return Files.walk(this.fileLocation, 1)
+        .filter(path -> !path.equals(this.fileLocation))
+        .map(this.fileLocation::relativize);
     } catch (IOException e) {
       throw new RuntimeException("Failed to read stored files", e);
     }
@@ -69,7 +87,7 @@ public class FileSystemStorageService implements StorageService {
   @Override
   public Path load(String filename) {
 
-    return rootLocation.resolve(filename);
+    return fileLocation.resolve(filename);
   }
 
   @Override
@@ -91,13 +109,13 @@ public class FileSystemStorageService implements StorageService {
   @Override
   public void deleteAll() {
 
-    FileSystemUtils.deleteRecursively(rootLocation.toFile());
+    FileSystemUtils.deleteRecursively(fileLocation.toFile());
   }
 
   @Override
   public void init() {
     try {
-      Files.createDirectories(rootLocation);
+      Files.createDirectories(fileLocation);
     } catch (IOException e) {
       throw new RuntimeException("Could not initialize storage", e);
     }
