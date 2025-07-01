@@ -23,7 +23,7 @@ public class UserDto {
 
   private TeacherProfileDto teacherProfile;
 
-//  private StudentProfileDto studentProfile;
+  private StudentProfileDto studentProfile;
 
   private LocalDateTime createdAt;
 
@@ -40,7 +40,11 @@ public class UserDto {
       .gender(user.getGender() == null ? null : user.getGender().name())
       .profileImageUrl(user.getProfileImageUrl())
       .teacherProfile(
-        user.getTeacherProfile() == null ? null : TeacherProfileDto.of(user.getTeacherProfile()))
+        user.getTeacherProfile() == null ? null : TeacherProfileDto.of(user.getTeacherProfile())
+      )
+      .studentProfile(
+        user.getStudentProfile() == null ? null : StudentProfileDto.of(user.getStudentProfile())
+      )
       .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
       .createdAt(user.getCreatedAt())
       .updatedAt(user.getUpdatedAt())

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -22,10 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
-import promiseofblood.umpabackend.domain.service.StorageService;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
+import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
@@ -33,6 +32,7 @@ import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralLoginRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
+import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
@@ -45,7 +45,6 @@ public class UserController {
 
   private final UserService userService;
   private final Oauth2Service oauth2Service;
-  private final StorageService storageService;
 
   @PostMapping("/register/general")
   public ResponseEntity<RegisterCompleteResponse> registerUser(
@@ -107,6 +106,19 @@ public class UserController {
     return ResponseEntity.ok(teacherProfileDto);
   }
 
+  @PatchMapping("/me/student-profile")
+  public ResponseEntity<StudentProfileDto> patchStudentProfile(
+    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+    @RequestBody @Valid StudentProfileRequest studentProfileRequest
+  ) {
+
+    StudentProfileDto studentProfileDto = userService.patchStudentProfile(
+      securityUserDetails.getUsername(), studentProfileRequest
+    );
+
+    return ResponseEntity.ok(studentProfileDto);
+  }
+
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UserDto> patchDefaultProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
@@ -118,16 +130,6 @@ public class UserController {
     );
 
     return ResponseEntity.ok(updatedUser);
-  }
-
-  @PatchMapping("/me/student-profile")
-  public ResponseEntity<UserDto> patchTeacherProfile(@RequestBody UserDto userDto) {
-    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if (!(principal instanceof Long userId)) {
-      throw new RuntimeException("인증된 사용자 정보를 찾을 수 없습니다.");
-    }
-
-    return ResponseEntity.ok(null);
   }
 
   @DeleteMapping("")

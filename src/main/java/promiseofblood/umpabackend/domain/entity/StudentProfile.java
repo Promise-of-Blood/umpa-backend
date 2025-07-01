@@ -1,6 +1,7 @@
 package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -11,6 +12,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.College;
@@ -22,6 +24,7 @@ import promiseofblood.umpabackend.domain.vo.WeekDay;
 
 @Entity
 @Getter
+@Setter
 @SuperBuilder
 @Table(name = "student_profiles")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -47,6 +50,7 @@ public class StudentProfile extends TimeStampedEntity {
   @Enumerated(EnumType.STRING)
   private List<WeekDay> weekDays;
 
+  @Column(length = 1000)
   private String lessonRequirements;
 
 }
