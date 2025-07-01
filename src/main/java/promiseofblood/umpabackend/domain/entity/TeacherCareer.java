@@ -9,6 +9,7 @@ import java.time.YearMonth;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
@@ -16,6 +17,7 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 
 @Entity
 @Getter
+@Setter
 @SuperBuilder
 @ToString
 @Table(name = "teacher_careers")
