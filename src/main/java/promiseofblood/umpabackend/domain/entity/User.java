@@ -16,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.domain.vo.Status;
 
 
 @Entity
@@ -26,13 +27,23 @@ import promiseofblood.umpabackend.domain.vo.Role;
 public class User extends TimeStampedEntity {
 
   // 로그인용 ID, 비밀번호(일반 회원가입)
-  @Column(unique = true)
+  @Column(nullable = false, unique = true)
   private String loginId;
 
+  @Column(nullable = false)
   private String password;
 
+  // 회원 상태, 역할
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Status status;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role;
+
   // 닉네임, 성별, 프로필사진
-  @Column(unique = true, nullable = false)
+  @Column(nullable = false, unique = true)
   private String username;
 
   @Enumerated(EnumType.STRING)
@@ -40,12 +51,11 @@ public class User extends TimeStampedEntity {
 
   private String profileImageUrl;
 
-  // 학생 프로필
+  // 학생 프로필, 선생님 프로필
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "student_profile_id")
   private StudentProfile studentProfile;
 
-  // 선생님 프로필
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "teacher_profile_id")
   private TeacherProfile teacherProfile;
@@ -54,9 +64,6 @@ public class User extends TimeStampedEntity {
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "oauth2_user_id")
   private Oauth2User oauth2User;
-
-  @Enumerated(EnumType.STRING)
-  private Role role;
 
   public void patchUsername(String username) {
     this.username = username;
@@ -77,5 +84,4 @@ public class User extends TimeStampedEntity {
   public void patchTeacherProfile(TeacherProfile teacherProfile) {
     this.teacherProfile = teacherProfile;
   }
-
 }
