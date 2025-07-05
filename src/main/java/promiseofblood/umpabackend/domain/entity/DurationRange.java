@@ -24,4 +24,17 @@ public class DurationRange {
   @Enumerated(EnumType.STRING)
   private DurationUnit maxUnit;
 
+  public static DurationRange of(String averageDuration) {
+    String[] parts = averageDuration.split("~");
+    String[] minParts = parts[0].split("(?<=\\d)(?=\\D)");
+    String[] maxParts = parts[1].split("(?<=\\d)(?=\\D)");
+
+    return DurationRange.builder()
+      .minValue(Integer.parseInt(minParts[0]))
+      .minUnit(DurationUnit.valueOf(minParts[1]))
+      .maxValue(Integer.parseInt(maxParts[0]))
+      .maxUnit(DurationUnit.valueOf(maxParts[1]))
+      .build();
+  }
+
 }

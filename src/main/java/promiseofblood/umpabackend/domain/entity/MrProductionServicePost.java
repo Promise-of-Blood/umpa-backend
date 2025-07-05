@@ -8,12 +8,14 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
 
 @Entity
 @DiscriminatorValue("MR_PRODUCTION")
 @Getter
+@ToString
 @SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MrProductionServicePost extends ServicePost {
