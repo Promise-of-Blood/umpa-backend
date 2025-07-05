@@ -17,6 +17,8 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ServicePost extends TimeStampedEntity {
+  
+  private String thumbnailImageUrl;
 
   private String title;
 

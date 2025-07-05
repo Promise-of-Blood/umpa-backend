@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.domain.vo.Status;
 
 @Getter
 @Builder
@@ -16,6 +18,10 @@ public class UserDto {
   private String loginId;
 
   private String username;
+
+  private Status status;
+
+  private Role role;
 
   private String gender;
 
@@ -37,6 +43,8 @@ public class UserDto {
       .id(user.getId())
       .loginId(user.getLoginId())
       .username(user.getUsername())
+      .status(user.getStatus())
+      .role(user.getRole())
       .gender(user.getGender() == null ? null : user.getGender().name())
       .profileImageUrl(user.getProfileImageUrl())
       .teacherProfile(

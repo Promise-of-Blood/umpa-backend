@@ -16,8 +16,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.core.security.JwtFilter;
+import promiseofblood.umpabackend.domain.vo.Role;
 
 @Configuration
 @EnableWebSecurity
@@ -47,6 +47,7 @@ public class SecurityConfig {
         .requestMatchers("/api/swagger-ui/**").permitAll()
         .requestMatchers("/api/v1/constants/**").permitAll()
         .requestMatchers("/api/v1/users/**").permitAll() // TODO: 인가 처리하기
+        .requestMatchers("/api/v1/services/**").permitAll() // TODO: 인가 처리하기
         .anyRequest().authenticated()
     );
     http.addFilterBefore(

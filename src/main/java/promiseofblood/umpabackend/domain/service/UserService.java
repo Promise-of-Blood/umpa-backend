@@ -12,6 +12,7 @@ import promiseofblood.umpabackend.domain.entity.TeacherLink;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
@@ -38,7 +39,9 @@ public class UserService {
     User user = User.builder()
       .loginId(generalRegisterRequest.getLoginId())
       .password(passwordEncoder.encode(generalRegisterRequest.getPassword()))
+      .status(Status.ACTIVE)
       .role(Role.USER)
+      .username("임의의사용자" + System.currentTimeMillis())
       .build();
     user = userRepository.save(user);
 

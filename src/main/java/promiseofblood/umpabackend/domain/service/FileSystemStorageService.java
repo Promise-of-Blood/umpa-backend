@@ -39,9 +39,7 @@ public class FileSystemStorageService implements StorageService {
     }
 
     String filename = StringUtils.cleanPath(
-      file.getOriginalFilename().replace(" ", "")
-        + System.currentTimeMillis()
-    );
+      file.getOriginalFilename().replace(" ", "") + System.currentTimeMillis());
 
     Path targetDirectory = fileLocation;
     for (String pathPart : filePaths) {
@@ -66,18 +64,15 @@ public class FileSystemStorageService implements StorageService {
       throw new RuntimeException("File storage failed", e);
     }
 
-    return Paths
-      .get(fileLocation + "/" + String.join("/", filePaths))
-      .resolve(filename).toString()
-      .replace("\\", "/");
+    return Paths.get("/" + fileLocation + "/" + String.join("/", filePaths)).resolve(filename)
+      .toString().replace("\\", "/");
   }
 
 
   @Override
   public Stream<Path> loadAll() {
     try {
-      return Files.walk(this.fileLocation, 1)
-        .filter(path -> !path.equals(this.fileLocation))
+      return Files.walk(this.fileLocation, 1).filter(path -> !path.equals(this.fileLocation))
         .map(this.fileLocation::relativize);
     } catch (IOException e) {
       throw new RuntimeException("Failed to read stored files", e);
