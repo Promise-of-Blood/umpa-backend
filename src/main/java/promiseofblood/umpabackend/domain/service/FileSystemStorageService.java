@@ -39,7 +39,9 @@ public class FileSystemStorageService implements StorageService {
     }
 
     String filename = StringUtils.cleanPath(
-      file.getOriginalFilename().replace(" ", "") + System.currentTimeMillis());
+      System.currentTimeMillis() +
+        file.getOriginalFilename().replace(" ", "")
+    );
 
     Path targetDirectory = fileLocation;
     for (String pathPart : filePaths) {
