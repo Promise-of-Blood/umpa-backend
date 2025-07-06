@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @DiscriminatorValue("SCORE_PRODUCTION")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ScoreProductionRegistration extends ServicePost {
+public class ScoreProductionPost extends ServicePost {
 
   @ElementCollection
   private List<ServiceCost> serviceCosts;
