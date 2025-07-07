@@ -31,6 +31,7 @@ import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralLoginRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
+import promiseofblood.umpabackend.dto.request.Oauth2LoginRequest;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
@@ -149,18 +150,35 @@ public class UserController {
     return oauth2Service.getOauth2Profile(providerName, code);
   }
 
-  @PostMapping("/token")
-  public ResponseEntity<JwtPairDto> createToken(@RequestBody GeneralLoginRequest request) {
+  @PostMapping("token/{providerName}")
+  public ResponseEntity<JwtPairDto> createOauth2Token(
+    @PathVariable String providerName,
+    @RequestBody Oauth2LoginRequest oauth2LoginRequest
+  ) {
 
-    JwtPairDto jwtPairDto = userService.generateJwt(request.getLoginId(), request.getPassword());
+    JwtPairDto jwtPairDto = oauth2Service.generateOauth2Jwt(
+      providerName,
+      oauth2LoginRequest.getExternalIdToken(),
+      oauth2LoginRequest.getExternalAccessToken()
+    );
 
     return ResponseEntity.ok(jwtPairDto);
   }
 
-  @PostMapping("/token/refresh")
+  @PostMapping("/token/general")
+  public ResponseEntity<JwtPairDto> createToken(@RequestBody GeneralLoginRequest request) {
+
+    JwtPairDto jwtPairDto = userService.generateGeneralJwt(request.getLoginId(),
+      request.getPassword());
+
+    return ResponseEntity.ok(jwtPairDto);
+  }
+
+
+  @PostMapping("/refresh-token")
   public JwtPairDto refreshToken(@RequestBody TokenRefreshRequest request) {
 
-    return oauth2Service.refreshToken(request.getRefreshToken());
+    return userService.refreshToken(request.getRefreshToken());
   }
 
   @GetMapping("/oauth2-authorization-urls")

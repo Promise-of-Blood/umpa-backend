@@ -7,6 +7,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import java.security.interfaces.RSAPublicKey;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
@@ -17,10 +18,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
-import java.security.interfaces.RSAPublicKey;
 
 @Component
 @ToString
@@ -110,7 +111,7 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
         .build();
       return verifier.verify(externalIdToken);
     } catch (Exception e) {
-      throw new RuntimeException("Kakao externalIdToken 검증 실패: " + e.getMessage(), e);
+      throw new UnauthorizedException("ID 토큰이 유효하지 않습니다.");
     }
 
   }

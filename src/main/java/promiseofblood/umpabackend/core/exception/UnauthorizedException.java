@@ -1,9 +1,14 @@
 package promiseofblood.umpabackend.core.exception;
 
-public class UnauthorizedException extends RuntimeException {
-  
-  public UnauthorizedException(String message) {
-    super(message);
+import org.springframework.security.core.AuthenticationException;
+
+public class UnauthorizedException extends AuthenticationException {
+
+  public UnauthorizedException(String msg, Throwable cause) {
+    super(msg, cause);
   }
 
+  public UnauthorizedException(String msg) {
+    super(msg);
+  }
 }
