@@ -2,7 +2,9 @@ package promiseofblood.umpabackend.domain.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +28,9 @@ import promiseofblood.umpabackend.dto.request.TeacherProfileRequest.TeacherCaree
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
+
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserService {
 
@@ -202,11 +206,18 @@ public class UserService {
 
   public JwtPairDto generateGeneralJwt(String loginId, String password) {
 
-    // 로그인ID 로 사용자를 찾을 수 없거나, 비밀번호가 일치하지 않는 경우 "아이디 혹은 비밀번호가 일치하지 않습니다." 예외를 발생시킵니다.
-    User user = userRepository.findByLoginIdAndPassword(loginId, passwordEncoder.encode(password))
-      .orElseThrow(() -> new UnauthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다."));
+    Optional<User> optionalUser = userRepository.findByLoginId(loginId);
 
-    return jwtService.createJwtPair(user.getId(), user.getLoginId());
+    boolean userExists = optionalUser.isPresent();
+    boolean isPasswordCorrect = optionalUser
+      .map(user -> passwordEncoder.matches(password, user.getPassword()))
+      .orElse(false);
+
+    if (!userExists || !isPasswordCorrect) {
+      throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
+    }
+
+    return jwtService.createJwtPair(optionalUser.get().getId(), optionalUser.get().getLoginId());
   }
 
   @Transactional

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -40,13 +39,38 @@ import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")
-@Tag(name = "사용자 관리 API", description = "사용자 등록, 조회, 삭제 및 OAuth2 인증 관련 API")
 @RequiredArgsConstructor
 public class UserController {
 
   private final UserService userService;
   private final Oauth2Service oauth2Service;
 
+  // ****************
+  // * 사용자 관리 API *
+  // ****************
+  @Tag(name = "사용자 관리 API")
+  @GetMapping("")
+  public ResponseEntity<List<UserDto>> getUser() {
+    List<UserDto> users = userService.getUsers();
+
+    return ResponseEntity.ok(users);
+  }
+  
+  @Tag(name = "사용자 관리 API")
+  @GetMapping("/{userId}")
+  public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
+    UserDto user = userService.getUsers().stream()
+      .filter(u -> u.getId().equals(userId))
+      .findFirst()
+      .orElseThrow(() -> new RuntimeException("User not found"));
+
+    return ResponseEntity.ok(user);
+  }
+
+  // **************
+  // * 회원가입 API *
+  // **************
+  @Tag(name = "회원가입 API")
   @PostMapping("/register/general")
   public ResponseEntity<RegisterCompleteResponse> registerUser(
     @RequestBody @Valid final GeneralRegisterRequest generalRegisterRequest) {
@@ -56,6 +80,7 @@ public class UserController {
     return ResponseEntity.ok(registerCompleteResponse);
   }
 
+  @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/{providerName}")
   public ResponseEntity<RegisterCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
@@ -68,23 +93,11 @@ public class UserController {
     return ResponseEntity.ok(registerCompleteResponse);
   }
 
-  @GetMapping("")
-  public ResponseEntity<List<UserDto>> getUser() {
-    List<UserDto> users = userService.getUsers();
 
-    return ResponseEntity.ok(users);
-  }
-
-  @GetMapping("/{userId}")
-  public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
-    UserDto user = userService.getUsers().stream()
-      .filter(u -> u.getId().equals(userId))
-      .findFirst()
-      .orElseThrow(() -> new RuntimeException("User not found"));
-
-    return ResponseEntity.ok(user);
-  }
-
+  // ****************
+  // * 프로필 관리 API *
+  // ****************
+  @Tag(name = "프로필 관리 API")
   @GetMapping("/me")
   public ResponseEntity<UserDto> getCurrentUser(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
@@ -94,6 +107,7 @@ public class UserController {
     );
   }
 
+  @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/teacher-profile")
   public ResponseEntity<TeacherProfileDto> patchTeacherProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
@@ -107,6 +121,7 @@ public class UserController {
     return ResponseEntity.ok(teacherProfileDto);
   }
 
+  @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/student-profile")
   public ResponseEntity<StudentProfileDto> patchStudentProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
@@ -120,6 +135,7 @@ public class UserController {
     return ResponseEntity.ok(studentProfileDto);
   }
 
+  @Tag(name = "프로필 관리 API")
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UserDto> patchDefaultProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
@@ -133,23 +149,11 @@ public class UserController {
     return ResponseEntity.ok(updatedUser);
   }
 
-  @DeleteMapping("")
-  public ResponseEntity<Void> deleteUser() {
-    userService.deleteUsers();
 
-    return ResponseEntity.noContent().build();
-  }
-
-  @GetMapping("/callback/{providerName}")
-  @Hidden
-  public Oauth2ProfileResponse oauth2AuthorizationCallback(
-    @PathVariable String providerName,
-    String code
-  ) {
-
-    return oauth2Service.getOauth2Profile(providerName, code);
-  }
-
+  // ***************
+  // * 토큰 발급 API *
+  // ***************
+  @Tag(name = "토큰 발급 API")
   @PostMapping("token/{providerName}")
   public ResponseEntity<JwtPairDto> createOauth2Token(
     @PathVariable String providerName,
@@ -165,6 +169,7 @@ public class UserController {
     return ResponseEntity.ok(jwtPairDto);
   }
 
+  @Tag(name = "토큰 발급 API")
   @PostMapping("/token/general")
   public ResponseEntity<JwtPairDto> createToken(@RequestBody GeneralLoginRequest request) {
 
@@ -174,17 +179,30 @@ public class UserController {
     return ResponseEntity.ok(jwtPairDto);
   }
 
-
+  @Tag(name = "토큰 발급 API")
   @PostMapping("/refresh-token")
   public JwtPairDto refreshToken(@RequestBody TokenRefreshRequest request) {
 
     return userService.refreshToken(request.getRefreshToken());
   }
 
+  @Tag(name = "토큰 발급 API")
   @GetMapping("/oauth2-authorization-urls")
   public ResponseEntity<Map<String, Oauth2ProviderDto>> getAuthorizationUrls() {
 
     return ResponseEntity.ok(oauth2Service.generateAuthorizationUrls());
   }
+
+
+  @GetMapping("/callback/{providerName}")
+  @Hidden
+  public Oauth2ProfileResponse oauth2AuthorizationCallback(
+    @PathVariable String providerName,
+    String code
+  ) {
+
+    return oauth2Service.getOauth2Profile(providerName, code);
+  }
+
 
 }
