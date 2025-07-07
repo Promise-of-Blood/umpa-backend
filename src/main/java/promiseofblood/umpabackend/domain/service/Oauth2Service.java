@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.core.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
 import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
+import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.Oauth2User;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.strategy.Oauth2Strategy;
@@ -86,6 +87,26 @@ public class Oauth2Service {
     return oauth2Strategy.getOauth2UserProfile(oauth2Provider, code);
   }
 
+  public JwtPairDto generateOauth2Jwt(
+    String providerName,
+    String externalAccessToken,
+    String idToken) {
+
+    Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
+    Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
+
+    User user = userRepository.findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
+        providerName,
+        oauth2Strategy.getOauth2UserProfile(oauth2Provider, externalAccessToken, idToken)
+          .getProviderUid())
+      .orElseThrow(() -> new UnauthorizedException("해당 Oauth2 사용자 정보가 존재하지 않습니다."));
+
+    return JwtPairDto.builder()
+      .accessToken(jwtService.createAccessToken(user.getId(), user.getLoginId()))
+      .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
+      .build();
+  }
+
 
   public Map<String, Oauth2ProviderDto> generateAuthorizationUrls() {
     Map<String, Oauth2ProviderDto> oauth2ProviderNameToInfo = new HashMap<>();
@@ -111,21 +132,6 @@ public class Oauth2Service {
     return oauth2ProviderNameToInfo;
   }
 
-  @Transactional
-  public JwtPairDto refreshToken(String refreshToken) {
-    Long userId = jwtService.getUserIdFromToken(refreshToken);
-
-    User user = userRepository.findById(userId)
-      .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
-
-    String newAccessToken = jwtService.createAccessToken(user.getId(), user.getLoginId());
-    String newRefreshToken = jwtService.createRefreshToken(user.getId(), user.getLoginId());
-
-    return JwtPairDto.builder()
-      .accessToken(newAccessToken)
-      .refreshToken(newRefreshToken)
-      .build();
-  }
 
   public boolean isOauth2UserAlreadyExists(String providerName, String providerUid) {
 
