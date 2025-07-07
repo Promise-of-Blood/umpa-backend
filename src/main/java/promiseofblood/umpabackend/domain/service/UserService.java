@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;
@@ -200,12 +201,10 @@ public class UserService {
   }
 
   public JwtPairDto generateJwt(String loginId, String password) {
-    User user = userRepository.findByLoginId(loginId)
-      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    if (!passwordEncoder.matches(password, user.getPassword())) {
-      throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
-    }
+    // 로그인ID 로 사용자를 찾을 수 없거나, 비밀번호가 일치하지 않는 경우 "아이디 혹은 비밀번호가 일치하지 않습니다." 예외를 발생시킵니다.
+    User user = userRepository.findByLoginIdAndPassword(loginId, passwordEncoder.encode(password))
+      .orElseThrow(() -> new UnauthorizedException("아이디 혹은 비밀번호가 일치하지 않습니다."));
 
     return jwtService.createJwtPair(user.getId(), user.getLoginId());
   }
