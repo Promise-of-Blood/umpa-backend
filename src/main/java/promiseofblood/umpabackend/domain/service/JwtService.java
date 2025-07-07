@@ -8,11 +8,13 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import java.util.Date;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import promiseofblood.umpabackend.core.config.JwtConfig;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtService {
@@ -39,13 +41,16 @@ public class JwtService {
 
   public boolean isValidJwt(String token) {
     try {
-      JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
-      verifier.verify(token);
+      this.verifyJwt(token);
       return true;
     } catch (Exception e) {
-      e.printStackTrace();
       return false;
     }
+  }
+
+  public void verifyJwt(String token) {
+    JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
+    verifier.verify(token);
   }
 
   public Long getUserIdFromToken(String token) {
