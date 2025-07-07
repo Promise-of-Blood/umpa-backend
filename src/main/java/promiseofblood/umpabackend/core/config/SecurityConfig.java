@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.core.config;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -16,18 +17,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import promiseofblood.umpabackend.core.security.JwtAuthenticationEntryPoint;
 import promiseofblood.umpabackend.core.security.JwtFilter;
 import promiseofblood.umpabackend.domain.vo.Role;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
   private final JwtFilter jwtFilter;
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    log.debug("--- Configuring SecurityFilterChain ---");
 
     http.formLogin(
       AbstractHttpConfigurer::disable
@@ -46,13 +52,20 @@ public class SecurityConfig {
         .requestMatchers("/api/docs/**").permitAll()
         .requestMatchers("/api/swagger-ui/**").permitAll()
         .requestMatchers("/api/v1/constants/**").permitAll()
+
         .requestMatchers("/api/v1/users/**").permitAll() // TODO: 인가 처리하기
-        .requestMatchers("/api/v1/services/**").permitAll() // TODO: 인가 처리하기
+//        .requestMatchers("/api/v1/services/**").permitAll() // TODO: 인가 처리하기
         .anyRequest().authenticated()
     );
     http.addFilterBefore(
       jwtFilter, UsernamePasswordAuthenticationFilter.class
     );
+    http.exceptionHandling(
+      exceptionHandling -> exceptionHandling
+        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+    );
+
+    log.info("--- SecurityFilterChain configured successfully ---");
 
     return http.build();
   }

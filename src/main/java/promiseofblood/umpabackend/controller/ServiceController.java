@@ -72,6 +72,7 @@ public class ServiceController {
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute MrProductionServicePostRequest mrProductionServicePostRequest
   ) {
+
     String loginId = securityUserDetails.getUsername();
 
     MrProductionServicePostResponse mrProductionServicePostResponse = serviceBoardService
@@ -79,6 +80,5 @@ public class ServiceController {
 
     return ResponseEntity.ok(mrProductionServicePostResponse);
   }
-
 
 }
