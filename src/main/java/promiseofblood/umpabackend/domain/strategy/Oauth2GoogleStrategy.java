@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
@@ -106,10 +107,9 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
         .build();
 
     } catch (Exception e) {
-      e.printStackTrace();
-    }
 
-    return null;
+      throw new UnauthorizedException("ID 토큰이 유효하지 않습니다.");
+    }
   }
 
 }
