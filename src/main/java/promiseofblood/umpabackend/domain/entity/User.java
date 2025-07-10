@@ -29,8 +29,7 @@ public class User extends TimeStampedEntity {
   // 로그인용 ID, 비밀번호(일반 회원가입)
   @Column(nullable = false, unique = true)
   private String loginId;
-
-  @Column(nullable = false)
+  
   private String password;
 
   // 회원 상태, 역할
