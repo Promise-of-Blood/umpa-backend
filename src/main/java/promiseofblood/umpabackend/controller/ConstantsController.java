@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,90 +30,62 @@ import promiseofblood.umpabackend.dto.response.WeekdayResponse;
 public class ConstantsController {
 
   @GetMapping("/majors")
-  public List<MajorResponse> getMajors() {
+  public ResponseEntity<List<MajorResponse>> getMajors() {
 
-    return Stream.of(Major.values())
-      .map(Major -> MajorResponse.builder()
-        .code(Major.name())
-        .name(Major.getKoreanName())
-        .build())
-      .collect(Collectors.toList());
+    return ResponseEntity.ok(Stream.of(Major.values())
+      .map(major -> MajorResponse.builder().code(major.name()).name(major.getKoreanName()).build())
+      .collect(Collectors.toList()));
   }
 
   @GetMapping("/weekdays")
-  public List<WeekdayResponse> getWeekDays() {
+  public ResponseEntity<List<WeekdayResponse>> getWeekDays() {
 
-    return Stream.of(WeekDay.values())
-      .map(weekDay -> WeekdayResponse.builder()
-        .code(weekDay.name())
-        .name(weekDay.getKoreanName())
-        .build())
-      .collect(Collectors.toList());
+    return ResponseEntity.ok(Stream.of(WeekDay.values()).map(
+      weekDay -> WeekdayResponse.builder().code(weekDay.name()).name(weekDay.getKoreanName())
+        .build()).collect(Collectors.toList()));
   }
 
   @GetMapping("/colleges")
-  public List<CollegeResponse> getColleges() {
+  public ResponseEntity<List<CollegeResponse>> getColleges() {
 
-    return Stream.of(College.values())
-      .map(college -> CollegeResponse.builder()
-        .code(college.name())
-        .name(college.getKoreanName())
-        .build())
-      .collect(Collectors.toList());
+    return ResponseEntity.ok(Stream.of(College.values()).map(
+      college -> CollegeResponse.builder().code(college.name()).name(college.getKoreanName())
+        .build()).collect(Collectors.toList()));
   }
 
   @GetMapping("/subjects")
-  public List<SubjectResponse> getSubjects() {
+  public ResponseEntity<List<SubjectResponse>> getSubjects() {
 
-    return Stream.of(Subject.values())
-      .map(college -> SubjectResponse.builder()
-        .code(college.name())
-        .name(college.getKoreanName())
-        .build())
-      .collect(Collectors.toList());
+    return ResponseEntity.ok(Stream.of(Subject.values()).map(
+      college -> SubjectResponse.builder().code(college.name()).name(college.getKoreanName())
+        .build()).collect(Collectors.toList()));
   }
 
   @GetMapping("lessonStyles")
-  public List<LessonStyleResponse> getLessonStyles() {
+  public ResponseEntity<List<LessonStyleResponse>> getLessonStyles() {
 
-    return Stream.of(LessonStyle.values())
-      .map(lessonStyle -> LessonStyleResponse.builder()
-        .code(lessonStyle.name())
-        .name(lessonStyle.getKoreanName())
-        .build())
-      .collect(Collectors.toList());
+    return ResponseEntity.ok(Stream.of(LessonStyle.values()).map(
+      lessonStyle -> LessonStyleResponse.builder().code(lessonStyle.name())
+        .name(lessonStyle.getKoreanName()).build()).collect(Collectors.toList()));
   }
 
 
   @GetMapping("/grades")
-  public List<GradeResponse> getGrades() {
+  public ResponseEntity<List<GradeResponse>> getGrades() {
 
-    return Stream.of(Grade.values())
-      .map(grade -> GradeResponse.builder()
-        .code(grade.name())
-        .name(grade.getKoreanName())
-        .build())
-      .collect(Collectors.toList());
+    return ResponseEntity.ok(Stream.of(Grade.values())
+      .map(grade -> GradeResponse.builder().code(grade.name()).name(grade.getKoreanName()).build())
+      .collect(Collectors.toList()));
   }
 
   @GetMapping("/regions")
-  public List<RegionCategoryDto> getRegions() {
+  public ResponseEntity<List<RegionCategoryDto>> getRegions() {
 
-    return Stream.of(RegionCategory.values())
-      .map(regionCategory -> RegionCategoryDto.builder()
-        .code(regionCategory.getCode())
-        .name(regionCategory.getKoreanName())
-        .regions(
-          regionCategory.getRegions().stream()
-            .map(region -> RegionDto.builder()
-              .code(region.getCode())
-              .name(region.getKoreanName())
-              .build())
-            .collect(Collectors.toList())
-        )
-        .build()
-      )
-      .collect(Collectors.toList());
+    return ResponseEntity.ok(Stream.of(RegionCategory.values()).map(
+      regionCategory -> RegionCategoryDto.builder().code(regionCategory.getCode())
+        .name(regionCategory.getKoreanName()).regions(regionCategory.getRegions().stream().map(
+            region -> RegionDto.builder().code(region.getCode()).name(region.getKoreanName()).build())
+          .collect(Collectors.toList())).build()).collect(Collectors.toList()));
   }
 
 }
