@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.dto.request;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class MrProductionServicePostRequest {
 
   @Schema(type = "string", format = "binary", description = "대표 사진")
+  @NotBlank
   private MultipartFile thumbnailImage;
 
   private String title;
