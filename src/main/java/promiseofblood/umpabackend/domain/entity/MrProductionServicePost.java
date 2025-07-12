@@ -37,6 +37,6 @@ public class MrProductionServicePost extends ServicePost {
 
   @Override
   public String getCostAndUnit() {
-    return serviceCost.getCost() + " " + serviceCost.getUnit();
+    return serviceCost.getCost() + "원/" + serviceCost.getUnit();
   }
 }

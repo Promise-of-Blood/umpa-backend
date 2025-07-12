@@ -12,7 +12,7 @@ public class MajorResponse {
 
   private String name;
 
-  public static MajorResponse of(Major major) {
+  public static MajorResponse from(Major major) {
     return MajorResponse.builder()
       .code(major.name())
       .name(major.getKoreanName())

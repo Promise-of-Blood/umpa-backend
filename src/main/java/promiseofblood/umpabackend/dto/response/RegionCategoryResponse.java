@@ -20,7 +20,7 @@ public class RegionCategoryResponse {
       .code(regionCategory.getCode())
       .name(regionCategory.getKoreanName())
       .regions(regionCategory.getRegions().stream()
-        .map(RegionResponse::of)
+        .map(RegionResponse::from)
         .toList())
       .build();
   }

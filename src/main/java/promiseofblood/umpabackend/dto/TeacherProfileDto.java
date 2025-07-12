@@ -38,8 +38,8 @@ public class TeacherProfileDto {
 
     return TeacherProfileDto.builder()
       .description(teacherProfile.getDescription())
-      .major(MajorResponse.of(teacherProfile.getMajor()))
-      .lessonRegion(RegionResponse.of(teacherProfile.getLessonRegion()))
+      .major(MajorResponse.from(teacherProfile.getMajor()))
+      .lessonRegion(RegionResponse.from(teacherProfile.getLessonRegion()))
       .careers(teacherCareerDtos)
       .links(
         teacherLinkDtos == null

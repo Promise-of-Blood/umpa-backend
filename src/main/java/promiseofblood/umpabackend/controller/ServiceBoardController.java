@@ -1,8 +1,8 @@
 package promiseofblood.umpabackend.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -10,42 +10,36 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
-import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.request.MrProductionServicePostRequest;
 import promiseofblood.umpabackend.dto.response.MrProductionServicePostResponse;
-import promiseofblood.umpabackend.dto.response.ServiceResponse;
-import promiseofblood.umpabackend.repository.ServiceRegistrationRepository;
-import promiseofblood.umpabackend.repository.UserRepository;
+import promiseofblood.umpabackend.dto.response.ServicePostResponse;
+import promiseofblood.umpabackend.dto.response.common.PaginatedResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
 @Tag(name = "서비스 관리 API", description = "서비스 등록, 조회, 수정, 삭제 API")
 @RequiredArgsConstructor
-public class ServiceController {
+public class ServiceBoardController {
 
   private final ServiceBoardService serviceBoardService;
-  private final UserRepository userRepository;
-  private final ServiceRegistrationRepository serviceRegistrationRepository;
 
-  // all services list
   @GetMapping("")
-  public List<ServiceResponse> getAllServices() {
+  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllServices(
+    @RequestParam(required = false) String serviceType,
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size) {
 
-    List<ServicePost> servicePosts = serviceRegistrationRepository.findAll();
+    Page<ServicePostResponse> servicePostResponsePage = this.serviceBoardService.getAllServices(
+      serviceType, page, size
+    );
 
-    return servicePosts.stream()
-      .map(service -> ServiceResponse.builder()
-        .id(service.getId())
-        .title(service.getTitle())
-        .cost(100)
-        .unit("곡")
-        .reviewRating(4.5f)
-        .build())
-      .toList();
-
+    return ResponseEntity.ok(
+      PaginatedResponse.from(servicePostResponsePage)
+    );
   }
 
   // lesson
