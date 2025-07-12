@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.core.exception;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -74,6 +75,21 @@ public class GlobalExceptionHandler {
   ) {
     ExceptionResponse ExceptionResponse = new ExceptionResponse(
       "토큰이 만료되었습니다."
+    );
+
+    return ResponseEntity
+      .status(HttpStatus.UNAUTHORIZED)
+      .body(ExceptionResponse);
+  }
+
+  @ExceptionHandler(JWTDecodeException.class)
+  public ResponseEntity<ExceptionResponse> handleJWTDecodeException(
+    Exception ex,
+    WebRequest request
+  ) {
+    
+    ExceptionResponse ExceptionResponse = new ExceptionResponse(
+      "올바르지 않은 토큰입니다."
     );
 
     return ResponseEntity
