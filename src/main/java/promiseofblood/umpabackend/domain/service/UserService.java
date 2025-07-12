@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.core.exception.RegistrationException;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
@@ -40,6 +41,10 @@ public class UserService {
   private final StorageService storageService;
 
   public RegisterCompleteResponse registerUser(GeneralRegisterRequest generalRegisterRequest) {
+    if (this.isLoginIdAvailable(generalRegisterRequest.getLoginId())) {
+
+      throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
+    }
 
     User user = User.builder()
       .loginId(generalRegisterRequest.getLoginId())
@@ -80,11 +85,6 @@ public class UserService {
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     return UserDto.of(user);
-  }
-
-  public void deleteUsers() {
-
-    userRepository.deleteAll();
   }
 
   public UserDto patchDefaultProfile(String loginId, DefaultProfileRequest defaultProfileRequest) {
@@ -234,6 +234,11 @@ public class UserService {
       .accessToken(newAccessToken)
       .refreshToken(newRefreshToken)
       .build();
+  }
+
+  private boolean isLoginIdAvailable(String loginId) {
+
+    return userRepository.existsByLoginId(loginId);
   }
 
 }

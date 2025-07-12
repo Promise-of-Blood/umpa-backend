@@ -87,7 +87,7 @@ public class GlobalExceptionHandler {
     Exception ex,
     WebRequest request
   ) {
-    
+
     ExceptionResponse ExceptionResponse = new ExceptionResponse(
       "올바르지 않은 토큰입니다."
     );
@@ -113,6 +113,21 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(NotSupportedOauth2ProviderException.class)
   public ResponseEntity<ExceptionResponse> handleNotSupportedOauth2Provider(
+    Exception ex,
+    WebRequest request
+  ) {
+    log.error(ex.getMessage(), ex);
+    ExceptionResponse ExceptionResponse = new ExceptionResponse(
+      ex.getMessage()
+    );
+
+    return ResponseEntity
+      .status(HttpStatus.BAD_REQUEST)
+      .body(ExceptionResponse);
+  }
+
+  @ExceptionHandler(RegistrationException.class)
+  public ResponseEntity<ExceptionResponse> handleRegistrationException(
     Exception ex,
     WebRequest request
   ) {
