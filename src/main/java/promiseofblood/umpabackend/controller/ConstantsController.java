@@ -15,12 +15,11 @@ import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
-import promiseofblood.umpabackend.dto.RegionCategoryDto;
-import promiseofblood.umpabackend.dto.RegionDto;
 import promiseofblood.umpabackend.dto.response.CollegeResponse;
 import promiseofblood.umpabackend.dto.response.GradeResponse;
 import promiseofblood.umpabackend.dto.response.LessonStyleResponse;
 import promiseofblood.umpabackend.dto.response.MajorResponse;
+import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
 import promiseofblood.umpabackend.dto.response.SubjectResponse;
 import promiseofblood.umpabackend.dto.response.WeekdayResponse;
 
@@ -79,13 +78,12 @@ public class ConstantsController {
   }
 
   @GetMapping("/regions")
-  public ResponseEntity<List<RegionCategoryDto>> getRegions() {
+  public ResponseEntity<List<RegionCategoryResponse>> getRegions() {
 
-    return ResponseEntity.ok(Stream.of(RegionCategory.values()).map(
-      regionCategory -> RegionCategoryDto.builder().code(regionCategory.getCode())
-        .name(regionCategory.getKoreanName()).regions(regionCategory.getRegions().stream().map(
-            region -> RegionDto.builder().code(region.getCode()).name(region.getKoreanName()).build())
-          .collect(Collectors.toList())).build()).collect(Collectors.toList()));
+    List<RegionCategoryResponse> regionCategories = Stream.of(RegionCategory.values())
+      .map(RegionCategoryResponse::from)
+      .toList();
+
+    return ResponseEntity.ok(regionCategories);
   }
-
 }
