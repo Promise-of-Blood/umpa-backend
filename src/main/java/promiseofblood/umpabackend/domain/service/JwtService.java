@@ -81,10 +81,13 @@ public class JwtService {
 
   private String createJwt(String type, Long id, String loginId, Role role, long expiration) {
 
-    return JWT.create().withClaim("type", type).withClaim("loginId", loginId).withClaim("id", id)
-      .withClaim("username", "정재균").withClaim("role", role.name())
+    return JWT.create()
+      .withClaim("type", type)
+      .withClaim("id", id)
+      .withClaim("loginId", loginId)
       .withIssuedAt(new Date(System.currentTimeMillis()))
-      .withExpiresAt(new Date(System.currentTimeMillis() + expiration)).sign(this.jwtAlgorithm());
+      .withExpiresAt(new Date(System.currentTimeMillis() + expiration))
+      .sign(this.jwtAlgorithm());
   }
 
 }
