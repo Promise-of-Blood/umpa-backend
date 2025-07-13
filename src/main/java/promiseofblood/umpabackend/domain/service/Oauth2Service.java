@@ -89,15 +89,16 @@ public class Oauth2Service {
 
   public JwtPairDto generateOauth2Jwt(
     String providerName,
-    String externalAccessToken,
-    String idToken) {
+    String externalIdToken,
+    String externalAccessToken
+  ) {
 
     Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 
     User user = userRepository.findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
         providerName,
-        oauth2Strategy.getOauth2UserProfile(oauth2Provider, externalAccessToken, idToken)
+        oauth2Strategy.getOauth2UserProfile(oauth2Provider, externalAccessToken, externalIdToken)
           .getProviderUid())
       .orElseThrow(() -> new UnauthorizedException("해당 Oauth2 사용자 정보가 존재하지 않습니다."));
 
