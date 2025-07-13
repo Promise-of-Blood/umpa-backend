@@ -32,9 +32,6 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-    log.debug("--- Configuring SecurityFilterChain ---");
-
     http.formLogin(
       AbstractHttpConfigurer::disable
     );
@@ -49,10 +46,10 @@ public class SecurityConfig {
     );
     http.authorizeHttpRequests(
       (authorizeRequests) -> authorizeRequests
+        .requestMatchers("/static/**").permitAll()
         .requestMatchers("/api/docs/**").permitAll()
         .requestMatchers("/api/swagger-ui/**").permitAll()
         .requestMatchers("/api/v1/constants/**").permitAll()
-
         .requestMatchers("/api/v1/users/**").permitAll() // TODO: 인가 처리하기
 //        .requestMatchers("/api/v1/services/**").permitAll() // TODO: 인가 처리하기
         .anyRequest().authenticated()
@@ -64,8 +61,6 @@ public class SecurityConfig {
       exceptionHandling -> exceptionHandling
         .authenticationEntryPoint(jwtAuthenticationEntryPoint)
     );
-
-    log.info("--- SecurityFilterChain configured successfully ---");
 
     return http.build();
   }

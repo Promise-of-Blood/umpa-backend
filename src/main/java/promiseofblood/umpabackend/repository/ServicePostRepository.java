@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 
 @Repository
-public interface ServiceRegistrationRepository extends JpaRepository<ServicePost, Long> {
+public interface ServicePostRepository extends JpaRepository<ServicePost, Long> {
 
 }

@@ -12,7 +12,7 @@ public class RegionResponse {
 
   private String name;
 
-  public static RegionResponse of(Region region) {
+  public static RegionResponse from(Region region) {
     return RegionResponse.builder()
       .code(region.getCode())
       .name(region.getKoreanName())

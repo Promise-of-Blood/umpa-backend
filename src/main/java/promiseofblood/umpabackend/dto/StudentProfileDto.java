@@ -25,7 +25,7 @@ public class StudentProfileDto {
 
   public static StudentProfileDto of(StudentProfile studentProfile) {
     return StudentProfileDto.builder()
-      .major(MajorResponse.of(studentProfile.getMajor()))
+      .major(MajorResponse.from(studentProfile.getMajor()))
       .lessonStyle(LessonStyleResponse.of(studentProfile.getLessonStyle()))
       .preferredColleges(studentProfile.getPreferredColleges().stream()
         .map(CollegeResponse::of)

@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.core.exception.RegistrationException;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
@@ -18,7 +19,6 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
-import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
@@ -26,6 +26,7 @@ import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest.TeacherCareerRequest;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
+import promiseofblood.umpabackend.dto.response.TeacherProfileResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 
@@ -40,6 +41,10 @@ public class UserService {
   private final StorageService storageService;
 
   public RegisterCompleteResponse registerUser(GeneralRegisterRequest generalRegisterRequest) {
+    if (this.isLoginIdAvailable(generalRegisterRequest.getLoginId())) {
+
+      throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
+    }
 
     User user = User.builder()
       .loginId(generalRegisterRequest.getLoginId())
@@ -82,11 +87,6 @@ public class UserService {
     return UserDto.of(user);
   }
 
-  public void deleteUsers() {
-
-    userRepository.deleteAll();
-  }
-
   public UserDto patchDefaultProfile(String loginId, DefaultProfileRequest defaultProfileRequest) {
     User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
@@ -112,7 +112,7 @@ public class UserService {
   }
 
   @Transactional
-  public TeacherProfileDto patchTeacherProfile(
+  public TeacherProfileResponse patchTeacherProfile(
     String loginId, TeacherProfileRequest teacherProfileRequest
   ) {
     User user = userRepository.findByLoginId(loginId)
@@ -168,7 +168,7 @@ public class UserService {
     }
     user = userRepository.save(user);
 
-    return TeacherProfileDto.of(user.getTeacherProfile());
+    return TeacherProfileResponse.from(user.getTeacherProfile());
   }
 
   @Transactional
@@ -234,6 +234,11 @@ public class UserService {
       .accessToken(newAccessToken)
       .refreshToken(newRefreshToken)
       .build();
+  }
+
+  private boolean isLoginIdAvailable(String loginId) {
+
+    return userRepository.existsByLoginId(loginId);
   }
 
 }

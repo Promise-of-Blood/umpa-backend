@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.core.exception;
 
+import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -81,6 +82,21 @@ public class GlobalExceptionHandler {
       .body(ExceptionResponse);
   }
 
+  @ExceptionHandler(JWTDecodeException.class)
+  public ResponseEntity<ExceptionResponse> handleJWTDecodeException(
+    Exception ex,
+    WebRequest request
+  ) {
+
+    ExceptionResponse ExceptionResponse = new ExceptionResponse(
+      "올바르지 않은 토큰입니다."
+    );
+
+    return ResponseEntity
+      .status(HttpStatus.UNAUTHORIZED)
+      .body(ExceptionResponse);
+  }
+
   // 404
   @ExceptionHandler(NotFoundException.class)
   public ResponseEntity<ExceptionResponse> handleNotFoundException(
@@ -97,6 +113,21 @@ public class GlobalExceptionHandler {
 
   @ExceptionHandler(NotSupportedOauth2ProviderException.class)
   public ResponseEntity<ExceptionResponse> handleNotSupportedOauth2Provider(
+    Exception ex,
+    WebRequest request
+  ) {
+    log.error(ex.getMessage(), ex);
+    ExceptionResponse ExceptionResponse = new ExceptionResponse(
+      ex.getMessage()
+    );
+
+    return ResponseEntity
+      .status(HttpStatus.BAD_REQUEST)
+      .body(ExceptionResponse);
+  }
+
+  @ExceptionHandler(RegistrationException.class)
+  public ResponseEntity<ExceptionResponse> handleRegistrationException(
     Exception ex,
     WebRequest request
   ) {

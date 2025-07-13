@@ -3,6 +3,7 @@ package promiseofblood.umpabackend.dto.response;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
+import promiseofblood.umpabackend.dto.TeacherProfileDto;
 
 @Getter
 @Builder
@@ -12,7 +13,7 @@ public class MrProductionServicePostResponse {
 
   private String description;
 
-  // todo: 선생님 회원 프로필 추가
+  private TeacherProfileDto teacherProfile;
 
   private String reviewRating;
 
@@ -28,6 +29,7 @@ public class MrProductionServicePostResponse {
 
   public static MrProductionServicePostResponse of(
     MrProductionServicePost mrProductionServicePost) {
+
     return MrProductionServicePostResponse.builder()
       .title(mrProductionServicePost.getTitle())
       .description(mrProductionServicePost.getDescription())
