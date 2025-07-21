@@ -6,6 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -95,6 +98,37 @@ public class GlobalExceptionHandler {
     return ResponseEntity
       .status(HttpStatus.UNAUTHORIZED)
       .body(ExceptionResponse);
+  }
+
+  /**
+   * 유효성 검사 실패 예외 처리 핸들러 (400 Bad Request)
+   */
+  @ExceptionHandler(MethodArgumentNotValidException.class)
+  public ResponseEntity<ExceptionResponse> handleMethodArgumentNotValidException(
+    MethodArgumentNotValidException ex,
+    WebRequest request
+  ) {
+    log.error("유효성 검사 실패: {}", ex.getMessage(), ex);
+    BindingResult bindingResult = ex.getBindingResult();
+
+    StringBuilder builder = new StringBuilder();
+    for (FieldError fieldError : bindingResult.getFieldErrors()) {
+      builder.append("[");
+      builder.append(fieldError.getField());
+      builder.append("](은)는 ");
+      builder.append(fieldError.getDefaultMessage());
+      builder.append(" 입력된 값: [");
+      builder.append(fieldError.getRejectedValue());
+      builder.append("]");
+    }
+
+    ExceptionResponse exceptionResponse = new ExceptionResponse(
+      "유효성 검사 실패: " + builder
+    );
+
+    return ResponseEntity
+      .status(HttpStatus.BAD_REQUEST)
+      .body(exceptionResponse);
   }
 
   // 404
