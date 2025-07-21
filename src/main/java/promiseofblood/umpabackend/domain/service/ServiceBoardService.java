@@ -86,4 +86,12 @@ public class ServiceBoardService {
     return MrProductionServicePostResponse.of(mrProductionServicePost);
   }
 
+  @Transactional(readOnly = true)
+  public MrProductionServicePostResponse getMrProductionServicePost(Long id) {
+
+    MrProductionServicePost mrProductionServicePost = (MrProductionServicePost) servicePostRepository.findById(
+      id).get();
+
+    return MrProductionServicePostResponse.of(mrProductionServicePost);
+  }
 }

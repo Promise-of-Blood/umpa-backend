@@ -236,9 +236,16 @@ public class UserService {
       .build();
   }
 
+  public boolean isUsernameAvailable(String username) {
+
+    return !userRepository.existsByUsername(username);
+  }
+
+
   private boolean isLoginIdAvailable(String loginId) {
 
     return userRepository.existsByLoginId(loginId);
   }
+
 
 }

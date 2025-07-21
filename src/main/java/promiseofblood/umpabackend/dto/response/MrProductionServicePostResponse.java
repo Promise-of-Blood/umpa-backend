@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.dto.response;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
@@ -27,6 +28,8 @@ public class MrProductionServicePostResponse {
 
   private String softwareUsed;
 
+  private List<String> sampleUrls;
+
   public static MrProductionServicePostResponse of(
     MrProductionServicePost mrProductionServicePost) {
 
@@ -50,6 +53,7 @@ public class MrProductionServicePostResponse {
 
       .freeRevisionCount(String.valueOf(mrProductionServicePost.getFreeRevisionCount()))
       .softwareUsed(mrProductionServicePost.getSoftwareUsed())
+      .sampleUrls(mrProductionServicePost.getSampleMrUrls())
       .build();
   }
 }

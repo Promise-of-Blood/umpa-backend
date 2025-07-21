@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
@@ -34,6 +35,7 @@ import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
+import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
 import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.dto.response.TeacherProfileResponse;
 
@@ -93,6 +95,18 @@ public class UserController {
     return ResponseEntity.ok(registerCompleteResponse);
   }
 
+  @Tag(name = "회원가입 API")
+  @GetMapping(value = "/register/check/username")
+  public ResponseEntity<IsUsernameAvailableResponse> isUsernameAvailable(
+    @RequestParam String username
+  ) {
+
+    boolean isAvailable = userService.isUsernameAvailable(username);
+
+    return ResponseEntity.ok(
+      new IsUsernameAvailableResponse(username, isAvailable)
+    );
+  }
 
   // ****************
   // * 프로필 관리 API *
@@ -148,7 +162,6 @@ public class UserController {
 
     return ResponseEntity.ok(updatedUser);
   }
-
 
   // ***************
   // * 토큰 발급 API *
