@@ -20,11 +20,6 @@ public class SecurityUserDetailsService implements UserDetailsService {
   public SecurityUserDetails loadUserByUsername(String loginId) {
     Optional<User> user = userRepository.findByLoginId(loginId);
 
-    log.info(
-      "--- SecurityUserDetailsService.loadUserByUsername() called with loginId: {} ---",
-      loginId
-    );
-
     if (user.isEmpty()) {
       throw new UnauthorizedException("인증에 실패하였습니다. 사용자를 찾을 수 없습니다.");
     }
