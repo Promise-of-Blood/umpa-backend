@@ -140,12 +140,12 @@ public class UserController {
 
   @Tag(name = "프로필 관리 API")
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<UserDto> patchDefaultProfile(
+  public ResponseEntity<UserDto.ProfileResponse> patchDefaultProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute DefaultProfileRequest defaultProfileRequest
   ) {
 
-    UserDto updatedUser = userService.patchDefaultProfile(
+    UserDto.ProfileResponse updatedUser = userService.patchDefaultProfile(
       securityUserDetails.getUsername(), defaultProfileRequest
     );
 

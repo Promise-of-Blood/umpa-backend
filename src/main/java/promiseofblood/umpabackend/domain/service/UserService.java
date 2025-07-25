@@ -87,7 +87,8 @@ public class UserService {
     return UserDto.ProfileResponse.from(user);
   }
 
-  public UserDto patchDefaultProfile(String loginId, DefaultProfileRequest defaultProfileRequest) {
+  public UserDto.ProfileResponse patchDefaultProfile(
+    String loginId, DefaultProfileRequest defaultProfileRequest) {
     User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
@@ -108,7 +109,7 @@ public class UserService {
     }
     User updatedUser = userRepository.save(user);
 
-    return UserDto.of(updatedUser);
+    return UserDto.ProfileResponse.from(updatedUser);
   }
 
   @Transactional
