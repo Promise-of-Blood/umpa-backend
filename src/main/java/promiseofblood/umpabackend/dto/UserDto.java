@@ -27,6 +27,8 @@ public class UserDto {
 
   private String profileImageUrl;
 
+  private String profileType;
+
   private TeacherProfileDto teacherProfile;
 
   private StudentProfileDto studentProfile;
@@ -47,6 +49,7 @@ public class UserDto {
       .role(user.getRole())
       .gender(user.getGender() == null ? null : user.getGender().name())
       .profileImageUrl(user.getProfileImageUrl())
+      .profileType(user.getProfileType().name())
       .teacherProfile(
         user.getTeacherProfile() == null ? null : TeacherProfileDto.of(user.getTeacherProfile())
       )
