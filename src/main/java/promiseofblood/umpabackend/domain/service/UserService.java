@@ -71,11 +71,11 @@ public class UserService {
    *
    * @return 사용자 목록
    */
-  public List<UserDto> getUsers() {
+  public List<UserDto.ProfileResponse> getUsers() {
 
     return userRepository.findAll()
       .stream()
-      .map(UserDto::of)
+      .map(UserDto.ProfileResponse::from)
       .toList();
   }
 

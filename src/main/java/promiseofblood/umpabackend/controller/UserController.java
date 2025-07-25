@@ -52,8 +52,8 @@ public class UserController {
   // ****************
   @Tag(name = "사용자 관리 API")
   @GetMapping("")
-  public ResponseEntity<List<UserDto>> getUser() {
-    List<UserDto> users = userService.getUsers();
+  public ResponseEntity<List<UserDto.ProfileResponse>> getUser() {
+    List<UserDto.ProfileResponse> users = userService.getUsers();
 
     return ResponseEntity.ok(users);
   }
