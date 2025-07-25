@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.core.security;
 
 import java.util.Collection;
 import java.util.List;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,14 +13,13 @@ import promiseofblood.umpabackend.domain.vo.Role;
 @RequiredArgsConstructor
 public class SecurityUserDetails implements UserDetails {
 
-  private final long id;
+  @Getter
   private final String loginId;
   private final String password;
   private final Role role;
 
   public static SecurityUserDetails of(User user) {
     return new SecurityUserDetails(
-      user.getId(),
       user.getLoginId(),
       user.getPassword(),
       user.getRole()
