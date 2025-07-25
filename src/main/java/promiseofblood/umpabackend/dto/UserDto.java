@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
@@ -61,4 +62,64 @@ public class UserDto {
       .updatedAt(user.getUpdatedAt())
       .build();
   }
+
+  @Getter
+  @Builder
+  public static class ProfileResponse {
+
+    private Long id;
+
+    private String loginId;
+
+    @Schema(nullable = true)
+    private String username;
+
+    private Status status;
+
+    private Role role;
+
+    @Schema(nullable = true)
+    private String gender;
+
+    @Schema(nullable = true)
+    private String profileImageUrl;
+
+    private String profileType;
+
+    @Schema(nullable = true)
+    private TeacherProfileDto teacherProfile;
+
+    @Schema(nullable = true)
+    private StudentProfileDto studentProfile;
+
+    @Schema(nullable = true)
+    private Oauth2UserDto oauth2User;
+
+    private LocalDateTime createdAt;
+
+    private LocalDateTime updatedAt;
+
+    public static ProfileResponse from(User user) {
+      return ProfileResponse.builder()
+        .id(user.getId())
+        .loginId(user.getLoginId())
+        .username(user.getUsername())
+        .status(user.getStatus())
+        .role(user.getRole())
+        .gender(user.getGender() == null ? null : user.getGender().name())
+        .profileImageUrl(user.getProfileImageUrl())
+        .profileType(user.getProfileType().name())
+        .teacherProfile(
+          user.getTeacherProfile() == null ? null : TeacherProfileDto.of(user.getTeacherProfile()
+          ))
+        .studentProfile(
+          user.getStudentProfile() == null ? null : StudentProfileDto.of(user.getStudentProfile()
+          ))
+        .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
+        .createdAt(user.getCreatedAt())
+        .updatedAt(user.getUpdatedAt())
+        .build();
+    }
+  }
+
 }

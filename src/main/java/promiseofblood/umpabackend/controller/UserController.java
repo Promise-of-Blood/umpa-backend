@@ -113,7 +113,7 @@ public class UserController {
   // ****************
   @Tag(name = "프로필 관리 API")
   @GetMapping("/me")
-  public ResponseEntity<UserDto> getCurrentUser(
+  public ResponseEntity<UserDto.ProfileResponse> getCurrentUser(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
     return ResponseEntity.ok(

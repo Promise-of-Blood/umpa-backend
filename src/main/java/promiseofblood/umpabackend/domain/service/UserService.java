@@ -79,12 +79,12 @@ public class UserService {
       .toList();
   }
 
-  public UserDto getUserByLoginId(String loginId) {
+  public UserDto.ProfileResponse getUserByLoginId(String loginId) {
 
     User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    return UserDto.of(user);
+    return UserDto.ProfileResponse.from(user);
   }
 
   public UserDto patchDefaultProfile(String loginId, DefaultProfileRequest defaultProfileRequest) {
