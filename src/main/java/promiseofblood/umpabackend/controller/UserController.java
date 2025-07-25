@@ -58,17 +58,6 @@ public class UserController {
     return ResponseEntity.ok(users);
   }
 
-  @Tag(name = "사용자 관리 API")
-  @GetMapping("/{userId}")
-  public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
-    UserDto user = userService.getUsers().stream()
-      .filter(u -> u.getId().equals(userId))
-      .findFirst()
-      .orElseThrow(() -> new RuntimeException("User not found"));
-
-    return ResponseEntity.ok(user);
-  }
-
   // **************
   // * 회원가입 API *
   // **************
