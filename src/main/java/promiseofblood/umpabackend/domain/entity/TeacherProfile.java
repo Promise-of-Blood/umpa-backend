@@ -15,6 +15,7 @@ import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.Region;
+import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 
 
 @Entity
@@ -38,5 +39,44 @@ public class TeacherProfile extends TimeStampedEntity {
 
   @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TeacherLink> links;
+
+  public static TeacherProfile from(TeacherProfileRequest request) {
+
+    return TeacherProfile.builder()
+      .description(request.getDescription())
+      .major(request.getMajor())
+      .lessonRegion(request.getLessonRegion())
+      .careers(request.getCareers().stream()
+        .map(TeacherCareer::from)
+        .toList())
+      .links(request.getLinks().stream()
+        .map(TeacherLink::from)
+        .toList())
+      .build();
+  }
+
+  public void update(TeacherProfileRequest request) {
+    if (request.getDescription() != null) {
+      this.description = request.getDescription();
+    }
+    if (request.getMajor() != null) {
+      this.major = request.getMajor();
+    }
+    if (request.getLessonRegion() != null) {
+      this.lessonRegion = request.getLessonRegion();
+    }
+    if (request.getCareers() != null) {
+      this.careers.clear();
+      this.careers.addAll(request.getCareers().stream()
+        .map(TeacherCareer::from)
+        .toList());
+    }
+    if (request.getLinks() != null) {
+      this.links.clear();
+      this.links.addAll(request.getLinks().stream()
+        .map(TeacherLink::from)
+        .toList());
+    }
+  }
 
 }
