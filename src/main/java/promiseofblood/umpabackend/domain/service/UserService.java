@@ -15,17 +15,18 @@ import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
+import promiseofblood.umpabackend.dto.LoginDto;
+import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordRequest;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
-import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest.TeacherCareerRequest;
-import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.dto.response.TeacherProfileResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
@@ -40,19 +41,20 @@ public class UserService {
   private final UserRepository userRepository;
   private final StorageService storageService;
 
-  public RegisterCompleteResponse registerUser(GeneralRegisterRequest generalRegisterRequest) {
-    if (this.isLoginIdAvailable(generalRegisterRequest.getLoginId())) {
+  public LoginDto.LoginCompleteResponse registerUser(
+    LoginIdPasswordRequest loginIdPasswordRequest) {
 
+    if (this.isLoginIdAvailable(loginIdPasswordRequest.getLoginId())) {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
-    User user = User.builder()
-      .loginId(generalRegisterRequest.getLoginId())
-      .password(passwordEncoder.encode(generalRegisterRequest.getPassword()))
-      .status(Status.ACTIVE)
-      .role(Role.USER)
-      .username("임의의사용자" + System.currentTimeMillis())
-      .build();
+    User user = User.register(
+      loginIdPasswordRequest.getLoginId(),
+      Status.ACTIVE,
+      Role.USER,
+      "임의의사용자" + System.currentTimeMillis(),
+      ProfileType.STUDENT
+    );
     user = userRepository.save(user);
 
     JwtPairDto jwtPairDto = JwtPairDto.builder()
@@ -60,10 +62,10 @@ public class UserService {
       .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
       .build();
 
-    return RegisterCompleteResponse.builder()
-      .user(UserDto.of(user))
-      .jwtPair(jwtPairDto)
-      .build();
+    return LoginDto.LoginCompleteResponse.of(
+      UserDto.ProfileResponse.from(user),
+      LoginDto.JwtPairResponse.of(jwtPairDto.getAccessToken(), jwtPairDto.getRefreshToken())
+    );
   }
 
   /**

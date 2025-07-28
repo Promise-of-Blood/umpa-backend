@@ -68,6 +68,18 @@ public class User extends TimeStampedEntity {
   @JoinColumn(name = "oauth2_user_id")
   private Oauth2User oauth2User;
 
+  public static User register(String loginId, Status status, Role role, String username,
+    ProfileType profileType) {
+
+    return User.builder()
+      .loginId(loginId)
+      .status(status)
+      .role(role)
+      .username(username)
+      .profileType(profileType)
+      .build();
+  }
+
   public void patchUsername(String username) {
     this.username = username;
   }

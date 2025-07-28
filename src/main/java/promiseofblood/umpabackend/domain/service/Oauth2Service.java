@@ -17,11 +17,11 @@ import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
+import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
-import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.repository.Oauth2UserRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
 
@@ -37,7 +37,7 @@ public class Oauth2Service {
 
 
   @Transactional
-  public RegisterCompleteResponse registerOauth2User(
+  public LoginDto.LoginCompleteResponse registerOauth2User(
     String providerName,
     Oauth2RegisterRequest oauth2RegisterRequest
   ) {
@@ -69,13 +69,13 @@ public class Oauth2Service {
       .build();
     User user = userRepository.save(newUser);
 
-    return RegisterCompleteResponse.builder()
-      .user(UserDto.of(user))
-      .jwtPair(JwtPairDto.builder()
-        .accessToken(jwtService.createAccessToken(user.getId(), user.getLoginId()))
-        .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
-        .build())
-      .build();
+    return LoginDto.LoginCompleteResponse.of(
+      UserDto.ProfileResponse.from(user),
+      LoginDto.JwtPairResponse.of(
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId())
+      )
+    );
   }
 
 
