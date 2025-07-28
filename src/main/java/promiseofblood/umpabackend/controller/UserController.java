@@ -28,6 +28,7 @@ import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
+import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -40,7 +41,6 @@ import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
 import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
-import promiseofblood.umpabackend.dto.response.RegisterCompleteResponse;
 import promiseofblood.umpabackend.dto.response.TeacherProfileResponse;
 
 @RestController
@@ -67,9 +67,10 @@ public class UserController {
   // **************
   @Tag(name = "회원가입 API")
   @PostMapping("/register/general")
-  public ResponseEntity<RegisterCompleteResponse> registerUser(
+  public ResponseEntity<LoginDto.RegisterCompleteResponse> registerUser(
     @RequestBody @Valid final GeneralRegisterRequest generalRegisterRequest) {
-    RegisterCompleteResponse registerCompleteResponse = userService.registerUser(
+
+    LoginDto.RegisterCompleteResponse registerCompleteResponse = userService.registerUser(
       generalRegisterRequest);
 
     return ResponseEntity.ok(registerCompleteResponse);
@@ -77,12 +78,12 @@ public class UserController {
 
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/{providerName}")
-  public ResponseEntity<RegisterCompleteResponse> registerOauth2User(
+  public ResponseEntity<LoginDto.RegisterCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
     @RequestBody Oauth2RegisterRequest oauth2RegisterRequest
   ) {
 
-    RegisterCompleteResponse registerCompleteResponse = oauth2Service.registerOauth2User(
+    LoginDto.RegisterCompleteResponse registerCompleteResponse = oauth2Service.registerOauth2User(
       providerName, oauth2RegisterRequest);
 
     return ResponseEntity.ok(registerCompleteResponse);
