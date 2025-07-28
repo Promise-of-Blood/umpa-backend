@@ -22,7 +22,6 @@ import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
-import promiseofblood.umpabackend.dto.response.TeacherProfileResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 
@@ -110,7 +109,7 @@ public class UserService {
   }
 
   @Transactional
-  public TeacherProfileResponse patchTeacherProfile(
+  public UserDto.ProfileResponse patchTeacherProfile(
     String loginId, TeacherProfileRequest teacherProfileRequest
   ) {
     User user = userRepository.findByLoginId(loginId)
@@ -127,7 +126,7 @@ public class UserService {
     user.patchTeacherProfile(teacherProfile);
     user = userRepository.save(user);
 
-    return TeacherProfileResponse.from(user.getTeacherProfile());
+    return UserDto.ProfileResponse.from(user);
   }
 
   @Transactional

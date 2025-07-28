@@ -42,8 +42,8 @@ public class TeacherCareer extends TimeStampedEntity {
     return TeacherCareer.builder()
       .isRepresentative(request.isRepresentative())
       .title(request.getTitle())
-      .start(request.getStartDate())
-      .end(request.getEndDate())
+      .start(request.getStart())
+      .end(request.getEnd())
       .build();
   }
 

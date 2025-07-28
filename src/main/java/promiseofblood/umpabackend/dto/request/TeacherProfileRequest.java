@@ -28,8 +28,8 @@ public class TeacherProfileRequest {
   @Schema(
     description = "경력",
     example = "["
-      + "{\"title\":\"인덕대학교 컴퓨터소프트웨어학과 졸업\",\"startDate\":\"2020.03\",\"endDate\":\"2024.02\",\"isRepresentative\":true},"
-      + "{\"title\":\"서울대학교 컴퓨터소프트웨어학과 졸업\",\"startDate\":\"2020.03\",\"endDate\":\"2024.02\",\"isRepresentative\":true}"
+      + "{\"title\":\"인덕대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true},"
+      + "{\"title\":\"서울대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true}"
       + "]"
   )
   private List<TeacherCareerRequest> careers;
@@ -46,11 +46,11 @@ public class TeacherProfileRequest {
 
     @DateTimeFormat(pattern = "yyyy.MM")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM", timezone = "Asia/Seoul")
-    private YearMonth startDate;
+    private YearMonth start;
 
     @DateTimeFormat(pattern = "yyyy.MM")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy.MM", timezone = "Asia/Seoul")
-    private YearMonth endDate;
+    private YearMonth end;
 
     private boolean isRepresentative;
 
