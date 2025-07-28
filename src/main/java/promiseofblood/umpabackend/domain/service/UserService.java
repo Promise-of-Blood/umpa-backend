@@ -21,7 +21,6 @@ import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordRequest;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
@@ -175,7 +174,7 @@ public class UserService {
   }
 
   @Transactional
-  public StudentProfileDto patchStudentProfile(
+  public UserDto.ProfileResponse patchStudentProfile(
     String loginId, StudentProfileRequest studentProfileRequest
   ) {
     User user = userRepository.findByLoginId(loginId)
@@ -184,30 +183,18 @@ public class UserService {
     StudentProfile studentProfile = user.getStudentProfile();
 
     if (studentProfile == null) {
-      studentProfile = StudentProfile.builder()
-        .major(studentProfileRequest.getMajor())
-        .lessonStyle(studentProfileRequest.getLessonStyles().get(0))
-        .preferredColleges(studentProfileRequest.getPreferredColleges())
-        .grade(studentProfileRequest.getGrade())
-        .subject(studentProfileRequest.getSubject())
-        .lessonRequirements(studentProfileRequest.getLessonRequirements())
-        .build();
-      user.patchStudentProfile(studentProfile);
+      studentProfile = StudentProfile.from(studentProfileRequest);
     } else {
-      studentProfile.setMajor(studentProfileRequest.getMajor());
-      studentProfile.setLessonStyle(studentProfileRequest.getLessonStyles().get(0));
-      studentProfile.setPreferredColleges(studentProfileRequest.getPreferredColleges());
-      studentProfile.setGrade(studentProfileRequest.getGrade());
-      studentProfile.setSubject(studentProfileRequest.getSubject());
-      studentProfile.setLessonRequirements(studentProfileRequest.getLessonRequirements());
-      user.patchStudentProfile(studentProfile);
+      studentProfile.update(studentProfileRequest);
     }
+
+    user.patchStudentProfile(studentProfile);
     userRepository.save(user);
 
-    return StudentProfileDto.of(studentProfile);
+    return UserDto.ProfileResponse.from(user);
   }
 
-  public JwtPairDto generateGeneralJwt(String loginId, String password) {
+  public LoginDto.LoginCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
 
     Optional<User> optionalUser = userRepository.findByLoginId(loginId);
 
@@ -220,7 +207,13 @@ public class UserService {
       throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
     }
 
-    return jwtService.createJwtPair(optionalUser.get().getId(), optionalUser.get().getLoginId());
+    return LoginDto.LoginCompleteResponse.of(
+      UserDto.ProfileResponse.from(optionalUser.get()),
+      LoginDto.JwtPairResponse.of(
+        jwtService.createAccessToken(optionalUser.get().getId(), optionalUser.get().getLoginId()),
+        jwtService.createRefreshToken(optionalUser.get().getId(), optionalUser.get().getLoginId())
+      )
+    );
   }
 
   @Transactional
