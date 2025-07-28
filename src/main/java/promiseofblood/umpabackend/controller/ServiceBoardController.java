@@ -1,6 +1,7 @@
 package promiseofblood.umpabackend.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -10,13 +11,17 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
+import promiseofblood.umpabackend.domain.service.ReviewService;
 import promiseofblood.umpabackend.domain.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.request.MrProductionServicePostRequest;
+import promiseofblood.umpabackend.dto.request.ReviewRequest;
 import promiseofblood.umpabackend.dto.response.MrProductionServicePostResponse;
+import promiseofblood.umpabackend.dto.response.ReviewResponse;
 import promiseofblood.umpabackend.dto.response.ServicePostResponse;
 import promiseofblood.umpabackend.dto.response.common.PaginatedResponse;
 
@@ -27,6 +32,7 @@ import promiseofblood.umpabackend.dto.response.common.PaginatedResponse;
 public class ServiceBoardController {
 
   private final ServiceBoardService serviceBoardService;
+  private final ReviewService reviewService;
 
   @GetMapping("")
   public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllServices(
@@ -83,6 +89,19 @@ public class ServiceBoardController {
       .getMrProductionServicePost(id);
 
     return ResponseEntity.ok(mrProductionServicePostResponse);
+  }
+
+  @PostMapping(path = "/mr-production/{id}/reviews")
+  public ResponseEntity<ReviewResponse> createMrProductionReview(
+    @PathVariable Long id,
+    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+    @Valid @RequestBody ReviewRequest reviewRequest
+  ) {
+
+    ReviewResponse reviewResponse = ReviewResponse.from(
+      this.reviewService.createReview(id, reviewRequest));
+
+    return ResponseEntity.ok(reviewResponse);
   }
 
 }

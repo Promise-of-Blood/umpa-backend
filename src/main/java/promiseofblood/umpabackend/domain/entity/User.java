@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Gender;
+import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 
@@ -29,7 +30,7 @@ public class User extends TimeStampedEntity {
   // 로그인용 ID, 비밀번호(일반 회원가입)
   @Column(nullable = false, unique = true)
   private String loginId;
-  
+
   private String password;
 
   // 회원 상태, 역할
@@ -51,6 +52,9 @@ public class User extends TimeStampedEntity {
   private String profileImageUrl;
 
   // 학생 프로필, 선생님 프로필
+  @Enumerated(EnumType.STRING)
+  private ProfileType profileType;
+
   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   @JoinColumn(name = "student_profile_id")
   private StudentProfile studentProfile;
