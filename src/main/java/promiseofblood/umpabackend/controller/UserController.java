@@ -38,7 +38,6 @@ import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
 import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
-import promiseofblood.umpabackend.dto.response.TeacherProfileResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -114,12 +113,12 @@ public class UserController {
 
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/teacher-profile")
-  public ResponseEntity<TeacherProfileResponse> patchTeacherProfile(
+  public ResponseEntity<UserDto.ProfileResponse> patchTeacherProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @RequestBody TeacherProfileRequest teacherProfileRequest
   ) {
 
-    TeacherProfileResponse teacherProfileResponse = userService.patchTeacherProfile(
+    UserDto.ProfileResponse teacherProfileResponse = userService.patchTeacherProfile(
       securityUserDetails.getUsername(), teacherProfileRequest
     );
 

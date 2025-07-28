@@ -55,6 +55,14 @@ public class TeacherProfile extends TimeStampedEntity {
       .build();
   }
 
+  public void addCareer(TeacherCareer career) {
+    this.careers.add(career);
+  }
+
+  public void addLink(TeacherLink link) {
+    this.links.add(link);
+  }
+
   public void update(TeacherProfileRequest request) {
     if (request.getDescription() != null) {
       this.description = request.getDescription();
@@ -67,15 +75,19 @@ public class TeacherProfile extends TimeStampedEntity {
     }
     if (request.getCareers() != null) {
       this.careers.clear();
-      this.careers.addAll(request.getCareers().stream()
-        .map(TeacherCareer::from)
-        .toList());
+      for (TeacherProfileRequest.TeacherCareerRequest careerRequest : request.getCareers()) {
+        TeacherCareer career = TeacherCareer.from(careerRequest);
+        this.addCareer(career);
+        career.setTeacherProfile(this);
+      }
     }
     if (request.getLinks() != null) {
       this.links.clear();
-      this.links.addAll(request.getLinks().stream()
-        .map(TeacherLink::from)
-        .toList());
+      for (String link : request.getLinks()) {
+        TeacherLink teacherLink = TeacherLink.from(link);
+        this.addLink(teacherLink);
+        teacherLink.setTeacherProfile(this);
+      }
     }
   }
 

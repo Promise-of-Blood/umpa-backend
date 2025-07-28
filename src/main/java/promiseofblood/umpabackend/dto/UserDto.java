@@ -10,6 +10,7 @@ import lombok.ToString;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Gender;
+import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 
@@ -88,6 +89,10 @@ public class UserDto {
     @Nullable
     @Schema(description = "성별", example = "MALE")
     private Gender gender;
+
+    @Nullable
+    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
+    private ProfileType profileType;
 
     @Nullable
     @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")

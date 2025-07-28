@@ -6,11 +6,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.DurationRange;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.request.MrProductionServicePostRequest;
 import promiseofblood.umpabackend.dto.response.MrProductionServicePostResponse;
 import promiseofblood.umpabackend.dto.response.ServicePostResponse;
@@ -36,7 +38,7 @@ public class ServiceBoardService {
     );
 
     return servicePostPage.map(servicePost -> {
-      User teacherUser = userRepository.findById(servicePost.getUserId())
+      User teacherUser = userRepository.findById(servicePost.getUser().getId())
         .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
       return ServicePostResponse.builder()
         .id(servicePost.getId())
@@ -52,6 +54,44 @@ public class ServiceBoardService {
   }
 
   @Transactional
+  public AccompanimentServicePostDto.AccompanimentServicePostResponse createAccompanimentServicePost(
+    String loginId,
+    AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+
+    User user = userRepository.findByLoginId(loginId)
+      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    String filePath = storageService.store(
+      accompanimentPostRequest.getThumbnailImage(),
+      "service/" + user.getId() + "/mr-production"
+    );
+
+    AccompanimentServicePost accompanimentServicePost = AccompanimentServicePost.builder()
+      .user(user)
+      .title(accompanimentPostRequest.getTitle())
+      .description(accompanimentPostRequest.getDescription())
+      .thumbnailImageUrl(filePath)
+      .serviceCost(ServiceCost.builder()
+        .cost(accompanimentPostRequest.getCost())
+        .unit("학교")
+        .build())
+      .additionalCostPolicy(accompanimentPostRequest.getAdditionalCostPolicy())
+      .instrument(accompanimentPostRequest.getInstrument())
+      .includedPracticeCount(accompanimentPostRequest.getIncludedPracticeCount())
+      .additionalPracticeCost(accompanimentPostRequest.getAdditionalPracticeCost())
+      .isMrIncluded(accompanimentPostRequest.getIsMrIncluded())
+      .practiceLocation(accompanimentPostRequest.getPracticeLocation())
+      .videoUrls(accompanimentPostRequest.getVideoUrls())
+      .build();
+    servicePostRepository.save(accompanimentServicePost);
+
+    return AccompanimentServicePostDto.AccompanimentServicePostResponse.from(
+      accompanimentServicePost, user
+    );
+  }
+
+
+  @Transactional
   public MrProductionServicePostResponse createMrProductionServicePost(
     String loginId,
     MrProductionServicePostRequest mrProductionServicePostRequest) {
@@ -65,7 +105,7 @@ public class ServiceBoardService {
     );
 
     MrProductionServicePost mrProductionServicePost = MrProductionServicePost.builder()
-      .userId(user.getId())
+      .user(user)
       .title(mrProductionServicePostRequest.getTitle())
       .thumbnailImageUrl(filePath)
       .description(mrProductionServicePostRequest.getDescription())
