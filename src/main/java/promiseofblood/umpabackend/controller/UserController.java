@@ -29,7 +29,6 @@ import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -66,10 +65,10 @@ public class UserController {
   // **************
   @Tag(name = "회원가입 API")
   @PostMapping("/register/general")
-  public ResponseEntity<LoginCompleteResponse> registerUser(
+  public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
     @RequestBody @Valid final LoginDto.LoginIdPasswordRequest loginIdPasswordRequest) {
 
-    LoginCompleteResponse loginCompleteResponse = userService.registerUser(
+    LoginDto.LoginCompleteResponse loginCompleteResponse = userService.registerUser(
       loginIdPasswordRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
@@ -77,12 +76,12 @@ public class UserController {
 
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/{providerName}")
-  public ResponseEntity<LoginCompleteResponse> registerOauth2User(
+  public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
     @RequestBody Oauth2RegisterRequest oauth2RegisterRequest
   ) {
 
-    LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
+    LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
       providerName, oauth2RegisterRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
@@ -177,13 +176,15 @@ public class UserController {
 
   @Tag(name = "토큰 발급 API")
   @PostMapping("/token/general")
-  public ResponseEntity<JwtPairDto> createToken(
+  public ResponseEntity<LoginDto.LoginCompleteResponse> createToken(
     @RequestBody LoginDto.LoginIdPasswordRequest request) {
 
-    JwtPairDto jwtPairDto = userService.generateGeneralJwt(request.getLoginId(),
-      request.getPassword());
+    LoginDto.LoginCompleteResponse loginCompleteResponse = userService.loginIdPasswordJwtLogin(
+      request.getLoginId(),
+      request.getPassword()
+    );
 
-    return ResponseEntity.ok(jwtPairDto);
+    return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "토큰 발급 API")

@@ -207,7 +207,7 @@ public class UserService {
     return StudentProfileDto.of(studentProfile);
   }
 
-  public JwtPairDto generateGeneralJwt(String loginId, String password) {
+  public LoginDto.LoginCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
 
     Optional<User> optionalUser = userRepository.findByLoginId(loginId);
 
@@ -220,7 +220,13 @@ public class UserService {
       throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
     }
 
-    return jwtService.createJwtPair(optionalUser.get().getId(), optionalUser.get().getLoginId());
+    return LoginDto.LoginCompleteResponse.of(
+      UserDto.ProfileResponse.from(optionalUser.get()),
+      LoginDto.JwtPairResponse.of(
+        jwtService.createAccessToken(optionalUser.get().getId(), optionalUser.get().getLoginId()),
+        jwtService.createRefreshToken(optionalUser.get().getId(), optionalUser.get().getLoginId())
+      )
+    );
   }
 
   @Transactional
