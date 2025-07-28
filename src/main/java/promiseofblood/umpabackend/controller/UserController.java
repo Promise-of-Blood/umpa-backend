@@ -30,7 +30,6 @@ import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2LoginRequest;
@@ -129,12 +128,12 @@ public class UserController {
 
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/student-profile")
-  public ResponseEntity<StudentProfileDto> patchStudentProfile(
+  public ResponseEntity<UserDto.ProfileResponse> patchStudentProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @RequestBody @Valid StudentProfileRequest studentProfileRequest
   ) {
 
-    StudentProfileDto studentProfileDto = userService.patchStudentProfile(
+    UserDto.ProfileResponse studentProfileDto = userService.patchStudentProfile(
       securityUserDetails.getUsername(), studentProfileRequest
     );
 
