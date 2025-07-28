@@ -29,12 +29,11 @@ import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
+import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.dto.request.GeneralLoginRequest;
-import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.Oauth2LoginRequest;
 import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
@@ -67,26 +66,26 @@ public class UserController {
   // **************
   @Tag(name = "회원가입 API")
   @PostMapping("/register/general")
-  public ResponseEntity<LoginDto.RegisterCompleteResponse> registerUser(
-    @RequestBody @Valid final GeneralRegisterRequest generalRegisterRequest) {
+  public ResponseEntity<LoginCompleteResponse> registerUser(
+    @RequestBody @Valid final LoginDto.LoginIdPasswordRequest loginIdPasswordRequest) {
 
-    LoginDto.RegisterCompleteResponse registerCompleteResponse = userService.registerUser(
-      generalRegisterRequest);
+    LoginCompleteResponse loginCompleteResponse = userService.registerUser(
+      loginIdPasswordRequest);
 
-    return ResponseEntity.ok(registerCompleteResponse);
+    return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/{providerName}")
-  public ResponseEntity<LoginDto.RegisterCompleteResponse> registerOauth2User(
+  public ResponseEntity<LoginCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
     @RequestBody Oauth2RegisterRequest oauth2RegisterRequest
   ) {
 
-    LoginDto.RegisterCompleteResponse registerCompleteResponse = oauth2Service.registerOauth2User(
+    LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
       providerName, oauth2RegisterRequest);
 
-    return ResponseEntity.ok(registerCompleteResponse);
+    return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "회원가입 API")
@@ -178,7 +177,8 @@ public class UserController {
 
   @Tag(name = "토큰 발급 API")
   @PostMapping("/token/general")
-  public ResponseEntity<JwtPairDto> createToken(@RequestBody GeneralLoginRequest request) {
+  public ResponseEntity<JwtPairDto> createToken(
+    @RequestBody LoginDto.LoginIdPasswordRequest request) {
 
     JwtPairDto jwtPairDto = userService.generateGeneralJwt(request.getLoginId(),
       request.getPassword());

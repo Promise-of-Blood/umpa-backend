@@ -20,10 +20,10 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
+import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordRequest;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
-import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest.TeacherCareerRequest;
@@ -41,15 +41,15 @@ public class UserService {
   private final UserRepository userRepository;
   private final StorageService storageService;
 
-  public LoginDto.RegisterCompleteResponse registerUser(
-    GeneralRegisterRequest generalRegisterRequest) {
-    if (this.isLoginIdAvailable(generalRegisterRequest.getLoginId())) {
+  public LoginDto.LoginCompleteResponse registerUser(
+    LoginIdPasswordRequest loginIdPasswordRequest) {
 
+    if (this.isLoginIdAvailable(loginIdPasswordRequest.getLoginId())) {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
     User user = User.register(
-      generalRegisterRequest.getLoginId(),
+      loginIdPasswordRequest.getLoginId(),
       Status.ACTIVE,
       Role.USER,
       "임의의사용자" + System.currentTimeMillis(),
@@ -62,7 +62,7 @@ public class UserService {
       .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
       .build();
 
-    return LoginDto.RegisterCompleteResponse.of(
+    return LoginDto.LoginCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(jwtPairDto.getAccessToken(), jwtPairDto.getRefreshToken())
     );

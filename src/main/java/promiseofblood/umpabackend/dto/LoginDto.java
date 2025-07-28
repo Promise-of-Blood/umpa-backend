@@ -11,16 +11,25 @@ import lombok.ToString;
 public class LoginDto {
 
   @Getter
+  public static class LoginIdPasswordRequest {
+
+    private String loginId;
+
+    private String password;
+
+  }
+
+  @Getter
   @AllArgsConstructor
-  public static class RegisterCompleteResponse {
+  public static class LoginCompleteResponse {
 
     private UserDto.ProfileResponse user;
 
     private JwtPairResponse jwtPair;
 
-    public static RegisterCompleteResponse of(
+    public static LoginCompleteResponse of(
       UserDto.ProfileResponse user, JwtPairResponse jwtPair) {
-      return new RegisterCompleteResponse(user, jwtPair);
+      return new LoginCompleteResponse(user, jwtPair);
     }
 
   }

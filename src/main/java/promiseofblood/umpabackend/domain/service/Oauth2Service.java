@@ -37,7 +37,7 @@ public class Oauth2Service {
 
 
   @Transactional
-  public LoginDto.RegisterCompleteResponse registerOauth2User(
+  public LoginDto.LoginCompleteResponse registerOauth2User(
     String providerName,
     Oauth2RegisterRequest oauth2RegisterRequest
   ) {
@@ -69,7 +69,7 @@ public class Oauth2Service {
       .build();
     User user = userRepository.save(newUser);
 
-    return LoginDto.RegisterCompleteResponse.of(
+    return LoginDto.LoginCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
