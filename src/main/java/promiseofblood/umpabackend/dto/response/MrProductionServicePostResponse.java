@@ -36,8 +36,9 @@ public class MrProductionServicePostResponse {
     return MrProductionServicePostResponse.builder()
       .title(mrProductionServicePost.getTitle())
       .description(mrProductionServicePost.getDescription())
+      .teacherProfile(TeacherProfileDto.of(mrProductionServicePost.getUser().getTeacherProfile()))
 
-      .reviewRating(String.format("%.1f", 4.5)) // 예시로 4.5점으로 설정
+      .reviewRating(String.format("%.1f", 0.0)) // 예시로 4.5점으로 설정
       .costPerUnit(String.format("%,d원/%s",
         mrProductionServicePost.getServiceCost().getCost(),
         mrProductionServicePost.getServiceCost().getUnit()))
