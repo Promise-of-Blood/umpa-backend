@@ -25,4 +25,9 @@ public class TeacherLink extends TimeStampedEntity {
   @JoinColumn(name = "teacher_profile_id")
   private TeacherProfile teacherProfile;
 
+  public static TeacherLink from(String link) {
+    return TeacherLink.builder()
+      .link(link)
+      .build();
+  }
 }

@@ -1,6 +1,5 @@
 package promiseofblood.umpabackend.domain.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,6 @@ import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.core.exception.RegistrationException;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
-import promiseofblood.umpabackend.domain.entity.TeacherCareer;
-import promiseofblood.umpabackend.domain.entity.TeacherLink;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
@@ -25,7 +22,6 @@ import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
-import promiseofblood.umpabackend.dto.request.TeacherProfileRequest.TeacherCareerRequest;
 import promiseofblood.umpabackend.dto.response.TeacherProfileResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
@@ -122,52 +118,13 @@ public class UserService {
 
     TeacherProfile teacherProfile = user.getTeacherProfile();
 
-    List<TeacherCareer> teacherCareers = new ArrayList<>(List.of());
-    for (TeacherCareerRequest teacherCareerRequest : teacherProfileRequest.getCareers()) {
-      TeacherCareer newCareer = TeacherCareer.builder()
-        .title(teacherCareerRequest.getTitle())
-        .isRepresentative(teacherCareerRequest.isRepresentative())
-        .start(teacherCareerRequest.getStartDate())
-        .end(teacherCareerRequest.getEndDate())
-        .build();
-      teacherCareers.add(newCareer);
-    }
-
-    List<TeacherLink> teacherLinks = new ArrayList<>(List.of());
-    for (String teacherLink : teacherProfileRequest.getLinks()) {
-      TeacherLink newLink = TeacherLink.builder()
-        .link(teacherLink)
-        .build();
-      teacherLinks.add(newLink);
-    }
-
     if (teacherProfile == null) {
-      teacherProfile = TeacherProfile.builder()
-        .description(teacherProfileRequest.getDescription())
-        .major(teacherProfileRequest.getMajor())
-        .lessonRegion(teacherProfileRequest.getLessonRegion())
-        .careers(teacherCareers)
-        .links(teacherLinks)
-        .build();
-      user.patchTeacherProfile(teacherProfile);
+      teacherProfile = TeacherProfile.from(teacherProfileRequest);
     } else {
-      teacherProfile.setDescription(teacherProfileRequest.getDescription());
-      teacherProfile.setMajor(teacherProfileRequest.getMajor());
-      teacherProfile.setLessonRegion(teacherProfileRequest.getLessonRegion());
-      teacherProfile.getCareers().clear();
-      teacherProfile.getCareers().addAll(teacherCareers);
-      for (TeacherCareer career : teacherCareers) {
-        career.setTeacherProfile(teacherProfile);
-      }
-
-      teacherProfile.getLinks().clear();
-      teacherProfile.getLinks().addAll(teacherLinks);
-      for (TeacherLink link : teacherLinks) {
-        link.setTeacherProfile(teacherProfile);
-      }
-
-      user.patchTeacherProfile(teacherProfile);
+      teacherProfile.update(teacherProfileRequest);
     }
+
+    user.patchTeacherProfile(teacherProfile);
     user = userRepository.save(user);
 
     return TeacherProfileResponse.from(user.getTeacherProfile());
