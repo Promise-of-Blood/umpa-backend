@@ -84,6 +84,10 @@ public class User extends TimeStampedEntity {
     this.username = username;
   }
 
+  public void patchProfileType(ProfileType profileType) {
+    this.profileType = profileType;
+  }
+
   public void patchGender(Gender gender) {
     this.gender = gender;
   }

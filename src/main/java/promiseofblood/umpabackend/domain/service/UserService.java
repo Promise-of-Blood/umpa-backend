@@ -103,6 +103,9 @@ public class UserService {
       );
       user.patchProfileImageUrl(storedFilePath);
     }
+    if (defaultProfilePatchRequest.getProfileType() != null) {
+      user.patchProfileType(defaultProfilePatchRequest.getProfileType());
+    }
     User updatedUser = userRepository.save(user);
 
     return UserDto.ProfileResponse.from(updatedUser);
