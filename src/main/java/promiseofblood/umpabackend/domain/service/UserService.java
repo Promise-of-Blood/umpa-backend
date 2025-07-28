@@ -20,7 +20,7 @@ import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
+import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
@@ -88,19 +88,19 @@ public class UserService {
   }
 
   public UserDto.ProfileResponse patchDefaultProfile(
-    String loginId, DefaultProfileRequest defaultProfileRequest) {
+    String loginId, DefaultProfilePatchRequest defaultProfilePatchRequest) {
     User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    if (defaultProfileRequest.getUsername() != null) {
-      user.patchUsername(defaultProfileRequest.getUsername());
+    if (defaultProfilePatchRequest.getUsername() != null) {
+      user.patchUsername(defaultProfilePatchRequest.getUsername());
     }
-    if (defaultProfileRequest.getGender() != null) {
-      user.patchGender(defaultProfileRequest.getGender());
+    if (defaultProfilePatchRequest.getGender() != null) {
+      user.patchGender(defaultProfilePatchRequest.getGender());
     }
-    if (defaultProfileRequest.getProfileImage() != null) {
+    if (defaultProfilePatchRequest.getProfileImage() != null) {
       String storedFilePath = storageService.store(
-        defaultProfileRequest.getProfileImage(),
+        defaultProfilePatchRequest.getProfileImage(),
         "users",
         user.getId().toString(),
         "default-profile"

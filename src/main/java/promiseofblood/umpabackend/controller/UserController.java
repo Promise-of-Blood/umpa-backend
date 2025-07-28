@@ -4,13 +4,17 @@ package promiseofblood.umpabackend.controller;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.beans.PropertyEditorSupport;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
@@ -27,7 +32,6 @@ import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.dto.request.DefaultProfileRequest;
 import promiseofblood.umpabackend.dto.request.GeneralLoginRequest;
 import promiseofblood.umpabackend.dto.request.GeneralRegisterRequest;
 import promiseofblood.umpabackend.dto.request.Oauth2LoginRequest;
@@ -142,11 +146,11 @@ public class UserController {
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UserDto.ProfileResponse> patchDefaultProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute DefaultProfileRequest defaultProfileRequest
+    @Validated @ModelAttribute UserDto.DefaultProfilePatchRequest defaultProfilePatchRequest
   ) {
 
     UserDto.ProfileResponse updatedUser = userService.patchDefaultProfile(
-      securityUserDetails.getUsername(), defaultProfileRequest
+      securityUserDetails.getUsername(), defaultProfilePatchRequest
     );
 
     return ResponseEntity.ok(updatedUser);
@@ -207,4 +211,13 @@ public class UserController {
   }
 
 
+  @InitBinder
+  public void initBinder(WebDataBinder binder) {
+    binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
+      @Override
+      public void setAsText(String text) {
+        setValue(null);
+      }
+    });
+  }
 }
