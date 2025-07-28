@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.ReviewService;
 import promiseofblood.umpabackend.domain.service.ServiceBoardService;
+import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.request.MrProductionServicePostRequest;
 import promiseofblood.umpabackend.dto.request.ReviewRequest;
 import promiseofblood.umpabackend.dto.response.MrProductionServicePostResponse;
@@ -56,9 +57,17 @@ public class ServiceBoardController {
   }
 
   // accompaniment
-  @PostMapping("/accompaniment")
-  public void registerAccompaniment() {
+  @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<AccompanimentServicePostDto.AccompanimentServicePostResponse> registerAccompaniment(
+    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+    @ModelAttribute AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest
+  ) {
+    String loginId = securityUserDetails.getUsername();
 
+    AccompanimentServicePostDto.AccompanimentServicePostResponse accompanimentPostResponse =
+      serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
+
+    return ResponseEntity.ok(accompanimentPostResponse);
   }
 
   // score-production

@@ -23,6 +23,8 @@ public class AccompanimentServicePost extends ServicePost {
   @Embedded
   private ServiceCost serviceCost;
 
+  private String additionalCostPolicy;
+
   @Enumerated(EnumType.STRING)
   private Instrument instrument;
 
@@ -39,6 +41,7 @@ public class AccompanimentServicePost extends ServicePost {
 
   @Override
   public String getCostAndUnit() {
-    return "";
+    return this.serviceCost.getCost() + "원/" + this.serviceCost.getUnit();
   }
+
 }
