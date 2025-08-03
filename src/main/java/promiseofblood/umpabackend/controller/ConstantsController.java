@@ -17,7 +17,6 @@ import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.dto.ConstantDto;
-import promiseofblood.umpabackend.dto.response.LessonStyleResponse;
 import promiseofblood.umpabackend.dto.response.MajorResponse;
 import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
 
@@ -68,11 +67,14 @@ public class ConstantsController {
   }
 
   @GetMapping("lessonStyles")
-  public ResponseEntity<List<LessonStyleResponse>> getLessonStyles() {
+  public ResponseEntity<List<ConstantDto.LessonStyleResponse>> getLessonStyles() {
 
-    return ResponseEntity.ok(Stream.of(LessonStyle.values()).map(
-      lessonStyle -> LessonStyleResponse.builder().code(lessonStyle.name())
-        .name(lessonStyle.getKoreanName()).build()).collect(Collectors.toList()));
+    List<ConstantDto.LessonStyleResponse> lessonStyleResponses = new ArrayList<>();
+    for (LessonStyle lessonStyle : LessonStyle.values()) {
+      lessonStyleResponses.add(ConstantDto.LessonStyleResponse.from(lessonStyle));
+    }
+
+    return ResponseEntity.ok(lessonStyleResponses);
   }
 
 

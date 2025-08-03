@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
+import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 
@@ -80,8 +81,22 @@ public class ConstantDto {
         .name(subject.name())
         .build();
     }
-
   }
 
+  @Getter
+  @Builder(access = AccessLevel.PRIVATE)
+  public static class LessonStyleResponse {
 
+    private String code;
+
+    private String name;
+
+    public static LessonStyleResponse from(LessonStyle lessonStyle) {
+      return LessonStyleResponse.builder()
+        .code(lessonStyle.name())
+        .name(lessonStyle.getKoreanName())
+        .build();
+    }
+  }
+  
 }
