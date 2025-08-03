@@ -21,7 +21,7 @@ import promiseofblood.umpabackend.dto.response.LessonStyleResponse;
 import promiseofblood.umpabackend.dto.response.MajorResponse;
 import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
 import promiseofblood.umpabackend.dto.response.SubjectResponse;
-import promiseofblood.umpabackend.dto.response.WeekdayResponse;
+
 
 @RestController
 @RequestMapping("api/v1/constants")
@@ -37,11 +37,14 @@ public class ConstantsController {
   }
 
   @GetMapping("/weekdays")
-  public ResponseEntity<List<WeekdayResponse>> getWeekDays() {
+  public ResponseEntity<List<ConstantDto.WeekdayResponse>> getWeekDays() {
 
-    return ResponseEntity.ok(Stream.of(WeekDay.values()).map(
-      weekDay -> WeekdayResponse.builder().code(weekDay.name()).name(weekDay.getKoreanName())
-        .build()).collect(Collectors.toList()));
+    List<ConstantDto.WeekdayResponse> weekdayResponses = new ArrayList<>();
+    for (WeekDay weekday : WeekDay.values()) {
+      weekdayResponses.add(ConstantDto.WeekdayResponse.from(weekday));
+    }
+
+    return ResponseEntity.ok(weekdayResponses);
   }
 
   @GetMapping("/colleges")
