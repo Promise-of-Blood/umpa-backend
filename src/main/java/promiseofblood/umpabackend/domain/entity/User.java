@@ -80,6 +80,19 @@ public class User extends TimeStampedEntity {
       .build();
   }
 
+  public static User register(String loginId, Status status, Role role, String username,
+    ProfileType profileType, Oauth2User oauth2User) {
+
+    return User.builder()
+      .loginId(loginId)
+      .status(status)
+      .role(role)
+      .username(username)
+      .profileType(profileType)
+      .oauth2User(oauth2User)
+      .build();
+  }
+
   public void patchUsername(String username) {
     this.username = username;
   }

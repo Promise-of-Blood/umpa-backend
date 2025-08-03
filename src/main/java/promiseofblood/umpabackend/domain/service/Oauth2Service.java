@@ -14,6 +14,7 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.strategy.Oauth2Strategy;
 import promiseofblood.umpabackend.domain.strategy.Oauth2StrategyFactory;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
+import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
@@ -60,13 +61,15 @@ public class Oauth2Service {
       .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
       .username(oauth2ProfileResponse.getUsername())
       .build();
-    User newUser = User.builder()
-      .loginId(providerName + System.currentTimeMillis())
-      .status(Status.ACTIVE)
-      .role(Role.USER)
-      .username("임의의사용자" + System.currentTimeMillis())
-      .oauth2User(newOauth2User)
-      .build();
+    User newUser = User.register(
+      providerName + System.currentTimeMillis(),
+      Status.ACTIVE,
+      Role.USER,
+      "임의의사용자" + System.currentTimeMillis(),
+      ProfileType.STUDENT,
+      newOauth2User
+    );
+
     User user = userRepository.save(newUser);
 
     return LoginDto.LoginCompleteResponse.of(
