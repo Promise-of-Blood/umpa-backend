@@ -17,7 +17,6 @@ import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.dto.ConstantDto;
-import promiseofblood.umpabackend.dto.response.GradeResponse;
 import promiseofblood.umpabackend.dto.response.LessonStyleResponse;
 import promiseofblood.umpabackend.dto.response.MajorResponse;
 import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
@@ -47,7 +46,7 @@ public class ConstantsController {
 
   @GetMapping("/colleges")
   public ResponseEntity<List<ConstantDto.CollegeResponse>> getColleges() {
-    
+
     List<ConstantDto.CollegeResponse> collegeResponses = new ArrayList<>();
     for (College college : College.values()) {
       collegeResponses.add(ConstantDto.CollegeResponse.from(college));
@@ -74,11 +73,15 @@ public class ConstantsController {
 
 
   @GetMapping("/grades")
-  public ResponseEntity<List<GradeResponse>> getGrades() {
+  public ResponseEntity<List<ConstantDto.GradeResponse>> getGrades() {
 
-    return ResponseEntity.ok(Stream.of(Grade.values())
-      .map(grade -> GradeResponse.builder().code(grade.name()).name(grade.getKoreanName()).build())
-      .collect(Collectors.toList()));
+    List<ConstantDto.GradeResponse> gradeResponses = new ArrayList<>();
+    for (Grade grade : Grade.values()) {
+      gradeResponses.add(ConstantDto.GradeResponse.from(grade));
+    }
+
+    return ResponseEntity.ok(gradeResponses);
+
   }
 
   @GetMapping("/regions")
