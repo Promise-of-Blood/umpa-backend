@@ -20,8 +20,6 @@ import promiseofblood.umpabackend.dto.ConstantDto;
 import promiseofblood.umpabackend.dto.response.LessonStyleResponse;
 import promiseofblood.umpabackend.dto.response.MajorResponse;
 import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
-import promiseofblood.umpabackend.dto.response.SubjectResponse;
-
 
 @RestController
 @RequestMapping("api/v1/constants")
@@ -59,11 +57,14 @@ public class ConstantsController {
   }
 
   @GetMapping("/subjects")
-  public ResponseEntity<List<SubjectResponse>> getSubjects() {
+  public ResponseEntity<List<ConstantDto.SubjectResponse>> getSubjects() {
 
-    return ResponseEntity.ok(Stream.of(Subject.values()).map(
-      college -> SubjectResponse.builder().code(college.name()).name(college.getKoreanName())
-        .build()).collect(Collectors.toList()));
+    List<ConstantDto.SubjectResponse> subjectResponses = new ArrayList<>();
+    for (Subject subject : Subject.values()) {
+      subjectResponses.add(ConstantDto.SubjectResponse.of(subject));
+    }
+
+    return ResponseEntity.ok(subjectResponses);
   }
 
   @GetMapping("lessonStyles")

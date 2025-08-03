@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
+import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 
 
@@ -64,5 +65,23 @@ public class ConstantDto {
         .build();
     }
   }
+
+  @Getter
+  @Builder(access = AccessLevel.PRIVATE)
+  public static class SubjectResponse {
+
+    private String code;
+
+    private String name;
+
+    public static SubjectResponse of(Subject subject) {
+      return SubjectResponse.builder()
+        .code(subject.name())
+        .name(subject.name())
+        .build();
+    }
+
+  }
+
 
 }
