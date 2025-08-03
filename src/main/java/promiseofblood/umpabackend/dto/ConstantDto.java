@@ -6,6 +6,7 @@ import lombok.Getter;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
+import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 
@@ -98,5 +99,20 @@ public class ConstantDto {
         .build();
     }
   }
-  
+
+  @Builder
+  @Getter
+  public static class MajorResponse {
+
+    private String code;
+
+    private String name;
+
+    public static MajorResponse from(Major major) {
+      return MajorResponse.builder()
+        .code(major.name())
+        .name(major.getKoreanName())
+        .build();
+    }
+  }
 }

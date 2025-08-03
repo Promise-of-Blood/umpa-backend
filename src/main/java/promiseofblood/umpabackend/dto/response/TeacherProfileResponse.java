@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
+import promiseofblood.umpabackend.dto.ConstantDto;
 
 @Getter
 @Builder
@@ -26,7 +27,7 @@ public class TeacherProfileResponse {
 
   private String description;
 
-  private MajorResponse major;
+  private ConstantDto.MajorResponse major;
 
   private RegionResponse lessonRegion;
 
@@ -54,7 +55,7 @@ public class TeacherProfileResponse {
 
     return TeacherProfileResponse.builder()
       .description(teacherProfile.getDescription())
-      .major(MajorResponse.from(teacherProfile.getMajor()))
+      .major(ConstantDto.MajorResponse.from(teacherProfile.getMajor()))
       .lessonRegion(RegionResponse.from(teacherProfile.getLessonRegion()))
       .careers(careerResponses)
       .links(linkResponses)

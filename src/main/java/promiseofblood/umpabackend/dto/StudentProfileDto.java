@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
-import promiseofblood.umpabackend.dto.response.MajorResponse;
+import promiseofblood.umpabackend.dto.ConstantDto.MajorResponse;
 
 @Getter
 @Builder

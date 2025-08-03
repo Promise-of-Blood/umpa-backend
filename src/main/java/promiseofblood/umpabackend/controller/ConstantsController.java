@@ -17,7 +17,7 @@ import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.dto.ConstantDto;
-import promiseofblood.umpabackend.dto.response.MajorResponse;
+import promiseofblood.umpabackend.dto.ConstantDto.MajorResponse;
 import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
 
 @RestController
