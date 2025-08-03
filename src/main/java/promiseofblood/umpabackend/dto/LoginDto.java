@@ -1,5 +1,7 @@
 package promiseofblood.umpabackend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,6 +33,25 @@ public class LoginDto {
       String username, ProfileType profileType, String loginId, String password) {
       return new LoginIdPasswordRegisterRequest(username, profileType, loginId, password);
     }
+
+  }
+
+  @Builder
+  @Getter
+  @AllArgsConstructor
+  public static class Oauth2RegisterRequest {
+
+    private String username;
+
+    private ProfileType profileType;
+
+    @NotBlank
+    @Schema(description = "OpenID Connect 제공자로부터 발급된 idToken")
+    private String externalIdToken;
+
+    @NotBlank
+    @Schema(description = "oauth2 제공자로부터 발급된 액세스 토큰")
+    private String externalAccessToken;
 
   }
 
@@ -69,5 +90,6 @@ public class LoginDto {
       return new JwtPairResponse(accessToken, refreshToken);
     }
   }
+
 
 }

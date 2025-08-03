@@ -34,7 +34,6 @@ import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2LoginRequest;
-import promiseofblood.umpabackend.dto.request.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
@@ -77,7 +76,7 @@ public class UserController {
   @PostMapping(value = "/register/{providerName}")
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
-    @RequestBody Oauth2RegisterRequest oauth2RegisterRequest
+    @RequestBody LoginDto.Oauth2RegisterRequest oauth2RegisterRequest
   ) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
