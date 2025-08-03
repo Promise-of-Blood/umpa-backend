@@ -29,6 +29,7 @@ import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
+import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordLoginRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
@@ -64,7 +65,7 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @PostMapping("/register/general")
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
-    @RequestBody @Valid final LoginDto.LoginIdPasswordRequest loginIdPasswordRequest) {
+    @RequestBody @Valid final LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse = userService.registerUser(
       loginIdPasswordRequest);
@@ -175,7 +176,7 @@ public class UserController {
   @Tag(name = "토큰 발급 API")
   @PostMapping("/token/general")
   public ResponseEntity<LoginDto.LoginCompleteResponse> createToken(
-    @RequestBody LoginDto.LoginIdPasswordRequest request) {
+    @RequestBody LoginIdPasswordLoginRequest request) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse = userService.loginIdPasswordJwtLogin(
       request.getLoginId(),

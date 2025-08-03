@@ -12,12 +12,10 @@ import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
-import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordRequest;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
@@ -35,19 +33,20 @@ public class UserService {
   private final UserRepository userRepository;
   private final StorageService storageService;
 
+  @Transactional
   public LoginDto.LoginCompleteResponse registerUser(
-    LoginIdPasswordRequest loginIdPasswordRequest) {
+    LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRegisterRequest) {
 
-    if (this.isLoginIdAvailable(loginIdPasswordRequest.getLoginId())) {
+    if (this.isLoginIdAvailable(loginIdPasswordRegisterRequest.getLoginId())) {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
     User user = User.register(
-      loginIdPasswordRequest.getLoginId(),
+      loginIdPasswordRegisterRequest.getLoginId(),
       Status.ACTIVE,
       Role.USER,
-      "임의의사용자" + System.currentTimeMillis(),
-      ProfileType.STUDENT
+      loginIdPasswordRegisterRequest.getUsername(),
+      loginIdPasswordRegisterRequest.getProfileType()
     );
     user = userRepository.save(user);
 
