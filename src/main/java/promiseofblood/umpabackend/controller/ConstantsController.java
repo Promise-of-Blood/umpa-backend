@@ -1,6 +1,7 @@
 package promiseofblood.umpabackend.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -15,7 +16,7 @@ import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
-import promiseofblood.umpabackend.dto.response.CollegeResponse;
+import promiseofblood.umpabackend.dto.ConstantDto;
 import promiseofblood.umpabackend.dto.response.GradeResponse;
 import promiseofblood.umpabackend.dto.response.LessonStyleResponse;
 import promiseofblood.umpabackend.dto.response.MajorResponse;
@@ -45,11 +46,14 @@ public class ConstantsController {
   }
 
   @GetMapping("/colleges")
-  public ResponseEntity<List<CollegeResponse>> getColleges() {
+  public ResponseEntity<List<ConstantDto.CollegeResponse>> getColleges() {
+    
+    List<ConstantDto.CollegeResponse> collegeResponses = new ArrayList<>();
+    for (College college : College.values()) {
+      collegeResponses.add(ConstantDto.CollegeResponse.from(college));
+    }
 
-    return ResponseEntity.ok(Stream.of(College.values()).map(
-      college -> CollegeResponse.builder().code(college.name()).name(college.getKoreanName())
-        .build()).collect(Collectors.toList()));
+    return ResponseEntity.ok(collegeResponses);
   }
 
   @GetMapping("/subjects")
@@ -81,8 +85,7 @@ public class ConstantsController {
   public ResponseEntity<List<RegionCategoryResponse>> getRegions() {
 
     List<RegionCategoryResponse> regionCategories = Stream.of(RegionCategory.values())
-      .map(RegionCategoryResponse::from)
-      .toList();
+      .map(RegionCategoryResponse::from).toList();
 
     return ResponseEntity.ok(regionCategories);
   }

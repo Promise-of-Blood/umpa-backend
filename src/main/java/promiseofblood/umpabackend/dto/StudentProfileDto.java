@@ -4,7 +4,6 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
-import promiseofblood.umpabackend.dto.response.CollegeResponse;
 import promiseofblood.umpabackend.dto.response.GradeResponse;
 import promiseofblood.umpabackend.dto.response.MajorResponse;
 
@@ -13,14 +12,14 @@ import promiseofblood.umpabackend.dto.response.MajorResponse;
 public class StudentProfileDto {
 
   private MajorResponse major;
-  private List<CollegeResponse> preferredColleges;
+  private List<ConstantDto.CollegeResponse> preferredColleges;
   private GradeResponse grade;
 
   public static StudentProfileDto of(StudentProfile studentProfile) {
     return StudentProfileDto.builder()
       .major(MajorResponse.from(studentProfile.getMajor()))
       .preferredColleges(studentProfile.getPreferredColleges().stream()
-        .map(CollegeResponse::of)
+        .map(ConstantDto.CollegeResponse::from)
         .toList()
       )
       .grade(GradeResponse.of(studentProfile.getGrade()))
