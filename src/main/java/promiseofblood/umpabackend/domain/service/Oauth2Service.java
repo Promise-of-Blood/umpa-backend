@@ -16,8 +16,8 @@ import promiseofblood.umpabackend.domain.strategy.Oauth2StrategyFactory;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
+import promiseofblood.umpabackend.dto.LoginDto.AuthenticationCompleteResponse;
 import promiseofblood.umpabackend.dto.LoginDto.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -37,7 +37,7 @@ public class Oauth2Service {
 
 
   @Transactional
-  public LoginDto.LoginCompleteResponse registerOauth2User(
+  public AuthenticationCompleteResponse registerOauth2User(
     String providerName,
     Oauth2RegisterRequest oauth2RegisterRequest
   ) {
@@ -71,7 +71,7 @@ public class Oauth2Service {
 
     User user = userRepository.save(newUser);
 
-    return LoginDto.LoginCompleteResponse.of(
+    return AuthenticationCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
@@ -89,7 +89,7 @@ public class Oauth2Service {
     return oauth2Strategy.getOauth2UserProfile(oauth2Provider, code);
   }
 
-  public JwtPairDto generateOauth2Jwt(
+  public LoginDto.AuthenticationCompleteResponse generateOauth2Jwt(
     String providerName,
     String externalIdToken,
     String externalAccessToken
@@ -104,10 +104,14 @@ public class Oauth2Service {
           .getProviderUid())
       .orElseThrow(() -> new UnauthorizedException("해당 Oauth2 사용자 정보가 존재하지 않습니다."));
 
-    return JwtPairDto.builder()
-      .accessToken(jwtService.createAccessToken(user.getId(), user.getLoginId()))
-      .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
-      .build();
+    return AuthenticationCompleteResponse.of(
+      UserDto.ProfileResponse.from(user),
+      LoginDto.JwtPairResponse.of(
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId())
+      )
+    );
+
   }
 
 

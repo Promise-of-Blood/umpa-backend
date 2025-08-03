@@ -55,6 +55,10 @@ public class LoginDto {
 
   }
 
+  // ****************
+  // * 로그인 관련 DTO *
+  // ****************
+
   @Getter
   public static class LoginIdPasswordLoginRequest {
 
@@ -66,14 +70,15 @@ public class LoginDto {
 
   @Getter
   @AllArgsConstructor
-  public static class LoginCompleteResponse {
+  public static class AuthenticationCompleteResponse {
 
     private UserDto.ProfileResponse user;
 
     private JwtPairResponse jwtPair;
 
-    public static LoginCompleteResponse of(UserDto.ProfileResponse user, JwtPairResponse jwtPair) {
-      return new LoginCompleteResponse(user, jwtPair);
+    public static AuthenticationCompleteResponse of(UserDto.ProfileResponse user,
+      JwtPairResponse jwtPair) {
+      return new AuthenticationCompleteResponse(user, jwtPair);
     }
 
   }
