@@ -17,7 +17,6 @@ import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.dto.ConstantDto;
-import promiseofblood.umpabackend.dto.ConstantDto.MajorResponse;
 import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
 
 @RestController
@@ -26,11 +25,13 @@ import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
 public class ConstantsController {
 
   @GetMapping("/majors")
-  public ResponseEntity<List<MajorResponse>> getMajors() {
+  public ResponseEntity<List<ConstantDto.MajorResponse>> getMajors() {
 
-    return ResponseEntity.ok(Stream.of(Major.values())
-      .map(major -> MajorResponse.builder().code(major.name()).name(major.getKoreanName()).build())
-      .collect(Collectors.toList()));
+    List<ConstantDto.MajorResponse> majorResponses = Stream.of(Major.values())
+      .map(ConstantDto.MajorResponse::from)
+      .collect(Collectors.toList());
+
+    return ResponseEntity.ok(majorResponses);
   }
 
   @GetMapping("/weekdays")
