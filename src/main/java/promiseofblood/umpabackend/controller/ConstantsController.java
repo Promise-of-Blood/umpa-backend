@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
+import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
@@ -98,5 +99,16 @@ public class ConstantsController {
       .map(RegionCategoryResponse::from).toList();
 
     return ResponseEntity.ok(regionCategories);
+  }
+
+  @GetMapping("/instruments")
+  public ResponseEntity<List<ConstantDto.InstrumentResponse>> getInstruments() {
+
+    List<ConstantDto.InstrumentResponse> instrumentResponses = new ArrayList<>();
+    for (Instrument instrument : Instrument.values()) {
+      instrumentResponses.add(ConstantDto.InstrumentResponse.from(instrument));
+    }
+
+    return ResponseEntity.ok(instrumentResponses);
   }
 }
