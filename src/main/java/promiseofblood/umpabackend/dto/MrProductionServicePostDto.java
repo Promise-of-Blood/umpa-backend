@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
+import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 
 public class MrProductionServicePostDto {
 
@@ -40,5 +42,59 @@ public class MrProductionServicePostDto {
     private String softwareUsed;
 
     private List<String> sampleMrUrls;
+  }
+
+  @Getter
+  @Builder
+  public static class MrProductionServicePostResponse {
+
+    private String title;
+
+    private String description;
+
+    private TeacherProfileDto teacherProfile;
+
+    private String reviewRating;
+
+    private String costPerUnit;
+
+    private String additionalCostPolicy;
+
+    private String averageDuration;
+
+    private String freeRevisionCount;
+
+    private String softwareUsed;
+
+    private List<String> sampleUrls;
+
+    public static MrProductionServicePostResponse of(
+      MrProductionServicePost mrProductionServicePost) {
+
+      return MrProductionServicePostResponse.builder()
+        .title(mrProductionServicePost.getTitle())
+        .description(mrProductionServicePost.getDescription())
+        .teacherProfile(TeacherProfileDto.of(mrProductionServicePost.getUser().getTeacherProfile()))
+
+        .reviewRating(String.format("%.1f", 0.0))
+        .costPerUnit(String.format("%,d원/%s",
+          mrProductionServicePost.getServiceCost().getCost(),
+          mrProductionServicePost.getServiceCost().getUnit())
+        )
+
+        .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
+
+        .averageDuration(String.format("%d%s ~ %d%s",
+          mrProductionServicePost.getAverageDuration().getMinValue(),
+          mrProductionServicePost.getAverageDuration().getMinUnit(),
+          mrProductionServicePost.getAverageDuration().getMaxValue(),
+          mrProductionServicePost.getAverageDuration().getMaxUnit()
+        ))
+
+        .freeRevisionCount(String.valueOf(mrProductionServicePost.getFreeRevisionCount()))
+        .softwareUsed(mrProductionServicePost.getSoftwareUsed())
+        .sampleUrls(mrProductionServicePost.getSampleMrUrls())
+        .build();
+    }
   }
 }
