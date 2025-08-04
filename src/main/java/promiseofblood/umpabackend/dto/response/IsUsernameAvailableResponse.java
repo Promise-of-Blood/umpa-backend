@@ -11,4 +11,5 @@ public class IsUsernameAvailableResponse {
 
   private boolean isAvailable;
 
+  private String message;
 }

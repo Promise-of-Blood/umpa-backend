@@ -21,6 +21,7 @@ import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
+import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 
@@ -191,7 +192,26 @@ public class UserService {
       .build();
   }
 
-  public boolean isUsernameAvailable(String username) {
+  public IsUsernameAvailableResponse isUsernameAvailable(String username) {
+    if (!isUsernamePatternValid(username)) {
+      return new IsUsernameAvailableResponse(username, false,
+        "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
+    }
+
+    if (!isUsernameDuplicated(username)) {
+      return new IsUsernameAvailableResponse(username, false, "이미 사용 중인 아이디입니다.");
+    }
+
+    return new IsUsernameAvailableResponse(username, true, "사용 가능한 아이디입니다.");
+  }
+
+  public boolean isUsernamePatternValid(String username) {
+    String regex = "^[가-힣a-zA-Z0-9]{1,8}$";
+
+    return username != null && username.matches(regex);
+  }
+
+  public boolean isUsernameDuplicated(String username) {
 
     return !userRepository.existsByUsername(username);
   }

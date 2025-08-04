@@ -92,10 +92,8 @@ public class UserController {
     @RequestParam String username
   ) {
 
-    boolean isAvailable = userService.isUsernameAvailable(username);
-
     return ResponseEntity.ok(
-      new IsUsernameAvailableResponse(username, isAvailable)
+      userService.isUsernameAvailable(username)
     );
   }
 
