@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
+import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.Subject;
@@ -112,6 +113,22 @@ public class ConstantDto {
       return MajorResponse.builder()
         .code(major.name())
         .name(major.getKoreanName())
+        .build();
+    }
+  }
+
+  @Builder
+  @Getter
+  public static class InstrumentResponse {
+
+    private String code;
+
+    private String name;
+
+    public static InstrumentResponse from(Instrument instrument) {
+      return InstrumentResponse.builder()
+        .code(instrument.name())
+        .name(instrument.getKoreanName())
         .build();
     }
   }
