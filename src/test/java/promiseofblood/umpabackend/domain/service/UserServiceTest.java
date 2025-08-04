@@ -27,7 +27,7 @@ public class UserServiceTest {
     String username = "existing-user";
     when(userRepository.existsByUsername(username)).thenReturn(true);
 
-    boolean isAvailable = userService.isUsernameAvailable(username);
+    boolean isAvailable = userService.isUsernameDuplicated(username);
 
     assertFalse(isAvailable, "Username은 이미 존재하므로 사용 불가능해야 합니다.");
   }
@@ -38,7 +38,7 @@ public class UserServiceTest {
     String username = "new-user";
     when(userRepository.existsByUsername(username)).thenReturn(false);
 
-    boolean isAvailable = userService.isUsernameAvailable(username);
+    boolean isAvailable = userService.isUsernameDuplicated(username);
 
     assertTrue(isAvailable, "Username은 존재하지 않으므로 사용 가능해야 합니다.");
   }

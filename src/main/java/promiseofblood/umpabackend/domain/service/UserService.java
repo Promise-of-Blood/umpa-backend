@@ -12,16 +12,16 @@ import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
-import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordRequest;
+import promiseofblood.umpabackend.dto.LoginDto.AuthenticationCompleteResponse;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
+import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 
@@ -35,19 +35,20 @@ public class UserService {
   private final UserRepository userRepository;
   private final StorageService storageService;
 
-  public LoginDto.LoginCompleteResponse registerUser(
-    LoginIdPasswordRequest loginIdPasswordRequest) {
+  @Transactional
+  public AuthenticationCompleteResponse registerUser(
+    LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRegisterRequest) {
 
-    if (this.isLoginIdAvailable(loginIdPasswordRequest.getLoginId())) {
+    if (this.isLoginIdAvailable(loginIdPasswordRegisterRequest.getLoginId())) {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
     User user = User.register(
-      loginIdPasswordRequest.getLoginId(),
+      loginIdPasswordRegisterRequest.getLoginId(),
       Status.ACTIVE,
       Role.USER,
-      "임의의사용자" + System.currentTimeMillis(),
-      ProfileType.STUDENT
+      loginIdPasswordRegisterRequest.getUsername(),
+      loginIdPasswordRegisterRequest.getProfileType()
     );
     user = userRepository.save(user);
 
@@ -56,7 +57,7 @@ public class UserService {
       .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
       .build();
 
-    return LoginDto.LoginCompleteResponse.of(
+    return AuthenticationCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(jwtPairDto.getAccessToken(), jwtPairDto.getRefreshToken())
     );
@@ -153,7 +154,7 @@ public class UserService {
     return UserDto.ProfileResponse.from(user);
   }
 
-  public LoginDto.LoginCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
+  public AuthenticationCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
 
     Optional<User> optionalUser = userRepository.findByLoginId(loginId);
 
@@ -166,7 +167,7 @@ public class UserService {
       throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
     }
 
-    return LoginDto.LoginCompleteResponse.of(
+    return AuthenticationCompleteResponse.of(
       UserDto.ProfileResponse.from(optionalUser.get()),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(optionalUser.get().getId(), optionalUser.get().getLoginId()),
@@ -191,7 +192,26 @@ public class UserService {
       .build();
   }
 
-  public boolean isUsernameAvailable(String username) {
+  public IsUsernameAvailableResponse isUsernameAvailable(String username) {
+    if (!isUsernamePatternValid(username)) {
+      return new IsUsernameAvailableResponse(username, false,
+        "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
+    }
+
+    if (!isUsernameDuplicated(username)) {
+      return new IsUsernameAvailableResponse(username, false, "이미 사용 중인 아이디입니다.");
+    }
+
+    return new IsUsernameAvailableResponse(username, true, "사용 가능한 아이디입니다.");
+  }
+
+  public boolean isUsernamePatternValid(String username) {
+    String regex = "^[가-힣a-zA-Z0-9]{1,8}$";
+
+    return username != null && username.matches(regex);
+  }
+
+  public boolean isUsernameDuplicated(String username) {
 
     return !userRepository.existsByUsername(username);
   }
