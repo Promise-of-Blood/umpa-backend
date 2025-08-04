@@ -19,7 +19,7 @@ import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.ReviewService;
 import promiseofblood.umpabackend.domain.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.request.MrProductionServicePostRequest;
+import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionServicePostRequest;
 import promiseofblood.umpabackend.dto.request.ReviewRequest;
 import promiseofblood.umpabackend.dto.response.MrProductionServicePostResponse;
 import promiseofblood.umpabackend.dto.response.ReviewResponse;
