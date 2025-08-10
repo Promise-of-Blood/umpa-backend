@@ -29,7 +29,7 @@ import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.AuthenticationCompleteResponse;
+import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordLoginRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -64,26 +64,26 @@ public class UserController {
   // **************
   @Tag(name = "회원가입 API")
   @PostMapping("/register/general")
-  public ResponseEntity<AuthenticationCompleteResponse> registerUser(
+  public ResponseEntity<LoginCompleteResponse> registerUser(
     @RequestBody @Valid final LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
 
-    AuthenticationCompleteResponse authenticationCompleteResponse = userService.registerUser(
+    LoginCompleteResponse loginCompleteResponse = userService.registerUser(
       loginIdPasswordRequest);
 
-    return ResponseEntity.ok(authenticationCompleteResponse);
+    return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/{providerName}")
-  public ResponseEntity<AuthenticationCompleteResponse> registerOauth2User(
+  public ResponseEntity<LoginCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
     @RequestBody LoginDto.Oauth2RegisterRequest oauth2RegisterRequest
   ) {
 
-    AuthenticationCompleteResponse authenticationCompleteResponse = oauth2Service.registerOauth2User(
+    LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
       providerName, oauth2RegisterRequest);
 
-    return ResponseEntity.ok(authenticationCompleteResponse);
+    return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "회원가입 API")
@@ -157,31 +157,31 @@ public class UserController {
   // ***************
   @Tag(name = "토큰 발급 API")
   @PostMapping("token/{providerName}")
-  public ResponseEntity<LoginDto.AuthenticationCompleteResponse> createOauth2Token(
+  public ResponseEntity<LoginCompleteResponse> createOauth2Token(
     @PathVariable String providerName,
     @RequestBody Oauth2LoginRequest oauth2LoginRequest
   ) {
 
-    LoginDto.AuthenticationCompleteResponse authenticationCompleteResponse = oauth2Service.generateOauth2Jwt(
+    LoginCompleteResponse loginCompleteResponse = oauth2Service.generateOauth2Jwt(
       providerName,
       oauth2LoginRequest.getExternalIdToken(),
       oauth2LoginRequest.getExternalAccessToken()
     );
 
-    return ResponseEntity.ok(authenticationCompleteResponse);
+    return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "토큰 발급 API")
   @PostMapping("/token/general")
-  public ResponseEntity<LoginDto.AuthenticationCompleteResponse> createToken(
+  public ResponseEntity<LoginCompleteResponse> createToken(
     @RequestBody LoginIdPasswordLoginRequest request) {
 
-    LoginDto.AuthenticationCompleteResponse authenticationCompleteResponse = userService.loginIdPasswordJwtLogin(
+    LoginCompleteResponse loginCompleteResponse = userService.loginIdPasswordJwtLogin(
       request.getLoginId(),
       request.getPassword()
     );
 
-    return ResponseEntity.ok(authenticationCompleteResponse);
+    return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "토큰 발급 API")

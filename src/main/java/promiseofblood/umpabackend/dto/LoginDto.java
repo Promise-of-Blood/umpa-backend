@@ -5,12 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.ToString;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 
-@Getter
-@Builder
-@ToString
+
 public class LoginDto {
 
   // ******************
@@ -70,15 +67,15 @@ public class LoginDto {
 
   @Getter
   @AllArgsConstructor
-  public static class AuthenticationCompleteResponse {
+  public static class LoginCompleteResponse {
 
     private UserDto.ProfileResponse user;
 
     private JwtPairResponse jwtPair;
 
-    public static AuthenticationCompleteResponse of(UserDto.ProfileResponse user,
+    public static LoginCompleteResponse of(UserDto.ProfileResponse user,
       JwtPairResponse jwtPair) {
-      return new AuthenticationCompleteResponse(user, jwtPair);
+      return new LoginCompleteResponse(user, jwtPair);
     }
 
   }

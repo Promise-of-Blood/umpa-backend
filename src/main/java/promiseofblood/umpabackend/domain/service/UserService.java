@@ -16,7 +16,7 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.AuthenticationCompleteResponse;
+import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
@@ -36,7 +36,7 @@ public class UserService {
   private final StorageService storageService;
 
   @Transactional
-  public AuthenticationCompleteResponse registerUser(
+  public LoginCompleteResponse registerUser(
     LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRegisterRequest) {
 
     if (this.isLoginIdAvailable(loginIdPasswordRegisterRequest.getLoginId())) {
@@ -57,7 +57,7 @@ public class UserService {
       .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
       .build();
 
-    return AuthenticationCompleteResponse.of(
+    return LoginCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(jwtPairDto.getAccessToken(), jwtPairDto.getRefreshToken())
     );
@@ -154,7 +154,7 @@ public class UserService {
     return UserDto.ProfileResponse.from(user);
   }
 
-  public AuthenticationCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
+  public LoginCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
 
     Optional<User> optionalUser = userRepository.findByLoginId(loginId);
 
@@ -167,7 +167,7 @@ public class UserService {
       throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
     }
 
-    return AuthenticationCompleteResponse.of(
+    return LoginCompleteResponse.of(
       UserDto.ProfileResponse.from(optionalUser.get()),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(optionalUser.get().getId(), optionalUser.get().getLoginId()),
