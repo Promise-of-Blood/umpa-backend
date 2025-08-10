@@ -12,7 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import promiseofblood.umpabackend.core.config.JwtConfig;
 import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.dto.JwtPairDto;
+import promiseofblood.umpabackend.dto.LoginDto;
 
 @Slf4j
 @Component
@@ -21,12 +21,14 @@ public class JwtService {
 
   private final JwtConfig jwtConfig;
 
-  public JwtPairDto createJwtPair(Long id, String loginId) {
+  public LoginDto.JwtPairResponse createJwtPair(Long id, String loginId) {
 
     String accessToken = createAccessToken(id, loginId);
     String refreshToken = createRefreshToken(id, loginId);
 
-    return JwtPairDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
+    return LoginDto.JwtPairResponse.of(
+      accessToken, refreshToken
+    );
   }
 
   public String createAccessToken(Long id, String loginId) {

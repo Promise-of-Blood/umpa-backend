@@ -14,7 +14,6 @@ import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Status;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -52,14 +51,12 @@ public class UserService {
     );
     user = userRepository.save(user);
 
-    JwtPairDto jwtPairDto = JwtPairDto.builder()
-      .accessToken(jwtService.createAccessToken(user.getId(), user.getLoginId()))
-      .refreshToken(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
-      .build();
-
     return LoginCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
-      LoginDto.JwtPairResponse.of(jwtPairDto.getAccessToken(), jwtPairDto.getRefreshToken())
+      LoginDto.JwtPairResponse.of(
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId())
+      )
     );
   }
 
