@@ -55,14 +55,6 @@ public class TeacherProfile extends TimeStampedEntity {
       .build();
   }
 
-  public void addCareer(TeacherCareer career) {
-    this.careers.add(career);
-  }
-
-  public void addLink(TeacherLink link) {
-    this.links.add(link);
-  }
-
   public void update(TeacherProfileRequest request) {
     if (request.getDescription() != null) {
       this.description = request.getDescription();
@@ -77,7 +69,7 @@ public class TeacherProfile extends TimeStampedEntity {
       this.careers.clear();
       for (TeacherProfileRequest.TeacherCareerRequest careerRequest : request.getCareers()) {
         TeacherCareer career = TeacherCareer.from(careerRequest);
-        this.addCareer(career);
+        this.careers.add(career);
         career.setTeacherProfile(this);
       }
     }
@@ -85,7 +77,7 @@ public class TeacherProfile extends TimeStampedEntity {
       this.links.clear();
       for (String link : request.getLinks()) {
         TeacherLink teacherLink = TeacherLink.from(link);
-        this.addLink(teacherLink);
+        this.links.add(teacherLink);
         teacherLink.setTeacherProfile(this);
       }
     }
