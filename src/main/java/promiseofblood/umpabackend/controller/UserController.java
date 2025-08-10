@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -73,8 +72,7 @@ public class UserController {
   @PostMapping(value = "/register/{providerName}")
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
-    @RequestBody LoginDto.Oauth2RegisterRequest oauth2RegisterRequest
-  ) {
+    @RequestBody LoginDto.Oauth2RegisterRequest oauth2RegisterRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
       providerName, oauth2RegisterRequest);
@@ -85,12 +83,9 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @GetMapping(value = "/register/check/username")
   public ResponseEntity<IsUsernameAvailableResponse> isUsernameAvailable(
-    @RequestParam String username
-  ) {
+    @RequestParam String username) {
 
-    return ResponseEntity.ok(
-      userService.isUsernameAvailable(username)
-    );
+    return ResponseEntity.ok(userService.isUsernameAvailable(username));
   }
 
   // ****************
@@ -101,21 +96,17 @@ public class UserController {
   public ResponseEntity<UserDto.ProfileResponse> getCurrentUser(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
-    return ResponseEntity.ok(
-      userService.getUserByLoginId(securityUserDetails.getUsername())
-    );
+    return ResponseEntity.ok(userService.getUserByLoginId(securityUserDetails.getUsername()));
   }
 
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/teacher-profile")
   public ResponseEntity<UserDto.ProfileResponse> patchTeacherProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody TeacherProfileRequest teacherProfileRequest
-  ) {
+    @RequestBody TeacherProfileRequest teacherProfileRequest) {
 
     UserDto.ProfileResponse teacherProfileResponse = userService.patchTeacherProfile(
-      securityUserDetails.getUsername(), teacherProfileRequest
-    );
+      securityUserDetails.getUsername(), teacherProfileRequest);
 
     return ResponseEntity.ok(teacherProfileResponse);
   }
@@ -124,12 +115,10 @@ public class UserController {
   @PatchMapping("/me/student-profile")
   public ResponseEntity<UserDto.ProfileResponse> patchStudentProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody @Valid StudentProfileRequest studentProfileRequest
-  ) {
+    @RequestBody @Valid StudentProfileRequest studentProfileRequest) {
 
     UserDto.ProfileResponse studentProfileDto = userService.patchStudentProfile(
-      securityUserDetails.getUsername(), studentProfileRequest
-    );
+      securityUserDetails.getUsername(), studentProfileRequest);
 
     return ResponseEntity.ok(studentProfileDto);
   }
@@ -138,12 +127,10 @@ public class UserController {
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UserDto.ProfileResponse> patchDefaultProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @Validated @ModelAttribute UserDto.DefaultProfilePatchRequest defaultProfilePatchRequest
-  ) {
+    @Validated @ModelAttribute UserDto.DefaultProfilePatchRequest defaultProfilePatchRequest) {
 
     UserDto.ProfileResponse updatedUser = userService.patchDefaultProfile(
-      securityUserDetails.getUsername(), defaultProfilePatchRequest
-    );
+      securityUserDetails.getUsername(), defaultProfilePatchRequest);
 
     return ResponseEntity.ok(updatedUser);
   }
@@ -155,14 +142,11 @@ public class UserController {
   @PostMapping("token/{providerName}")
   public ResponseEntity<LoginDto.LoginCompleteResponse> createOauth2Token(
     @PathVariable String providerName,
-    @RequestBody LoginDto.Oauth2LoginRequest oauth2LoginRequest
-  ) {
+    @RequestBody LoginDto.Oauth2LoginRequest oauth2LoginRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.generateOauth2Jwt(
-      providerName,
-      oauth2LoginRequest.getExternalIdToken(),
-      oauth2LoginRequest.getExternalAccessToken()
-    );
+      providerName, oauth2LoginRequest.getExternalIdToken(),
+      oauth2LoginRequest.getExternalAccessToken());
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
@@ -173,18 +157,17 @@ public class UserController {
     @RequestBody LoginDto.LoginIdPasswordLoginRequest request) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse = userService.loginIdPasswordJwtLogin(
-      request.getLoginId(),
-      request.getPassword()
-    );
+      request.getLoginId(), request.getPassword());
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "토큰 발급 API")
   @PostMapping("/refresh-token")
-  public JwtPairDto refreshToken(@RequestBody LoginDto.TokenRefreshRequest request) {
+  public ResponseEntity<LoginDto.LoginCompleteResponse> refreshToken(
+    @RequestBody LoginDto.TokenRefreshRequest request) {
 
-    return userService.refreshToken(request.getRefreshToken());
+    return ResponseEntity.ok(userService.refreshToken(request.getRefreshToken()));
   }
 
   @Tag(name = "토큰 발급 API")
@@ -197,10 +180,8 @@ public class UserController {
 
   @GetMapping("/callback/{providerName}")
   @Hidden
-  public Oauth2ProfileResponse oauth2AuthorizationCallback(
-    @PathVariable String providerName,
-    String code
-  ) {
+  public Oauth2ProfileResponse oauth2AuthorizationCallback(@PathVariable String providerName,
+    String code) {
 
     return oauth2Service.getOauth2Profile(providerName, code);
   }

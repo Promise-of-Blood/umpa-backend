@@ -177,19 +177,20 @@ public class UserService {
   }
 
   @Transactional
-  public JwtPairDto refreshToken(String refreshToken) {
+  public LoginDto.LoginCompleteResponse refreshToken(String refreshToken) {
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
     User user = userRepository.findById(userId)
       .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-    String newAccessToken = jwtService.createAccessToken(user.getId(), user.getLoginId());
-    String newRefreshToken = jwtService.createRefreshToken(user.getId(), user.getLoginId());
+    LoginDto.JwtPairResponse jwtPairResponse = LoginDto.JwtPairResponse.of(
+      jwtService.createAccessToken(user.getId(), user.getLoginId()),
+      jwtService.createRefreshToken(user.getId(), user.getLoginId())
+    );
 
-    return JwtPairDto.builder()
-      .accessToken(newAccessToken)
-      .refreshToken(newRefreshToken)
-      .build();
+    return LoginCompleteResponse.of(
+      UserDto.ProfileResponse.from(user),
+      jwtPairResponse);
   }
 
   public IsUsernameAvailableResponse isUsernameAvailable(String username) {
