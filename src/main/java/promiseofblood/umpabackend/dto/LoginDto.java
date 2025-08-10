@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 
 
@@ -62,6 +63,15 @@ public class LoginDto {
     private String loginId;
 
     private String password;
+
+  }
+
+  @Getter
+  @NoArgsConstructor
+  public static class TokenRefreshRequest {
+
+    @NotBlank
+    private String refreshToken;
 
   }
 

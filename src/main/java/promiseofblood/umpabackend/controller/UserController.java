@@ -31,13 +31,13 @@ import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordLoginRequest;
+import promiseofblood.umpabackend.dto.LoginDto.TokenRefreshRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.dto.request.Oauth2LoginRequest;
 import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
-import promiseofblood.umpabackend.dto.request.TokenRefreshRequest;
 import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
 
 @RestController
