@@ -27,8 +27,8 @@ public class LoginDto {
 
     private String password;
 
-    public static LoginIdPasswordRegisterRequest of(
-      String username, ProfileType profileType, String loginId, String password) {
+    public static LoginIdPasswordRegisterRequest of(String username, ProfileType profileType,
+      String loginId, String password) {
       return new LoginIdPasswordRegisterRequest(username, profileType, loginId, password);
     }
 
@@ -56,6 +56,14 @@ public class LoginDto {
   // ****************
   // * 로그인 관련 DTO *
   // ****************
+  @Getter
+  public static class Oauth2LoginRequest {
+
+    private String externalIdToken;
+
+    private String externalAccessToken;
+
+  }
 
   @Getter
   public static class LoginIdPasswordLoginRequest {
@@ -83,8 +91,7 @@ public class LoginDto {
 
     private JwtPairResponse jwtPair;
 
-    public static LoginCompleteResponse of(UserDto.ProfileResponse user,
-      JwtPairResponse jwtPair) {
+    public static LoginCompleteResponse of(UserDto.ProfileResponse user, JwtPairResponse jwtPair) {
       return new LoginCompleteResponse(user, jwtPair);
     }
 
