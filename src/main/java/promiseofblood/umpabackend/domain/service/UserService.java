@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.core.exception.RegistrationException;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
@@ -42,13 +43,6 @@ public class UserService {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
-    String storedFilePath = storageService.store(
-      loginIdPasswordRegisterRequest.getProfileImage(),
-      "users",
-      loginIdPasswordRegisterRequest.getLoginId(),
-      "default-profile"
-    );
-
     User user = User.register(
       loginIdPasswordRegisterRequest.getLoginId(),
       loginIdPasswordRegisterRequest.getGender(),
@@ -56,7 +50,10 @@ public class UserService {
       Role.USER,
       loginIdPasswordRegisterRequest.getUsername(),
       loginIdPasswordRegisterRequest.getProfileType(),
-      storedFilePath
+      this.uploadProfileImage(
+        loginIdPasswordRegisterRequest.getLoginId(),
+        loginIdPasswordRegisterRequest.getProfileImage()
+      )
     );
     user = userRepository.save(user);
 
@@ -102,11 +99,9 @@ public class UserService {
       user.patchGender(defaultProfilePatchRequest.getGender());
     }
     if (defaultProfilePatchRequest.getProfileImage() != null) {
-      String storedFilePath = storageService.store(
-        defaultProfilePatchRequest.getProfileImage(),
-        "users",
+      String storedFilePath = this.uploadProfileImage(
         user.getLoginId(),
-        "default-profile"
+        defaultProfilePatchRequest.getProfileImage()
       );
       user.patchProfileImageUrl(storedFilePath);
     }
@@ -223,6 +218,15 @@ public class UserService {
     return !userRepository.existsByUsername(username);
   }
 
+  public String uploadProfileImage(String loginId, MultipartFile profileImage) {
+
+    return storageService.store(
+      profileImage,
+      "users",
+      loginId,
+      "default-profile"
+    );
+  }
 
   private boolean isLoginIdAvailable(String loginId) {
 
