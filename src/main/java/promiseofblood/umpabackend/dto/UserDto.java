@@ -12,7 +12,7 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.domain.vo.Status;
+import promiseofblood.umpabackend.domain.vo.UserStatus;
 
 @Getter
 @Builder
@@ -30,7 +30,7 @@ public class UserDto {
     @Schema(nullable = true)
     private String username;
 
-    private Status status;
+    private UserStatus userStatus;
 
     private Role role;
 
@@ -57,7 +57,7 @@ public class UserDto {
 
     public static ProfileResponse from(User user) {
       return ProfileResponse.builder().id(user.getId()).loginId(user.getLoginId())
-        .username(user.getUsername()).status(user.getStatus()).role(user.getRole())
+        .username(user.getUsername()).userStatus(user.getUserStatus()).role(user.getRole())
         .gender(user.getGender() == null ? null : user.getGender().name())
         .profileImageUrl(user.getProfileImageUrl()).profileType(user.getProfileType().name())
         .teacherProfile(user.getTeacherProfile() == null ? null

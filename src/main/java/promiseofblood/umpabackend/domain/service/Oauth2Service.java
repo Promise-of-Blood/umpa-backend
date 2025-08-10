@@ -15,7 +15,7 @@ import promiseofblood.umpabackend.domain.strategy.Oauth2Strategy;
 import promiseofblood.umpabackend.domain.strategy.Oauth2StrategyFactory;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.domain.vo.Status;
+import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.LoginDto.Oauth2RegisterRequest;
@@ -73,7 +73,7 @@ public class Oauth2Service {
     User newUser = User.register(
       loginId,
       oauth2RegisterRequest.getGender(),
-      Status.ACTIVE,
+      UserStatus.ACTIVE,
       Role.USER,
       oauth2RegisterRequest.getUsername(),
       oauth2RegisterRequest.getProfileType(),

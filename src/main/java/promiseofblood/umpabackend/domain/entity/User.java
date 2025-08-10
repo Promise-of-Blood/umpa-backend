@@ -17,7 +17,7 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.domain.vo.Status;
+import promiseofblood.umpabackend.domain.vo.UserStatus;
 
 
 @Entity
@@ -36,7 +36,7 @@ public class User extends TimeStampedEntity {
   // 회원 상태, 역할
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
-  private Status status;
+  private UserStatus userStatus;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false)
@@ -71,13 +71,13 @@ public class User extends TimeStampedEntity {
   private Oauth2User oauth2User;
 
   public static User register(
-    String loginId, Gender gender, Status status, Role role, String username,
+    String loginId, Gender gender, UserStatus userStatus, Role role, String username,
     ProfileType profileType, String profileImageUrl) {
 
     return User.builder()
       .loginId(loginId)
       .gender(gender)
-      .status(status)
+      .userStatus(userStatus)
       .role(role)
       .username(username)
       .profileType(profileType)
@@ -85,14 +85,14 @@ public class User extends TimeStampedEntity {
       .build();
   }
 
-  public static User register(String loginId, Gender gender, Status status, Role role,
+  public static User register(String loginId, Gender gender, UserStatus userStatus, Role role,
     String username,
     ProfileType profileType, String profileImageUrl, Oauth2User oauth2User) {
 
     return User.builder()
       .loginId(loginId)
       .gender(gender)
-      .status(status)
+      .userStatus(userStatus)
       .role(role)
       .username(username)
       .profileType(profileType)

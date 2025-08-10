@@ -13,7 +13,7 @@ import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.domain.vo.Status;
+import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -52,7 +52,7 @@ public class UserService {
     User user = User.register(
       loginIdPasswordRegisterRequest.getLoginId(),
       loginIdPasswordRegisterRequest.getGender(),
-      Status.ACTIVE,
+      UserStatus.ACTIVE,
       Role.USER,
       loginIdPasswordRegisterRequest.getUsername(),
       loginIdPasswordRegisterRequest.getProfileType(),
