@@ -42,12 +42,21 @@ public class UserService {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
+    String storedFilePath = storageService.store(
+      loginIdPasswordRegisterRequest.getProfileImage(),
+      "users",
+      loginIdPasswordRegisterRequest.getLoginId(),
+      "default-profile"
+    );
+
     User user = User.register(
       loginIdPasswordRegisterRequest.getLoginId(),
+      loginIdPasswordRegisterRequest.getGender(),
       Status.ACTIVE,
       Role.USER,
       loginIdPasswordRegisterRequest.getUsername(),
-      loginIdPasswordRegisterRequest.getProfileType()
+      loginIdPasswordRegisterRequest.getProfileType(),
+      storedFilePath
     );
     user = userRepository.save(user);
 

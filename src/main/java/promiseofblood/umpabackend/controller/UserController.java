@@ -58,9 +58,9 @@ public class UserController {
   // * 회원가입 API *
   // **************
   @Tag(name = "회원가입 API")
-  @PostMapping("/register/general")
+  @PostMapping(value = "/register/general", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
-    @RequestBody @Valid final LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
+    @Validated @ModelAttribute LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse = userService.registerUser(
       loginIdPasswordRequest);
@@ -69,10 +69,10 @@ public class UserController {
   }
 
   @Tag(name = "회원가입 API")
-  @PostMapping(value = "/register/{providerName}")
+  @PostMapping(value = "/register/{providerName}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
-    @RequestBody LoginDto.Oauth2RegisterRequest oauth2RegisterRequest) {
+    @Validated @ModelAttribute LoginDto.Oauth2RegisterRequest oauth2RegisterRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
       providerName, oauth2RegisterRequest);

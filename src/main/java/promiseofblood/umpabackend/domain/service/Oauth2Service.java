@@ -34,6 +34,7 @@ public class Oauth2Service {
   private final UserRepository userRepository;
   private final Oauth2UserRepository oauth2UserRepository;
   private final JwtService jwtService;
+  private final StorageService storageService;
 
 
   @Transactional
@@ -60,12 +61,22 @@ public class Oauth2Service {
       .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
       .username(oauth2ProfileResponse.getUsername())
       .build();
+
+    String loginId = oauth2ProfileResponse.getProviderUid();
+    String storedFilePath = storageService.store(
+      oauth2RegisterRequest.getProfileImage(),
+      "users",
+      loginId,
+      "default-profile"
+    );
+
     User newUser = User.register(
-      providerName + System.currentTimeMillis(),
+      loginId,
       Status.ACTIVE,
       Role.USER,
       oauth2RegisterRequest.getUsername(),
       oauth2RegisterRequest.getProfileType(),
+      storedFilePath,
       newOauth2User
     );
 

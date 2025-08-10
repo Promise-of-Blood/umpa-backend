@@ -68,20 +68,23 @@ public class User extends TimeStampedEntity {
   @JoinColumn(name = "oauth2_user_id")
   private Oauth2User oauth2User;
 
-  public static User register(String loginId, Status status, Role role, String username,
-    ProfileType profileType) {
+  public static User register(
+    String loginId, Gender gender, Status status, Role role, String username,
+    ProfileType profileType, String profileImageUrl) {
 
     return User.builder()
       .loginId(loginId)
+      .gender(gender)
       .status(status)
       .role(role)
       .username(username)
       .profileType(profileType)
+      .profileImageUrl(profileImageUrl)
       .build();
   }
 
   public static User register(String loginId, Status status, Role role, String username,
-    ProfileType profileType, Oauth2User oauth2User) {
+    ProfileType profileType, String profileImageUrl, Oauth2User oauth2User) {
 
     return User.builder()
       .loginId(loginId)
@@ -89,6 +92,7 @@ public class User extends TimeStampedEntity {
       .role(role)
       .username(username)
       .profileType(profileType)
+      .profileImageUrl(profileImageUrl)
       .oauth2User(oauth2User)
       .build();
   }

@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
+import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 
 
@@ -19,18 +21,26 @@ public class LoginDto {
   @AllArgsConstructor
   public static class LoginIdPasswordRegisterRequest {
 
+    @NotBlank
+    @Schema(description = "사용자 닉네임", example = "홍길동")
     private String username;
 
+    @Schema(description = "성별", example = "MALE")
+    private Gender gender;
+
+    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
     private ProfileType profileType;
 
+    @NotBlank
+    @Schema(description = "로그인 아이디")
     private String loginId;
 
+    @NotBlank
+    @Schema(description = "비밀번호")
     private String password;
-
-    public static LoginIdPasswordRegisterRequest of(String username, ProfileType profileType,
-      String loginId, String password) {
-      return new LoginIdPasswordRegisterRequest(username, profileType, loginId, password);
-    }
+    
+    @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
+    private MultipartFile profileImage;
 
   }
 
@@ -39,9 +49,18 @@ public class LoginDto {
   @AllArgsConstructor
   public static class Oauth2RegisterRequest {
 
+    @NotBlank
+    @Schema(description = "사용자 닉네임", example = "홍길동")
     private String username;
 
+    @Schema(description = "성별", example = "MALE")
+    private Gender gender;
+
+    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
     private ProfileType profileType;
+
+    @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
+    private MultipartFile profileImage;
 
     @NotBlank
     @Schema(description = "OpenID Connect 제공자로부터 발급된 idToken")
