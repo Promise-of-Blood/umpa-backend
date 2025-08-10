@@ -13,8 +13,7 @@ import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.dto.ConstantDto.MajorResponse;
 import promiseofblood.umpabackend.dto.response.RegionResponse;
 
-@Getter
-@Builder(access = AccessLevel.PRIVATE)
+
 public class TeacherProfileDto {
 
   @Getter

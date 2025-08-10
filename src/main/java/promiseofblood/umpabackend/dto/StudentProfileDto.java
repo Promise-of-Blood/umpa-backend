@@ -11,7 +11,8 @@ import promiseofblood.umpabackend.dto.ConstantDto.MajorResponse;
 @Getter
 public class StudentProfileDto {
 
-  @Builder
+  @Getter
+  @Builder(access = lombok.AccessLevel.PRIVATE)
   public static class StudentProfileResponse {
 
     private MajorResponse major;
