@@ -35,7 +35,6 @@ public class Oauth2Service {
   private final UserService userService;
   private final Oauth2UserRepository oauth2UserRepository;
   private final JwtService jwtService;
-  private final StorageService storageService;
 
 
   @Transactional
