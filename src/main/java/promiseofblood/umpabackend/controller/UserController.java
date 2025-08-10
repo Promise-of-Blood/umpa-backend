@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
+import promiseofblood.umpabackend.domain.service.ProfileService;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
@@ -41,6 +42,7 @@ import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
 public class UserController {
 
   private final UserService userService;
+  private final ProfileService profileService;
   private final Oauth2Service oauth2Service;
 
   // ****************
@@ -105,7 +107,7 @@ public class UserController {
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @RequestBody TeacherProfileRequest teacherProfileRequest) {
 
-    UserDto.ProfileResponse teacherProfileResponse = userService.patchTeacherProfile(
+    UserDto.ProfileResponse teacherProfileResponse = profileService.patchTeacherProfile(
       securityUserDetails.getUsername(), teacherProfileRequest);
 
     return ResponseEntity.ok(teacherProfileResponse);
@@ -117,7 +119,7 @@ public class UserController {
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @RequestBody @Valid StudentProfileRequest studentProfileRequest) {
 
-    UserDto.ProfileResponse studentProfileDto = userService.patchStudentProfile(
+    UserDto.ProfileResponse studentProfileDto = profileService.patchStudentProfile(
       securityUserDetails.getUsername(), studentProfileRequest);
 
     return ResponseEntity.ok(studentProfileDto);
@@ -129,7 +131,7 @@ public class UserController {
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @Validated @ModelAttribute UserDto.DefaultProfilePatchRequest defaultProfilePatchRequest) {
 
-    UserDto.ProfileResponse updatedUser = userService.patchDefaultProfile(
+    UserDto.ProfileResponse updatedUser = profileService.patchDefaultProfile(
       securityUserDetails.getUsername(), defaultProfilePatchRequest);
 
     return ResponseEntity.ok(updatedUser);
