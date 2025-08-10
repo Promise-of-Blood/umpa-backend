@@ -29,10 +29,6 @@ import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.JwtPairDto;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
-import promiseofblood.umpabackend.dto.LoginDto.LoginIdPasswordLoginRequest;
-import promiseofblood.umpabackend.dto.LoginDto.Oauth2LoginRequest;
-import promiseofblood.umpabackend.dto.LoginDto.TokenRefreshRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
@@ -64,10 +60,10 @@ public class UserController {
   // **************
   @Tag(name = "회원가입 API")
   @PostMapping("/register/general")
-  public ResponseEntity<LoginCompleteResponse> registerUser(
+  public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
     @RequestBody @Valid final LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
 
-    LoginCompleteResponse loginCompleteResponse = userService.registerUser(
+    LoginDto.LoginCompleteResponse loginCompleteResponse = userService.registerUser(
       loginIdPasswordRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
@@ -75,12 +71,12 @@ public class UserController {
 
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/{providerName}")
-  public ResponseEntity<LoginCompleteResponse> registerOauth2User(
+  public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
     @RequestBody LoginDto.Oauth2RegisterRequest oauth2RegisterRequest
   ) {
 
-    LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
+    LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
       providerName, oauth2RegisterRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
@@ -157,12 +153,12 @@ public class UserController {
   // ***************
   @Tag(name = "토큰 발급 API")
   @PostMapping("token/{providerName}")
-  public ResponseEntity<LoginCompleteResponse> createOauth2Token(
+  public ResponseEntity<LoginDto.LoginCompleteResponse> createOauth2Token(
     @PathVariable String providerName,
-    @RequestBody Oauth2LoginRequest oauth2LoginRequest
+    @RequestBody LoginDto.Oauth2LoginRequest oauth2LoginRequest
   ) {
 
-    LoginCompleteResponse loginCompleteResponse = oauth2Service.generateOauth2Jwt(
+    LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.generateOauth2Jwt(
       providerName,
       oauth2LoginRequest.getExternalIdToken(),
       oauth2LoginRequest.getExternalAccessToken()
@@ -173,10 +169,10 @@ public class UserController {
 
   @Tag(name = "토큰 발급 API")
   @PostMapping("/token/general")
-  public ResponseEntity<LoginCompleteResponse> createToken(
-    @RequestBody LoginIdPasswordLoginRequest request) {
+  public ResponseEntity<LoginDto.LoginCompleteResponse> createToken(
+    @RequestBody LoginDto.LoginIdPasswordLoginRequest request) {
 
-    LoginCompleteResponse loginCompleteResponse = userService.loginIdPasswordJwtLogin(
+    LoginDto.LoginCompleteResponse loginCompleteResponse = userService.loginIdPasswordJwtLogin(
       request.getLoginId(),
       request.getPassword()
     );
@@ -186,7 +182,7 @@ public class UserController {
 
   @Tag(name = "토큰 발급 API")
   @PostMapping("/refresh-token")
-  public JwtPairDto refreshToken(@RequestBody TokenRefreshRequest request) {
+  public JwtPairDto refreshToken(@RequestBody LoginDto.TokenRefreshRequest request) {
 
     return userService.refreshToken(request.getRefreshToken());
   }
