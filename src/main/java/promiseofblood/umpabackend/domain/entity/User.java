@@ -101,27 +101,28 @@ public class User extends TimeStampedEntity {
       .build();
   }
 
-  public void patchUsername(String username) {
-    this.username = username;
-  }
-
-  public void patchProfileType(ProfileType profileType) {
-    this.profileType = profileType;
-  }
-
-  public void patchGender(Gender gender) {
-    this.gender = gender;
-  }
-
-  public void patchProfileImageUrl(String profileImageUrl) {
-    this.profileImageUrl = profileImageUrl;
-  }
-
   public void patchStudentProfile(StudentProfile studentProfile) {
     this.studentProfile = studentProfile;
   }
 
   public void patchTeacherProfile(TeacherProfile teacherProfile) {
     this.teacherProfile = teacherProfile;
+  }
+
+  public void patchDefaultProfile(
+    String username, Gender gender, String profileImageUrl, ProfileType profileType
+  ) {
+    if (username != null) {
+      this.username = username;
+    }
+    if (gender != null) {
+      this.gender = gender;
+    }
+    if (profileImageUrl != null) {
+      this.profileImageUrl = profileImageUrl;
+    }
+    if (profileType != null) {
+      this.profileType = profileType;
+    }
   }
 }

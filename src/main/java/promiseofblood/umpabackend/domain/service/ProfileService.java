@@ -25,22 +25,14 @@ public class ProfileService {
     User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    if (defaultProfilePatchRequest.getUsername() != null) {
-      user.patchUsername(defaultProfilePatchRequest.getUsername());
-    }
-    if (defaultProfilePatchRequest.getGender() != null) {
-      user.patchGender(defaultProfilePatchRequest.getGender());
-    }
-    if (defaultProfilePatchRequest.getProfileImage() != null) {
-      String storedFilePath = this.uploadProfileImage(
-        user.getLoginId(),
-        defaultProfilePatchRequest.getProfileImage()
-      );
-      user.patchProfileImageUrl(storedFilePath);
-    }
-    if (defaultProfilePatchRequest.getProfileType() != null) {
-      user.patchProfileType(defaultProfilePatchRequest.getProfileType());
-    }
+    user.patchDefaultProfile(
+      defaultProfilePatchRequest.getUsername(),
+      defaultProfilePatchRequest.getGender(),
+      uploadProfileImageIfExists(
+        user.getLoginId(), defaultProfilePatchRequest.getProfileImage()
+      ),
+      defaultProfilePatchRequest.getProfileType()
+    );
     User updatedUser = userRepository.save(user);
 
     return UserDto.ProfileResponse.from(updatedUser);
@@ -89,7 +81,11 @@ public class ProfileService {
     return UserDto.ProfileResponse.from(user);
   }
 
-  public String uploadProfileImage(String loginId, MultipartFile profileImage) {
+  public String uploadProfileImageIfExists(String loginId, MultipartFile profileImage) {
+
+    if (profileImage == null || profileImage.isEmpty()) {
+      return null;
+    }
 
     return storageService.store(
       profileImage,
