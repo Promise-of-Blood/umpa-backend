@@ -21,10 +21,10 @@ import promiseofblood.umpabackend.domain.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionServicePostRequest;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionServicePostResponse;
+import promiseofblood.umpabackend.dto.PaginatedResponse;
 import promiseofblood.umpabackend.dto.request.ReviewRequest;
 import promiseofblood.umpabackend.dto.response.ReviewResponse;
 import promiseofblood.umpabackend.dto.response.ServicePostResponse;
-import promiseofblood.umpabackend.dto.response.common.PaginatedResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
