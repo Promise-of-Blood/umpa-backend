@@ -105,7 +105,7 @@ public class UserService {
       String storedFilePath = storageService.store(
         defaultProfilePatchRequest.getProfileImage(),
         "users",
-        user.getId().toString(),
+        user.getLoginId(),
         "default-profile"
       );
       user.patchProfileImageUrl(storedFilePath);
