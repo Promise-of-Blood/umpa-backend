@@ -71,11 +71,13 @@ public class User extends TimeStampedEntity {
   private Oauth2User oauth2User;
 
   public static User register(
-    String loginId, Gender gender, UserStatus userStatus, Role role, String username,
+    String loginId, String password, Gender gender, UserStatus userStatus, Role role,
+    String username,
     ProfileType profileType, String profileImageUrl) {
 
     return User.builder()
       .loginId(loginId)
+      .password(password)
       .gender(gender)
       .userStatus(userStatus)
       .role(role)

@@ -40,6 +40,7 @@ public class UserService {
 
     User user = User.register(
       loginIdPasswordRegisterRequest.getLoginId(),
+      passwordEncoder.encode(loginIdPasswordRegisterRequest.getPassword()),
       loginIdPasswordRegisterRequest.getGender(),
       UserStatus.PENDING,
       Role.USER,
@@ -87,9 +88,7 @@ public class UserService {
     Optional<User> optionalUser = userRepository.findByLoginId(loginId);
 
     boolean userExists = optionalUser.isPresent();
-    boolean isPasswordCorrect = optionalUser
-      .map(user -> passwordEncoder.matches(password, user.getPassword()))
-      .orElse(false);
+    boolean isPasswordCorrect = passwordEncoder.matches(password, optionalUser.get().getPassword());
 
     if (!userExists || !isPasswordCorrect) {
       throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
