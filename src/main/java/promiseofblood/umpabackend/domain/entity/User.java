@@ -83,11 +83,13 @@ public class User extends TimeStampedEntity {
       .build();
   }
 
-  public static User register(String loginId, Status status, Role role, String username,
+  public static User register(String loginId, Gender gender, Status status, Role role,
+    String username,
     ProfileType profileType, String profileImageUrl, Oauth2User oauth2User) {
 
     return User.builder()
       .loginId(loginId)
+      .gender(gender)
       .status(status)
       .role(role)
       .username(username)

@@ -72,6 +72,7 @@ public class Oauth2Service {
 
     User newUser = User.register(
       loginId,
+      oauth2RegisterRequest.getGender(),
       Status.ACTIVE,
       Role.USER,
       oauth2RegisterRequest.getUsername(),
