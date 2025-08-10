@@ -46,7 +46,7 @@ public class UserDto {
     private TeacherProfileDto.TeacherProfileResponse teacherProfile;
 
     @Schema(nullable = true)
-    private StudentProfileDto studentProfile;
+    private StudentProfileDto.StudentProfileResponse studentProfile;
 
     @Schema(nullable = true)
     private Oauth2UserDto oauth2User;
@@ -56,26 +56,16 @@ public class UserDto {
     private LocalDateTime updatedAt;
 
     public static ProfileResponse from(User user) {
-      return ProfileResponse.builder()
-        .id(user.getId())
-        .loginId(user.getLoginId())
-        .username(user.getUsername())
-        .status(user.getStatus())
-        .role(user.getRole())
+      return ProfileResponse.builder().id(user.getId()).loginId(user.getLoginId())
+        .username(user.getUsername()).status(user.getStatus()).role(user.getRole())
         .gender(user.getGender() == null ? null : user.getGender().name())
-        .profileImageUrl(user.getProfileImageUrl())
-        .profileType(user.getProfileType().name())
-        .teacherProfile(
-          user.getTeacherProfile() == null ? null
-            : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()
-            ))
-        .studentProfile(
-          user.getStudentProfile() == null ? null : StudentProfileDto.from(user.getStudentProfile()
-          ))
+        .profileImageUrl(user.getProfileImageUrl()).profileType(user.getProfileType().name())
+        .teacherProfile(user.getTeacherProfile() == null ? null
+          : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile())).studentProfile(
+          user.getStudentProfile() == null ? null
+            : StudentProfileDto.StudentProfileResponse.from(user.getStudentProfile()))
         .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
-        .createdAt(user.getCreatedAt())
-        .updatedAt(user.getUpdatedAt())
-        .build();
+        .createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
     }
   }
 
