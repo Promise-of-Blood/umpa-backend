@@ -46,9 +46,11 @@ public class User extends TimeStampedEntity {
   @Column(nullable = false, unique = true)
   private String username;
 
+  @Column(nullable = false)
   @Enumerated(EnumType.STRING)
   private Gender gender;
 
+  @Column(nullable = false)
   private String profileImageUrl;
 
   // 학생 프로필, 선생님 프로필
