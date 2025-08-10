@@ -52,7 +52,7 @@ public class UserService {
     User user = User.register(
       loginIdPasswordRegisterRequest.getLoginId(),
       loginIdPasswordRegisterRequest.getGender(),
-      UserStatus.ACTIVE,
+      UserStatus.PENDING,
       Role.USER,
       loginIdPasswordRegisterRequest.getUsername(),
       loginIdPasswordRegisterRequest.getProfileType(),

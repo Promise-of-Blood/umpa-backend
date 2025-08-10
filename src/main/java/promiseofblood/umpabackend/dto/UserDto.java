@@ -30,7 +30,7 @@ public class UserDto {
     @Schema(nullable = true)
     private String username;
 
-    private UserStatus userStatus;
+    private UserStatus status;
 
     private Role role;
 
@@ -57,7 +57,7 @@ public class UserDto {
 
     public static ProfileResponse from(User user) {
       return ProfileResponse.builder().id(user.getId()).loginId(user.getLoginId())
-        .username(user.getUsername()).userStatus(user.getUserStatus()).role(user.getRole())
+        .username(user.getUsername()).status(user.getUserStatus()).role(user.getRole())
         .gender(user.getGender() == null ? null : user.getGender().name())
         .profileImageUrl(user.getProfileImageUrl()).profileType(user.getProfileType().name())
         .teacherProfile(user.getTeacherProfile() == null ? null
