@@ -14,7 +14,7 @@ public class StudentProfileDto {
   private List<ConstantDto.CollegeResponse> preferredColleges;
   private ConstantDto.GradeResponse grade;
 
-  public static StudentProfileDto of(StudentProfile studentProfile) {
+  public static StudentProfileDto from(StudentProfile studentProfile) {
     return StudentProfileDto.builder()
       .major(MajorResponse.from(studentProfile.getMajor()))
       .preferredColleges(studentProfile.getPreferredColleges().stream()

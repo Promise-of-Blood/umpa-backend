@@ -69,7 +69,7 @@ public class UserDto {
           user.getTeacherProfile() == null ? null : TeacherProfileDto.of(user.getTeacherProfile()
           ))
         .studentProfile(
-          user.getStudentProfile() == null ? null : StudentProfileDto.of(user.getStudentProfile()
+          user.getStudentProfile() == null ? null : StudentProfileDto.from(user.getStudentProfile()
           ))
         .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
         .createdAt(user.getCreatedAt())
