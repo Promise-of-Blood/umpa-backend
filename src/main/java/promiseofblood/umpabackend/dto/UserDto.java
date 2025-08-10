@@ -43,7 +43,7 @@ public class UserDto {
     private String profileType;
 
     @Schema(nullable = true)
-    private TeacherProfileDto teacherProfile;
+    private TeacherProfileDto.TeacherProfileResponse teacherProfile;
 
     @Schema(nullable = true)
     private StudentProfileDto studentProfile;
@@ -66,8 +66,9 @@ public class UserDto {
         .profileImageUrl(user.getProfileImageUrl())
         .profileType(user.getProfileType().name())
         .teacherProfile(
-          user.getTeacherProfile() == null ? null : TeacherProfileDto.of(user.getTeacherProfile()
-          ))
+          user.getTeacherProfile() == null ? null
+            : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()
+            ))
         .studentProfile(
           user.getStudentProfile() == null ? null : StudentProfileDto.from(user.getStudentProfile()
           ))

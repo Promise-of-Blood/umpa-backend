@@ -54,7 +54,7 @@ public class MrProductionServicePostDto {
 
     private String description;
 
-    private TeacherProfileDto teacherProfile;
+    private TeacherProfileDto.TeacherProfileResponse teacherProfile;
 
     private float reviewRating;
 
@@ -73,26 +73,17 @@ public class MrProductionServicePostDto {
     public static MrProductionServicePostResponse of(
       MrProductionServicePost mrProductionServicePost) {
 
-      return MrProductionServicePostResponse.builder()
-        .title(mrProductionServicePost.getTitle())
-        .description(mrProductionServicePost.getDescription())
-        .teacherProfile(TeacherProfileDto.of(mrProductionServicePost.getUser().getTeacherProfile()))
-        .reviewRating(0.0f)
-        .costPerUnit(
-          String.format(
-            "%,d원/%s", mrProductionServicePost.getServiceCost().getCost(),
-            mrProductionServicePost.getServiceCost().getUnit()
-          )
-        )
-        .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(
-          String.format(
-            "%d%s ~ %d%s", mrProductionServicePost.getAverageDuration().getMinValue(),
+      return MrProductionServicePostResponse.builder().title(mrProductionServicePost.getTitle())
+        .description(mrProductionServicePost.getDescription()).teacherProfile(
+          TeacherProfileDto.TeacherProfileResponse.from(
+            mrProductionServicePost.getUser().getTeacherProfile())).reviewRating(0.0f).costPerUnit(
+          String.format("%,d원/%s", mrProductionServicePost.getServiceCost().getCost(),
+            mrProductionServicePost.getServiceCost().getUnit()))
+        .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy()).averageDuration(
+          String.format("%d%s ~ %d%s", mrProductionServicePost.getAverageDuration().getMinValue(),
             mrProductionServicePost.getAverageDuration().getMinUnit(),
             mrProductionServicePost.getAverageDuration().getMaxValue(),
-            mrProductionServicePost.getAverageDuration().getMaxUnit()
-          )
-        )
+            mrProductionServicePost.getAverageDuration().getMaxUnit()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .softwareUsed(mrProductionServicePost.getSoftwareUsed())
         .sampleUrls(mrProductionServicePost.getSampleMrUrls()).build();
