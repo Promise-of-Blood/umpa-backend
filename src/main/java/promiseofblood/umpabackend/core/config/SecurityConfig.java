@@ -59,6 +59,11 @@ public class SecurityConfig {
         .requestMatchers("/api/swagger-ui/**").permitAll()
         // 상수 API 접근 허용
         .requestMatchers("/api/v1/constants/**").permitAll()
+        // 회원가입/토큰발급 API 접근 허용
+        .requestMatchers("/api/v1/users/register/**").permitAll()
+        .requestMatchers("/api/v1/users/callback/**").permitAll()
+        .requestMatchers("/api/v1/users/token/**").permitAll()
+        .requestMatchers("/api/v1/users/oauth2-authorization-urls").permitAll()
         // 서비스 API 접근 제어 - GET 요청은 모두 허용, POST/PUT/DELETE는 인증 필요
         .requestMatchers(GET, "/api/v1/services/**").permitAll()
         .requestMatchers(POST, "/api/v1/services/**").authenticated()
