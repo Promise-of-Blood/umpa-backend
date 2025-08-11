@@ -8,6 +8,7 @@ import promiseofblood.umpabackend.domain.entity.Oauth2User;
 @Builder
 public class Oauth2UserDto {
 
+
   private String providerName;
 
   private String providerUid;
