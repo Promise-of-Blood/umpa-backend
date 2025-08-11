@@ -35,21 +35,6 @@ public class ServiceBoardController {
   private final ServiceBoardService serviceBoardService;
   private final ReviewService reviewService;
 
-  @GetMapping("")
-  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllServices(
-    @RequestParam(required = false) String serviceType,
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "10") int size) {
-
-    Page<ServicePostResponse> servicePostResponsePage = this.serviceBoardService.getAllServices(
-      serviceType, page, size
-    );
-
-    return ResponseEntity.ok(
-      PaginatedResponse.from(servicePostResponsePage)
-    );
-  }
-
   // lesson
   @Tag(name = "서비스 관리 API(레슨)")
   @PostMapping("/lesson")
