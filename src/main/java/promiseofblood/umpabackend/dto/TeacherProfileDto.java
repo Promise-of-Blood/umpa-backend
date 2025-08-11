@@ -29,7 +29,7 @@ public class TeacherProfileDto {
 
     private List<TeacherCareerDto> careers;
 
-    private List<String> links;
+    private List<TeacherLinkDto> links;
 
     public static TeacherProfileResponse from(TeacherProfile teacherProfile) {
 
@@ -38,9 +38,9 @@ public class TeacherProfileDto {
         teacherCareerDtoList.add(TeacherCareerDto.from(teacherCareer));
       }
 
-      List<String> teacherLinkDtoList = new ArrayList<>();
+      List<TeacherLinkDto> teacherLinkDtoList = new ArrayList<>();
       for (TeacherLink teacherLink : teacherProfile.getLinks()) {
-        teacherLinkDtoList.add(teacherLink.getLink());
+        teacherLinkDtoList.add(TeacherLinkDto.from(teacherLink));
       }
 
       return TeacherProfileResponse.builder()
@@ -58,6 +58,8 @@ public class TeacherProfileDto {
   @ToString
   public static class TeacherCareerDto {
 
+    private long id;
+
     private boolean isRepresentative;
 
     private String title;
@@ -68,10 +70,28 @@ public class TeacherProfileDto {
 
     public static TeacherCareerDto from(TeacherCareer teacherCareer) {
       return TeacherCareerDto.builder()
+        .id(teacherCareer.getId())
         .isRepresentative(teacherCareer.isRepresentative())
         .title(teacherCareer.getTitle())
         .start(teacherCareer.getStart())
         .end(teacherCareer.getEnd())
+        .build();
+    }
+  }
+
+  @Getter
+  @Builder(access = AccessLevel.PRIVATE)
+  @ToString
+  public static class TeacherLinkDto {
+
+    private long id;
+
+    private String link;
+
+    public static TeacherLinkDto from(TeacherLink teacherLink) {
+      return TeacherLinkDto.builder()
+        .id(teacherLink.getId())
+        .link(teacherLink.getLink())
         .build();
     }
   }
