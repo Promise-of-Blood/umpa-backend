@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -52,12 +53,14 @@ public class ServiceBoardController {
 
   // lesson
   @PostMapping("/lesson")
+  @PreAuthorize("isAuthenticated()")
   public void registerLesson() {
 
   }
 
   // accompaniment
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<AccompanimentServicePostDto.AccompanimentServicePostResponse> registerAccompaniment(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest
@@ -72,12 +75,14 @@ public class ServiceBoardController {
 
   // score-production
   @PostMapping("/score-production")
+  @PreAuthorize("isAuthenticated()")
   public void registerScoreProduction() {
 
   }
 
   // mr-production
   @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<MrProductionServicePostResponse> registerMrProduction(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute MrProductionServicePostRequest mrProductionServicePostRequest
@@ -101,6 +106,7 @@ public class ServiceBoardController {
   }
 
   @PostMapping(path = "/mr-production/{id}/reviews")
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<ReviewResponse> createMrProductionReview(
     @PathVariable Long id,
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
