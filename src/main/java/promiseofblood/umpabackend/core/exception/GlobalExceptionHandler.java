@@ -12,7 +12,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import promiseofblood.umpabackend.dto.response.common.ExceptionResponse;
+import promiseofblood.umpabackend.dto.ExceptionResponse;
 
 @Slf4j
 @RestControllerAdvice

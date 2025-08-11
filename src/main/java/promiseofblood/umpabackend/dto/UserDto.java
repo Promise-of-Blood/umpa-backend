@@ -12,7 +12,7 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.domain.vo.Status;
+import promiseofblood.umpabackend.domain.vo.UserStatus;
 
 @Getter
 @Builder
@@ -30,7 +30,7 @@ public class UserDto {
     @Schema(nullable = true)
     private String username;
 
-    private Status status;
+    private UserStatus status;
 
     private Role role;
 
@@ -43,10 +43,10 @@ public class UserDto {
     private String profileType;
 
     @Schema(nullable = true)
-    private TeacherProfileDto teacherProfile;
+    private TeacherProfileDto.TeacherProfileResponse teacherProfile;
 
     @Schema(nullable = true)
-    private StudentProfileDto studentProfile;
+    private StudentProfileDto.StudentProfileResponse studentProfile;
 
     @Schema(nullable = true)
     private Oauth2UserDto oauth2User;
@@ -56,25 +56,16 @@ public class UserDto {
     private LocalDateTime updatedAt;
 
     public static ProfileResponse from(User user) {
-      return ProfileResponse.builder()
-        .id(user.getId())
-        .loginId(user.getLoginId())
-        .username(user.getUsername())
-        .status(user.getStatus())
-        .role(user.getRole())
+      return ProfileResponse.builder().id(user.getId()).loginId(user.getLoginId())
+        .username(user.getUsername()).status(user.getUserStatus()).role(user.getRole())
         .gender(user.getGender() == null ? null : user.getGender().name())
-        .profileImageUrl(user.getProfileImageUrl())
-        .profileType(user.getProfileType().name())
-        .teacherProfile(
-          user.getTeacherProfile() == null ? null : TeacherProfileDto.of(user.getTeacherProfile()
-          ))
-        .studentProfile(
-          user.getStudentProfile() == null ? null : StudentProfileDto.of(user.getStudentProfile()
-          ))
+        .profileImageUrl(user.getProfileImageUrl()).profileType(user.getProfileType().name())
+        .teacherProfile(user.getTeacherProfile() == null ? null
+          : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile())).studentProfile(
+          user.getStudentProfile() == null ? null
+            : StudentProfileDto.StudentProfileResponse.from(user.getStudentProfile()))
         .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
-        .createdAt(user.getCreatedAt())
-        .updatedAt(user.getUpdatedAt())
-        .build();
+        .createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
     }
   }
 

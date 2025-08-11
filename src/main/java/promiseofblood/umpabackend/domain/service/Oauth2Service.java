@@ -15,9 +15,9 @@ import promiseofblood.umpabackend.domain.strategy.Oauth2Strategy;
 import promiseofblood.umpabackend.domain.strategy.Oauth2StrategyFactory;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.domain.vo.Status;
+import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.AuthenticationCompleteResponse;
+import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.LoginDto.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
@@ -32,12 +32,13 @@ public class Oauth2Service {
   private final Oauth2StrategyFactory oauth2StrategyFactory;
   private final Oauth2ProvidersConfig oauth2ProvidersConfig;
   private final UserRepository userRepository;
+  private final UserService userService;
   private final Oauth2UserRepository oauth2UserRepository;
   private final JwtService jwtService;
 
 
   @Transactional
-  public AuthenticationCompleteResponse registerOauth2User(
+  public LoginCompleteResponse registerOauth2User(
     String providerName,
     Oauth2RegisterRequest oauth2RegisterRequest
   ) {
@@ -60,18 +61,27 @@ public class Oauth2Service {
       .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
       .username(oauth2ProfileResponse.getUsername())
       .build();
+
+    String loginId = oauth2ProfileResponse.getProviderUid();
+    String storedFilePath = userService.uploadProfileImage(
+      loginId,
+      oauth2RegisterRequest.getProfileImage()
+    );
+
     User newUser = User.register(
-      providerName + System.currentTimeMillis(),
-      Status.ACTIVE,
+      loginId,
+      oauth2RegisterRequest.getGender(),
+      UserStatus.PENDING,
       Role.USER,
       oauth2RegisterRequest.getUsername(),
       oauth2RegisterRequest.getProfileType(),
+      storedFilePath,
       newOauth2User
     );
 
     User user = userRepository.save(newUser);
 
-    return AuthenticationCompleteResponse.of(
+    return LoginCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
@@ -89,7 +99,7 @@ public class Oauth2Service {
     return oauth2Strategy.getOauth2UserProfile(oauth2Provider, code);
   }
 
-  public LoginDto.AuthenticationCompleteResponse generateOauth2Jwt(
+  public LoginCompleteResponse generateOauth2Jwt(
     String providerName,
     String externalIdToken,
     String externalAccessToken
@@ -104,7 +114,7 @@ public class Oauth2Service {
           .getProviderUid())
       .orElseThrow(() -> new UnauthorizedException("해당 Oauth2 사용자 정보가 존재하지 않습니다."));
 
-    return AuthenticationCompleteResponse.of(
+    return LoginCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(user.getId(), user.getLoginId()),

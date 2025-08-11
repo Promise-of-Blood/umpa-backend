@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.dto.response.common;
+package promiseofblood.umpabackend.dto;
 
 import java.util.List;
 import lombok.Builder;

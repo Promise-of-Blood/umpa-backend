@@ -26,7 +26,7 @@ public class AccompanimentServicePostDto {
 
     private String thumbnailImage;
 
-    private TeacherProfileDto teacherProfile;
+    private TeacherProfileDto.TeacherProfileResponse teacherProfile;
 
     private String reviewRating;
 
@@ -49,21 +49,18 @@ public class AccompanimentServicePostDto {
     public static AccompanimentServicePostResponse from(
       AccompanimentServicePost accompanimentServicePost, User user) {
 
-      return AccompanimentServicePostResponse.builder()
-        .title(accompanimentServicePost.getTitle())
+      return AccompanimentServicePostResponse.builder().title(accompanimentServicePost.getTitle())
         .description(accompanimentServicePost.getDescription())
         .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-        .teacherProfile(TeacherProfileDto.of(user.getTeacherProfile()))
-        .reviewRating("0.0")
-        .costPerUnit(accompanimentServicePost.getCostAndUnit())
+        .teacherProfile(TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
+        .reviewRating("0.0").costPerUnit(accompanimentServicePost.getCostAndUnit())
         .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
         .instrument(accompanimentServicePost.getInstrument())
         .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
         .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
         .isMrIncluded(accompanimentServicePost.isMrIncluded())
         .practiceLocation(accompanimentServicePost.getPracticeLocation())
-        .videoUrls(accompanimentServicePost.getVideoUrls())
-        .build();
+        .videoUrls(accompanimentServicePost.getVideoUrls()).build();
     }
   }
 

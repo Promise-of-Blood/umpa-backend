@@ -9,12 +9,13 @@ import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.DurationRange;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
+import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.domain.entity.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionServicePostRequest;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionServicePostResponse;
+import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionPostRequest;
+import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionResponse;
 import promiseofblood.umpabackend.dto.response.ServicePostResponse;
 import promiseofblood.umpabackend.repository.ServicePostRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
@@ -92,46 +93,50 @@ public class ServiceBoardService {
 
 
   @Transactional
-  public MrProductionServicePostResponse createMrProductionServicePost(
+  public MrProductionResponse createMrProductionServicePost(
     String loginId,
-    MrProductionServicePostRequest mrProductionServicePostRequest) {
+    MrProductionPostRequest mrProductionPostRequest) {
 
     User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     String filePath = storageService.store(
-      mrProductionServicePostRequest.getThumbnailImage(),
+      mrProductionPostRequest.getThumbnailImage(),
       "service/" + user.getId() + "/mr-production"
     );
 
     MrProductionServicePost mrProductionServicePost = MrProductionServicePost.builder()
       .user(user)
-      .title(mrProductionServicePostRequest.getTitle())
+      .title(mrProductionPostRequest.getTitle())
       .thumbnailImageUrl(filePath)
-      .description(mrProductionServicePostRequest.getDescription())
+      .description(mrProductionPostRequest.getDescription())
       .serviceCost(
         ServiceCost.builder()
-          .cost(mrProductionServicePostRequest.getCost())
+          .cost(mrProductionPostRequest.getCost())
           .unit("곡")
           .build()
       )
-      .additionalCostPolicy(mrProductionServicePostRequest.getAdditionalCostPolicy())
-      .freeRevisionCount(mrProductionServicePostRequest.getFreeRevisionCount())
-      .averageDuration(DurationRange.of(mrProductionServicePostRequest.getAverageDuration()))
-      .softwareUsed(mrProductionServicePostRequest.getSoftwareUsed())
-      .sampleMrUrls(mrProductionServicePostRequest.getSampleMrUrls())
+      .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
+      .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
+      .averageDuration(DurationRange.of(mrProductionPostRequest.getAverageDuration()))
+      .softwareUsed(mrProductionPostRequest.getSoftwareUsed())
+      .sampleMrUrls(
+        mrProductionPostRequest.getSampleMrUrls().stream()
+          .map(SampleMrUrl::of)
+          .toList()
+      )
       .build();
     servicePostRepository.save(mrProductionServicePost);
 
-    return MrProductionServicePostResponse.of(mrProductionServicePost);
+    return MrProductionResponse.of(mrProductionServicePost);
   }
 
   @Transactional(readOnly = true)
-  public MrProductionServicePostResponse getMrProductionServicePost(Long id) {
+  public MrProductionResponse getMrProductionServicePost(Long id) {
 
     MrProductionServicePost mrProductionServicePost = (MrProductionServicePost) servicePostRepository.findById(
       id).get();
 
-    return MrProductionServicePostResponse.of(mrProductionServicePost);
+    return MrProductionResponse.of(mrProductionServicePost);
   }
 }

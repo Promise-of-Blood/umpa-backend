@@ -1,28 +1,36 @@
 package promiseofblood.umpabackend.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
+import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.dto.ConstantDto.MajorResponse;
 
 @Getter
-@Builder
 public class StudentProfileDto {
 
-  private MajorResponse major;
-  private List<ConstantDto.CollegeResponse> preferredColleges;
-  private ConstantDto.GradeResponse grade;
+  @Getter
+  @Builder(access = lombok.AccessLevel.PRIVATE)
+  public static class StudentProfileResponse {
 
-  public static StudentProfileDto of(StudentProfile studentProfile) {
-    return StudentProfileDto.builder()
-      .major(MajorResponse.from(studentProfile.getMajor()))
-      .preferredColleges(studentProfile.getPreferredColleges().stream()
-        .map(ConstantDto.CollegeResponse::from)
-        .toList()
-      )
-      .grade(ConstantDto.GradeResponse.from(studentProfile.getGrade()))
-      .build();
+    private MajorResponse major;
+    private List<ConstantDto.CollegeResponse> preferredColleges;
+    private ConstantDto.GradeResponse grade;
+
+    public static StudentProfileResponse from(StudentProfile studentProfile) {
+
+      List<ConstantDto.CollegeResponse> preferredColleges = new ArrayList<>();
+      for (College college : studentProfile.getPreferredColleges()) {
+        preferredColleges.add(ConstantDto.CollegeResponse.from(college));
+      }
+
+      return StudentProfileResponse.builder()
+        .major(MajorResponse.from(studentProfile.getMajor()))
+        .preferredColleges(preferredColleges)
+        .grade(ConstantDto.GradeResponse.from(studentProfile.getGrade()))
+        .build();
+    }
   }
-
 }

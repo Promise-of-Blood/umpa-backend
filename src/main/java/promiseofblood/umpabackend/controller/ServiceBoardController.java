@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,16 +20,15 @@ import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.ReviewService;
 import promiseofblood.umpabackend.domain.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionServicePostRequest;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionServicePostResponse;
+import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionPostRequest;
+import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionResponse;
+import promiseofblood.umpabackend.dto.PaginatedResponse;
 import promiseofblood.umpabackend.dto.request.ReviewRequest;
 import promiseofblood.umpabackend.dto.response.ReviewResponse;
 import promiseofblood.umpabackend.dto.response.ServicePostResponse;
-import promiseofblood.umpabackend.dto.response.common.PaginatedResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
-@Tag(name = "서비스 관리 API", description = "서비스 등록, 조회, 수정, 삭제 API")
 @RequiredArgsConstructor
 public class ServiceBoardController {
 
@@ -51,13 +51,17 @@ public class ServiceBoardController {
   }
 
   // lesson
+  @Tag(name = "서비스 관리 API(레슨)")
   @PostMapping("/lesson")
+  @PreAuthorize("isAuthenticated()")
   public void registerLesson() {
 
   }
 
   // accompaniment
+  @Tag(name = "서비스 관리 API(합주)")
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<AccompanimentServicePostDto.AccompanimentServicePostResponse> registerAccompaniment(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest
@@ -71,36 +75,43 @@ public class ServiceBoardController {
   }
 
   // score-production
+  @Tag(name = "서비스 관리 API(악보 제작)")
   @PostMapping("/score-production")
+  @PreAuthorize("isAuthenticated()")
   public void registerScoreProduction() {
 
   }
 
   // mr-production
+  @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<MrProductionServicePostResponse> registerMrProduction(
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<MrProductionResponse> registerMrProduction(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute MrProductionServicePostRequest mrProductionServicePostRequest
+    @ModelAttribute MrProductionPostRequest mrProductionPostRequest
   ) {
 
     String loginId = securityUserDetails.getUsername();
 
-    MrProductionServicePostResponse mrProductionServicePostResponse = serviceBoardService
-      .createMrProductionServicePost(loginId, mrProductionServicePostRequest);
+    MrProductionResponse mrProductionResponse = serviceBoardService
+      .createMrProductionServicePost(loginId, mrProductionPostRequest);
 
-    return ResponseEntity.ok(mrProductionServicePostResponse);
+    return ResponseEntity.ok(mrProductionResponse);
   }
 
+  @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production/{id}")
-  public ResponseEntity<MrProductionServicePostResponse> getMrProductionServicePost(
+  public ResponseEntity<MrProductionResponse> getMrProductionServicePost(
     @PathVariable Long id) {
-    MrProductionServicePostResponse mrProductionServicePostResponse = serviceBoardService
+    MrProductionResponse mrProductionResponse = serviceBoardService
       .getMrProductionServicePost(id);
 
-    return ResponseEntity.ok(mrProductionServicePostResponse);
+    return ResponseEntity.ok(mrProductionResponse);
   }
 
+  @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production/{id}/reviews")
+  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<ReviewResponse> createMrProductionReview(
     @PathVariable Long id,
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,

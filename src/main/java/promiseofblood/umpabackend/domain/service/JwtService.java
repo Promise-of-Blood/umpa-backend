@@ -11,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import promiseofblood.umpabackend.core.config.JwtConfig;
-import promiseofblood.umpabackend.domain.vo.Role;
-import promiseofblood.umpabackend.dto.JwtPairDto;
 
 @Slf4j
 @Component
@@ -21,31 +19,14 @@ public class JwtService {
 
   private final JwtConfig jwtConfig;
 
-  public JwtPairDto createJwtPair(Long id, String loginId) {
-
-    String accessToken = createAccessToken(id, loginId);
-    String refreshToken = createRefreshToken(id, loginId);
-
-    return JwtPairDto.builder().accessToken(accessToken).refreshToken(refreshToken).build();
-  }
-
   public String createAccessToken(Long id, String loginId) {
 
-    return createJwt("access", id, loginId, Role.USER, jwtConfig.getAccessTokenExpiration());
+    return createJwt("access", id, loginId, jwtConfig.getAccessTokenExpiration());
   }
 
   public String createRefreshToken(Long id, String loginId) {
 
-    return createJwt("refresh", id, loginId, Role.USER, jwtConfig.getRefreshTokenExpiration());
-  }
-
-  public boolean isValidJwt(String token) {
-    try {
-      this.verifyJwt(token);
-      return true;
-    } catch (Exception e) {
-      return false;
-    }
+    return createJwt("refresh", id, loginId, jwtConfig.getRefreshTokenExpiration());
   }
 
   public void verifyJwt(String token) {
@@ -79,7 +60,7 @@ public class JwtService {
     return Algorithm.HMAC256(jwtConfig.getSecretKey().getBytes());
   }
 
-  private String createJwt(String type, Long id, String loginId, Role role, long expiration) {
+  private String createJwt(String type, Long id, String loginId, long expiration) {
 
     return JWT.create()
       .withClaim("type", type)

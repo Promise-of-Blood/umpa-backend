@@ -33,7 +33,7 @@ public class MrProductionServicePost extends ServicePost {
   private String softwareUsed;
 
   @ElementCollection
-  private List<String> sampleMrUrls;
+  private List<SampleMrUrl> sampleMrUrls;
 
   @Override
   public String getCostAndUnit() {
