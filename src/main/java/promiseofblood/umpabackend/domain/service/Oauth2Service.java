@@ -112,7 +112,7 @@ public class Oauth2Service {
         providerName,
         oauth2Strategy.getOauth2UserProfile(oauth2Provider, externalAccessToken, externalIdToken)
           .getProviderUid())
-      .orElseThrow(() -> new UnauthorizedException("해당 Oauth2 사용자 정보가 존재하지 않습니다."));
+      .orElseThrow(() -> new UnauthorizedException("가입하지 않은 Oauth2 사용자입니다."));
 
     return LoginCompleteResponse.of(
       UserDto.ProfileResponse.from(user),
