@@ -14,6 +14,10 @@ public class SampleMrUrl {
 
   private String url;
 
+  public static SampleMrUrl of(String url) {
+    return new SampleMrUrl(url);
+  }
+
   @Override
   public String toString() {
     return url;

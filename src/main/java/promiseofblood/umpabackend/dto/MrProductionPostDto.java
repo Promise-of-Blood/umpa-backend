@@ -4,17 +4,23 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
+import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
+import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
+import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
+import promiseofblood.umpabackend.dto.ServicePostDto.ReviewDto;
+import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
-public class MrProductionServicePostDto {
+public class MrProductionPostDto {
 
   @Getter
   @AllArgsConstructor
-  public static class MrProductionServicePostRequest {
+  public static class MrProductionPostRequest {
 
     @Schema(type = "string", format = "binary", description = "대표 사진")
     @NotBlank
@@ -48,45 +54,74 @@ public class MrProductionServicePostDto {
 
   @Getter
   @Builder
-  public static class MrProductionServicePostResponse {
+  public static class MrProductionResponse {
+
+    private long id;
 
     private String title;
 
     private String description;
 
-    private TeacherProfileDto.TeacherProfileResponse teacherProfile;
-
     private float reviewRating;
 
-    private String costPerUnit;
+    private CostPerUnitDto costPerUnit;
 
     private String additionalCostPolicy;
 
-    private String averageDuration;
+    private AverageDurationDto averageDuration;
 
     private int freeRevisionCount;
 
     private String softwareUsed;
 
-    private List<String> sampleUrls;
+    private List<SampleMrUrlDto> sampleUrls;
 
-    public static MrProductionServicePostResponse of(
+    private TeacherAuthorProfileDto teacherProfile;
+
+    private List<ReviewDto> reviews;
+
+    public static MrProductionResponse of(
       MrProductionServicePost mrProductionServicePost) {
 
-      return MrProductionServicePostResponse.builder().title(mrProductionServicePost.getTitle())
-        .description(mrProductionServicePost.getDescription()).teacherProfile(
-          TeacherProfileDto.TeacherProfileResponse.from(
-            mrProductionServicePost.getUser().getTeacherProfile())).reviewRating(0.0f).costPerUnit(
-          String.format("%,d원/%s", mrProductionServicePost.getServiceCost().getCost(),
-            mrProductionServicePost.getServiceCost().getUnit()))
-        .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy()).averageDuration(
-          String.format("%d%s ~ %d%s", mrProductionServicePost.getAverageDuration().getMinValue(),
-            mrProductionServicePost.getAverageDuration().getMinUnit(),
-            mrProductionServicePost.getAverageDuration().getMaxValue(),
-            mrProductionServicePost.getAverageDuration().getMaxUnit()))
+      return MrProductionResponse.builder()
+        .id(mrProductionServicePost.getId())
+        .title(mrProductionServicePost.getTitle())
+        .description(mrProductionServicePost.getDescription())
+        .reviewRating(0.0f)
+        .costPerUnit(CostPerUnitDto.from(mrProductionServicePost.getServiceCost()))
+        .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
+        .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .softwareUsed(mrProductionServicePost.getSoftwareUsed())
-        .sampleUrls(mrProductionServicePost.getSampleMrUrls()).build();
+        .sampleUrls(
+          mrProductionServicePost.getSampleMrUrls().stream()
+            .map(SampleMrUrlDto::from)
+            .toList()
+        )
+        // 선생님 프로필
+        .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
+        // 리뷰 목록
+        .reviews(
+          mrProductionServicePost.getReviews() == null
+            ? List.of()
+            : mrProductionServicePost.getReviews().stream()
+              .map(ReviewDto::from)
+              .toList()
+        )
+        .build();
+    }
+  }
+
+  @Getter
+  @AllArgsConstructor(access = AccessLevel.PRIVATE)
+  public static class SampleMrUrlDto {
+
+    @Schema(description = "샘플 MR URL", example = "https://example.com/sample1.mp3")
+    @NotBlank
+    private String url;
+
+    public static SampleMrUrlDto from(SampleMrUrl sampleMrUrl) {
+      return new SampleMrUrlDto(sampleMrUrl.getUrl());
     }
   }
 }
