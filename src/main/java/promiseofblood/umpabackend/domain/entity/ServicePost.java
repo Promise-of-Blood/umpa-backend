@@ -1,6 +1,7 @@
 package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Inheritance;
@@ -23,6 +24,9 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ServicePost extends TimeStampedEntity {
 
+  @Column(name = "service_type", insertable = false, updatable = false)
+  private String serviceType;
+
   private String thumbnailImageUrl;
 
   private String title;
@@ -37,8 +41,4 @@ public abstract class ServicePost extends TimeStampedEntity {
   private List<Review> reviews;
 
   abstract public String getCostAndUnit();
-
-  public void addReview(Review review) {
-    this.reviews.add(review);
-  }
 }

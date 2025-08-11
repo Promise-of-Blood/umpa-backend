@@ -35,21 +35,6 @@ public class ServiceBoardController {
   private final ServiceBoardService serviceBoardService;
   private final ReviewService reviewService;
 
-  @GetMapping("")
-  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllServices(
-    @RequestParam(required = false) String serviceType,
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "10") int size) {
-
-    Page<ServicePostResponse> servicePostResponsePage = this.serviceBoardService.getAllServices(
-      serviceType, page, size
-    );
-
-    return ResponseEntity.ok(
-      PaginatedResponse.from(servicePostResponsePage)
-    );
-  }
-
   // lesson
   @Tag(name = "서비스 관리 API(레슨)")
   @PostMapping("/lesson")
@@ -83,6 +68,21 @@ public class ServiceBoardController {
   }
 
   // mr-production
+  @Tag(name = "서비스 관리 API(MR제작)")
+  @GetMapping(path = "/mr-production")
+  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllMrProductionServices(
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") int size) {
+
+    Page<ServicePostResponse> servicePostResponsePage = this.serviceBoardService.getAllServices(
+      "MR_PRODUCTION", page, size
+    );
+
+    return ResponseEntity.ok(
+      PaginatedResponse.from(servicePostResponsePage)
+    );
+  }
+
   @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")

@@ -34,13 +34,16 @@ public class ServiceBoardService {
     int page,
     int size
   ) {
-    Page<ServicePost> servicePostPage = servicePostRepository.findAll(
+    Page<ServicePost> servicePostPage = servicePostRepository.findAllByServiceType(
+      serviceType,
       PageRequest.of(page, size)
     );
 
     return servicePostPage.map(servicePost -> {
+
       User teacherUser = userRepository.findById(servicePost.getUser().getId())
         .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
       return ServicePostResponse.builder()
         .id(servicePost.getId())
         .title(servicePost.getTitle())
