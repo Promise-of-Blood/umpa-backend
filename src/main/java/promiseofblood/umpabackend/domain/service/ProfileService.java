@@ -8,9 +8,9 @@ import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
+import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
-import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 @Service
@@ -41,7 +41,7 @@ public class ProfileService {
 
   @Transactional
   public UserDto.ProfileResponse patchTeacherProfile(
-    String loginId, TeacherProfileRequest teacherProfileRequest
+    String loginId, TeacherProfileDto.TeacherProfileRequest teacherProfileRequest
   ) {
     User user = userRepository.findByLoginId(loginId)
       .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
