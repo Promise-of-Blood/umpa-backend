@@ -13,7 +13,6 @@ import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.ReviewDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 public class MrProductionPostDto {
@@ -78,7 +77,7 @@ public class MrProductionPostDto {
 
     private TeacherAuthorProfileDto teacherProfile;
 
-    private List<ReviewDto> reviews;
+    private List<ServiceReviewDto.ReviewDto> reviews;
 
     public static MrProductionResponse of(
       MrProductionServicePost mrProductionServicePost) {
@@ -105,7 +104,7 @@ public class MrProductionPostDto {
           mrProductionServicePost.getReviews() == null
             ? List.of()
             : mrProductionServicePost.getReviews().stream()
-              .map(ReviewDto::from)
+              .map(ServiceReviewDto.ReviewDto::from)
               .toList()
         )
         .build();

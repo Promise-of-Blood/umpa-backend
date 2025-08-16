@@ -1,6 +1,5 @@
 package promiseofblood.umpabackend.dto;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -8,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.DurationRange;
-import promiseofblood.umpabackend.domain.entity.Review;
 import promiseofblood.umpabackend.domain.entity.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;
@@ -71,8 +69,7 @@ public class ServicePostDto {
     }
 
   }
-
-
+  
   /**
    * 서비스 평균 소요 기간 DTO
    */
@@ -98,36 +95,4 @@ public class ServicePostDto {
     }
   }
 
-  /**
-   * 리뷰 DTO
-   */
-  @Getter
-  @Builder(access = AccessLevel.PRIVATE)
-  public static class ReviewDto {
-
-    private Long id;
-
-    private Double rating;
-    private String content;
-
-    private String reviewImageUrl1;
-    private String reviewImageUrl2;
-    private String reviewImageUrl3;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
-
-    public static ReviewDto from(Review review) {
-      return ReviewDto.builder()
-        .id(review.getId())
-        .rating(review.getRating())
-        .content(review.getContent())
-        .reviewImageUrl1(review.getReviewImageUrl1())
-        .reviewImageUrl2(review.getReviewImageUrl2())
-        .reviewImageUrl3(review.getReviewImageUrl3())
-        .createdAt(review.getCreatedAt())
-        .updatedAt(review.getUpdatedAt())
-        .build();
-    }
-  }
 }
