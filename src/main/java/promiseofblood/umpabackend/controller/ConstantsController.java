@@ -18,7 +18,6 @@ import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.dto.ConstantDto;
-import promiseofblood.umpabackend.dto.response.RegionCategoryResponse;
 
 @RestController
 @RequestMapping("api/v1/constants")
@@ -93,10 +92,10 @@ public class ConstantsController {
   }
 
   @GetMapping("/regions")
-  public ResponseEntity<List<RegionCategoryResponse>> getRegions() {
+  public ResponseEntity<List<ConstantDto.RegionCategoryResponse>> getRegions() {
 
-    List<RegionCategoryResponse> regionCategories = Stream.of(RegionCategory.values())
-      .map(RegionCategoryResponse::from).toList();
+    List<ConstantDto.RegionCategoryResponse> regionCategories = Stream.of(RegionCategory.values())
+      .map(ConstantDto.RegionCategoryResponse::from).toList();
 
     return ResponseEntity.ok(regionCategories);
   }

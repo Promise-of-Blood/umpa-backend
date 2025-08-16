@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.dto;
 
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,8 +9,10 @@ import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Major;
+import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
+import promiseofblood.umpabackend.dto.response.RegionResponse;
 
 
 public class ConstantDto {
@@ -131,5 +134,27 @@ public class ConstantDto {
         .name(instrument.getKoreanName())
         .build();
     }
+  }
+
+  @Getter
+  @Builder
+  public static class RegionCategoryResponse {
+
+    private String code;
+
+    private String name;
+
+    private List<RegionResponse> regions;
+
+    public static RegionCategoryResponse from(RegionCategory regionCategory) {
+      return RegionCategoryResponse.builder()
+        .code(regionCategory.getCode())
+        .name(regionCategory.getKoreanName())
+        .regions(regionCategory.getRegions().stream()
+          .map(RegionResponse::from)
+          .toList())
+        .build();
+    }
+
   }
 }
