@@ -16,9 +16,6 @@ import promiseofblood.umpabackend.domain.entity.TeacherLink;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.Region;
-import promiseofblood.umpabackend.dto.ConstantDto.MajorResponse;
-import promiseofblood.umpabackend.dto.response.RegionResponse;
-
 
 public class TeacherProfileDto {
 
@@ -75,9 +72,9 @@ public class TeacherProfileDto {
 
     private String description;
 
-    private MajorResponse major;
+    private ConstantDto.MajorResponse major;
 
-    private RegionResponse lessonRegion;
+    private ConstantDto.RegionResponse lessonRegion;
 
     private List<TeacherCareerDto> careers;
 
@@ -97,8 +94,8 @@ public class TeacherProfileDto {
 
       return TeacherProfileResponse.builder()
         .description(teacherProfile.getDescription())
-        .major(MajorResponse.from(teacherProfile.getMajor()))
-        .lessonRegion(RegionResponse.from(teacherProfile.getLessonRegion()))
+        .major(ConstantDto.MajorResponse.from(teacherProfile.getMajor()))
+        .lessonRegion(ConstantDto.RegionResponse.from(teacherProfile.getLessonRegion()))
         .careers(teacherCareerDtoList)
         .links(teacherLinkDtoList)
         .build();

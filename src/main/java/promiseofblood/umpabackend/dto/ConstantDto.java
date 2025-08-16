@@ -9,10 +9,10 @@ import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Major;
+import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
-import promiseofblood.umpabackend.dto.response.RegionResponse;
 
 
 public class ConstantDto {
@@ -153,6 +153,23 @@ public class ConstantDto {
         .regions(regionCategory.getRegions().stream()
           .map(RegionResponse::from)
           .toList())
+        .build();
+    }
+
+  }
+
+  @Builder
+  @Getter
+  public static class RegionResponse {
+
+    private String code;
+
+    private String name;
+
+    public static RegionResponse from(Region region) {
+      return RegionResponse.builder()
+        .code(region.getCode())
+        .name(region.getKoreanName())
         .build();
     }
 
