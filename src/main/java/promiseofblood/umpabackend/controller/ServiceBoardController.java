@@ -20,10 +20,9 @@ import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.ReviewService;
 import promiseofblood.umpabackend.domain.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionPostRequest;
-import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionResponse;
+import promiseofblood.umpabackend.dto.MrProductionPostDto;
 import promiseofblood.umpabackend.dto.PaginatedResponse;
-import promiseofblood.umpabackend.dto.request.ReviewRequest;
+import promiseofblood.umpabackend.dto.ServiceReviewDto;
 import promiseofblood.umpabackend.dto.response.ReviewResponse;
 import promiseofblood.umpabackend.dto.response.ServicePostResponse;
 
@@ -86,14 +85,14 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<MrProductionResponse> registerMrProduction(
+  public ResponseEntity<MrProductionPostDto.MrProductionResponse> registerMrProduction(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute MrProductionPostRequest mrProductionPostRequest
+    @ModelAttribute MrProductionPostDto.MrProductionPostRequest mrProductionPostRequest
   ) {
 
     String loginId = securityUserDetails.getUsername();
 
-    MrProductionResponse mrProductionResponse = serviceBoardService
+    MrProductionPostDto.MrProductionResponse mrProductionResponse = serviceBoardService
       .createMrProductionServicePost(loginId, mrProductionPostRequest);
 
     return ResponseEntity.ok(mrProductionResponse);
@@ -101,9 +100,9 @@ public class ServiceBoardController {
 
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production/{id}")
-  public ResponseEntity<MrProductionResponse> getMrProductionServicePost(
+  public ResponseEntity<MrProductionPostDto.MrProductionResponse> getMrProductionServicePost(
     @PathVariable Long id) {
-    MrProductionResponse mrProductionResponse = serviceBoardService
+    MrProductionPostDto.MrProductionResponse mrProductionResponse = serviceBoardService
       .getMrProductionServicePost(id);
 
     return ResponseEntity.ok(mrProductionResponse);
@@ -115,7 +114,7 @@ public class ServiceBoardController {
   public ResponseEntity<ReviewResponse> createMrProductionReview(
     @PathVariable Long id,
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @Valid @RequestBody ReviewRequest reviewRequest
+    @Valid @RequestBody ServiceReviewDto.ReviewRequest reviewRequest
   ) {
 
     ReviewResponse reviewResponse = ReviewResponse.from(
