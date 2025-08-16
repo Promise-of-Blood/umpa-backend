@@ -23,7 +23,6 @@ import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionPostDto;
 import promiseofblood.umpabackend.dto.PaginatedResponse;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
-import promiseofblood.umpabackend.dto.response.ReviewResponse;
 import promiseofblood.umpabackend.dto.response.ServicePostResponse;
 
 @RestController
@@ -111,13 +110,13 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production/{id}/reviews")
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<ReviewResponse> createMrProductionReview(
+  public ResponseEntity<ServiceReviewDto.ReviewResponse> createMrProductionReview(
     @PathVariable Long id,
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @Valid @RequestBody ServiceReviewDto.ReviewRequest reviewRequest
   ) {
 
-    ReviewResponse reviewResponse = ReviewResponse.from(
+    ServiceReviewDto.ReviewResponse reviewResponse = ServiceReviewDto.ReviewResponse.from(
       this.reviewService.createReview(id, reviewRequest));
 
     return ResponseEntity.ok(reviewResponse);
