@@ -7,13 +7,16 @@ import static org.mockito.Mockito.when;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
   @Mock
   private UserRepository userRepository;
@@ -42,4 +45,20 @@ public class UserServiceTest {
 
     assertTrue(isAvailable, "Username은 존재하지 않으므로 사용 가능해야 합니다.");
   }
+
+  @ParameterizedTest
+  @ValueSource(strings = {
+    "홍길동abcabc",
+    "ABCABCABC",
+    "일이삼사오육칠팔구십",
+    "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  })
+  void 닉네임이_8글자_초과인경우_사용불가능(String name) {
+    // When
+    IsUsernameAvailableResponse result = userService.isUsernameAvailable(name);
+
+    // Then
+    assertFalse(result.isAvailable());
+  }
+
 }
