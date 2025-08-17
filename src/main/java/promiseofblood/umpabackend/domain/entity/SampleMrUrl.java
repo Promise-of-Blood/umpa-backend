@@ -1,7 +1,6 @@
 package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.Embeddable;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

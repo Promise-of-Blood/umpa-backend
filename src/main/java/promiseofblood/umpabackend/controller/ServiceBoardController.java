@@ -1,9 +1,8 @@
 package promiseofblood.umpabackend.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.ReviewService;
 import promiseofblood.umpabackend.domain.service.ServiceBoardService;
@@ -41,22 +37,21 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(레슨)")
   @PostMapping("/lesson")
   @PreAuthorize("isAuthenticated()")
-  public void registerLesson() {
-
-  }
+  public void registerLesson() {}
 
   // accompaniment
   @Tag(name = "서비스 관리 API(합주)")
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<AccompanimentServicePostDto.AccompanimentServicePostResponse> registerAccompaniment(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest
-  ) {
+  public ResponseEntity<AccompanimentServicePostDto.AccompanimentServicePostResponse>
+      registerAccompaniment(
+          @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+          @ModelAttribute
+              AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
     String loginId = securityUserDetails.getUsername();
 
     AccompanimentServicePostDto.AccompanimentServicePostResponse accompanimentPostResponse =
-      serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
+        serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
 
     return ResponseEntity.ok(accompanimentPostResponse);
   }
@@ -65,38 +60,32 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(악보 제작)")
   @PostMapping("/score-production")
   @PreAuthorize("isAuthenticated()")
-  public void registerScoreProduction() {
-
-  }
+  public void registerScoreProduction() {}
 
   // mr-production
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production")
-  public ResponseEntity<PaginatedResponse<ServicePostDto.ServicePostResponse>> getAllMrProductionServices(
-    @RequestParam(defaultValue = "0") int page,
-    @RequestParam(defaultValue = "10") int size) {
+  public ResponseEntity<PaginatedResponse<ServicePostDto.ServicePostResponse>>
+      getAllMrProductionServices(
+          @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
-    Page<ServicePostDto.ServicePostResponse> servicePostResponsePage = this.serviceBoardService.getAllServices(
-      "MR_PRODUCTION", page, size
-    );
+    Page<ServicePostDto.ServicePostResponse> servicePostResponsePage =
+        this.serviceBoardService.getAllServices("MR_PRODUCTION", page, size);
 
-    return ResponseEntity.ok(
-      PaginatedResponse.from(servicePostResponsePage)
-    );
+    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }
 
   @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<MrProductionPostDto.MrProductionResponse> registerMrProduction(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute MrProductionPostDto.MrProductionPostRequest mrProductionPostRequest
-  ) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @ModelAttribute MrProductionPostDto.MrProductionPostRequest mrProductionPostRequest) {
 
     String loginId = securityUserDetails.getUsername();
 
-    MrProductionPostDto.MrProductionResponse mrProductionResponse = serviceBoardService
-      .createMrProductionServicePost(loginId, mrProductionPostRequest);
+    MrProductionPostDto.MrProductionResponse mrProductionResponse =
+        serviceBoardService.createMrProductionServicePost(loginId, mrProductionPostRequest);
 
     return ResponseEntity.ok(mrProductionResponse);
   }
@@ -104,9 +93,9 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production/{id}")
   public ResponseEntity<MrProductionPostDto.MrProductionResponse> getMrProductionServicePost(
-    @PathVariable Long id) {
-    MrProductionPostDto.MrProductionResponse mrProductionResponse = serviceBoardService
-      .getMrProductionServicePost(id);
+      @PathVariable Long id) {
+    MrProductionPostDto.MrProductionResponse mrProductionResponse =
+        serviceBoardService.getMrProductionServicePost(id);
 
     return ResponseEntity.ok(mrProductionResponse);
   }
@@ -115,15 +104,13 @@ public class ServiceBoardController {
   @PostMapping(path = "/mr-production/{id}/reviews")
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<ServiceReviewDto.ReviewResponse> createMrProductionReview(
-    @PathVariable Long id,
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @Valid @RequestBody ServiceReviewDto.ReviewRequest reviewRequest
-  ) {
+      @PathVariable Long id,
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @Valid @RequestBody ServiceReviewDto.ReviewRequest reviewRequest) {
 
-    ServiceReviewDto.ReviewResponse reviewResponse = ServiceReviewDto.ReviewResponse.from(
-      this.reviewService.createReview(id, reviewRequest));
+    ServiceReviewDto.ReviewResponse reviewResponse =
+        ServiceReviewDto.ReviewResponse.from(this.reviewService.createReview(id, reviewRequest));
 
     return ResponseEntity.ok(reviewResponse);
   }
-
 }

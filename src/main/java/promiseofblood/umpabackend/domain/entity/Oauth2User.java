@@ -1,14 +1,11 @@
 package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.*;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
-
 
 @Entity
 @Getter
@@ -24,5 +21,4 @@ public class Oauth2User extends TimeStampedEntity {
   private String profileImageUrl;
 
   private String username;
-
 }

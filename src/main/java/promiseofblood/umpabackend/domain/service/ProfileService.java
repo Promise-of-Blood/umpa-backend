@@ -1,11 +1,9 @@
 package promiseofblood.umpabackend.domain.service;
 
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
@@ -23,30 +21,29 @@ public class ProfileService {
   private final StorageService storageService;
 
   public UserDto.ProfileResponse patchDefaultProfile(
-    String loginId, DefaultProfilePatchRequest defaultProfilePatchRequest) {
-    User user = userRepository.findByLoginId(loginId)
-      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+      String loginId, DefaultProfilePatchRequest defaultProfilePatchRequest) {
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     user.patchDefaultProfile(
-      defaultProfilePatchRequest.getUsername(),
-      defaultProfilePatchRequest.getGender(),
-      uploadProfileImageIfExists(
-        user.getLoginId(), defaultProfilePatchRequest.getProfileImage()
-      ),
-      defaultProfilePatchRequest.getProfileType()
-    );
+        defaultProfilePatchRequest.getUsername(),
+        defaultProfilePatchRequest.getGender(),
+        uploadProfileImageIfExists(user.getLoginId(), defaultProfilePatchRequest.getProfileImage()),
+        defaultProfilePatchRequest.getProfileType());
     User updatedUser = userRepository.save(user);
 
     return UserDto.ProfileResponse.from(updatedUser);
   }
 
-
   @Transactional
   public UserDto.ProfileResponse patchTeacherProfile(
-    String loginId, TeacherProfileDto.TeacherProfileRequest teacherProfileRequest
-  ) {
-    User user = userRepository.findByLoginId(loginId)
-      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+      String loginId, TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     TeacherProfile teacherProfile = user.getTeacherProfile();
 
@@ -64,10 +61,11 @@ public class ProfileService {
 
   @Transactional
   public UserDto.ProfileResponse patchStudentProfile(
-    String loginId, StudentProfileDto.StudentProfileRequest studentProfileRequest
-  ) {
-    User user = userRepository.findByLoginId(loginId)
-      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+      String loginId, StudentProfileDto.StudentProfileRequest studentProfileRequest) {
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     StudentProfile studentProfile = user.getStudentProfile();
 
@@ -89,11 +87,6 @@ public class ProfileService {
       return null;
     }
 
-    return storageService.store(
-      profileImage,
-      "users",
-      loginId,
-      "default-profile"
-    );
+    return storageService.store(profileImage, "users", loginId, "default-profile");
   }
 }

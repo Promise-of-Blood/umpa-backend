@@ -2,7 +2,6 @@ package promiseofblood.umpabackend.dto;
 
 import lombok.*;
 
-
 @Getter
 @Setter
 @Builder
@@ -19,5 +18,4 @@ public class Oauth2ProviderDto {
   private String profileUri;
 
   private String redirectUri;
-  
 }

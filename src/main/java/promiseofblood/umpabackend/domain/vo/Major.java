@@ -2,11 +2,9 @@ package promiseofblood.umpabackend.domain.vo;
 
 import lombok.*;
 
-
 @Getter
 @RequiredArgsConstructor
 public enum Major {
-
   PIANO("피아노"),
 
   COMPOSITION("작곡"),
@@ -24,5 +22,4 @@ public enum Major {
   WIND_INSTRUMENT("관악");
 
   private final String koreanName;
-  
 }

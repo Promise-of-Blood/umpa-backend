@@ -1,22 +1,18 @@
 package promiseofblood.umpabackend.core.security;
 
-import java.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.service.JwtService;
-
 
 @RequiredArgsConstructor
 @Component
@@ -30,21 +26,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-    HttpServletRequest request,
-    HttpServletResponse response,
-    FilterChain filterChain) throws ServletException, IOException {
+      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+      throws ServletException, IOException {
 
     try {
       String jwt = this.getTokenFromRequest(request);
 
       jwtService.verifyJwt(jwt);
-      SecurityUserDetails securityUserDetails = securityUserDetailsService
-        .loadUserByUsername(jwtService.getLoginIdFromToken(jwt));
-      UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
-        securityUserDetails,
-        null,
-        securityUserDetails.getAuthorities()
-      );
+      SecurityUserDetails securityUserDetails =
+          securityUserDetailsService.loadUserByUsername(jwtService.getLoginIdFromToken(jwt));
+      UsernamePasswordAuthenticationToken auth =
+          new UsernamePasswordAuthenticationToken(
+              securityUserDetails, null, securityUserDetails.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(auth);
 
     } catch (Exception e) {
@@ -63,5 +56,4 @@ public class JwtFilter extends OncePerRequestFilter {
 
     throw new UnauthorizedException("인증 정보가 없습니다.");
   }
-
 }

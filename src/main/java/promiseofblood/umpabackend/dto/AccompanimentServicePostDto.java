@@ -1,18 +1,13 @@
 package promiseofblood.umpabackend.dto;
 
-
-import java.util.List;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
 import org.springframework.web.multipart.MultipartFile;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Instrument;
@@ -51,20 +46,23 @@ public class AccompanimentServicePostDto {
     private List<String> videoUrls;
 
     public static AccompanimentServicePostResponse from(
-      AccompanimentServicePost accompanimentServicePost, User user) {
+        AccompanimentServicePost accompanimentServicePost, User user) {
 
-      return AccompanimentServicePostResponse.builder().title(accompanimentServicePost.getTitle())
-        .description(accompanimentServicePost.getDescription())
-        .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-        .teacherProfile(TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
-        .reviewRating("0.0").costPerUnit(accompanimentServicePost.getCostAndUnit())
-        .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
-        .instrument(accompanimentServicePost.getInstrument())
-        .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
-        .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
-        .isMrIncluded(accompanimentServicePost.isMrIncluded())
-        .practiceLocation(accompanimentServicePost.getPracticeLocation())
-        .videoUrls(accompanimentServicePost.getVideoUrls()).build();
+      return AccompanimentServicePostResponse.builder()
+          .title(accompanimentServicePost.getTitle())
+          .description(accompanimentServicePost.getDescription())
+          .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
+          .teacherProfile(TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
+          .reviewRating("0.0")
+          .costPerUnit(accompanimentServicePost.getCostAndUnit())
+          .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
+          .instrument(accompanimentServicePost.getInstrument())
+          .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
+          .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
+          .isMrIncluded(accompanimentServicePost.isMrIncluded())
+          .practiceLocation(accompanimentServicePost.getPracticeLocation())
+          .videoUrls(accompanimentServicePost.getVideoUrls())
+          .build();
     }
   }
 
@@ -109,6 +107,4 @@ public class AccompanimentServicePostDto {
     @Schema(type = "array", description = "연주 영상 URL들")
     private List<String> videoUrls;
   }
-
-
 }

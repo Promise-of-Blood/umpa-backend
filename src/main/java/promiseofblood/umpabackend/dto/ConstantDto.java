@@ -1,11 +1,9 @@
 package promiseofblood.umpabackend.dto;
 
 import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Instrument;
@@ -16,15 +14,14 @@ import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 
-
 public class ConstantDto {
 
-//  public static interface EnumWrapper<T extends Enum<T>> {
-//    String getCode();
-//
-//    String getName();
-//
-//  }
+  //  public static interface EnumWrapper<T extends Enum<T>> {
+  //    String getCode();
+  //
+  //    String getName();
+  //
+  //  }
 
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
@@ -35,10 +32,7 @@ public class ConstantDto {
     private String name;
 
     public static GradeResponse from(Grade grade) {
-      return GradeResponse.builder()
-        .code(grade.name())
-        .name(grade.getKoreanName())
-        .build();
+      return GradeResponse.builder().code(grade.name()).name(grade.getKoreanName()).build();
     }
   }
 
@@ -51,10 +45,7 @@ public class ConstantDto {
     private String name;
 
     public static CollegeResponse from(College college) {
-      return CollegeResponse.builder()
-        .code(college.name())
-        .name(college.getKoreanName())
-        .build();
+      return CollegeResponse.builder().code(college.name()).name(college.getKoreanName()).build();
     }
   }
 
@@ -67,10 +58,7 @@ public class ConstantDto {
     private String name;
 
     public static WeekdayResponse from(WeekDay weekday) {
-      return WeekdayResponse.builder()
-        .code(weekday.name())
-        .name(weekday.getKoreanName())
-        .build();
+      return WeekdayResponse.builder().code(weekday.name()).name(weekday.getKoreanName()).build();
     }
   }
 
@@ -83,10 +71,7 @@ public class ConstantDto {
     private String name;
 
     public static SubjectResponse of(Subject subject) {
-      return SubjectResponse.builder()
-        .code(subject.name())
-        .name(subject.name())
-        .build();
+      return SubjectResponse.builder().code(subject.name()).name(subject.name()).build();
     }
   }
 
@@ -100,9 +85,9 @@ public class ConstantDto {
 
     public static LessonStyleResponse from(LessonStyle lessonStyle) {
       return LessonStyleResponse.builder()
-        .code(lessonStyle.name())
-        .name(lessonStyle.getKoreanName())
-        .build();
+          .code(lessonStyle.name())
+          .name(lessonStyle.getKoreanName())
+          .build();
     }
   }
 
@@ -115,10 +100,7 @@ public class ConstantDto {
     private String name;
 
     public static MajorResponse from(Major major) {
-      return MajorResponse.builder()
-        .code(major.name())
-        .name(major.getKoreanName())
-        .build();
+      return MajorResponse.builder().code(major.name()).name(major.getKoreanName()).build();
     }
   }
 
@@ -132,9 +114,9 @@ public class ConstantDto {
 
     public static InstrumentResponse from(Instrument instrument) {
       return InstrumentResponse.builder()
-        .code(instrument.name())
-        .name(instrument.getKoreanName())
-        .build();
+          .code(instrument.name())
+          .name(instrument.getKoreanName())
+          .build();
     }
   }
 
@@ -150,14 +132,11 @@ public class ConstantDto {
 
     public static RegionCategoryResponse from(RegionCategory regionCategory) {
       return RegionCategoryResponse.builder()
-        .code(regionCategory.getCode())
-        .name(regionCategory.getKoreanName())
-        .regions(regionCategory.getRegions().stream()
-          .map(RegionResponse::from)
-          .toList())
-        .build();
+          .code(regionCategory.getCode())
+          .name(regionCategory.getKoreanName())
+          .regions(regionCategory.getRegions().stream().map(RegionResponse::from).toList())
+          .build();
     }
-
   }
 
   @Builder
@@ -169,11 +148,7 @@ public class ConstantDto {
     private String name;
 
     public static RegionResponse from(Region region) {
-      return RegionResponse.builder()
-        .code(region.getCode())
-        .name(region.getKoreanName())
-        .build();
+      return RegionResponse.builder().code(region.getCode()).name(region.getKoreanName()).build();
     }
-
   }
 }

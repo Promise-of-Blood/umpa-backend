@@ -1,11 +1,10 @@
 package promiseofblood.umpabackend.domain.entity;
 
-import java.util.List;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -14,13 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ScoreProductionPost extends ServicePost {
 
-  @ElementCollection
-  private List<ServiceCost> serviceCosts;
+  @ElementCollection private List<ServiceCost> serviceCosts;
 
   private int freeRevisionCount;
 
-  @Embedded
-  private DurationRange averageDuration;
+  @Embedded private DurationRange averageDuration;
 
   private String softwareUsed;
 

@@ -1,18 +1,16 @@
 package promiseofblood.umpabackend.domain.entity;
 
-import java.util.List;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-
 import promiseofblood.umpabackend.domain.vo.Instrument;
 
 @Entity
@@ -22,8 +20,7 @@ import promiseofblood.umpabackend.domain.vo.Instrument;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccompanimentServicePost extends ServicePost {
 
-  @Embedded
-  private ServiceCost serviceCost;
+  @Embedded private ServiceCost serviceCost;
 
   private String additionalCostPolicy;
 
@@ -38,12 +35,10 @@ public class AccompanimentServicePost extends ServicePost {
 
   private String practiceLocation;
 
-  @ElementCollection
-  private List<String> videoUrls;
+  @ElementCollection private List<String> videoUrls;
 
   @Override
   public String getCostAndUnit() {
     return this.serviceCost.getCost() + "원/" + this.serviceCost.getUnit();
   }
-
 }

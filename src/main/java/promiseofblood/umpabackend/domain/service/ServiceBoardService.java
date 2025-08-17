@@ -1,14 +1,11 @@
 package promiseofblood.umpabackend.domain.service;
 
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.DurationRange;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
@@ -33,105 +30,96 @@ public class ServiceBoardService {
 
   @Transactional
   public Page<ServicePostDto.ServicePostResponse> getAllServices(
-    String serviceType,
-    int page,
-    int size
-  ) {
-    Page<ServicePost> servicePostPage = servicePostRepository.findAllByServiceType(
-      serviceType,
-      PageRequest.of(page, size)
-    );
+      String serviceType, int page, int size) {
+    Page<ServicePost> servicePostPage =
+        servicePostRepository.findAllByServiceType(serviceType, PageRequest.of(page, size));
 
-    return servicePostPage.map(servicePost -> {
+    return servicePostPage.map(
+        servicePost -> {
+          User teacherUser =
+              userRepository
+                  .findById(servicePost.getUser().getId())
+                  .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-      User teacherUser = userRepository.findById(servicePost.getUser().getId())
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
-      return ServicePostDto.ServicePostResponse.builder()
-        .id(servicePost.getId())
-        .title(servicePost.getTitle())
-        .tags(List.of("기타", "보컬"))
-        .teacherName(teacherUser.getUsername())
-        .thumbnailImageUrl(servicePost.getThumbnailImageUrl())
-        .costAndUnit(servicePost.getCostAndUnit())
-        .reviewRating(5.0f)
-        .build();
-    });
-
+          return ServicePostDto.ServicePostResponse.builder()
+              .id(servicePost.getId())
+              .title(servicePost.getTitle())
+              .tags(List.of("기타", "보컬"))
+              .teacherName(teacherUser.getUsername())
+              .thumbnailImageUrl(servicePost.getThumbnailImageUrl())
+              .costAndUnit(servicePost.getCostAndUnit())
+              .reviewRating(5.0f)
+              .build();
+        });
   }
 
   @Transactional
-  public AccompanimentServicePostDto.AccompanimentServicePostResponse createAccompanimentServicePost(
-    String loginId,
-    AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+  public AccompanimentServicePostDto.AccompanimentServicePostResponse
+      createAccompanimentServicePost(
+          String loginId,
+          AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
 
-    User user = userRepository.findByLoginId(loginId)
-      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    String filePath = storageService.store(
-      accompanimentPostRequest.getThumbnailImage(),
-      "service/" + user.getId() + "/mr-production"
-    );
+    String filePath =
+        storageService.store(
+            accompanimentPostRequest.getThumbnailImage(),
+            "service/" + user.getId() + "/mr-production");
 
-    AccompanimentServicePost accompanimentServicePost = AccompanimentServicePost.builder()
-      .user(user)
-      .title(accompanimentPostRequest.getTitle())
-      .description(accompanimentPostRequest.getDescription())
-      .thumbnailImageUrl(filePath)
-      .serviceCost(ServiceCost.builder()
-        .cost(accompanimentPostRequest.getCost())
-        .unit("학교")
-        .build())
-      .additionalCostPolicy(accompanimentPostRequest.getAdditionalCostPolicy())
-      .instrument(accompanimentPostRequest.getInstrument())
-      .includedPracticeCount(accompanimentPostRequest.getIncludedPracticeCount())
-      .additionalPracticeCost(accompanimentPostRequest.getAdditionalPracticeCost())
-      .isMrIncluded(accompanimentPostRequest.getIsMrIncluded())
-      .practiceLocation(accompanimentPostRequest.getPracticeLocation())
-      .videoUrls(accompanimentPostRequest.getVideoUrls())
-      .build();
+    AccompanimentServicePost accompanimentServicePost =
+        AccompanimentServicePost.builder()
+            .user(user)
+            .title(accompanimentPostRequest.getTitle())
+            .description(accompanimentPostRequest.getDescription())
+            .thumbnailImageUrl(filePath)
+            .serviceCost(
+                ServiceCost.builder().cost(accompanimentPostRequest.getCost()).unit("학교").build())
+            .additionalCostPolicy(accompanimentPostRequest.getAdditionalCostPolicy())
+            .instrument(accompanimentPostRequest.getInstrument())
+            .includedPracticeCount(accompanimentPostRequest.getIncludedPracticeCount())
+            .additionalPracticeCost(accompanimentPostRequest.getAdditionalPracticeCost())
+            .isMrIncluded(accompanimentPostRequest.getIsMrIncluded())
+            .practiceLocation(accompanimentPostRequest.getPracticeLocation())
+            .videoUrls(accompanimentPostRequest.getVideoUrls())
+            .build();
     servicePostRepository.save(accompanimentServicePost);
 
     return AccompanimentServicePostDto.AccompanimentServicePostResponse.from(
-      accompanimentServicePost, user
-    );
+        accompanimentServicePost, user);
   }
-
 
   @Transactional
   public MrProductionResponse createMrProductionServicePost(
-    String loginId,
-    MrProductionPostRequest mrProductionPostRequest) {
+      String loginId, MrProductionPostRequest mrProductionPostRequest) {
 
-    User user = userRepository.findByLoginId(loginId)
-      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    String filePath = storageService.store(
-      mrProductionPostRequest.getThumbnailImage(),
-      "service/" + user.getId() + "/mr-production"
-    );
+    String filePath =
+        storageService.store(
+            mrProductionPostRequest.getThumbnailImage(),
+            "service/" + user.getId() + "/mr-production");
 
-    MrProductionServicePost mrProductionServicePost = MrProductionServicePost.builder()
-      .user(user)
-      .title(mrProductionPostRequest.getTitle())
-      .thumbnailImageUrl(filePath)
-      .description(mrProductionPostRequest.getDescription())
-      .serviceCost(
-        ServiceCost.builder()
-          .cost(mrProductionPostRequest.getCost())
-          .unit("곡")
-          .build()
-      )
-      .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
-      .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
-      .averageDuration(DurationRange.of(mrProductionPostRequest.getAverageDuration()))
-      .softwareUsed(mrProductionPostRequest.getSoftwareUsed())
-      .sampleMrUrls(
-        mrProductionPostRequest.getSampleMrUrls().stream()
-          .map(SampleMrUrl::of)
-          .toList()
-      )
-      .build();
+    MrProductionServicePost mrProductionServicePost =
+        MrProductionServicePost.builder()
+            .user(user)
+            .title(mrProductionPostRequest.getTitle())
+            .thumbnailImageUrl(filePath)
+            .description(mrProductionPostRequest.getDescription())
+            .serviceCost(
+                ServiceCost.builder().cost(mrProductionPostRequest.getCost()).unit("곡").build())
+            .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
+            .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
+            .averageDuration(DurationRange.of(mrProductionPostRequest.getAverageDuration()))
+            .softwareUsed(mrProductionPostRequest.getSoftwareUsed())
+            .sampleMrUrls(
+                mrProductionPostRequest.getSampleMrUrls().stream().map(SampleMrUrl::of).toList())
+            .build();
     servicePostRepository.save(mrProductionServicePost);
 
     return MrProductionResponse.of(mrProductionServicePost);
@@ -140,8 +128,8 @@ public class ServiceBoardService {
   @Transactional(readOnly = true)
   public MrProductionResponse getMrProductionServicePost(Long id) {
 
-    MrProductionServicePost mrProductionServicePost = (MrProductionServicePost) servicePostRepository.findById(
-      id).get();
+    MrProductionServicePost mrProductionServicePost =
+        (MrProductionServicePost) servicePostRepository.findById(id).get();
 
     return MrProductionResponse.of(mrProductionServicePost);
   }

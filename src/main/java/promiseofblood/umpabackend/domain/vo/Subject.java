@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Subject {
-
   PIANO("피아노"),
 
   COMPOSITION("작곡"),
@@ -36,5 +35,4 @@ public enum Subject {
   MR_PRODUCTION("MR제작");
 
   private final String koreanName;
-  
 }

@@ -4,13 +4,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 
 @Entity
@@ -28,8 +26,6 @@ public class TeacherLink extends TimeStampedEntity {
   private TeacherProfile teacherProfile;
 
   public static TeacherLink from(String link) {
-    return TeacherLink.builder()
-      .link(link)
-      .build();
+    return TeacherLink.builder().link(link).build();
   }
 }

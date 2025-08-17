@@ -7,5 +7,4 @@ public class LessonCurriculum extends TimeStampedEntity {
   private String title;
 
   private String content;
-
 }

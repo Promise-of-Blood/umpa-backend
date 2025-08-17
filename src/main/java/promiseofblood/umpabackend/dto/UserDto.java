@@ -1,17 +1,13 @@
 package promiseofblood.umpabackend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import javax.annotation.Nullable;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
 import org.springframework.web.multipart.MultipartFile;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
@@ -60,16 +56,27 @@ public class UserDto {
     private LocalDateTime updatedAt;
 
     public static ProfileResponse from(User user) {
-      return ProfileResponse.builder().id(user.getId()).loginId(user.getLoginId())
-        .username(user.getUsername()).status(user.getUserStatus()).role(user.getRole())
-        .gender(user.getGender() == null ? null : user.getGender().name())
-        .profileImageUrl(user.getProfileImageUrl()).profileType(user.getProfileType().name())
-        .teacherProfile(user.getTeacherProfile() == null ? null
-          : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile())).studentProfile(
-          user.getStudentProfile() == null ? null
-            : StudentProfileDto.StudentProfileResponse.from(user.getStudentProfile()))
-        .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
-        .createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
+      return ProfileResponse.builder()
+          .id(user.getId())
+          .loginId(user.getLoginId())
+          .username(user.getUsername())
+          .status(user.getUserStatus())
+          .role(user.getRole())
+          .gender(user.getGender() == null ? null : user.getGender().name())
+          .profileImageUrl(user.getProfileImageUrl())
+          .profileType(user.getProfileType().name())
+          .teacherProfile(
+              user.getTeacherProfile() == null
+                  ? null
+                  : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
+          .studentProfile(
+              user.getStudentProfile() == null
+                  ? null
+                  : StudentProfileDto.StudentProfileResponse.from(user.getStudentProfile()))
+          .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
+          .createdAt(user.getCreatedAt())
+          .updatedAt(user.getUpdatedAt())
+          .build();
     }
   }
 
@@ -77,21 +84,16 @@ public class UserDto {
   @AllArgsConstructor
   public static class DefaultProfilePatchRequest {
 
-    @Nullable
-    @Schema(description = "사용자 닉네임", example = "홍길동")
+    @Nullable @Schema(description = "사용자 닉네임", example = "홍길동")
     private String username;
 
-    @Nullable
-    @Schema(description = "성별", example = "MALE")
+    @Nullable @Schema(description = "성별", example = "MALE")
     private Gender gender;
 
-    @Nullable
-    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
+    @Nullable @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
     private ProfileType profileType;
 
-    @Nullable
-    @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
+    @Nullable @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
     private MultipartFile profileImage;
-
   }
 }

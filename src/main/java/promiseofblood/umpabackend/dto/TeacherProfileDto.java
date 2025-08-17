@@ -1,20 +1,16 @@
 package promiseofblood.umpabackend.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
-
 import org.springframework.format.annotation.DateTimeFormat;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
@@ -28,7 +24,9 @@ public class TeacherProfileDto {
   @AllArgsConstructor
   public static class TeacherProfileRequest {
 
-    @Schema(description = "선생님 소개", example = "안녕하세요, 저는 전자 음악을 전공한 선생님입니다. 레슨을 통해 여러분과 함께 음악의 즐거움을 나누고 싶습니다.")
+    @Schema(
+        description = "선생님 소개",
+        example = "안녕하세요, 저는 전자 음악을 전공한 선생님입니다. 레슨을 통해 여러분과 함께 음악의 즐거움을 나누고 싶습니다.")
     private String description;
 
     @Schema(description = "선생님 전공", example = "ELECTRONIC_MUSIC")
@@ -38,12 +36,12 @@ public class TeacherProfileDto {
     private Region lessonRegion;
 
     @Schema(
-      description = "경력",
-      example = "["
-        + "{\"title\":\"인덕대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true},"
-        + "{\"title\":\"서울대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true}"
-        + "]"
-    )
+        description = "경력",
+        example =
+            "["
+                + "{\"title\":\"인덕대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true},"
+                + "{\"title\":\"서울대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true}"
+                + "]")
     private List<TeacherCareerRequest> careers;
 
     @Schema(example = "[\"https://gdsnadevlog.com\",\"https://www.gdsnadevlog.com\"]")
@@ -65,7 +63,6 @@ public class TeacherProfileDto {
       private YearMonth end;
 
       private boolean isRepresentative;
-
     }
   }
 
@@ -97,12 +94,12 @@ public class TeacherProfileDto {
       }
 
       return TeacherProfileResponse.builder()
-        .description(teacherProfile.getDescription())
-        .major(ConstantDto.MajorResponse.from(teacherProfile.getMajor()))
-        .lessonRegion(ConstantDto.RegionResponse.from(teacherProfile.getLessonRegion()))
-        .careers(teacherCareerDtoList)
-        .links(teacherLinkDtoList)
-        .build();
+          .description(teacherProfile.getDescription())
+          .major(ConstantDto.MajorResponse.from(teacherProfile.getMajor()))
+          .lessonRegion(ConstantDto.RegionResponse.from(teacherProfile.getLessonRegion()))
+          .careers(teacherCareerDtoList)
+          .links(teacherLinkDtoList)
+          .build();
     }
   }
 
@@ -123,12 +120,12 @@ public class TeacherProfileDto {
 
     public static TeacherCareerDto from(TeacherCareer teacherCareer) {
       return TeacherCareerDto.builder()
-        .id(teacherCareer.getId())
-        .isRepresentative(teacherCareer.isRepresentative())
-        .title(teacherCareer.getTitle())
-        .start(teacherCareer.getStart())
-        .end(teacherCareer.getEnd())
-        .build();
+          .id(teacherCareer.getId())
+          .isRepresentative(teacherCareer.isRepresentative())
+          .title(teacherCareer.getTitle())
+          .start(teacherCareer.getStart())
+          .end(teacherCareer.getEnd())
+          .build();
     }
   }
 
@@ -142,10 +139,7 @@ public class TeacherProfileDto {
     private String link;
 
     public static TeacherLinkDto from(TeacherLink teacherLink) {
-      return TeacherLinkDto.builder()
-        .id(teacherLink.getId())
-        .link(teacherLink.getLink())
-        .build();
+      return TeacherLinkDto.builder().id(teacherLink.getId()).link(teacherLink.getLink()).build();
     }
   }
 }

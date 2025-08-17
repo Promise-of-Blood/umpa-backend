@@ -1,7 +1,6 @@
 package promiseofblood.umpabackend.dto;
 
 import java.time.LocalDateTime;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,6 +14,5 @@ public class ApiResponse {
     private final String message;
 
     private final LocalDateTime timestamp = LocalDateTime.now();
-
   }
 }

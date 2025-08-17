@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ScoreType {
-
   FULL_SCORE("풀스코어"),
 
   VOCAL("보컬곡"),
@@ -22,5 +21,4 @@ public enum ScoreType {
   DRUM("드럼");
 
   private final String koreanName;
-
 }

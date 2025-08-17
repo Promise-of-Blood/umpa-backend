@@ -1,14 +1,10 @@
 package promiseofblood.umpabackend.core.config;
 
-
 import java.util.List;
-
 import lombok.Getter;
 import lombok.Setter;
-
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
-
 import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 
@@ -22,10 +18,10 @@ public class Oauth2ProvidersConfig {
 
   public Oauth2Provider get(String providerName) {
     return providers.stream()
-      .filter(provider -> provider.getName().equalsIgnoreCase(providerName))
-      .findFirst()
-      .orElseThrow(
-        () -> new NotSupportedOauth2ProviderException("지원하지 않는 OAuth2 제공자입니다: " + providerName));
+        .filter(provider -> provider.getName().equalsIgnoreCase(providerName))
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new NotSupportedOauth2ProviderException("지원하지 않는 OAuth2 제공자입니다: " + providerName));
   }
-
 }

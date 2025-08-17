@@ -1,17 +1,14 @@
 package promiseofblood.umpabackend.controller;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Instrument;
@@ -30,9 +27,8 @@ public class ConstantsController {
   @GetMapping("/majors")
   public ResponseEntity<List<ConstantDto.MajorResponse>> getMajors() {
 
-    List<ConstantDto.MajorResponse> majorResponses = Stream.of(Major.values())
-      .map(ConstantDto.MajorResponse::from)
-      .collect(Collectors.toList());
+    List<ConstantDto.MajorResponse> majorResponses =
+        Stream.of(Major.values()).map(ConstantDto.MajorResponse::from).collect(Collectors.toList());
 
     return ResponseEntity.ok(majorResponses);
   }
@@ -81,7 +77,6 @@ public class ConstantsController {
     return ResponseEntity.ok(lessonStyleResponses);
   }
 
-
   @GetMapping("/grades")
   public ResponseEntity<List<ConstantDto.GradeResponse>> getGrades() {
 
@@ -91,14 +86,13 @@ public class ConstantsController {
     }
 
     return ResponseEntity.ok(gradeResponses);
-
   }
 
   @GetMapping("/regions")
   public ResponseEntity<List<ConstantDto.RegionCategoryResponse>> getRegions() {
 
-    List<ConstantDto.RegionCategoryResponse> regionCategories = Stream.of(RegionCategory.values())
-      .map(ConstantDto.RegionCategoryResponse::from).toList();
+    List<ConstantDto.RegionCategoryResponse> regionCategories =
+        Stream.of(RegionCategory.values()).map(ConstantDto.RegionCategoryResponse::from).toList();
 
     return ResponseEntity.ok(regionCategories);
   }

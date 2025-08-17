@@ -1,7 +1,6 @@
 package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.Embeddable;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,5 +16,4 @@ public class ServiceCost {
   private int cost;
 
   private String unit;
-
 }

@@ -8,7 +8,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
-
 import promiseofblood.umpabackend.core.config.StorageConfig;
 
 @Service
@@ -40,10 +38,9 @@ public class FileSystemStorageService implements StorageService {
       throw new RuntimeException("Empty file");
     }
 
-    String filename = StringUtils.cleanPath(
-      System.currentTimeMillis() +
-        file.getOriginalFilename().replace(" ", "")
-    );
+    String filename =
+        StringUtils.cleanPath(
+            System.currentTimeMillis() + file.getOriginalFilename().replace(" ", ""));
 
     Path targetDirectory = fileLocation;
     for (String pathPart : filePaths) {
@@ -68,16 +65,18 @@ public class FileSystemStorageService implements StorageService {
       throw new RuntimeException("File storage failed", e);
     }
 
-    return Paths.get("/" + fileLocation + "/" + String.join("/", filePaths)).resolve(filename)
-      .toString().replace("\\", "/");
+    return Paths.get("/" + fileLocation + "/" + String.join("/", filePaths))
+        .resolve(filename)
+        .toString()
+        .replace("\\", "/");
   }
-
 
   @Override
   public Stream<Path> loadAll() {
     try {
-      return Files.walk(this.fileLocation, 1).filter(path -> !path.equals(this.fileLocation))
-        .map(this.fileLocation::relativize);
+      return Files.walk(this.fileLocation, 1)
+          .filter(path -> !path.equals(this.fileLocation))
+          .map(this.fileLocation::relativize);
     } catch (IOException e) {
       throw new RuntimeException("Failed to read stored files", e);
     }

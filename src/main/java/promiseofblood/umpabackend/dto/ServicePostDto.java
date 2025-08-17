@@ -2,12 +2,10 @@ package promiseofblood.umpabackend.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
 import promiseofblood.umpabackend.domain.entity.DurationRange;
 import promiseofblood.umpabackend.domain.entity.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
@@ -17,9 +15,7 @@ import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherCareerDto;
 
 public class ServicePostDto {
 
-  /**
-   * 선생님 프로필 응답 형식 DTO
-   */
+  /** 선생님 프로필 응답 형식 DTO */
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class TeacherAuthorProfileDto {
@@ -45,19 +41,15 @@ public class ServicePostDto {
       }
 
       return TeacherAuthorProfileDto.builder()
-        .profileImageUrl(user.getProfileImageUrl())
-        .description(user.getTeacherProfile().getDescription())
-        .careers(careers)
-        .links(links)
-        .build();
+          .profileImageUrl(user.getProfileImageUrl())
+          .description(user.getTeacherProfile().getDescription())
+          .careers(careers)
+          .links(links)
+          .build();
     }
-
   }
 
-
-  /**
-   * 서비스 단위당 비용 DTO
-   */
+  /** 서비스 단위당 비용 DTO */
   @Getter
   @AllArgsConstructor
   public static class CostPerUnitDto {
@@ -69,12 +61,9 @@ public class ServicePostDto {
     public static CostPerUnitDto from(ServiceCost serviceCost) {
       return new CostPerUnitDto(serviceCost.getCost(), serviceCost.getUnit());
     }
-
   }
 
-  /**
-   * 서비스 평균 소요 기간 DTO
-   */
+  /** 서비스 평균 소요 기간 DTO */
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class AverageDurationDto {
@@ -89,11 +78,11 @@ public class ServicePostDto {
 
     public static AverageDurationDto from(DurationRange durationRange) {
       return AverageDurationDto.builder()
-        .minValue(durationRange.getMinValue())
-        .minUnit(durationRange.getMinUnit().name())
-        .maxValue(durationRange.getMaxValue())
-        .maxUnit(durationRange.getMaxUnit().name())
-        .build();
+          .minValue(durationRange.getMinValue())
+          .minUnit(durationRange.getMinUnit().name())
+          .maxValue(durationRange.getMaxValue())
+          .maxUnit(durationRange.getMaxUnit().name())
+          .build();
     }
   }
 
@@ -114,6 +103,5 @@ public class ServicePostDto {
     private String costAndUnit;
 
     private Float reviewRating;
-
   }
 }

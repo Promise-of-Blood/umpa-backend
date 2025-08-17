@@ -1,13 +1,12 @@
 package promiseofblood.umpabackend.controller;
 
-
+import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import java.beans.PropertyEditorSupport;
 import java.util.List;
 import java.util.Map;
-import jakarta.validation.Valid;
-
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -24,10 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
-import io.swagger.v3.oas.annotations.Hidden;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
 import promiseofblood.umpabackend.core.security.SecurityUserDetails;
 import promiseofblood.umpabackend.domain.service.Oauth2Service;
 import promiseofblood.umpabackend.domain.service.ProfileService;
@@ -65,10 +60,10 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/general", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
-    @Validated @ModelAttribute LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
+      @Validated @ModelAttribute LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
 
-    LoginDto.LoginCompleteResponse loginCompleteResponse = userService.registerUser(
-      loginIdPasswordRequest);
+    LoginDto.LoginCompleteResponse loginCompleteResponse =
+        userService.registerUser(loginIdPasswordRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
@@ -76,11 +71,11 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/{providerName}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
-    @PathVariable String providerName,
-    @Validated @ModelAttribute LoginDto.Oauth2RegisterRequest oauth2RegisterRequest) {
+      @PathVariable String providerName,
+      @Validated @ModelAttribute LoginDto.Oauth2RegisterRequest oauth2RegisterRequest) {
 
-    LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.registerOauth2User(
-      providerName, oauth2RegisterRequest);
+    LoginDto.LoginCompleteResponse loginCompleteResponse =
+        oauth2Service.registerOauth2User(providerName, oauth2RegisterRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
@@ -88,7 +83,7 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @GetMapping(value = "/register/check/username")
   public ResponseEntity<LoginDto.IsUsernameAvailableResponse> isUsernameAvailable(
-    @RequestParam String username) {
+      @RequestParam String username) {
 
     return ResponseEntity.ok(userService.isUsernameAvailable(username));
   }
@@ -96,7 +91,7 @@ public class UserController {
   @Tag(name = "회원가입 API", description = "이미 가입한 OAuth2 사용자인지 확인합니다.")
   @GetMapping(value = "/register/check/oauth2")
   public ResponseEntity<LoginDto.IsUsernameAvailableResponse> isOauth2Available(
-    @RequestParam String username) {
+      @RequestParam String username) {
 
     return ResponseEntity.ok(userService.isUsernameAvailable(username));
   }
@@ -107,7 +102,7 @@ public class UserController {
   @Tag(name = "프로필 관리 API")
   @GetMapping("/me")
   public ResponseEntity<UserDto.ProfileResponse> getCurrentUser(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
     return ResponseEntity.ok(userService.getUserByLoginId(securityUserDetails.getUsername()));
   }
@@ -115,11 +110,12 @@ public class UserController {
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/teacher-profile")
   public ResponseEntity<UserDto.ProfileResponse> patchTeacherProfile(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @RequestBody TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
 
-    UserDto.ProfileResponse teacherProfileResponse = profileService.patchTeacherProfile(
-      securityUserDetails.getUsername(), teacherProfileRequest);
+    UserDto.ProfileResponse teacherProfileResponse =
+        profileService.patchTeacherProfile(
+            securityUserDetails.getUsername(), teacherProfileRequest);
 
     return ResponseEntity.ok(teacherProfileResponse);
   }
@@ -127,11 +123,12 @@ public class UserController {
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/student-profile")
   public ResponseEntity<UserDto.ProfileResponse> patchStudentProfile(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody @Valid StudentProfileDto.StudentProfileRequest studentProfileRequest) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @RequestBody @Valid StudentProfileDto.StudentProfileRequest studentProfileRequest) {
 
-    UserDto.ProfileResponse studentProfileDto = profileService.patchStudentProfile(
-      securityUserDetails.getUsername(), studentProfileRequest);
+    UserDto.ProfileResponse studentProfileDto =
+        profileService.patchStudentProfile(
+            securityUserDetails.getUsername(), studentProfileRequest);
 
     return ResponseEntity.ok(studentProfileDto);
   }
@@ -139,11 +136,12 @@ public class UserController {
   @Tag(name = "프로필 관리 API")
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UserDto.ProfileResponse> patchDefaultProfile(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @Validated @ModelAttribute UserDto.DefaultProfilePatchRequest defaultProfilePatchRequest) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @Validated @ModelAttribute UserDto.DefaultProfilePatchRequest defaultProfilePatchRequest) {
 
-    UserDto.ProfileResponse updatedUser = profileService.patchDefaultProfile(
-      securityUserDetails.getUsername(), defaultProfilePatchRequest);
+    UserDto.ProfileResponse updatedUser =
+        profileService.patchDefaultProfile(
+            securityUserDetails.getUsername(), defaultProfilePatchRequest);
 
     return ResponseEntity.ok(updatedUser);
   }
@@ -154,12 +152,14 @@ public class UserController {
   @Tag(name = "토큰 발급 API")
   @PostMapping("token/{providerName}")
   public ResponseEntity<LoginDto.LoginCompleteResponse> createOauth2Token(
-    @PathVariable String providerName,
-    @RequestBody LoginDto.Oauth2LoginRequest oauth2LoginRequest) {
+      @PathVariable String providerName,
+      @RequestBody LoginDto.Oauth2LoginRequest oauth2LoginRequest) {
 
-    LoginDto.LoginCompleteResponse loginCompleteResponse = oauth2Service.generateOauth2Jwt(
-      providerName, oauth2LoginRequest.getExternalIdToken(),
-      oauth2LoginRequest.getExternalAccessToken());
+    LoginDto.LoginCompleteResponse loginCompleteResponse =
+        oauth2Service.generateOauth2Jwt(
+            providerName,
+            oauth2LoginRequest.getExternalIdToken(),
+            oauth2LoginRequest.getExternalAccessToken());
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
@@ -167,10 +167,10 @@ public class UserController {
   @Tag(name = "토큰 발급 API")
   @PostMapping("/token/general")
   public ResponseEntity<LoginDto.LoginCompleteResponse> createToken(
-    @RequestBody LoginDto.LoginIdPasswordLoginRequest request) {
+      @RequestBody LoginDto.LoginIdPasswordLoginRequest request) {
 
-    LoginDto.LoginCompleteResponse loginCompleteResponse = userService.loginIdPasswordJwtLogin(
-      request.getLoginId(), request.getPassword());
+    LoginDto.LoginCompleteResponse loginCompleteResponse =
+        userService.loginIdPasswordJwtLogin(request.getLoginId(), request.getPassword());
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
@@ -178,7 +178,7 @@ public class UserController {
   @Tag(name = "토큰 발급 API")
   @PostMapping("/refresh-token")
   public ResponseEntity<LoginDto.LoginCompleteResponse> refreshToken(
-    @RequestBody LoginDto.TokenRefreshRequest request) {
+      @RequestBody LoginDto.TokenRefreshRequest request) {
 
     return ResponseEntity.ok(userService.refreshToken(request.getRefreshToken()));
   }
@@ -190,23 +190,23 @@ public class UserController {
     return ResponseEntity.ok(oauth2Service.generateAuthorizationUrls());
   }
 
-
   @GetMapping("/callback/{providerName}")
   @Hidden
-  public Oauth2ProfileResponse oauth2AuthorizationCallback(@PathVariable String providerName,
-    String code) {
+  public Oauth2ProfileResponse oauth2AuthorizationCallback(
+      @PathVariable String providerName, String code) {
 
     return oauth2Service.getOauth2Profile(providerName, code);
   }
 
-
   @InitBinder
   public void initBinder(WebDataBinder binder) {
-    binder.registerCustomEditor(MultipartFile.class, new PropertyEditorSupport() {
-      @Override
-      public void setAsText(String text) {
-        setValue(null);
-      }
-    });
+    binder.registerCustomEditor(
+        MultipartFile.class,
+        new PropertyEditorSupport() {
+          @Override
+          public void setAsText(String text) {
+            setValue(null);
+          }
+        });
   }
 }

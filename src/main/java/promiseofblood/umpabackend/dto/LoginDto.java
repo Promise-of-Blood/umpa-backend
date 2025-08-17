@@ -1,20 +1,15 @@
 package promiseofblood.umpabackend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import org.springframework.web.multipart.MultipartFile;
-
-import io.swagger.v3.oas.annotations.media.Schema;
-
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
-
 
 public class LoginDto {
 
@@ -30,12 +25,10 @@ public class LoginDto {
     @Schema(description = "사용자 닉네임", example = "홍길동")
     private String username;
 
-    @NotNull
-    @Schema(description = "성별", example = "MALE")
+    @NotNull @Schema(description = "성별", example = "MALE")
     private Gender gender;
 
-    @NotNull
-    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
+    @NotNull @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
     private ProfileType profileType;
 
     @NotBlank
@@ -46,10 +39,8 @@ public class LoginDto {
     @Schema(description = "비밀번호")
     private String password;
 
-    @NotNull
-    @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
+    @NotNull @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
     private MultipartFile profileImage;
-
   }
 
   @Builder
@@ -61,16 +52,13 @@ public class LoginDto {
     @Schema(description = "사용자 닉네임", example = "홍길동")
     private String username;
 
-    @NotNull
-    @Schema(description = "성별", example = "MALE")
+    @NotNull @Schema(description = "성별", example = "MALE")
     private Gender gender;
 
-    @NotNull
-    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
+    @NotNull @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
     private ProfileType profileType;
 
-    @NotNull
-    @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
+    @NotNull @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
     private MultipartFile profileImage;
 
     @NotBlank
@@ -80,7 +68,6 @@ public class LoginDto {
     @NotBlank
     @Schema(description = "oauth2 제공자로부터 발급된 액세스 토큰")
     private String externalAccessToken;
-
   }
 
   @Getter
@@ -109,7 +96,6 @@ public class LoginDto {
     private String externalIdToken;
 
     private String externalAccessToken;
-
   }
 
   @Getter
@@ -118,16 +104,13 @@ public class LoginDto {
     private String loginId;
 
     private String password;
-
   }
 
   @Getter
   @NoArgsConstructor
   public static class TokenRefreshRequest {
 
-    @NotBlank
-    private String refreshToken;
-
+    @NotBlank private String refreshToken;
   }
 
   @Getter
@@ -141,7 +124,6 @@ public class LoginDto {
     public static LoginCompleteResponse of(UserDto.ProfileResponse user, JwtPairResponse jwtPair) {
       return new LoginCompleteResponse(user, jwtPair);
     }
-
   }
 
   @Getter
@@ -156,7 +138,6 @@ public class LoginDto {
       return new JwtPairResponse(accessToken, refreshToken);
     }
   }
-
 
   @Getter
   @AllArgsConstructor

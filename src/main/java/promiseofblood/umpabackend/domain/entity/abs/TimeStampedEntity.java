@@ -1,8 +1,7 @@
 package promiseofblood.umpabackend.domain.entity.abs;
 
-import java.time.LocalDateTime;
 import jakarta.persistence.*;
-
+import java.time.LocalDateTime;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

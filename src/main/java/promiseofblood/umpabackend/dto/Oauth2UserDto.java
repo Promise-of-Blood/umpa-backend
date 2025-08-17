@@ -2,7 +2,6 @@ package promiseofblood.umpabackend.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-
 import promiseofblood.umpabackend.domain.entity.Oauth2User;
 
 @Getter
@@ -19,11 +18,10 @@ public class Oauth2UserDto {
 
   public static Oauth2UserDto of(Oauth2User oauth2User) {
     return Oauth2UserDto.builder()
-      .providerName(oauth2User.getProviderName())
-      .providerUid(oauth2User.getProviderUid())
-      .profileImageUrl(oauth2User.getProfileImageUrl())
-      .username(oauth2User.getUsername())
-      .build();
+        .providerName(oauth2User.getProviderName())
+        .providerUid(oauth2User.getProviderUid())
+        .profileImageUrl(oauth2User.getProfileImageUrl())
+        .username(oauth2User.getUsername())
+        .build();
   }
-
 }

@@ -1,8 +1,6 @@
 package promiseofblood.umpabackend.domain.vo;
 
-
 import java.util.List;
-
 import lombok.Getter;
 
 @Getter
@@ -34,5 +32,4 @@ public enum RegionCategory {
     this.koreanName = koreanName;
     this.regions = regions;
   }
-  
 }
