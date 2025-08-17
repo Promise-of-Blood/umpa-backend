@@ -10,8 +10,8 @@ import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.Oauth2User;
 import promiseofblood.umpabackend.domain.entity.User;
-import promiseofblood.umpabackend.domain.strategy.Oauth2Strategy;
-import promiseofblood.umpabackend.domain.strategy.Oauth2StrategyFactory;
+import promiseofblood.umpabackend.domain.repository.Oauth2UserRepository;
+import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
@@ -22,8 +22,8 @@ import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
-import promiseofblood.umpabackend.repository.Oauth2UserRepository;
-import promiseofblood.umpabackend.repository.UserRepository;
+import promiseofblood.umpabackend.infrastructure.oauth.Oauth2Strategy;
+import promiseofblood.umpabackend.infrastructure.oauth.Oauth2StrategyFactory;
 
 @Service
 @RequiredArgsConstructor

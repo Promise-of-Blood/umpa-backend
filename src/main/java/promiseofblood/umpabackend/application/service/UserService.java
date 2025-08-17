@@ -11,12 +11,12 @@ import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.core.exception.RegistrationException;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.repository.UserRepository;
 
 @Service
 @Slf4j

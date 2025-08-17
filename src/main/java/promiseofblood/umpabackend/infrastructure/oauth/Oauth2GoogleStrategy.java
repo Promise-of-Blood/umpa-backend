@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.strategy;
+package promiseofblood.umpabackend.infrastructure.oauth;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
@@ -30,12 +30,12 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
   @Override
   public String getAuthorizationUrl(Oauth2Provider oauth2Provider) {
     return oauth2Provider.getLoginUrl()
-        + "?client_id="
-        + oauth2Provider.getClientId()
-        + "&redirect_uri="
-        + oauth2Provider.getRedirectUri()
-        + "&response_type=code"
-        + "&scope=https://www.googleapis.com/auth/userinfo.profile";
+      + "?client_id="
+      + oauth2Provider.getClientId()
+      + "&redirect_uri="
+      + oauth2Provider.getRedirectUri()
+      + "&response_type=code"
+      + "&scope=https://www.googleapis.com/auth/userinfo.profile";
   }
 
   @Override
@@ -51,29 +51,29 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
     return restTemplate.postForObject(
-        oauth2Provider.getTokenUri(), new HttpEntity<>(body, headers), Oauth2TokenResponse.class);
+      oauth2Provider.getTokenUri(), new HttpEntity<>(body, headers), Oauth2TokenResponse.class);
   }
 
   @Override
   public Oauth2ProfileResponse getOauth2UserProfile(
-      Oauth2Provider oauth2Provider, String authorizationCode) {
+    Oauth2Provider oauth2Provider, String authorizationCode) {
     Oauth2TokenResponse oauth2TokenResponse = this.getToken(oauth2Provider, authorizationCode);
 
     GoogleIdTokenVerifier verifier =
-        new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-            .setAudience(Collections.singletonList(oauth2Provider.getClientId()))
-            .build();
+      new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+        .setAudience(Collections.singletonList(oauth2Provider.getClientId()))
+        .build();
 
     try {
       GoogleIdToken idToken = verifier.verify(oauth2TokenResponse.getIdToken());
       Payload payload = idToken.getPayload();
       return Oauth2ProfileResponse.builder()
-          .externalIdToken(oauth2TokenResponse.getIdToken())
-          .externalAccessToken(oauth2TokenResponse.getAccessToken())
-          .providerUid(payload.getSubject())
-          .profileImageUrl((String) payload.get("picture"))
-          .username((String) payload.get("given_name"))
-          .build();
+        .externalIdToken(oauth2TokenResponse.getIdToken())
+        .externalAccessToken(oauth2TokenResponse.getAccessToken())
+        .providerUid(payload.getSubject())
+        .profileImageUrl((String) payload.get("picture"))
+        .username((String) payload.get("given_name"))
+        .build();
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -83,23 +83,23 @@ public class Oauth2GoogleStrategy implements Oauth2Strategy {
 
   @Override
   public Oauth2ProfileResponse getOauth2UserProfile(
-      Oauth2Provider oauth2Provider, String externalAccessToken, String externalIdToken) {
+    Oauth2Provider oauth2Provider, String externalAccessToken, String externalIdToken) {
 
     GoogleIdTokenVerifier verifier =
-        new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
-            .setAudience(Collections.singletonList(oauth2Provider.getClientId()))
-            .build();
+      new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+        .setAudience(Collections.singletonList(oauth2Provider.getClientId()))
+        .build();
 
     try {
       GoogleIdToken idToken = verifier.verify(externalIdToken);
       Payload payload = idToken.getPayload();
       return Oauth2ProfileResponse.builder()
-          .externalIdToken(externalIdToken)
-          .externalAccessToken(externalAccessToken)
-          .providerUid(payload.getSubject())
-          .profileImageUrl((String) payload.get("picture"))
-          .username((String) payload.get("given_name"))
-          .build();
+        .externalIdToken(externalIdToken)
+        .externalAccessToken(externalAccessToken)
+        .providerUid(payload.getSubject())
+        .profileImageUrl((String) payload.get("picture"))
+        .username((String) payload.get("given_name"))
+        .build();
 
     } catch (Exception e) {
 

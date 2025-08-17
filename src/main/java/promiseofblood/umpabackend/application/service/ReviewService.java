@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import promiseofblood.umpabackend.domain.entity.Review;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
+import promiseofblood.umpabackend.domain.repository.ReviewRepository;
+import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
-import promiseofblood.umpabackend.repository.ReviewRepository;
-import promiseofblood.umpabackend.repository.ServicePostRepository;
 
 @Service
 @RequiredArgsConstructor

@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.strategy;
+package promiseofblood.umpabackend.infrastructure.oauth;
 
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
@@ -19,8 +19,8 @@ public interface Oauth2Strategy {
   Oauth2TokenResponse getToken(Oauth2Provider oauth2Provider, String authorizationCode);
 
   Oauth2ProfileResponse getOauth2UserProfile(
-      Oauth2Provider oauth2Provider, String authorizationCode);
+    Oauth2Provider oauth2Provider, String authorizationCode);
 
   Oauth2ProfileResponse getOauth2UserProfile(
-      Oauth2Provider oauth2Provider, String externalAccessToken, String externalIdToken);
+    Oauth2Provider oauth2Provider, String externalAccessToken, String externalIdToken);
 }

@@ -11,7 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import promiseofblood.umpabackend.application.service.UserService;
-import promiseofblood.umpabackend.repository.UserRepository;
+import promiseofblood.umpabackend.domain.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {

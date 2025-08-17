@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
-import promiseofblood.umpabackend.repository.UserRepository;
+import promiseofblood.umpabackend.domain.repository.UserRepository;
 
 @Slf4j
 @Service

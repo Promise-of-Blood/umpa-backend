@@ -7,11 +7,11 @@ import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
-import promiseofblood.umpabackend.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor

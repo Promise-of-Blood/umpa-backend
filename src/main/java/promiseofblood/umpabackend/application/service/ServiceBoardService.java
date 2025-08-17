@@ -13,12 +13,12 @@ import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.domain.entity.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
+import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionPostRequest;
 import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionResponse;
 import promiseofblood.umpabackend.dto.ServicePostDto;
-import promiseofblood.umpabackend.repository.ServicePostRepository;
-import promiseofblood.umpabackend.repository.UserRepository;
 
 @Service
 @RequiredArgsConstructor

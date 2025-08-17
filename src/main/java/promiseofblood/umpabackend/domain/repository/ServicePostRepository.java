@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.repository;
+package promiseofblood.umpabackend.domain.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

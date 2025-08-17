@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.core.command;
+package promiseofblood.umpabackend.infrastructure.storage;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
