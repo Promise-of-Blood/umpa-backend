@@ -73,7 +73,7 @@ spotless {
                 '\\#org.junit',
                 'promiseofblood.umpabackend',
         )
-//        googleJavaFormat()
+        googleJavaFormat()
 //        formatAnnotations()
 //        removeUnusedImports()
 //        trimTrailingWhitespace()
