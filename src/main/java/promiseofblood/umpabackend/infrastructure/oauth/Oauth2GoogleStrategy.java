@@ -17,8 +17,8 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
-import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2TokenResponse;
 
 @Component
 @ToString

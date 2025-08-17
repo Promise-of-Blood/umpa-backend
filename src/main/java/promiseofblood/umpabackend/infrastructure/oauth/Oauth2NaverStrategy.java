@@ -8,9 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
-import promiseofblood.umpabackend.dto.external.NaverProfileResponse;
-import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.NaverProfileResponse;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2TokenResponse;
 
 @Component
 @ToString

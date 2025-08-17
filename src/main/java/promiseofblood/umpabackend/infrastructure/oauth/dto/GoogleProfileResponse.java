@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.dto.external;
+package promiseofblood.umpabackend.infrastructure.oauth.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

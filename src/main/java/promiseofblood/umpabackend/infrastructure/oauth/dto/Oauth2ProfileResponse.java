@@ -1,6 +1,8 @@
-package promiseofblood.umpabackend.dto.external;
+package promiseofblood.umpabackend.infrastructure.oauth.dto;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.ToString;
 
 @Getter
 @Builder

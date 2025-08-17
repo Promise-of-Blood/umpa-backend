@@ -20,10 +20,10 @@ import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.LoginDto.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2Strategy;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2StrategyFactory;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
 
 @Service
 @RequiredArgsConstructor

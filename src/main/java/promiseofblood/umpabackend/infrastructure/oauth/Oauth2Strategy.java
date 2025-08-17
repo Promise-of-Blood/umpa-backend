@@ -1,8 +1,8 @@
 package promiseofblood.umpabackend.infrastructure.oauth;
 
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
-import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.dto.external.Oauth2TokenResponse;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2TokenResponse;
 
 public interface Oauth2Strategy {
 

@@ -31,7 +31,7 @@ import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 
 @RestController
