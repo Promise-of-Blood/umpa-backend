@@ -5,7 +5,6 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import promiseofblood.umpabackend.core.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
 import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
@@ -22,6 +21,7 @@ import promiseofblood.umpabackend.dto.LoginDto.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.repository.Oauth2UserRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
 
@@ -38,15 +38,15 @@ public class Oauth2Service {
 
   @Transactional
   public LoginCompleteResponse registerOauth2User(
-      String providerName, Oauth2RegisterRequest oauth2RegisterRequest) {
+    String providerName, Oauth2RegisterRequest oauth2RegisterRequest) {
     Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 
     Oauth2ProfileResponse oauth2ProfileResponse =
-        oauth2Strategy.getOauth2UserProfile(
-            oauth2Provider,
-            oauth2RegisterRequest.getExternalAccessToken(),
-            oauth2RegisterRequest.getExternalIdToken());
+      oauth2Strategy.getOauth2UserProfile(
+        oauth2Provider,
+        oauth2RegisterRequest.getExternalAccessToken(),
+        oauth2RegisterRequest.getExternalIdToken());
 
     // 중복 체크
     if (this.isOauth2UserAlreadyExists(providerName, oauth2ProfileResponse.getProviderUid())) {
@@ -54,35 +54,35 @@ public class Oauth2Service {
     }
 
     Oauth2User newOauth2User =
-        Oauth2User.builder()
-            .providerName(oauth2Provider.getName())
-            .providerUid(oauth2ProfileResponse.getProviderUid())
-            .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
-            .username(oauth2ProfileResponse.getUsername())
-            .build();
+      Oauth2User.builder()
+        .providerName(oauth2Provider.getName())
+        .providerUid(oauth2ProfileResponse.getProviderUid())
+        .profileImageUrl(oauth2ProfileResponse.getProfileImageUrl())
+        .username(oauth2ProfileResponse.getUsername())
+        .build();
 
     String loginId = oauth2ProfileResponse.getProviderUid();
     String storedFilePath =
-        userService.uploadProfileImage(loginId, oauth2RegisterRequest.getProfileImage());
+      userService.uploadProfileImage(loginId, oauth2RegisterRequest.getProfileImage());
 
     User newUser =
-        User.register(
-            loginId,
-            oauth2RegisterRequest.getGender(),
-            UserStatus.PENDING,
-            Role.USER,
-            oauth2RegisterRequest.getUsername(),
-            oauth2RegisterRequest.getProfileType(),
-            storedFilePath,
-            newOauth2User);
+      User.register(
+        loginId,
+        oauth2RegisterRequest.getGender(),
+        UserStatus.PENDING,
+        Role.USER,
+        oauth2RegisterRequest.getUsername(),
+        oauth2RegisterRequest.getProfileType(),
+        storedFilePath,
+        newOauth2User);
 
     User user = userRepository.save(newUser);
 
     return LoginCompleteResponse.of(
-        UserDto.ProfileResponse.from(user),
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(user.getId(), user.getLoginId()),
-            jwtService.createRefreshToken(user.getId(), user.getLoginId())));
+      UserDto.ProfileResponse.from(user),
+      LoginDto.JwtPairResponse.of(
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId())));
   }
 
   @Transactional
@@ -94,25 +94,25 @@ public class Oauth2Service {
   }
 
   public LoginCompleteResponse generateOauth2Jwt(
-      String providerName, String externalIdToken, String externalAccessToken) {
+    String providerName, String externalIdToken, String externalAccessToken) {
 
     Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 
     User user =
-        userRepository
-            .findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
-                providerName,
-                oauth2Strategy
-                    .getOauth2UserProfile(oauth2Provider, externalAccessToken, externalIdToken)
-                    .getProviderUid())
-            .orElseThrow(() -> new UnauthorizedException("가입하지 않은 Oauth2 사용자입니다."));
+      userRepository
+        .findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
+          providerName,
+          oauth2Strategy
+            .getOauth2UserProfile(oauth2Provider, externalAccessToken, externalIdToken)
+            .getProviderUid())
+        .orElseThrow(() -> new UnauthorizedException("가입하지 않은 Oauth2 사용자입니다."));
 
     return LoginCompleteResponse.of(
-        UserDto.ProfileResponse.from(user),
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(user.getId(), user.getLoginId()),
-            jwtService.createRefreshToken(user.getId(), user.getLoginId())));
+      UserDto.ProfileResponse.from(user),
+      LoginDto.JwtPairResponse.of(
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId())));
   }
 
   public Map<String, Oauth2ProviderDto> generateAuthorizationUrls() {
@@ -122,15 +122,15 @@ public class Oauth2Service {
       try {
         Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(oauth2Provider.getName());
         oauth2ProviderNameToInfo.put(
-            oauth2Provider.getName(),
-            Oauth2ProviderDto.builder()
-                .name(oauth2Provider.getName())
-                .clientId(oauth2Provider.getClientId())
-                .loginUrl(oauth2Strategy.getAuthorizationUrl(oauth2Provider))
-                .tokenUri(oauth2Provider.getTokenUri())
-                .profileUri(oauth2Provider.getProfileUri())
-                .redirectUri(oauth2Provider.getRedirectUri())
-                .build());
+          oauth2Provider.getName(),
+          Oauth2ProviderDto.builder()
+            .name(oauth2Provider.getName())
+            .clientId(oauth2Provider.getClientId())
+            .loginUrl(oauth2Strategy.getAuthorizationUrl(oauth2Provider))
+            .tokenUri(oauth2Provider.getTokenUri())
+            .profileUri(oauth2Provider.getProfileUri())
+            .redirectUri(oauth2Provider.getRedirectUri())
+            .build());
       } catch (NotSupportedOauth2ProviderException e) {
         oauth2ProviderNameToInfo.put(oauth2Provider.getName(), null);
       }

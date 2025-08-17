@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.core.config;
+package promiseofblood.umpabackend.infrastructure.config;
 
 import java.util.ArrayList;
 import java.util.List;
