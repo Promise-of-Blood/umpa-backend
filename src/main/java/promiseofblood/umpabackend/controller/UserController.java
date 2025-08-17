@@ -30,11 +30,10 @@ import promiseofblood.umpabackend.domain.service.ProfileService;
 import promiseofblood.umpabackend.domain.service.UserService;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
+import promiseofblood.umpabackend.dto.StudentProfileDto;
+import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
-import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
-import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -84,7 +83,15 @@ public class UserController {
 
   @Tag(name = "회원가입 API")
   @GetMapping(value = "/register/check/username")
-  public ResponseEntity<IsUsernameAvailableResponse> isUsernameAvailable(
+  public ResponseEntity<LoginDto.IsUsernameAvailableResponse> isUsernameAvailable(
+    @RequestParam String username) {
+
+    return ResponseEntity.ok(userService.isUsernameAvailable(username));
+  }
+
+  @Tag(name = "회원가입 API", description = "이미 가입한 OAuth2 사용자인지 확인합니다.")
+  @GetMapping(value = "/register/check/oauth2")
+  public ResponseEntity<LoginDto.IsUsernameAvailableResponse> isOauth2Available(
     @RequestParam String username) {
 
     return ResponseEntity.ok(userService.isUsernameAvailable(username));
@@ -105,7 +112,7 @@ public class UserController {
   @PatchMapping("/me/teacher-profile")
   public ResponseEntity<UserDto.ProfileResponse> patchTeacherProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody TeacherProfileRequest teacherProfileRequest) {
+    @RequestBody TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
 
     UserDto.ProfileResponse teacherProfileResponse = profileService.patchTeacherProfile(
       securityUserDetails.getUsername(), teacherProfileRequest);
@@ -117,7 +124,7 @@ public class UserController {
   @PatchMapping("/me/student-profile")
   public ResponseEntity<UserDto.ProfileResponse> patchStudentProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody @Valid StudentProfileRequest studentProfileRequest) {
+    @RequestBody @Valid StudentProfileDto.StudentProfileRequest studentProfileRequest) {
 
     UserDto.ProfileResponse studentProfileDto = profileService.patchStudentProfile(
       securityUserDetails.getUsername(), studentProfileRequest);

@@ -16,7 +16,7 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
+import promiseofblood.umpabackend.dto.StudentProfileDto;
 
 @Entity
 @Getter
@@ -36,7 +36,7 @@ public class StudentProfile extends TimeStampedEntity {
   @Enumerated(EnumType.STRING)
   private Grade grade;
 
-  public static StudentProfile from(StudentProfileRequest request) {
+  public static StudentProfile from(StudentProfileDto.StudentProfileRequest request) {
     return StudentProfile.builder()
       .major(request.getMajor())
       .preferredColleges(request.getPreferredColleges())
@@ -44,7 +44,7 @@ public class StudentProfile extends TimeStampedEntity {
       .build();
   }
 
-  public void update(StudentProfileRequest request) {
+  public void update(StudentProfileDto.StudentProfileRequest request) {
     if (request.getMajor() != null) {
       this.major = request.getMajor();
     }

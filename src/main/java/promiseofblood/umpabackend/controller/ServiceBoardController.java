@@ -22,9 +22,8 @@ import promiseofblood.umpabackend.domain.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionPostDto;
 import promiseofblood.umpabackend.dto.PaginatedResponse;
+import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
-import promiseofblood.umpabackend.dto.response.ReviewResponse;
-import promiseofblood.umpabackend.dto.response.ServicePostResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -69,11 +68,11 @@ public class ServiceBoardController {
   // mr-production
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production")
-  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllMrProductionServices(
+  public ResponseEntity<PaginatedResponse<ServicePostDto.ServicePostResponse>> getAllMrProductionServices(
     @RequestParam(defaultValue = "0") int page,
     @RequestParam(defaultValue = "10") int size) {
 
-    Page<ServicePostResponse> servicePostResponsePage = this.serviceBoardService.getAllServices(
+    Page<ServicePostDto.ServicePostResponse> servicePostResponsePage = this.serviceBoardService.getAllServices(
       "MR_PRODUCTION", page, size
     );
 
@@ -111,13 +110,13 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production/{id}/reviews")
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<ReviewResponse> createMrProductionReview(
+  public ResponseEntity<ServiceReviewDto.ReviewResponse> createMrProductionReview(
     @PathVariable Long id,
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @Valid @RequestBody ServiceReviewDto.ReviewRequest reviewRequest
   ) {
 
-    ReviewResponse reviewResponse = ReviewResponse.from(
+    ServiceReviewDto.ReviewResponse reviewResponse = ServiceReviewDto.ReviewResponse.from(
       this.reviewService.createReview(id, reviewRequest));
 
     return ResponseEntity.ok(reviewResponse);

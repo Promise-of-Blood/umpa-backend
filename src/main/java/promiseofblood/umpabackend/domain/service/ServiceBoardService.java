@@ -16,7 +16,7 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionPostRequest;
 import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionResponse;
-import promiseofblood.umpabackend.dto.response.ServicePostResponse;
+import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.repository.ServicePostRepository;
 import promiseofblood.umpabackend.repository.UserRepository;
 
@@ -29,7 +29,7 @@ public class ServiceBoardService {
   private final ServicePostRepository servicePostRepository;
 
   @Transactional
-  public Page<ServicePostResponse> getAllServices(
+  public Page<ServicePostDto.ServicePostResponse> getAllServices(
     String serviceType,
     int page,
     int size
@@ -44,7 +44,7 @@ public class ServiceBoardService {
       User teacherUser = userRepository.findById(servicePost.getUser().getId())
         .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-      return ServicePostResponse.builder()
+      return ServicePostDto.ServicePostResponse.builder()
         .id(servicePost.getId())
         .title(servicePost.getTitle())
         .tags(List.of("기타", "보컬"))

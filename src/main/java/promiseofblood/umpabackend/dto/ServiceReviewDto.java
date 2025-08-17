@@ -2,7 +2,11 @@ package promiseofblood.umpabackend.dto;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
+import promiseofblood.umpabackend.domain.entity.Review;
 
 public class ServiceReviewDto {
 
@@ -18,6 +22,67 @@ public class ServiceReviewDto {
     private String reviewImageUrl1; // 리뷰 이미지 URL 1
     private String reviewImageUrl2; // 리뷰 이미지 URL 2
     private String reviewImageUrl3; // 리뷰 이미지 URL 3
+
+  }
+
+  @Getter
+  @Builder(access = AccessLevel.PRIVATE)
+  public static class ReviewDto {
+
+    private Long id;
+
+    private Double rating;
+    private String content;
+
+    private String reviewImageUrl1;
+    private String reviewImageUrl2;
+    private String reviewImageUrl3;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    public static ReviewDto from(Review review) {
+      return ReviewDto.builder()
+        .id(review.getId())
+        .rating(review.getRating())
+        .content(review.getContent())
+        .reviewImageUrl1(review.getReviewImageUrl1())
+        .reviewImageUrl2(review.getReviewImageUrl2())
+        .reviewImageUrl3(review.getReviewImageUrl3())
+        .createdAt(review.getCreatedAt())
+        .updatedAt(review.getUpdatedAt())
+        .build();
+    }
+  }
+
+  @Getter
+  @Builder
+  public static class ReviewResponse {
+
+    private Long id;
+
+    private Double rating;
+
+    private String content;
+
+    private String reviewImageUrl1;
+
+    private String reviewImageUrl2;
+
+    private String reviewImageUrl3;
+
+    public static ReviewResponse from(Review review) {
+      ReviewResponse response = ReviewResponse.builder()
+        .id(review.getId())
+        .rating(review.getRating())
+        .content(review.getContent())
+        .reviewImageUrl1(review.getReviewImageUrl1())
+        .reviewImageUrl2(review.getReviewImageUrl2())
+        .reviewImageUrl3(review.getReviewImageUrl3())
+        .build();
+
+      return response;
+    }
 
   }
 }
