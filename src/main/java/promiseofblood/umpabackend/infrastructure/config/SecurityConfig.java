@@ -22,9 +22,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import promiseofblood.umpabackend.core.security.JwtAuthenticationEntryPoint;
-import promiseofblood.umpabackend.core.security.JwtFilter;
 import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.infrastructure.security.JwtAuthenticationEntryPoint;
+import promiseofblood.umpabackend.infrastructure.security.JwtFilter;
 
 @Slf4j
 @Configuration

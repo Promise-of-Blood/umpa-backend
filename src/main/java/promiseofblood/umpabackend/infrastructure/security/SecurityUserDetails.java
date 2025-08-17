@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.core.security;
+package promiseofblood.umpabackend.infrastructure.security;
 
 import java.util.Collection;
 import java.util.List;
@@ -13,7 +13,8 @@ import promiseofblood.umpabackend.domain.vo.Role;
 @RequiredArgsConstructor
 public class SecurityUserDetails implements UserDetails {
 
-  @Getter private final String loginId;
+  @Getter
+  private final String loginId;
   private final String password;
   private final Role role;
 

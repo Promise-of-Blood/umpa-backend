@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.core.security;
+package promiseofblood.umpabackend.infrastructure.security;
 
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;

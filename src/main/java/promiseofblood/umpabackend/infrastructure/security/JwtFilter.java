@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.core.security;
+package promiseofblood.umpabackend.infrastructure.security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,18 +26,18 @@ public class JwtFilter extends OncePerRequestFilter {
 
   @Override
   protected void doFilterInternal(
-      HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-      throws ServletException, IOException {
+    HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    throws ServletException, IOException {
 
     try {
       String jwt = this.getTokenFromRequest(request);
 
       jwtService.verifyJwt(jwt);
       SecurityUserDetails securityUserDetails =
-          securityUserDetailsService.loadUserByUsername(jwtService.getLoginIdFromToken(jwt));
+        securityUserDetailsService.loadUserByUsername(jwtService.getLoginIdFromToken(jwt));
       UsernamePasswordAuthenticationToken auth =
-          new UsernamePasswordAuthenticationToken(
-              securityUserDetails, null, securityUserDetails.getAuthorities());
+        new UsernamePasswordAuthenticationToken(
+          securityUserDetails, null, securityUserDetails.getAuthorities());
       SecurityContextHolder.getContext().setAuthentication(auth);
 
     } catch (Exception e) {
