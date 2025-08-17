@@ -74,7 +74,7 @@ spotless {
                 'promiseofblood.umpabackend',
         )
         removeUnusedImports()
-//        removeWildcardImports()
+        removeWildcardImports()
 //        googleJavaFormat()
 //        formatAnnotations()
 //        removeUnusedImports()
