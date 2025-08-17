@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.service;
+package promiseofblood.umpabackend.application.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;

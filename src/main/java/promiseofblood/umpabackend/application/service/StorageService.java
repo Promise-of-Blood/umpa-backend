@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.service;
+package promiseofblood.umpabackend.application.service;
 
 import java.nio.file.Path;
 import java.util.stream.Stream;
