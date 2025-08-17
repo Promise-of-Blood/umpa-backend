@@ -79,6 +79,23 @@ public class LoginDto {
 
   }
 
+  @Getter
+  public static class IsOauth2UserRegistered {
+
+    @NotBlank
+    @Schema(description = "사용자 닉네임", example = "홍길동")
+    private String username;
+
+    @NotBlank
+    @Schema(description = "OAuth2 제공자 이름", example = "google")
+    private String providerName;
+
+    public IsOauth2UserRegistered(String username, String providerName) {
+      this.username = username;
+      this.providerName = providerName;
+    }
+  }
+
   // ****************
   // * 로그인 관련 DTO *
   // ****************
@@ -137,4 +154,14 @@ public class LoginDto {
   }
 
 
+  @Getter
+  @AllArgsConstructor
+  public static class IsUsernameAvailableResponse {
+
+    private String username;
+
+    private boolean isAvailable;
+
+    private String message;
+  }
 }
