@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.controller;
+package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;

@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.controller;
+package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class ConstantsController {
   public ResponseEntity<List<ConstantDto.MajorResponse>> getMajors() {
 
     List<ConstantDto.MajorResponse> majorResponses =
-        Stream.of(Major.values()).map(ConstantDto.MajorResponse::from).collect(Collectors.toList());
+      Stream.of(Major.values()).map(ConstantDto.MajorResponse::from).collect(Collectors.toList());
 
     return ResponseEntity.ok(majorResponses);
   }
@@ -92,7 +92,7 @@ public class ConstantsController {
   public ResponseEntity<List<ConstantDto.RegionCategoryResponse>> getRegions() {
 
     List<ConstantDto.RegionCategoryResponse> regionCategories =
-        Stream.of(RegionCategory.values()).map(ConstantDto.RegionCategoryResponse::from).toList();
+      Stream.of(RegionCategory.values()).map(ConstantDto.RegionCategoryResponse::from).toList();
 
     return ResponseEntity.ok(regionCategories);
   }

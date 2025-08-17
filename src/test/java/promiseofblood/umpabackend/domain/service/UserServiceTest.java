@@ -10,14 +10,17 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import promiseofblood.umpabackend.application.service.UserService;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
-  @Mock private UserRepository userRepository;
+  @Mock
+  private UserRepository userRepository;
 
-  @InjectMocks private UserService userService;
+  @InjectMocks
+  private UserService userService;
 
   @Test
   @DisplayName("isUsernameAvailable 메서드는 닉네임이 중복되었을 경우 false를 반환한다.")

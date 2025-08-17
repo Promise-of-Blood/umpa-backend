@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.core.exception;
+package promiseofblood.umpabackend.web.advice;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
@@ -12,6 +12,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import promiseofblood.umpabackend.core.exception.NotFoundException;
+import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
+import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
+import promiseofblood.umpabackend.core.exception.RegistrationException;
+import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.dto.ApiResponse;
 
 @Slf4j
@@ -25,11 +30,11 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleGlobalException(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
     log.error("서버 내부 오류가 발생했습니다: {}", ex.getMessage(), ex);
 
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse("서버 내부 오류가 발생했습니다.");
+      new ApiResponse.ExceptionResponse("서버 내부 오류가 발생했습니다.");
 
     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(exceptionResponse);
   }
@@ -41,47 +46,49 @@ public class GlobalExceptionHandler {
    */
   @ExceptionHandler(InsufficientAuthenticationException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleAuthenticationException(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
     log.error("인증 실패: {}", ex.getMessage(), ex);
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse("인증에 실패하였습니다.");
+      new ApiResponse.ExceptionResponse("인증에 실패하였습니다.");
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionResponse);
   }
 
   @ExceptionHandler(UnauthorizedException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleUnauthorizedException(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
     log.error("인증 실패: {}", ex.getMessage(), ex);
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse(ex.getMessage());
+      new ApiResponse.ExceptionResponse(ex.getMessage());
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionResponse);
   }
 
   @ExceptionHandler(TokenExpiredException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleTokenExpiredException(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse("토큰이 만료되었습니다.");
+      new ApiResponse.ExceptionResponse("토큰이 만료되었습니다.");
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionResponse);
   }
 
   @ExceptionHandler(JWTDecodeException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleJWTDecodeException(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
 
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse("올바르지 않은 토큰입니다.");
+      new ApiResponse.ExceptionResponse("올바르지 않은 토큰입니다.");
 
     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(exceptionResponse);
   }
 
-  /** 유효성 검사 실패 예외 처리 핸들러 (400 Bad Request) */
+  /**
+   * 유효성 검사 실패 예외 처리 핸들러 (400 Bad Request)
+   */
   @ExceptionHandler(MethodArgumentNotValidException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleMethodArgumentNotValidException(
-      MethodArgumentNotValidException ex, WebRequest request) {
+    MethodArgumentNotValidException ex, WebRequest request) {
     log.error("유효성 검사 실패: {}", ex.getMessage(), ex);
     BindingResult bindingResult = ex.getBindingResult();
 
@@ -97,7 +104,7 @@ public class GlobalExceptionHandler {
     }
 
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse("유효성 검사 실패: " + builder);
+      new ApiResponse.ExceptionResponse("유효성 검사 실패: " + builder);
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
   }
@@ -105,40 +112,40 @@ public class GlobalExceptionHandler {
   // 404
   @ExceptionHandler(NotFoundException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleNotFoundException(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
     log.error(ex.getMessage(), ex);
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse(ex.getMessage());
+      new ApiResponse.ExceptionResponse(ex.getMessage());
 
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exceptionResponse);
   }
 
   @ExceptionHandler(NotSupportedOauth2ProviderException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleNotSupportedOauth2Provider(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
     log.error(ex.getMessage(), ex);
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse(ex.getMessage());
+      new ApiResponse.ExceptionResponse(ex.getMessage());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
   }
 
   @ExceptionHandler(RegistrationException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleRegistrationException(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
     log.error(ex.getMessage(), ex);
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse(ex.getMessage());
+      new ApiResponse.ExceptionResponse(ex.getMessage());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
   }
 
   @ExceptionHandler(Oauth2UserAlreadyExists.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleOauth2UserAlreadyExists(
-      Exception ex, WebRequest request) {
+    Exception ex, WebRequest request) {
     log.error(ex.getMessage(), ex);
     ApiResponse.ExceptionResponse exceptionResponse =
-        new ApiResponse.ExceptionResponse(ex.getMessage());
+      new ApiResponse.ExceptionResponse(ex.getMessage());
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
   }
