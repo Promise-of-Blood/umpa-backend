@@ -74,12 +74,10 @@ spotless {
                 'promiseofblood.umpabackend',
         )
         removeUnusedImports()
-        removeWildcardImports()
-//        googleJavaFormat()
-//        formatAnnotations()
-//        removeUnusedImports()
-//        trimTrailingWhitespace()
-//        endWithNewline()
+        googleJavaFormat()
+        formatAnnotations()
+        trimTrailingWhitespace()
+        endWithNewline()
     }
 }
 
