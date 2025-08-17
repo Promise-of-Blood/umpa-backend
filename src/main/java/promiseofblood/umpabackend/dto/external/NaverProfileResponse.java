@@ -19,14 +19,11 @@ public class NaverProfileResponse {
 
     @JsonProperty("profile_image")
     private String profileImage;
-
   }
-  
+
   private String resultCode;
 
   private String message;
 
   private Response response;
-
 }
-

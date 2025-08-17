@@ -23,7 +23,9 @@ public class StudentProfileDto {
     @Schema(description = "전공", example = "PIANO")
     private Major major;
 
-    @Schema(description = "선호하는 학교", example = "[\"GANGDONG_UNIVERSITY\", \"KYONGBUK_SCIENCE_COLLEGE\"]")
+    @Schema(
+        description = "선호하는 학교",
+        example = "[\"GANGDONG_UNIVERSITY\", \"KYONGBUK_SCIENCE_COLLEGE\"]")
     private List<College> preferredColleges;
 
     @Schema(description = "학년", example = "HIGH_3")
@@ -35,7 +37,7 @@ public class StudentProfileDto {
   public static class StudentProfileResponse {
 
     private MajorResponse major;
-    
+
     private List<ConstantDto.CollegeResponse> preferredColleges;
 
     private ConstantDto.GradeResponse grade;
@@ -47,10 +49,11 @@ public class StudentProfileDto {
         preferredColleges.add(ConstantDto.CollegeResponse.from(college));
       }
 
-      return StudentProfileResponse.builder().major(MajorResponse.from(studentProfile.getMajor()))
-        .preferredColleges(preferredColleges)
-        .grade(ConstantDto.GradeResponse.from(studentProfile.getGrade())).build();
+      return StudentProfileResponse.builder()
+          .major(MajorResponse.from(studentProfile.getMajor()))
+          .preferredColleges(preferredColleges)
+          .grade(ConstantDto.GradeResponse.from(studentProfile.getGrade()))
+          .build();
     }
-
   }
 }

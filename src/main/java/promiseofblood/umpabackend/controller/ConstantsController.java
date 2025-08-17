@@ -27,9 +27,8 @@ public class ConstantsController {
   @GetMapping("/majors")
   public ResponseEntity<List<ConstantDto.MajorResponse>> getMajors() {
 
-    List<ConstantDto.MajorResponse> majorResponses = Stream.of(Major.values())
-      .map(ConstantDto.MajorResponse::from)
-      .collect(Collectors.toList());
+    List<ConstantDto.MajorResponse> majorResponses =
+        Stream.of(Major.values()).map(ConstantDto.MajorResponse::from).collect(Collectors.toList());
 
     return ResponseEntity.ok(majorResponses);
   }
@@ -78,7 +77,6 @@ public class ConstantsController {
     return ResponseEntity.ok(lessonStyleResponses);
   }
 
-
   @GetMapping("/grades")
   public ResponseEntity<List<ConstantDto.GradeResponse>> getGrades() {
 
@@ -88,14 +86,13 @@ public class ConstantsController {
     }
 
     return ResponseEntity.ok(gradeResponses);
-
   }
 
   @GetMapping("/regions")
   public ResponseEntity<List<ConstantDto.RegionCategoryResponse>> getRegions() {
 
-    List<ConstantDto.RegionCategoryResponse> regionCategories = Stream.of(RegionCategory.values())
-      .map(ConstantDto.RegionCategoryResponse::from).toList();
+    List<ConstantDto.RegionCategoryResponse> regionCategories =
+        Stream.of(RegionCategory.values()).map(ConstantDto.RegionCategoryResponse::from).toList();
 
     return ResponseEntity.ok(regionCategories);
   }

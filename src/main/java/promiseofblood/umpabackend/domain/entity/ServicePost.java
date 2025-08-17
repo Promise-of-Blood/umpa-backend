@@ -40,5 +40,5 @@ public abstract class ServicePost extends TimeStampedEntity {
   @OneToMany(mappedBy = "servicePost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Review> reviews;
 
-  abstract public String getCostAndUnit();
+  public abstract String getCostAndUnit();
 }

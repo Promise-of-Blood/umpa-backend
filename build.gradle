@@ -73,12 +73,16 @@ spotless {
                 '\\#org.junit',
                 'promiseofblood.umpabackend',
         )
-//        googleJavaFormat()
-//        formatAnnotations()
-//        removeUnusedImports()
-//        trimTrailingWhitespace()
-//        endWithNewline()
+        removeUnusedImports()
+        googleJavaFormat()
+        formatAnnotations()
+        trimTrailingWhitespace()
+        endWithNewline()
     }
+}
+
+tasks.named('build') {
+    dependsOn 'spotlessCheck'
 }
 
 tasks.named('test') {

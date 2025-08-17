@@ -15,6 +15,4 @@ public class StorageCommandLineRunner implements CommandLineRunner {
   public void run(String... args) {
     storageService.init();
   }
-
 }
-

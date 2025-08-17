@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 
-
 @Entity
 @Getter
 @SuperBuilder
@@ -22,5 +21,4 @@ public class Oauth2User extends TimeStampedEntity {
   private String profileImageUrl;
 
   private String username;
-
 }

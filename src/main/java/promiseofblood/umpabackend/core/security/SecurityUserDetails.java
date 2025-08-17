@@ -13,24 +13,17 @@ import promiseofblood.umpabackend.domain.vo.Role;
 @RequiredArgsConstructor
 public class SecurityUserDetails implements UserDetails {
 
-  @Getter
-  private final String loginId;
+  @Getter private final String loginId;
   private final String password;
   private final Role role;
 
   public static SecurityUserDetails of(User user) {
-    return new SecurityUserDetails(
-      user.getLoginId(),
-      user.getPassword(),
-      user.getRole()
-    );
+    return new SecurityUserDetails(user.getLoginId(), user.getPassword(), user.getRole());
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
-    return List.of(
-      new SimpleGrantedAuthority("ROLE_" + role.name())
-    );
+    return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
   }
 
   @Override
@@ -43,12 +36,8 @@ public class SecurityUserDetails implements UserDetails {
     return this.loginId;
   }
 
-
   @Override
   public String toString() {
-    return "SecurityUserDetails{" +
-      "loginId='" + this.loginId + '\'' +
-      '}';
+    return "SecurityUserDetails{" + "loginId='" + this.loginId + '\'' + '}';
   }
-
 }

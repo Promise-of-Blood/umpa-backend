@@ -33,10 +33,12 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
   @Override
   public String getAuthorizationUrl(Oauth2Provider oauth2Provider) {
     return oauth2Provider.getLoginUrl()
-      + "?client_id=" + oauth2Provider.getClientId()
-      + "&redirect_uri=" + oauth2Provider.getRedirectUri()
-      + "&response_type=code"
-      + "&scope=openid";
+        + "?client_id="
+        + oauth2Provider.getClientId()
+        + "&redirect_uri="
+        + oauth2Provider.getRedirectUri()
+        + "&response_type=code"
+        + "&scope=openid";
   }
 
   @Override
@@ -54,15 +56,12 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 
     return restTemplate.postForObject(
-      oauth2Provider.getTokenUri(),
-      new HttpEntity<>(body, headers),
-      Oauth2TokenResponse.class
-    );
+        oauth2Provider.getTokenUri(), new HttpEntity<>(body, headers), Oauth2TokenResponse.class);
   }
 
   @Override
-  public Oauth2ProfileResponse getOauth2UserProfile(Oauth2Provider oauth2Provider,
-    String authorizationCode) {
+  public Oauth2ProfileResponse getOauth2UserProfile(
+      Oauth2Provider oauth2Provider, String authorizationCode) {
 
     Oauth2TokenResponse oauth2TokenResponse = this.getToken(oauth2Provider, authorizationCode);
 
@@ -73,46 +72,41 @@ public class Oauth2KakaoStrategy implements Oauth2Strategy {
     DecodedJWT jwt = validateExternalIdToken(externalIdToken);
 
     return Oauth2ProfileResponse.builder()
-      .externalIdToken(externalIdToken)
-      .externalAccessToken(externalAccessToken)
-      .providerUid(jwt.getClaim("sub").asString())
-      .profileImageUrl(jwt.getClaim("picture").asString())
-      .username(jwt.getClaim("nickname").asString())
-      .build();
-
+        .externalIdToken(externalIdToken)
+        .externalAccessToken(externalAccessToken)
+        .providerUid(jwt.getClaim("sub").asString())
+        .profileImageUrl(jwt.getClaim("picture").asString())
+        .username(jwt.getClaim("nickname").asString())
+        .build();
   }
 
   @Override
   public Oauth2ProfileResponse getOauth2UserProfile(
-    Oauth2Provider oauth2Provider, String externalAccessToken, String externalIdToken) {
+      Oauth2Provider oauth2Provider, String externalAccessToken, String externalIdToken) {
 
     DecodedJWT jwt = validateExternalIdToken(externalIdToken);
 
     return Oauth2ProfileResponse.builder()
-      .externalIdToken(externalIdToken)
-      .externalAccessToken(externalAccessToken)
-      .providerUid(jwt.getClaim("sub").asString())
-      .profileImageUrl(jwt.getClaim("picture").asString())
-      .username(jwt.getClaim("nickname").asString())
-      .build();
-
+        .externalIdToken(externalIdToken)
+        .externalAccessToken(externalAccessToken)
+        .providerUid(jwt.getClaim("sub").asString())
+        .profileImageUrl(jwt.getClaim("picture").asString())
+        .username(jwt.getClaim("nickname").asString())
+        .build();
   }
 
   private DecodedJWT validateExternalIdToken(String externalIdToken) {
     DecodedJWT jwtOrigin = JWT.decode(externalIdToken);
-    JwkProvider provider = new JwkProviderBuilder("https://kauth.kakao.com")
-      .cached(10, 7, TimeUnit.DAYS)
-      .build();
+    JwkProvider provider =
+        new JwkProviderBuilder("https://kauth.kakao.com").cached(10, 7, TimeUnit.DAYS).build();
 
     try {
       Jwk jwk = provider.get(jwtOrigin.getKeyId());
       Algorithm algorithm = Algorithm.RSA256((RSAPublicKey) jwk.getPublicKey(), null);
-      JWTVerifier verifier = JWT.require(algorithm).ignoreIssuedAt()
-        .build();
+      JWTVerifier verifier = JWT.require(algorithm).ignoreIssuedAt().build();
       return verifier.verify(externalIdToken);
     } catch (Exception e) {
       throw new UnauthorizedException("ID 토큰이 유효하지 않습니다.");
     }
-
   }
 }

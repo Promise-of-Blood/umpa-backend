@@ -13,13 +13,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ScoreProductionPost extends ServicePost {
 
-  @ElementCollection
-  private List<ServiceCost> serviceCosts;
+  @ElementCollection private List<ServiceCost> serviceCosts;
 
   private int freeRevisionCount;
 
-  @Embedded
-  private DurationRange averageDuration;
+  @Embedded private DurationRange averageDuration;
 
   private String softwareUsed;
 
@@ -30,4 +28,3 @@ public class ScoreProductionPost extends ServicePost {
     return "";
   }
 }
-

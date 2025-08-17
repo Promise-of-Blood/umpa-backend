@@ -21,6 +21,4 @@ public enum Grade {
   WORKER("사회인");
 
   private final String koreanName;
-
 }
-

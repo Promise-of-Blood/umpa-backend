@@ -14,6 +14,5 @@ public class ApiResponse {
     private final String message;
 
     private final LocalDateTime timestamp = LocalDateTime.now();
-
   }
 }

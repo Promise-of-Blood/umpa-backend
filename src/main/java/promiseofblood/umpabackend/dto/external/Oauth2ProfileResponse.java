@@ -16,5 +16,4 @@ public class Oauth2ProfileResponse {
   private String profileImageUrl;
 
   private String username;
-
 }
