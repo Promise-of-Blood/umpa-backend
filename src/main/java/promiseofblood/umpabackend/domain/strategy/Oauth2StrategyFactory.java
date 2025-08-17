@@ -1,10 +1,12 @@
 package promiseofblood.umpabackend.domain.strategy;
 
 
+import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
 import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
 
 @Component

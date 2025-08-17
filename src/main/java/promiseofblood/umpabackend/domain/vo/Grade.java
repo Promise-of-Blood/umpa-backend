@@ -23,4 +23,3 @@ public enum Grade {
   private final String koreanName;
 
 }
-

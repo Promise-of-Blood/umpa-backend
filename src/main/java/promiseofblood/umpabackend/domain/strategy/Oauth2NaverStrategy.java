@@ -2,11 +2,13 @@ package promiseofblood.umpabackend.domain.strategy;
 
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.dto.external.NaverProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;

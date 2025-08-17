@@ -1,7 +1,8 @@
 package promiseofblood.umpabackend.dto.external;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Getter
 @ToString
@@ -29,4 +30,3 @@ public class NaverProfileResponse {
   private Response response;
 
 }
-

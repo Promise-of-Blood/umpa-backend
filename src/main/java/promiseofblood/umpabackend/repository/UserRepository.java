@@ -1,8 +1,10 @@
 package promiseofblood.umpabackend.repository;
 
 import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import promiseofblood.umpabackend.domain.entity.User;
 
 @Repository

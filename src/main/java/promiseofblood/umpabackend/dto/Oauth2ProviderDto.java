@@ -1,6 +1,7 @@
 package promiseofblood.umpabackend.dto;
 
 import lombok.*;
+
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 
 @Getter

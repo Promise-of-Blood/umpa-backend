@@ -1,8 +1,9 @@
 package promiseofblood.umpabackend.domain.vo;
 
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
+
 import lombok.Getter;
 
 @Getter

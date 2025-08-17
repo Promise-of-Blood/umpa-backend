@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.dto;
 
 import lombok.Builder;
 import lombok.Getter;
+
 import promiseofblood.umpabackend.domain.entity.Oauth2User;
 
 @Getter
