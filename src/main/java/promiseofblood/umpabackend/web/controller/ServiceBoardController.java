@@ -71,6 +71,17 @@ public class ServiceBoardController {
 
   }
 
+  @Tag(name = "서비스 관리 API(악보 제작)")
+  @GetMapping(path = "/score-production/{id}")
+  public ResponseEntity<ScoreProductionServicePostDto.ScoreProductionServicePostResponse> getScoreProductionServicePost(
+    @PathVariable Long id) {
+
+    ScoreProductionServicePostDto.ScoreProductionServicePostResponse scoreProductionResponse =
+      serviceBoardService.getScoreProductionServicePost(id);
+
+    return ResponseEntity.ok(scoreProductionResponse);
+  }
+
   // mr-production
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production")

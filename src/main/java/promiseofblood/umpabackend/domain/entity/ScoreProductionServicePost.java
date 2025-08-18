@@ -6,10 +6,12 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
 @Entity
+@Getter
 @SuperBuilder
 @DiscriminatorValue("SCORE_PRODUCTION")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,7 +31,7 @@ public class ScoreProductionServicePost extends ServicePost {
 
   private String softwareUsed;
 
-  private String sampleScoreUrl;
+  private String sampleScoreImageUrl;
 
   @Override
   public String getCostAndUnit() {

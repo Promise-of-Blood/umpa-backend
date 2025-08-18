@@ -67,8 +67,6 @@ public class MrProductionServicePostDto {
 
     private String description;
 
-    private float reviewRating;
-
     private CostPerUnitDto costPerUnit;
 
     private String additionalCostPolicy;
@@ -79,9 +77,11 @@ public class MrProductionServicePostDto {
 
     private String softwareUsed;
 
-    private List<SampleMrUrlDto> sampleUrls;
+    private List<SampleMrUrlResponse> sampleUrls;
 
     private TeacherAuthorProfileDto teacherProfile;
+
+    private float reviewRating;
 
     private List<ServiceReviewDto.ReviewDto> reviews;
 
@@ -91,17 +91,18 @@ public class MrProductionServicePostDto {
         .id(mrProductionServicePost.getId())
         .title(mrProductionServicePost.getTitle())
         .description(mrProductionServicePost.getDescription())
-        .reviewRating(0.0f)
         .costPerUnit(CostPerUnitDto.from(mrProductionServicePost.getServiceCost()))
         .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .softwareUsed(mrProductionServicePost.getSoftwareUsed())
         .sampleUrls(
-          mrProductionServicePost.getSampleMrUrls().stream().map(SampleMrUrlDto::from).toList())
+          mrProductionServicePost.getSampleMrUrls().stream().map(SampleMrUrlResponse::from)
+            .toList())
         // 선생님 프로필
         .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
         // 리뷰 목록
+        .reviewRating(0.0f)
         .reviews(
           mrProductionServicePost.getReviews() == null
             ? List.of()
@@ -114,14 +115,14 @@ public class MrProductionServicePostDto {
 
   @Getter
   @AllArgsConstructor(access = AccessLevel.PRIVATE)
-  public static class SampleMrUrlDto {
+  public static class SampleMrUrlResponse {
 
     @Schema(description = "샘플 MR URL", example = "https://example.com/sample1.mp3")
     @NotBlank
     private String url;
 
-    public static SampleMrUrlDto from(SampleMrUrl sampleMrUrl) {
-      return new SampleMrUrlDto(sampleMrUrl.getUrl());
+    public static SampleMrUrlResponse from(SampleMrUrl sampleMrUrl) {
+      return new SampleMrUrlResponse(sampleMrUrl.getUrl());
     }
   }
 }
