@@ -3,9 +3,11 @@ package promiseofblood.umpabackend.controller;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+
 import java.beans.PropertyEditorSupport;
 import java.util.List;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +34,7 @@ import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
+import promiseofblood.umpabackend.dto.UserDto.ProfileResponse;
 import promiseofblood.umpabackend.dto.external.Oauth2ProfileResponse;
 
 @RestController
@@ -104,7 +107,10 @@ public class UserController {
   public ResponseEntity<UserDto.ProfileResponse> getCurrentUser(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
-    return ResponseEntity.ok(userService.getUserByLoginId(securityUserDetails.getUsername()));
+    String loginId = securityUserDetails.getUsername();
+    ProfileResponse profileResponseDto = userService.getUserByLoginId(loginId);
+
+    return ResponseEntity.ok(profileResponseDto);
   }
 
   @Tag(name = "프로필 관리 API")
