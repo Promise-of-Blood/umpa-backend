@@ -12,12 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
+import promiseofblood.umpabackend.dto.AccompanimentServicePostDto.AccompanimentServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 
 @RestController
 @RequestMapping("/api/v1/services")
 @RequiredArgsConstructor
-public class ServiceBoardController {
+public class AccompanimentServiceController {
 
   private final ServiceBoardService serviceBoardService;
 
@@ -27,7 +28,7 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(합주)")
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<AccompanimentServicePostDto.AccompanimentServicePostResponse>
+  public ResponseEntity<AccompanimentServicePostResponse>
   registerAccompaniment(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute
@@ -39,6 +40,5 @@ public class ServiceBoardController {
 
     return ResponseEntity.ok(accompanimentPostResponse);
   }
-
 
 }
