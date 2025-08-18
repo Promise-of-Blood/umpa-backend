@@ -70,7 +70,7 @@ public class ConstantDto {
 
     private String name;
 
-    public static SubjectResponse of(Subject subject) {
+    public static SubjectResponse from(Subject subject) {
       return SubjectResponse.builder().code(subject.name()).name(subject.name()).build();
     }
   }
@@ -85,9 +85,9 @@ public class ConstantDto {
 
     public static LessonStyleResponse from(LessonStyle lessonStyle) {
       return LessonStyleResponse.builder()
-          .code(lessonStyle.name())
-          .name(lessonStyle.getKoreanName())
-          .build();
+        .code(lessonStyle.name())
+        .name(lessonStyle.getKoreanName())
+        .build();
     }
   }
 
@@ -114,9 +114,9 @@ public class ConstantDto {
 
     public static InstrumentResponse from(Instrument instrument) {
       return InstrumentResponse.builder()
-          .code(instrument.name())
-          .name(instrument.getKoreanName())
-          .build();
+        .code(instrument.name())
+        .name(instrument.getKoreanName())
+        .build();
     }
   }
 
@@ -132,10 +132,10 @@ public class ConstantDto {
 
     public static RegionCategoryResponse from(RegionCategory regionCategory) {
       return RegionCategoryResponse.builder()
-          .code(regionCategory.getCode())
-          .name(regionCategory.getKoreanName())
-          .regions(regionCategory.getRegions().stream().map(RegionResponse::from).toList())
-          .build();
+        .code(regionCategory.getCode())
+        .name(regionCategory.getKoreanName())
+        .regions(regionCategory.getRegions().stream().map(RegionResponse::from).toList())
+        .build();
     }
   }
 
