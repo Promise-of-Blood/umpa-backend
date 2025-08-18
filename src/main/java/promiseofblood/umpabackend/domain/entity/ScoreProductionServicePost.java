@@ -7,17 +7,25 @@ import jakarta.persistence.Entity;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 @Entity
+@SuperBuilder
 @DiscriminatorValue("SCORE_PRODUCTION")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ScoreProductionPost extends ServicePost {
+public class ScoreProductionServicePost extends ServicePost {
 
-  @ElementCollection private List<ServiceCost> serviceCosts;
+  @ElementCollection
+  private List<ServiceCost> serviceCosts;
 
   private int freeRevisionCount;
 
-  @Embedded private DurationRange averageDuration;
+  private int additionalRevisionCost;
+
+  private String additionalCostPolicy;
+
+  @Embedded
+  private DurationRange averageDuration;
 
   private String softwareUsed;
 

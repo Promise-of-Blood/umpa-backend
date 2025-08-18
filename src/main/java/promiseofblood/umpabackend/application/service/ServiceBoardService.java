@@ -1,6 +1,8 @@
 package promiseofblood.umpabackend.application.service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -10,6 +12,7 @@ import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.DurationRange;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
+import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
@@ -18,6 +21,7 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionPostRequest;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionResponse;
+import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 
 @Service
@@ -89,6 +93,53 @@ public class ServiceBoardService {
 
     return AccompanimentServicePostDto.AccompanimentServicePostResponse.from(
       accompanimentServicePost, user);
+  }
+
+  @Transactional
+  public Map<String, Object> createScoreProductionServicePost(
+    String loginId,
+    ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+
+    User user =
+      userRepository
+        .findByLoginId(loginId)
+        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    String thumbnailFilePath =
+      storageService.store(
+        scoreProductionRequest.getThumbnailImage(),
+        "service/" + user.getId() + "/score-production");
+
+    String sampleScoreFilePath =
+      storageService.store(
+        scoreProductionRequest.getSampleScoreImage(),
+        "service/" + user.getId() + "/score-production/sample-score");
+
+    List<ServiceCost> serviceCosts = new ArrayList<>();
+    for (String costByScoreType : scoreProductionRequest.getCostByScoreType().split(",")) {
+      String[] parts = costByScoreType.split("-");
+      String scoreType = parts[0];
+      int cost = Integer.parseInt(parts[1]);
+      serviceCosts.add(ServiceCost.builder().unit(scoreType).cost(cost).build());
+    }
+
+    ScoreProductionServicePost scoreProductionServicePost =
+      ScoreProductionServicePost.builder()
+        .user(user)
+        .title(scoreProductionRequest.getTitle())
+        .thumbnailImageUrl(thumbnailFilePath)
+        .description(scoreProductionRequest.getDescription())
+        .serviceCosts(serviceCosts)
+        .additionalCostPolicy(scoreProductionRequest.getAdditionalCostPolicy())
+        .freeRevisionCount(scoreProductionRequest.getFreeRevisionCount())
+        .additionalRevisionCost(scoreProductionRequest.getAdditionalRevisionCost())
+        .averageDuration(DurationRange.of(scoreProductionRequest.getAverageDuration()))
+        .softwareUsed(scoreProductionRequest.getSoftwareUsed())
+        .sampleScoreUrl(sampleScoreFilePath)
+        .build();
+
+    servicePostRepository.save(scoreProductionServicePost);
+    return null;
   }
 
   @Transactional

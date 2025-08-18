@@ -20,6 +20,7 @@ import promiseofblood.umpabackend.application.service.ReviewService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto;
+import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
@@ -59,9 +60,15 @@ public class ServiceBoardController {
 
   // score-production
   @Tag(name = "서비스 관리 API(악보 제작)")
-  @PostMapping("/score-production")
+  @PostMapping(value = "/score-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public void registerScoreProduction() {
+  public void registerScoreProduction(
+    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+    @ModelAttribute ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+
+    String loginId = securityUserDetails.getUsername();
+    serviceBoardService.createScoreProductionServicePost(loginId, scoreProductionRequest);
+
   }
 
   // mr-production
