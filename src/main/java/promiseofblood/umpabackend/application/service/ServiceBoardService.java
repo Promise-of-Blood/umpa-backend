@@ -16,8 +16,8 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionPostRequest;
-import promiseofblood.umpabackend.dto.MrProductionPostDto.MrProductionResponse;
+import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionPostRequest;
+import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionResponse;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 
 @Service

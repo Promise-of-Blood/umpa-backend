@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ReviewService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.MrProductionPostDto;
+import promiseofblood.umpabackend.dto.MrProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
@@ -80,13 +80,13 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<MrProductionPostDto.MrProductionResponse> registerMrProduction(
+  public ResponseEntity<MrProductionServicePostDto.MrProductionResponse> registerMrProduction(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute MrProductionPostDto.MrProductionPostRequest mrProductionPostRequest) {
+    @ModelAttribute MrProductionServicePostDto.MrProductionPostRequest mrProductionPostRequest) {
 
     String loginId = securityUserDetails.getUsername();
 
-    MrProductionPostDto.MrProductionResponse mrProductionResponse =
+    MrProductionServicePostDto.MrProductionResponse mrProductionResponse =
       serviceBoardService.createMrProductionServicePost(loginId, mrProductionPostRequest);
 
     return ResponseEntity.ok(mrProductionResponse);
@@ -94,9 +94,9 @@ public class ServiceBoardController {
 
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production/{id}")
-  public ResponseEntity<MrProductionPostDto.MrProductionResponse> getMrProductionServicePost(
+  public ResponseEntity<MrProductionServicePostDto.MrProductionResponse> getMrProductionServicePost(
     @PathVariable Long id) {
-    MrProductionPostDto.MrProductionResponse mrProductionResponse =
+    MrProductionServicePostDto.MrProductionResponse mrProductionResponse =
       serviceBoardService.getMrProductionServicePost(id);
 
     return ResponseEntity.ok(mrProductionResponse);
