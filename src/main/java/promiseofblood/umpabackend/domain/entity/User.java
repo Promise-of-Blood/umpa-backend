@@ -70,47 +70,47 @@ public class User extends TimeStampedEntity {
   private Oauth2User oauth2User;
 
   public static User register(
-      String loginId,
-      String password,
-      Gender gender,
-      UserStatus userStatus,
-      Role role,
-      String username,
-      ProfileType profileType,
-      String profileImageUrl) {
+    String loginId,
+    String password,
+    Gender gender,
+    UserStatus userStatus,
+    Role role,
+    String username,
+    ProfileType profileType,
+    String profileImageUrl) {
 
     return User.builder()
-        .loginId(loginId)
-        .password(password)
-        .gender(gender)
-        .userStatus(userStatus)
-        .role(role)
-        .username(username)
-        .profileType(profileType)
-        .profileImageUrl(profileImageUrl)
-        .build();
+      .loginId(loginId)
+      .password(password)
+      .gender(gender)
+      .userStatus(userStatus)
+      .role(role)
+      .username(username)
+      .profileType(profileType)
+      .profileImageUrl(profileImageUrl)
+      .build();
   }
 
   public static User register(
-      String loginId,
-      Gender gender,
-      UserStatus userStatus,
-      Role role,
-      String username,
-      ProfileType profileType,
-      String profileImageUrl,
-      Oauth2User oauth2User) {
+    String loginId,
+    Gender gender,
+    UserStatus userStatus,
+    Role role,
+    String username,
+    ProfileType profileType,
+    String profileImageUrl,
+    Oauth2User oauth2User) {
 
     return User.builder()
-        .loginId(loginId)
-        .gender(gender)
-        .userStatus(userStatus)
-        .role(role)
-        .username(username)
-        .profileType(profileType)
-        .profileImageUrl(profileImageUrl)
-        .oauth2User(oauth2User)
-        .build();
+      .loginId(loginId)
+      .gender(gender)
+      .userStatus(userStatus)
+      .role(role)
+      .username(username)
+      .profileType(profileType)
+      .profileImageUrl(profileImageUrl)
+      .oauth2User(oauth2User)
+      .build();
   }
 
   public void patchStudentProfile(StudentProfile studentProfile) {
@@ -119,10 +119,16 @@ public class User extends TimeStampedEntity {
 
   public void patchTeacherProfile(TeacherProfile teacherProfile) {
     this.teacherProfile = teacherProfile;
+
+    if (this.teacherProfile.isProfileComplete()) {
+      this.userStatus = UserStatus.ACTIVE;
+    } else {
+      this.userStatus = UserStatus.PENDING;
+    }
   }
 
   public void patchDefaultProfile(
-      String username, Gender gender, String profileImageUrl, ProfileType profileType) {
+    String username, Gender gender, String profileImageUrl, ProfileType profileType) {
     if (username != null) {
       this.username = username;
     }
