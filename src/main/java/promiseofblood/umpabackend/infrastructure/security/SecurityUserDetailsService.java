@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
+import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
-import promiseofblood.umpabackend.exception.UnauthorizedException;
 
 @Slf4j
 @Service

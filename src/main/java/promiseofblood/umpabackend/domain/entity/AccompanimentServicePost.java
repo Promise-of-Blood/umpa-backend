@@ -6,6 +6,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,10 +18,12 @@ import promiseofblood.umpabackend.domain.vo.Instrument;
 @DiscriminatorValue("ACCOMPANIMENT")
 @Getter
 @SuperBuilder
+@Table(name = "accompaniment_service_posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccompanimentServicePost extends ServicePost {
 
-  @Embedded private ServiceCost serviceCost;
+  @Embedded
+  private ServiceCost serviceCost;
 
   private String additionalCostPolicy;
 
@@ -35,7 +38,8 @@ public class AccompanimentServicePost extends ServicePost {
 
   private String practiceLocation;
 
-  @ElementCollection private List<String> videoUrls;
+  @ElementCollection
+  private List<String> videoUrls;
 
   @Override
   public String getCostAndUnit() {
