@@ -17,7 +17,7 @@ import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderExcep
 import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.core.exception.RegistrationException;
 import promiseofblood.umpabackend.core.exception.UnauthorizedException;
-import promiseofblood.umpabackend.dto.ApiResponse;
+import promiseofblood.umpabackend.web.schema.ApiResponse;
 
 @Slf4j
 @RestControllerAdvice

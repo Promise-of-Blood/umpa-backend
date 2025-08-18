@@ -20,10 +20,10 @@ import promiseofblood.umpabackend.application.service.ReviewService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionPostDto;
-import promiseofblood.umpabackend.dto.PaginatedResponse;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.ApiResponse.PaginatedResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
