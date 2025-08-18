@@ -5,8 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import promiseofblood.umpabackend.application.exception.NotSupportedOauth2ProviderException;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
-import promiseofblood.umpabackend.exception.NotSupportedOauth2ProviderException;
 
 @Getter
 @Setter
