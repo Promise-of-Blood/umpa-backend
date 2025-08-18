@@ -37,11 +37,11 @@ public class ScoreProductionServicePostDto {
 
     @Schema(
       description = "악보 종류별 가격",
-      example = "FULL_SCORE-50000,VOCAL: 30000,PIANO: 40000"
+      example = "FULL_SCORE:50000,VOCAL:30000,PIANO:40000"
     )
     @Pattern(
       regexp = "^(FULL_SCORE|VOCAL|PIANO|GUITAR|BASS|WIND_INSTRUMENT|DRUM)(-[0-9]+)+$",
-      message = "형식은 {악보종류}-{가격} 을 쉼표로 구분한 문자열이어야 합니다. 예: FULL_SCORE-50000,VOCAL-30000,Piano-40000"
+      message = "형식은 {악보종류}:{가격} 을 쉼표로 구분한 문자열이어야 합니다. 예: FULL_SCORE:50000,VOCAL:30000,PIANO:40000"
     )
     private String costByScoreType;
 
