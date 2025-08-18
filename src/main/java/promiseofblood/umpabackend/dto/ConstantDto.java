@@ -16,13 +16,6 @@ import promiseofblood.umpabackend.domain.vo.WeekDay;
 
 public class ConstantDto {
 
-  //  public static interface EnumWrapper<T extends Enum<T>> {
-  //    String getCode();
-  //
-  //    String getName();
-  //
-  //  }
-
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class GradeResponse {
