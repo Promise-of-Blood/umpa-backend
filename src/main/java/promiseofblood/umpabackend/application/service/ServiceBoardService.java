@@ -48,7 +48,7 @@ public class ServiceBoardService {
           .id(servicePost.getId())
           .title(servicePost.getTitle())
           .tags(List.of("기타", "보컬"))
-          .teacherName(teacherUser.getUsername())
+          .teacherName(teacherUser.getUsername().getValue())
           .thumbnailImageUrl(servicePost.getThumbnailImageUrl())
           .costAndUnit(servicePost.getCostAndUnit())
           .reviewRating(5.0f)
