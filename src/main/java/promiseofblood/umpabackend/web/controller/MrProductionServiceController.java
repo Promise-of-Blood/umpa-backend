@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.web.controller;
 
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ReviewService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
-import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto;
-import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
-import promiseofblood.umpabackend.dto.ServicePostDto;
+import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.ApiResponse.PaginatedResponse;
@@ -29,69 +28,21 @@ import promiseofblood.umpabackend.web.schema.ApiResponse.PaginatedResponse;
 @RestController
 @RequestMapping("/api/v1/services")
 @RequiredArgsConstructor
-public class ServiceBoardController {
+public class MrProductionServiceController {
 
   private final ServiceBoardService serviceBoardService;
   private final ReviewService reviewService;
 
-  // lesson
-  @Tag(name = "서비스 관리 API(레슨)")
-  @PostMapping("/lesson")
-  @PreAuthorize("isAuthenticated()")
-  public void registerLesson() {
-  }
-
-  // accompaniment
-  @Tag(name = "서비스 관리 API(합주)")
-  @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<AccompanimentServicePostDto.AccompanimentServicePostResponse>
-  registerAccompaniment(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute
-    AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
-    String loginId = securityUserDetails.getUsername();
-
-    AccompanimentServicePostDto.AccompanimentServicePostResponse accompanimentPostResponse =
-      serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
-
-    return ResponseEntity.ok(accompanimentPostResponse);
-  }
-
-  // score-production
-  @Tag(name = "서비스 관리 API(악보 제작)")
-  @PostMapping(value = "/score-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<ScoreProductionServicePostDto.ScoreProductionServicePostResponse> registerScoreProduction(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
-
-    String loginId = securityUserDetails.getUsername();
-    ScoreProductionServicePostDto.ScoreProductionServicePostResponse scoreProductionServicePostResponse = serviceBoardService.createScoreProductionServicePost(
-      loginId, scoreProductionRequest);
-
-    return ResponseEntity.ok(scoreProductionServicePostResponse);
-  }
-
-  @Tag(name = "서비스 관리 API(악보 제작)")
-  @GetMapping(path = "/score-production/{id}")
-  public ResponseEntity<ScoreProductionServicePostDto.ScoreProductionServicePostResponse> getScoreProductionServicePost(
-    @PathVariable Long id) {
-
-    ScoreProductionServicePostDto.ScoreProductionServicePostResponse scoreProductionResponse =
-      serviceBoardService.getScoreProductionServicePost(id);
-
-    return ResponseEntity.ok(scoreProductionResponse);
-  }
-
-  // mr-production
+  // **************
+  // * MR제작 서비스 *
+  // **************
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production")
-  public ResponseEntity<PaginatedResponse<ServicePostDto.ServicePostResponse>>
+  public ResponseEntity<PaginatedResponse<ServicePostResponse>>
   getAllMrProductionServices(
     @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
 
-    Page<ServicePostDto.ServicePostResponse> servicePostResponsePage =
+    Page<ServicePostResponse> servicePostResponsePage =
       this.serviceBoardService.getAllServices("MR_PRODUCTION", page, size);
 
     return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));

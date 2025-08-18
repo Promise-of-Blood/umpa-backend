@@ -15,7 +15,7 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 @Getter
 @Setter
 @SuperBuilder
-@Table(name = "teacher_links")
+@Table(name = "teacher_profile_links")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherLink extends TimeStampedEntity {
 

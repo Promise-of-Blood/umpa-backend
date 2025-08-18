@@ -60,7 +60,7 @@ public class ConstantsController {
 
     List<ConstantDto.SubjectResponse> subjectResponses = new ArrayList<>();
     for (Subject subject : Subject.values()) {
-      subjectResponses.add(ConstantDto.SubjectResponse.of(subject));
+      subjectResponses.add(ConstantDto.SubjectResponse.from(subject));
     }
 
     return ResponseEntity.ok(subjectResponses);

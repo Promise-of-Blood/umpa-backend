@@ -11,8 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.application.service.JwtService;
-import promiseofblood.umpabackend.exception.UnauthorizedException;
 
 @RequiredArgsConstructor
 @Component
