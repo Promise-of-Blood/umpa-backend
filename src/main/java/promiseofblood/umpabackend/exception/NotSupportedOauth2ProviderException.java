@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.core.exception;
+package promiseofblood.umpabackend.exception;
 
 public class NotSupportedOauth2ProviderException extends IllegalArgumentException {
 

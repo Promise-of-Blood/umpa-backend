@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
+import promiseofblood.umpabackend.exception.UnauthorizedException;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2TokenResponse;
 

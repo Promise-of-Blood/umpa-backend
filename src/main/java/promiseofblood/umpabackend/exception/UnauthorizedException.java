@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.core.exception;
+package promiseofblood.umpabackend.exception;
 
 import org.springframework.security.core.AuthenticationException;
 

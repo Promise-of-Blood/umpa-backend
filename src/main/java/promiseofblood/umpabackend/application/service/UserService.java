@@ -8,8 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import promiseofblood.umpabackend.core.exception.RegistrationException;
-import promiseofblood.umpabackend.core.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Role;
@@ -17,6 +15,8 @@ import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.UserDto;
+import promiseofblood.umpabackend.exception.RegistrationException;
+import promiseofblood.umpabackend.exception.UnauthorizedException;
 
 @Service
 @Slf4j

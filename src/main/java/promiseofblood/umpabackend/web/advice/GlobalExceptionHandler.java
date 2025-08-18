@@ -12,11 +12,11 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import promiseofblood.umpabackend.core.exception.NotFoundException;
-import promiseofblood.umpabackend.core.exception.NotSupportedOauth2ProviderException;
-import promiseofblood.umpabackend.core.exception.Oauth2UserAlreadyExists;
-import promiseofblood.umpabackend.core.exception.RegistrationException;
-import promiseofblood.umpabackend.core.exception.UnauthorizedException;
+import promiseofblood.umpabackend.exception.NotFoundException;
+import promiseofblood.umpabackend.exception.NotSupportedOauth2ProviderException;
+import promiseofblood.umpabackend.exception.Oauth2UserAlreadyExists;
+import promiseofblood.umpabackend.exception.RegistrationException;
+import promiseofblood.umpabackend.exception.UnauthorizedException;
 import promiseofblood.umpabackend.web.schema.ApiResponse;
 
 @Slf4j
