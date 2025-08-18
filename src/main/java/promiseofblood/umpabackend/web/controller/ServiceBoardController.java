@@ -62,13 +62,15 @@ public class ServiceBoardController {
   @Tag(name = "서비스 관리 API(악보 제작)")
   @PostMapping(value = "/score-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public void registerScoreProduction(
+  public ResponseEntity<ScoreProductionServicePostDto.ScoreProductionServicePostResponse> registerScoreProduction(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
 
     String loginId = securityUserDetails.getUsername();
-    serviceBoardService.createScoreProductionServicePost(loginId, scoreProductionRequest);
+    ScoreProductionServicePostDto.ScoreProductionServicePostResponse scoreProductionServicePostResponse = serviceBoardService.createScoreProductionServicePost(
+      loginId, scoreProductionRequest);
 
+    return ResponseEntity.ok(scoreProductionServicePostResponse);
   }
 
   @Tag(name = "서비스 관리 API(악보 제작)")

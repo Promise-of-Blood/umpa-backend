@@ -136,7 +136,6 @@ public class ServiceBoardService {
         .softwareUsed(scoreProductionRequest.getSoftwareUsed())
         .sampleScoreImageUrl(sampleScoreFilePath)
         .build();
-
     servicePostRepository.save(scoreProductionServicePost);
 
     return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
