@@ -42,12 +42,19 @@ public class TeacherProfile extends TimeStampedEntity {
   public static TeacherProfile from(TeacherProfileDto.TeacherProfileRequest request) {
 
     return TeacherProfile.builder()
-        .description(request.getDescription())
-        .major(request.getMajor())
-        .lessonRegion(request.getLessonRegion())
-        .careers(request.getCareers().stream().map(TeacherCareer::from).toList())
-        .links(request.getLinks().stream().map(TeacherLink::from).toList())
-        .build();
+      .description(request.getDescription())
+      .major(request.getMajor())
+      .lessonRegion(request.getLessonRegion())
+      .careers(request.getCareers().stream().map(TeacherCareer::from).toList())
+      .links(request.getLinks().stream().map(TeacherLink::from).toList())
+      .build();
+  }
+
+  public boolean isProfileComplete() {
+    return description != null && !description.isEmpty() &&
+      major != null &&
+      lessonRegion != null &&
+      careers != null && !careers.isEmpty();
   }
 
   public void update(TeacherProfileDto.TeacherProfileRequest request) {
@@ -63,7 +70,7 @@ public class TeacherProfile extends TimeStampedEntity {
     if (request.getCareers() != null) {
       this.careers.clear();
       for (TeacherProfileDto.TeacherProfileRequest.TeacherCareerRequest careerRequest :
-          request.getCareers()) {
+        request.getCareers()) {
         TeacherCareer career = TeacherCareer.from(careerRequest);
         this.careers.add(career);
         career.setTeacherProfile(this);

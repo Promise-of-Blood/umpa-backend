@@ -2,7 +2,6 @@ package promiseofblood.umpabackend.application.service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -96,7 +95,7 @@ public class ServiceBoardService {
   }
 
   @Transactional
-  public Map<String, Object> createScoreProductionServicePost(
+  public ScoreProductionServicePostDto.ScoreProductionServicePostResponse createScoreProductionServicePost(
     String loginId,
     ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
 
@@ -135,11 +134,24 @@ public class ServiceBoardService {
         .additionalRevisionCost(scoreProductionRequest.getAdditionalRevisionCost())
         .averageDuration(DurationRange.of(scoreProductionRequest.getAverageDuration()))
         .softwareUsed(scoreProductionRequest.getSoftwareUsed())
-        .sampleScoreUrl(sampleScoreFilePath)
+        .sampleScoreImageUrl(sampleScoreFilePath)
         .build();
-
     servicePostRepository.save(scoreProductionServicePost);
-    return null;
+
+    return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
+      scoreProductionServicePost);
+  }
+
+  @Transactional(readOnly = true)
+  public ScoreProductionServicePostDto.ScoreProductionServicePostResponse getScoreProductionServicePost(
+    Long id) {
+
+    ScoreProductionServicePost mrProductionServicePost =
+      (ScoreProductionServicePost) servicePostRepository.findById(id).get();
+
+    return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
+      mrProductionServicePost
+    );
   }
 
   @Transactional

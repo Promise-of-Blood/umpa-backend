@@ -3,9 +3,18 @@ package promiseofblood.umpabackend.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.List;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
+import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
+import promiseofblood.umpabackend.domain.entity.ServiceCost;
+import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
+import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
+import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 public class ScoreProductionServicePostDto {
@@ -28,11 +37,11 @@ public class ScoreProductionServicePostDto {
 
     @Schema(
       description = "악보 종류별 가격",
-      example = "FULL_SCORE-50000,VOCAL: 30000,PIANO: 40000"
+      example = "FULL_SCORE:50000,VOCAL:30000,PIANO:40000"
     )
     @Pattern(
       regexp = "^(FULL_SCORE|VOCAL|PIANO|GUITAR|BASS|WIND_INSTRUMENT|DRUM)(-[0-9]+)+$",
-      message = "형식은 {악보종류}-{가격} 을 쉼표로 구분한 문자열이어야 합니다. 예: FULL_SCORE-50000,VOCAL-30000,Piano-40000"
+      message = "형식은 {악보종류}:{가격} 을 쉼표로 구분한 문자열이어야 합니다. 예: FULL_SCORE:50000,VOCAL:30000,PIANO:40000"
     )
     private String costByScoreType;
 
@@ -59,5 +68,61 @@ public class ScoreProductionServicePostDto {
     private MultipartFile sampleScoreImage;
 
   }
+
+
+  @Getter
+  @Builder(access = AccessLevel.PRIVATE)
+  public static class ScoreProductionServicePostResponse {
+
+    private long id;
+
+    private String title;
+
+    private String description;
+
+    private List<CostPerUnitDto> costsPerUnits;
+
+    private String additionalCostPolicy;
+
+    private AverageDurationDto averageDuration;
+
+    private int freeRevisionCount;
+
+    private String softwareUsed;
+
+    private int additionalRevisionCost;
+
+    private String sampleScoreImageUrl;
+
+    private TeacherAuthorProfileDto teacherProfile;
+
+    private float reviewRating;
+
+    public static ScoreProductionServicePostResponse from(
+      ScoreProductionServicePost scoreProductionServicePost) {
+
+      List<CostPerUnitDto> costPerUnits = new ArrayList<>();
+      for (ServiceCost serviceCost : scoreProductionServicePost.getServiceCosts()) {
+        costPerUnits.add(CostPerUnitDto.from(serviceCost));
+      }
+
+      return ScoreProductionServicePostResponse.builder()
+        .id(scoreProductionServicePost.getId())
+        .title(scoreProductionServicePost.getTitle())
+        .description(scoreProductionServicePost.getDescription())
+        .costsPerUnits(costPerUnits)
+        .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
+        .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
+        .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
+        .softwareUsed(scoreProductionServicePost.getSoftwareUsed())
+        .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
+        .sampleScoreImageUrl(scoreProductionServicePost.getSampleScoreImageUrl())
+        .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
+        .reviewRating(0.1f)
+        .build();
+    }
+
+  }
+
 
 }

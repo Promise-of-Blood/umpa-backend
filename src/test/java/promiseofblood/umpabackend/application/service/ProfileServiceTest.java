@@ -1,6 +1,6 @@
-package promiseofblood.umpabackend.domain.service;
+package promiseofblood.umpabackend.application.service;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -11,9 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
-import promiseofblood.umpabackend.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceTest {
