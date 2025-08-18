@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import promiseofblood.umpabackend.application.service.ReviewService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
@@ -24,16 +23,6 @@ import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 public class ServiceBoardController {
 
   private final ServiceBoardService serviceBoardService;
-  private final ReviewService reviewService;
-
-  //*************
-  // * 레슨 서비스 *
-  //*************
-  @Tag(name = "서비스 관리 API(레슨)")
-  @PostMapping("/lesson")
-  @PreAuthorize("isAuthenticated()")
-  public void registerLesson() {
-  }
 
   // ************
   // * 합주 서비스 *
