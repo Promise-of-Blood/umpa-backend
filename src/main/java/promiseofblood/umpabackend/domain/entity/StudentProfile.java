@@ -30,8 +30,8 @@ public class StudentProfile extends TimeStampedEntity {
 
   @ElementCollection(targetClass = College.class)
   @CollectionTable(
-      name = "student_preferred_colleges",
-      joinColumns = @JoinColumn(name = "student_profile_id"))
+    name = "student_profile_preferred_colleges",
+    joinColumns = @JoinColumn(name = "student_profile_id"))
   @Enumerated(EnumType.STRING)
   private List<College> preferredColleges;
 
@@ -40,10 +40,10 @@ public class StudentProfile extends TimeStampedEntity {
 
   public static StudentProfile from(StudentProfileDto.StudentProfileRequest request) {
     return StudentProfile.builder()
-        .major(request.getMajor())
-        .preferredColleges(request.getPreferredColleges())
-        .grade(request.getGrade())
-        .build();
+      .major(request.getMajor())
+      .preferredColleges(request.getPreferredColleges())
+      .grade(request.getGrade())
+      .build();
   }
 
   public void update(StudentProfileDto.StudentProfileRequest request) {
