@@ -18,15 +18,14 @@ public class PaginatedResponse<T> {
 
   private final List<T> items;
 
-
   public static <T> PaginatedResponse<T> from(Page<T> page) {
 
     return PaginatedResponse.<T>builder()
-      .page(page.getNumber())
-      .count(page.getNumberOfElements())
-      .totalPage(page.getTotalPages())
-      .totalCount(page.getTotalElements())
-      .items(page.getContent())
-      .build();
+        .page(page.getNumber())
+        .count(page.getNumberOfElements())
+        .totalPage(page.getTotalPages())
+        .totalCount(page.getTotalElements())
+        .items(page.getContent())
+        .build();
   }
 }

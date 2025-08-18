@@ -12,17 +12,15 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
+import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.repository.UserRepository;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-  @Mock
-  private UserRepository userRepository;
+  @Mock private UserRepository userRepository;
 
-  @InjectMocks
-  private UserService userService;
+  @InjectMocks private UserService userService;
 
   @Test
   @DisplayName("isUsernameAvailable 메서드는 닉네임이 중복되었을 경우 false를 반환한다.")
@@ -55,10 +53,9 @@ class UserServiceTest {
   })
   void 닉네임이_8글자_초과인경우_사용불가능(String name) {
     // When
-    IsUsernameAvailableResponse result = userService.isUsernameAvailable(name);
+    LoginDto.IsUsernameAvailableResponse result = userService.isUsernameAvailable(name);
 
     // Then
     assertFalse(result.isAvailable());
   }
-
 }

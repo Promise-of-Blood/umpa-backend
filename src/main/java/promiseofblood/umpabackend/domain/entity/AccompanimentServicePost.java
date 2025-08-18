@@ -20,8 +20,7 @@ import promiseofblood.umpabackend.domain.vo.Instrument;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccompanimentServicePost extends ServicePost {
 
-  @Embedded
-  private ServiceCost serviceCost;
+  @Embedded private ServiceCost serviceCost;
 
   private String additionalCostPolicy;
 
@@ -36,12 +35,10 @@ public class AccompanimentServicePost extends ServicePost {
 
   private String practiceLocation;
 
-  @ElementCollection
-  private List<String> videoUrls;
+  @ElementCollection private List<String> videoUrls;
 
   @Override
   public String getCostAndUnit() {
     return this.serviceCost.getCost() + "원/" + this.serviceCost.getUnit();
   }
-
 }

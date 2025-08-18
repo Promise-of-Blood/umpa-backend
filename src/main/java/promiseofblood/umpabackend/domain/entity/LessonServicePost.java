@@ -18,8 +18,7 @@ import promiseofblood.umpabackend.domain.vo.LessonStyle;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LessonServicePost extends ServicePost {
 
-  @Embedded
-  private ServiceCost serviceCost;
+  @Embedded private ServiceCost serviceCost;
 
   @ElementCollection
   @Enumerated(EnumType.STRING)
@@ -34,14 +33,12 @@ public class LessonServicePost extends ServicePost {
 
   private boolean isDemoLessonOptionAvailable;
 
-  @ElementCollection
-  private List<String> recommendedTargets;
+  @ElementCollection private List<String> recommendedTargets;
 
-  @ElementCollection
-  private List<String> studioPhotoUrls;
+  @ElementCollection private List<String> studioPhotoUrls;
 
-//  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//  private List<LessonCurriculum> curriculum;
+  //  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  //  private List<LessonCurriculum> curriculum;
 
   @Override
   public String getCostAndUnit() {

@@ -4,9 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum ProfileType {
-
   TEACHER,
 
   STUDENT;
-
 }

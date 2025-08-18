@@ -16,5 +16,4 @@ public class ServiceCost {
   private int cost;
 
   private String unit;
-
 }

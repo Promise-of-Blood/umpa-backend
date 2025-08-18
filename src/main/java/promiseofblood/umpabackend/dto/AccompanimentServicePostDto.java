@@ -1,6 +1,5 @@
 package promiseofblood.umpabackend.dto;
 
-
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import java.util.List;
@@ -47,20 +46,23 @@ public class AccompanimentServicePostDto {
     private List<String> videoUrls;
 
     public static AccompanimentServicePostResponse from(
-      AccompanimentServicePost accompanimentServicePost, User user) {
+        AccompanimentServicePost accompanimentServicePost, User user) {
 
-      return AccompanimentServicePostResponse.builder().title(accompanimentServicePost.getTitle())
-        .description(accompanimentServicePost.getDescription())
-        .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-        .teacherProfile(TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
-        .reviewRating("0.0").costPerUnit(accompanimentServicePost.getCostAndUnit())
-        .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
-        .instrument(accompanimentServicePost.getInstrument())
-        .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
-        .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
-        .isMrIncluded(accompanimentServicePost.isMrIncluded())
-        .practiceLocation(accompanimentServicePost.getPracticeLocation())
-        .videoUrls(accompanimentServicePost.getVideoUrls()).build();
+      return AccompanimentServicePostResponse.builder()
+          .title(accompanimentServicePost.getTitle())
+          .description(accompanimentServicePost.getDescription())
+          .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
+          .teacherProfile(TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
+          .reviewRating("0.0")
+          .costPerUnit(accompanimentServicePost.getCostAndUnit())
+          .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
+          .instrument(accompanimentServicePost.getInstrument())
+          .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
+          .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
+          .isMrIncluded(accompanimentServicePost.isMrIncluded())
+          .practiceLocation(accompanimentServicePost.getPracticeLocation())
+          .videoUrls(accompanimentServicePost.getVideoUrls())
+          .build();
     }
   }
 
@@ -105,6 +107,4 @@ public class AccompanimentServicePostDto {
     @Schema(type = "array", description = "연주 영상 URL들")
     private List<String> videoUrls;
   }
-
-
 }

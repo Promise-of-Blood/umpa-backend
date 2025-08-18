@@ -14,5 +14,4 @@ public class StorageConfig {
   private String fileLocation = "upload-dir";
 
   private String proxyPrefix = "static/upload-dir";
-  
 }

@@ -1,7 +1,7 @@
 package promiseofblood.umpabackend.domain.vo;
 
-import java.util.List;
 import java.util.Arrays;
+import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
 
@@ -303,7 +303,7 @@ public enum Region {
 
   public static List<Region> getRegionsByPrefix(String prefix) {
     return Arrays.stream(values())
-      .filter(region -> region.name().startsWith(prefix))
-      .collect(Collectors.toList());
+        .filter(region -> region.name().startsWith(prefix))
+        .collect(Collectors.toList());
   }
 }

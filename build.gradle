@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.0'
     id 'io.spring.dependency-management' version '1.1.6'
+    id 'com.diffplug.spotless' version '6.25.0'
 }
 
 group = 'promise-of-blood'
@@ -26,6 +27,7 @@ configurations {
 repositories {
     mavenCentral()
     google()
+    gradlePluginPortal()
 }
 
 dependencies {
@@ -57,6 +59,30 @@ dependencies {
 
     // google api client
     implementation 'com.google.api-client:google-api-client:2.4.0'
+}
+
+spotless {
+    java {
+        importOrder(
+                'java|javax|jakarta',
+                'lombok',
+                'org.springframework',
+                'org.junit|org.mockito',
+                '',
+                '\\#',
+                '\\#org.junit',
+                'promiseofblood.umpabackend',
+        )
+        removeUnusedImports()
+        googleJavaFormat()
+        formatAnnotations()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+}
+
+tasks.named('build') {
+    dependsOn 'spotlessCheck'
 }
 
 tasks.named('test') {

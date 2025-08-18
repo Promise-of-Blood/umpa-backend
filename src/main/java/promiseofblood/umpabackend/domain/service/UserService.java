@@ -16,9 +16,7 @@ import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.dto.response.IsUsernameAvailableResponse;
 import promiseofblood.umpabackend.repository.UserRepository;
-
 
 @Service
 @Slf4j
@@ -32,34 +30,31 @@ public class UserService {
 
   @Transactional
   public LoginCompleteResponse registerUser(
-    LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRegisterRequest) {
+      LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRegisterRequest) {
 
     if (this.isLoginIdAvailable(loginIdPasswordRegisterRequest.getLoginId())) {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
-    User user = User.register(
-      loginIdPasswordRegisterRequest.getLoginId(),
-      passwordEncoder.encode(loginIdPasswordRegisterRequest.getPassword()),
-      loginIdPasswordRegisterRequest.getGender(),
-      UserStatus.PENDING,
-      Role.USER,
-      loginIdPasswordRegisterRequest.getUsername(),
-      loginIdPasswordRegisterRequest.getProfileType(),
-      this.uploadProfileImage(
-        loginIdPasswordRegisterRequest.getLoginId(),
-        loginIdPasswordRegisterRequest.getProfileImage()
-      )
-    );
+    User user =
+        User.register(
+            loginIdPasswordRegisterRequest.getLoginId(),
+            passwordEncoder.encode(loginIdPasswordRegisterRequest.getPassword()),
+            loginIdPasswordRegisterRequest.getGender(),
+            UserStatus.PENDING,
+            Role.USER,
+            loginIdPasswordRegisterRequest.getUsername(),
+            loginIdPasswordRegisterRequest.getProfileType(),
+            this.uploadProfileImage(
+                loginIdPasswordRegisterRequest.getLoginId(),
+                loginIdPasswordRegisterRequest.getProfileImage()));
     user = userRepository.save(user);
 
     return LoginCompleteResponse.of(
-      UserDto.ProfileResponse.from(user),
-      LoginDto.JwtPairResponse.of(
-        jwtService.createAccessToken(user.getId(), user.getLoginId()),
-        jwtService.createRefreshToken(user.getId(), user.getLoginId())
-      )
-    );
+        UserDto.ProfileResponse.from(user),
+        LoginDto.JwtPairResponse.of(
+            jwtService.createAccessToken(user.getId(), user.getLoginId()),
+            jwtService.createRefreshToken(user.getId(), user.getLoginId())));
   }
 
   /**
@@ -69,16 +64,15 @@ public class UserService {
    */
   public List<UserDto.ProfileResponse> getUsers() {
 
-    return userRepository.findAll()
-      .stream()
-      .map(UserDto.ProfileResponse::from)
-      .toList();
+    return userRepository.findAll().stream().map(UserDto.ProfileResponse::from).toList();
   }
 
   public UserDto.ProfileResponse getUserByLoginId(String loginId) {
 
-    User user = userRepository.findByLoginId(loginId)
-      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     return UserDto.ProfileResponse.from(user);
   }
@@ -95,42 +89,40 @@ public class UserService {
     }
 
     return LoginCompleteResponse.of(
-      UserDto.ProfileResponse.from(optionalUser.get()),
-      LoginDto.JwtPairResponse.of(
-        jwtService.createAccessToken(optionalUser.get().getId(), optionalUser.get().getLoginId()),
-        jwtService.createRefreshToken(optionalUser.get().getId(), optionalUser.get().getLoginId())
-      )
-    );
+        UserDto.ProfileResponse.from(optionalUser.get()),
+        LoginDto.JwtPairResponse.of(
+            jwtService.createAccessToken(
+                optionalUser.get().getId(), optionalUser.get().getLoginId()),
+            jwtService.createRefreshToken(
+                optionalUser.get().getId(), optionalUser.get().getLoginId())));
   }
 
   @Transactional
   public LoginDto.LoginCompleteResponse refreshToken(String refreshToken) {
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
-    User user = userRepository.findById(userId)
-      .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+    User user =
+        userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-    LoginDto.JwtPairResponse jwtPairResponse = LoginDto.JwtPairResponse.of(
-      jwtService.createAccessToken(user.getId(), user.getLoginId()),
-      jwtService.createRefreshToken(user.getId(), user.getLoginId())
-    );
+    LoginDto.JwtPairResponse jwtPairResponse =
+        LoginDto.JwtPairResponse.of(
+            jwtService.createAccessToken(user.getId(), user.getLoginId()),
+            jwtService.createRefreshToken(user.getId(), user.getLoginId()));
 
-    return LoginCompleteResponse.of(
-      UserDto.ProfileResponse.from(user),
-      jwtPairResponse);
+    return LoginCompleteResponse.of(UserDto.ProfileResponse.from(user), jwtPairResponse);
   }
 
-  public IsUsernameAvailableResponse isUsernameAvailable(String username) {
+  public LoginDto.IsUsernameAvailableResponse isUsernameAvailable(String username) {
     if (!isUsernamePatternValid(username)) {
-      return new IsUsernameAvailableResponse(username, false,
-        "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
+      return new LoginDto.IsUsernameAvailableResponse(
+          username, false, "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
     }
 
     if (!isUsernameDuplicated(username)) {
-      return new IsUsernameAvailableResponse(username, false, "이미 사용 중인 아이디입니다.");
+      return new LoginDto.IsUsernameAvailableResponse(username, false, "이미 사용 중인 아이디입니다.");
     }
 
-    return new IsUsernameAvailableResponse(username, true, "사용 가능한 아이디입니다.");
+    return new LoginDto.IsUsernameAvailableResponse(username, true, "사용 가능한 아이디입니다.");
   }
 
   public boolean isUsernamePatternValid(String username) {
@@ -146,18 +138,11 @@ public class UserService {
 
   public String uploadProfileImage(String loginId, MultipartFile profileImage) {
 
-    return storageService.store(
-      profileImage,
-      "users",
-      loginId,
-      "default-profile"
-    );
+    return storageService.store(profileImage, "users", loginId, "default-profile");
   }
 
   private boolean isLoginIdAvailable(String loginId) {
 
     return userRepository.existsByLoginId(loginId);
   }
-
-
 }

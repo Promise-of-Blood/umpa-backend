@@ -38,10 +38,9 @@ public class FileSystemStorageService implements StorageService {
       throw new RuntimeException("Empty file");
     }
 
-    String filename = StringUtils.cleanPath(
-      System.currentTimeMillis() +
-        file.getOriginalFilename().replace(" ", "")
-    );
+    String filename =
+        StringUtils.cleanPath(
+            System.currentTimeMillis() + file.getOriginalFilename().replace(" ", ""));
 
     Path targetDirectory = fileLocation;
     for (String pathPart : filePaths) {
@@ -66,16 +65,18 @@ public class FileSystemStorageService implements StorageService {
       throw new RuntimeException("File storage failed", e);
     }
 
-    return Paths.get("/" + fileLocation + "/" + String.join("/", filePaths)).resolve(filename)
-      .toString().replace("\\", "/");
+    return Paths.get("/" + fileLocation + "/" + String.join("/", filePaths))
+        .resolve(filename)
+        .toString()
+        .replace("\\", "/");
   }
-
 
   @Override
   public Stream<Path> loadAll() {
     try {
-      return Files.walk(this.fileLocation, 1).filter(path -> !path.equals(this.fileLocation))
-        .map(this.fileLocation::relativize);
+      return Files.walk(this.fileLocation, 1)
+          .filter(path -> !path.equals(this.fileLocation))
+          .map(this.fileLocation::relativize);
     } catch (IOException e) {
       throw new RuntimeException("Failed to read stored files", e);
     }

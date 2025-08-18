@@ -27,10 +27,6 @@ public class Oauth2Provider {
 
   @Override
   public String toString() {
-    return "Oauth2Provider{" +
-      "name='" + name + '\'' +
-      ", clientId='" + clientId + '\'' +
-      '}';
+    return "Oauth2Provider{" + "name='" + name + '\'' + ", clientId='" + clientId + '\'' + '}';
   }
-
 }

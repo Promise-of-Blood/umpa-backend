@@ -26,8 +26,6 @@ public class TeacherLink extends TimeStampedEntity {
   private TeacherProfile teacherProfile;
 
   public static TeacherLink from(String link) {
-    return TeacherLink.builder()
-      .link(link)
-      .build();
+    return TeacherLink.builder().link(link).build();
   }
 }
