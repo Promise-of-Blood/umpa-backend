@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
 
 @Entity
 @Getter

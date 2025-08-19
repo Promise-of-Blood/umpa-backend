@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.entity;
+package promiseofblood.umpabackend.domain.vo;
 
 import jakarta.persistence.Embeddable;
 import lombok.AccessLevel;
