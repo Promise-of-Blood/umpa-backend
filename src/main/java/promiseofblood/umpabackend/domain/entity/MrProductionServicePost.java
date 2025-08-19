@@ -11,6 +11,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import promiseofblood.umpabackend.domain.vo.DurationRange;
 
 @Entity
 @DiscriminatorValue("MR_PRODUCTION")

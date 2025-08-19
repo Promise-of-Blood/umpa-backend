@@ -10,6 +10,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import promiseofblood.umpabackend.domain.vo.DurationRange;
 
 @Entity
 @Getter

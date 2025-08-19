@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import promiseofblood.umpabackend.domain.entity.DurationRange;
+import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.entity.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;

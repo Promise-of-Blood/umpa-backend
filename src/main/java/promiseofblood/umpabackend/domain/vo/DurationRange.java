@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.domain.entity;
+package promiseofblood.umpabackend.domain.vo;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import promiseofblood.umpabackend.domain.vo.DurationUnit;
 
 @Embeddable
 @Builder
