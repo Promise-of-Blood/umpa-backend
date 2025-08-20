@@ -14,7 +14,6 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 
 @Entity
@@ -30,9 +29,6 @@ public class TeacherProfile extends TimeStampedEntity {
   @Enumerated(EnumType.STRING)
   private Major major;
 
-  @Enumerated(EnumType.STRING)
-  private Region lessonRegion;
-
   @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TeacherCareer> careers;
 
@@ -44,7 +40,6 @@ public class TeacherProfile extends TimeStampedEntity {
     return TeacherProfile.builder()
       .description(request.getDescription())
       .major(request.getMajor())
-      .lessonRegion(request.getLessonRegion())
       .careers(request.getCareers().stream().map(TeacherCareer::from).toList())
       .links(request.getLinks().stream().map(TeacherLink::from).toList())
       .build();
@@ -53,7 +48,6 @@ public class TeacherProfile extends TimeStampedEntity {
   public boolean isProfileComplete() {
     return description != null && !description.isEmpty() &&
       major != null &&
-      lessonRegion != null &&
       careers != null && !careers.isEmpty();
   }
 
@@ -63,9 +57,6 @@ public class TeacherProfile extends TimeStampedEntity {
     }
     if (request.getMajor() != null) {
       this.major = request.getMajor();
-    }
-    if (request.getLessonRegion() != null) {
-      this.lessonRegion = request.getLessonRegion();
     }
     if (request.getCareers() != null) {
       this.careers.clear();
