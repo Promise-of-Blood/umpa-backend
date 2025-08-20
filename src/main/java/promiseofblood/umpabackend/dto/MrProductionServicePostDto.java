@@ -10,7 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
-import promiseofblood.umpabackend.domain.vo.SampleMrUrl;
+import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;

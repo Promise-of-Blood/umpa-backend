@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
-import promiseofblood.umpabackend.domain.vo.SampleMrUrl;
+import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
