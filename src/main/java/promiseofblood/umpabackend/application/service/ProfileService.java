@@ -22,6 +22,7 @@ public class ProfileService {
 
   public UserDto.ProfileResponse patchDefaultProfile(
     String loginId, DefaultProfilePatchRequest defaultProfilePatchRequest) {
+
     User user =
       userRepository
         .findByLoginId(loginId)
@@ -40,6 +41,7 @@ public class ProfileService {
   @Transactional
   public UserDto.ProfileResponse patchTeacherProfile(
     String loginId, TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
+
     User user =
       userRepository
         .findByLoginId(loginId)
@@ -54,14 +56,15 @@ public class ProfileService {
     }
 
     user.patchTeacherProfile(teacherProfile);
-    user = userRepository.save(user);
+    User updatedUser = userRepository.save(user);
 
-    return UserDto.ProfileResponse.from(user);
+    return UserDto.ProfileResponse.from(updatedUser);
   }
 
   @Transactional
   public UserDto.ProfileResponse patchStudentProfile(
     String loginId, StudentProfileDto.StudentProfileRequest studentProfileRequest) {
+
     User user =
       userRepository
         .findByLoginId(loginId)
@@ -76,9 +79,9 @@ public class ProfileService {
     }
 
     user.patchStudentProfile(studentProfile);
-    userRepository.save(user);
+    User updatedUser = userRepository.save(user);
 
-    return UserDto.ProfileResponse.from(user);
+    return UserDto.ProfileResponse.from(updatedUser);
   }
 
   public String uploadProfileImageIfExists(String loginId, MultipartFile profileImage) {

@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
 
 @Entity
 @DiscriminatorValue("ACCOMPANIMENT")
