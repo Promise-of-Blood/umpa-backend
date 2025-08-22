@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.application.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.domain.entity.Review;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.repository.ReviewRepository;
@@ -15,6 +16,7 @@ public class ReviewService {
   private final ServicePostRepository servicePostRepository;
   private final ReviewRepository reviewRepository;
 
+  @Transactional
   public Review createReview(Long servicePostId, ServiceReviewDto.ReviewRequest reviewRequest) {
     ServicePost servicePost = servicePostRepository.findById(servicePostId).orElse(null);
 

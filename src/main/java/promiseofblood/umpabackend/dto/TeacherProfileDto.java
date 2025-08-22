@@ -32,9 +32,6 @@ public class TeacherProfileDto {
     @Schema(description = "선생님 전공", example = "ELECTRONIC_MUSIC")
     private Major major;
 
-    @Schema(description = "레슨 지역", example = "SEOUL_GWANGJINGU")
-    private Region lessonRegion;
-
     @Schema(
         description = "경력",
         example =
@@ -75,8 +72,6 @@ public class TeacherProfileDto {
 
     private ConstantDto.MajorResponse major;
 
-    private ConstantDto.RegionResponse lessonRegion;
-
     private List<TeacherCareerDto> careers;
 
     private List<TeacherLinkDto> links;
@@ -96,7 +91,6 @@ public class TeacherProfileDto {
       return TeacherProfileResponse.builder()
           .description(teacherProfile.getDescription())
           .major(ConstantDto.MajorResponse.from(teacherProfile.getMajor()))
-          .lessonRegion(ConstantDto.RegionResponse.from(teacherProfile.getLessonRegion()))
           .careers(teacherCareerDtoList)
           .links(teacherLinkDtoList)
           .build();
