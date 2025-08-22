@@ -20,6 +20,7 @@ public class ProfileService {
   private final UserRepository userRepository;
   private final StorageService storageService;
 
+  @Transactional
   public UserDto.ProfileResponse patchDefaultProfile(
     String loginId, DefaultProfilePatchRequest defaultProfilePatchRequest) {
 

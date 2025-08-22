@@ -62,11 +62,13 @@ public class UserService {
    *
    * @return 사용자 목록
    */
+  @Transactional(readOnly = true)
   public List<UserDto.ProfileResponse> getUsers() {
 
     return userRepository.findAll().stream().map(UserDto.ProfileResponse::from).toList();
   }
 
+  @Transactional(readOnly = true)
   public UserDto.ProfileResponse getUserByLoginId(String loginId) {
 
     User user =
@@ -77,6 +79,7 @@ public class UserService {
     return UserDto.ProfileResponse.from(user);
   }
 
+  @Transactional(readOnly = true)
   public LoginCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
 
     Optional<User> optionalUser = userRepository.findByLoginId(loginId);
