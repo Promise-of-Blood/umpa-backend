@@ -93,6 +93,7 @@ public class Oauth2Service {
     return oauth2Strategy.getOauth2UserProfile(oauth2Provider, code);
   }
 
+  @Transactional(readOnly = true)
   public LoginCompleteResponse generateOauth2Jwt(
     String providerName, String externalIdToken, String externalAccessToken) {
 

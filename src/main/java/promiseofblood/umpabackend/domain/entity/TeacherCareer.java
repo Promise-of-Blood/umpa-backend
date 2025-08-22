@@ -1,11 +1,15 @@
 package promiseofblood.umpabackend.domain.entity;
 
+import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Converter;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,9 +32,11 @@ public class TeacherCareer extends TimeStampedEntity {
 
   private String title;
 
+  @Convert(converter = YearMonthConverter.class)
   private YearMonth start;
 
   @Column(name = "\"end\"")
+  @Convert(converter = YearMonthConverter.class)
   private YearMonth end;
 
   @ManyToOne
@@ -45,5 +51,21 @@ public class TeacherCareer extends TimeStampedEntity {
       .start(request.getStart())
       .end(request.getEnd())
       .build();
+  }
+
+  @Converter(autoApply = true)
+  static class YearMonthConverter implements AttributeConverter<YearMonth, String> {
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM");
+
+    @Override
+    public String convertToDatabaseColumn(YearMonth yearMonth) {
+      return yearMonth.format(formatter);
+    }
+
+    @Override
+    public YearMonth convertToEntityAttribute(String dbData) {
+      return YearMonth.parse(dbData, formatter);
+    }
   }
 }
