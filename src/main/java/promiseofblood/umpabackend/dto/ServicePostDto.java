@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
@@ -20,6 +21,8 @@ public class ServicePostDto {
   @Builder(access = AccessLevel.PRIVATE)
   public static class TeacherAuthorProfileDto {
 
+    private String keyphrase;
+
     private String profileImageUrl;
 
     private String description;
@@ -30,19 +33,22 @@ public class ServicePostDto {
 
     public static TeacherAuthorProfileDto from(User user) {
 
+      TeacherProfile teacherProfile = user.getTeacherProfile();
+
       List<TeacherProfileDto.TeacherCareerDto> careers = new ArrayList<>();
-      for (TeacherCareer career : user.getTeacherProfile().getCareers()) {
+      for (TeacherCareer career : teacherProfile.getCareers()) {
         careers.add(TeacherCareerDto.from(career));
       }
 
       List<TeacherProfileDto.TeacherLinkDto> links = new ArrayList<>();
-      for (TeacherLink link : user.getTeacherProfile().getLinks()) {
+      for (TeacherLink link : teacherProfile.getLinks()) {
         links.add(TeacherProfileDto.TeacherLinkDto.from(link));
       }
 
       return TeacherAuthorProfileDto.builder()
+          .keyphrase(teacherProfile.getKeyphrase())
           .profileImageUrl(user.getProfileImageUrl())
-          .description(user.getTeacherProfile().getDescription())
+          .description(teacherProfile.getDescription())
           .careers(careers)
           .links(links)
           .build();
