@@ -3,6 +3,7 @@ package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
@@ -40,7 +41,8 @@ public class MrProductionServiceController {
   @GetMapping(path = "/mr-production")
   public ResponseEntity<PaginatedResponse<ServicePostResponse>>
   getAllMrProductionServices(
-    @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    @RequestParam(defaultValue = "0") int page,
+    @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
 
     Page<ServicePostResponse> servicePostResponsePage =
       this.serviceBoardService.getAllServices("MR_PRODUCTION", page, size);
