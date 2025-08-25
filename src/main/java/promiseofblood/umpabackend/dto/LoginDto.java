@@ -17,35 +17,6 @@ public class LoginDto {
   // * 회원가입 관련 DTO *
   // ******************
 
-  @Getter
-  @AllArgsConstructor
-  public static class LoginIdPasswordRegisterRequest {
-
-    @NotBlank
-    @Schema(description = "사용자 닉네임", example = "홍길동")
-    private String username;
-
-    @NotNull
-    @Schema(description = "성별", example = "MALE")
-    private Gender gender;
-
-    @NotNull
-    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
-    private ProfileType profileType;
-
-    @NotBlank
-    @Schema(description = "로그인 아이디")
-    private String loginId;
-
-    @NotBlank
-    @Schema(description = "비밀번호")
-    private String password;
-
-    @NotNull
-    @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
-    private MultipartFile profileImage;
-  }
-
   @Builder
   @Getter
   @AllArgsConstructor
