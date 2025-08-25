@@ -11,7 +11,7 @@ import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherProfileResponse;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class AccompanimentServicePostDetailResponse {
+public class RetrieveAccompanimentServicePostResponse {
 
   private String title;
 
@@ -39,10 +39,10 @@ public class AccompanimentServicePostDetailResponse {
 
   private List<String> videoUrls;
 
-  public static AccompanimentServicePostDetailResponse from(
+  public static RetrieveAccompanimentServicePostResponse from(
     AccompanimentServicePost accompanimentServicePost, User user) {
 
-    return AccompanimentServicePostDetailResponse.builder()
+    return RetrieveAccompanimentServicePostResponse.builder()
       .title(accompanimentServicePost.getTitle())
       .description(accompanimentServicePost.getDescription())
       .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())

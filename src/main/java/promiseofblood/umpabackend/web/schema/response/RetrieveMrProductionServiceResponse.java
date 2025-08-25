@@ -15,7 +15,7 @@ import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder
-public class MrProductionServicePostDetailResponse {
+public class RetrieveMrProductionServiceResponse {
 
   private long id;
 
@@ -39,10 +39,10 @@ public class MrProductionServicePostDetailResponse {
 
   private float reviewRating;
 
-  public static MrProductionServicePostDetailResponse of(
+  public static RetrieveMrProductionServiceResponse of(
     MrProductionServicePost mrProductionServicePost) {
 
-    return MrProductionServicePostDetailResponse.builder().id(mrProductionServicePost.getId())
+    return RetrieveMrProductionServiceResponse.builder().id(mrProductionServicePost.getId())
       .title(mrProductionServicePost.getTitle())
       .description(mrProductionServicePost.getDescription())
       .costPerUnit(CostPerUnitDto.from(mrProductionServicePost.getServiceCost()))

@@ -10,7 +10,7 @@ import promiseofblood.umpabackend.domain.vo.Instrument;
 
 @Getter
 @AllArgsConstructor
-public class AccompanimentServicePostCreateRequest {
+public class CreateAccompanimentServicePostRequest {
 
   @Schema(type = "string", format = "binary", description = "대표 사진")
   @NotBlank
