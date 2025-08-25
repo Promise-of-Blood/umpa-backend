@@ -17,12 +17,12 @@ import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionPostRequest;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionResponse;
 import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.web.schema.request.AccompanimentServicePostCreateRequest;
+import promiseofblood.umpabackend.web.schema.response.AccompanimentServicePostDetailResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +58,7 @@ public class ServiceBoardService {
   }
 
   @Transactional
-  public AccompanimentServicePostDto.AccompanimentServicePostResponse
+  public AccompanimentServicePostDetailResponse
   createAccompanimentServicePost(
     String loginId,
     AccompanimentServicePostCreateRequest accompanimentServicePostCreateRequest) {
@@ -92,7 +92,7 @@ public class ServiceBoardService {
         .build();
     servicePostRepository.save(accompanimentServicePost);
 
-    return AccompanimentServicePostDto.AccompanimentServicePostResponse.from(
+    return AccompanimentServicePostDetailResponse.from(
       accompanimentServicePost, user);
   }
 
