@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import java.beans.PropertyEditorSupport;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -86,10 +87,13 @@ public class UserController {
 
   @Tag(name = "회원가입 API", description = "이미 가입한 OAuth2 사용자인지 확인합니다.")
   @GetMapping(value = "/register/check/oauth2")
-  public ResponseEntity<LoginDto.IsUsernameAvailableResponse> isOauth2Available(
-    @RequestParam String username) {
+  public ResponseEntity<LoginDto.IsOauth2RegisterAvailableResponse> isOauth2Available(
+    @RequestParam @NotNull String providerName,
+    @RequestParam String accessToken,
+    @RequestParam String idToken) {
 
-    return ResponseEntity.ok(userService.isUsernameAvailable(username));
+    return ResponseEntity.ok(
+      oauth2Service.isOauth2RegisterAvailable(providerName, idToken, accessToken));
   }
 
   // ****************
