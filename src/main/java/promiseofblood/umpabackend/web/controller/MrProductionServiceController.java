@@ -20,11 +20,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ReviewService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.ApiResponse.PaginatedResponse;
+import promiseofblood.umpabackend.web.schema.request.MrProductionServicePostCreateRequest;
+import promiseofblood.umpabackend.web.schema.response.MrProductionServicePostDetailResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -53,26 +54,27 @@ public class MrProductionServiceController {
   @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<MrProductionServicePostDto.MrProductionResponse> registerMrProduction(
+  public ResponseEntity<MrProductionServicePostDetailResponse> registerMrProduction(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute MrProductionServicePostDto.MrProductionPostRequest mrProductionPostRequest) {
+    @ModelAttribute MrProductionServicePostCreateRequest mrProductionServicePostCreateRequest) {
 
     String loginId = securityUserDetails.getUsername();
 
-    MrProductionServicePostDto.MrProductionResponse mrProductionResponse =
-      serviceBoardService.createMrProductionServicePost(loginId, mrProductionPostRequest);
+    MrProductionServicePostDetailResponse mrProductionServicePostDetailResponse =
+      serviceBoardService.createMrProductionServicePost(loginId,
+        mrProductionServicePostCreateRequest);
 
-    return ResponseEntity.ok(mrProductionResponse);
+    return ResponseEntity.ok(mrProductionServicePostDetailResponse);
   }
 
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production/{id}")
-  public ResponseEntity<MrProductionServicePostDto.MrProductionResponse> getMrProductionServicePost(
+  public ResponseEntity<MrProductionServicePostDetailResponse> getMrProductionServicePost(
     @PathVariable Long id) {
-    MrProductionServicePostDto.MrProductionResponse mrProductionResponse =
+    MrProductionServicePostDetailResponse mrProductionServicePostDetailResponse =
       serviceBoardService.getMrProductionServicePost(id);
 
-    return ResponseEntity.ok(mrProductionResponse);
+    return ResponseEntity.ok(mrProductionServicePostDetailResponse);
   }
 
   @Tag(name = "서비스 관리 API(MR제작)")

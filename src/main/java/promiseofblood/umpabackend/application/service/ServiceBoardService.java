@@ -17,12 +17,12 @@ import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionPostRequest;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionResponse;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.web.schema.request.AccompanimentServicePostCreateRequest;
+import promiseofblood.umpabackend.web.schema.request.MrProductionServicePostCreateRequest;
 import promiseofblood.umpabackend.web.schema.request.ScoreProductionServicePostCreateRequest;
 import promiseofblood.umpabackend.web.schema.response.AccompanimentServicePostDetailResponse;
+import promiseofblood.umpabackend.web.schema.response.MrProductionServicePostDetailResponse;
 import promiseofblood.umpabackend.web.schema.response.ScoreProductionServicePostDetailResponse;
 
 @Service
@@ -158,8 +158,8 @@ public class ServiceBoardService {
   }
 
   @Transactional
-  public MrProductionResponse createMrProductionServicePost(
-    String loginId, MrProductionPostRequest mrProductionPostRequest) {
+  public MrProductionServicePostDetailResponse createMrProductionServicePost(
+    String loginId, MrProductionServicePostCreateRequest mrProductionServicePostCreateRequest) {
 
     User user =
       userRepository
@@ -168,35 +168,38 @@ public class ServiceBoardService {
 
     String filePath =
       storageService.store(
-        mrProductionPostRequest.getThumbnailImage(),
+        mrProductionServicePostCreateRequest.getThumbnailImage(),
         "service/" + user.getId() + "/mr-production");
 
     MrProductionServicePost mrProductionServicePost =
       MrProductionServicePost.builder()
         .user(user)
-        .title(mrProductionPostRequest.getTitle())
+        .title(mrProductionServicePostCreateRequest.getTitle())
         .thumbnailImageUrl(filePath)
-        .description(mrProductionPostRequest.getDescription())
+        .description(mrProductionServicePostCreateRequest.getDescription())
         .serviceCost(
-          ServiceCost.builder().cost(mrProductionPostRequest.getCost()).unit("곡").build())
-        .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
-        .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
-        .averageDuration(DurationRange.of(mrProductionPostRequest.getAverageDuration()))
-        .softwareUsed(mrProductionPostRequest.getSoftwareUsed())
+          ServiceCost.builder().cost(mrProductionServicePostCreateRequest.getCost()).unit("곡")
+            .build())
+        .additionalCostPolicy(mrProductionServicePostCreateRequest.getAdditionalCostPolicy())
+        .freeRevisionCount(mrProductionServicePostCreateRequest.getFreeRevisionCount())
+        .averageDuration(
+          DurationRange.of(mrProductionServicePostCreateRequest.getAverageDuration()))
+        .softwareUsed(mrProductionServicePostCreateRequest.getSoftwareUsed())
         .sampleMrUrls(
-          mrProductionPostRequest.getSampleMrUrls().stream().map(SampleMrUrl::of).toList())
+          mrProductionServicePostCreateRequest.getSampleMrUrls().stream().map(SampleMrUrl::of)
+            .toList())
         .build();
     servicePostRepository.save(mrProductionServicePost);
 
-    return MrProductionResponse.of(mrProductionServicePost);
+    return MrProductionServicePostDetailResponse.of(mrProductionServicePost);
   }
 
   @Transactional(readOnly = true)
-  public MrProductionResponse getMrProductionServicePost(Long id) {
+  public MrProductionServicePostDetailResponse getMrProductionServicePost(Long id) {
 
     MrProductionServicePost mrProductionServicePost =
       (MrProductionServicePost) servicePostRepository.findById(id).get();
 
-    return MrProductionResponse.of(mrProductionServicePost);
+    return MrProductionServicePostDetailResponse.of(mrProductionServicePost);
   }
 }
