@@ -24,9 +24,6 @@ public class TeacherProfileDto {
   @AllArgsConstructor
   public static class TeacherProfileRequest {
 
-    @Schema(description = "대표 문구", example = "멋쟁이 토마토")
-    private String keyphrase;
-
     @Schema(
         description = "선생님 소개",
         example = "안녕하세요, 저는 전자 음악을 전공한 선생님입니다. 레슨을 통해 여러분과 함께 음악의 즐거움을 나누고 싶습니다.")
@@ -71,8 +68,6 @@ public class TeacherProfileDto {
   @ToString
   public static class TeacherProfileResponse {
 
-    private String keyphrase;
-
     private String description;
 
     private ConstantDto.MajorResponse major;
@@ -94,7 +89,6 @@ public class TeacherProfileDto {
       }
 
       return TeacherProfileResponse.builder()
-          .keyphrase(teacherProfile.getKeyphrase())
           .description(teacherProfile.getDescription())
           .major(ConstantDto.MajorResponse.from(teacherProfile.getMajor()))
           .careers(teacherCareerDtoList)
