@@ -14,6 +14,7 @@ import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto.AccompanimentServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.request.AccompanimentServicePostCreateRequest;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -32,11 +33,12 @@ public class AccompanimentServiceController {
   registerAccompaniment(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute
-    AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+    AccompanimentServicePostCreateRequest accompanimentServicePostCreateRequest) {
     String loginId = securityUserDetails.getUsername();
 
     AccompanimentServicePostDto.AccompanimentServicePostResponse accompanimentPostResponse =
-      serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
+      serviceBoardService.createAccompanimentServicePost(loginId,
+        accompanimentServicePostCreateRequest);
 
     return ResponseEntity.ok(accompanimentPostResponse);
   }

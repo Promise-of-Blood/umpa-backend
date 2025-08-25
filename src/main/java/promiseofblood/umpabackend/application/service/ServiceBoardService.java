@@ -8,20 +8,21 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
-import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
-import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
+import promiseofblood.umpabackend.domain.vo.DurationRange;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionPostRequest;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionResponse;
 import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
+import promiseofblood.umpabackend.web.schema.request.AccompanimentServicePostCreateRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class ServiceBoardService {
   public AccompanimentServicePostDto.AccompanimentServicePostResponse
   createAccompanimentServicePost(
     String loginId,
-    AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+    AccompanimentServicePostCreateRequest accompanimentServicePostCreateRequest) {
 
     User user =
       userRepository
@@ -69,24 +70,25 @@ public class ServiceBoardService {
 
     String filePath =
       storageService.store(
-        accompanimentPostRequest.getThumbnailImage(),
+        accompanimentServicePostCreateRequest.getThumbnailImage(),
         "service/" + user.getId() + "/mr-production");
 
     AccompanimentServicePost accompanimentServicePost =
       AccompanimentServicePost.builder()
         .user(user)
-        .title(accompanimentPostRequest.getTitle())
-        .description(accompanimentPostRequest.getDescription())
+        .title(accompanimentServicePostCreateRequest.getTitle())
+        .description(accompanimentServicePostCreateRequest.getDescription())
         .thumbnailImageUrl(filePath)
         .serviceCost(
-          ServiceCost.builder().cost(accompanimentPostRequest.getCost()).unit("학교").build())
-        .additionalCostPolicy(accompanimentPostRequest.getAdditionalCostPolicy())
-        .instrument(accompanimentPostRequest.getInstrument())
-        .includedPracticeCount(accompanimentPostRequest.getIncludedPracticeCount())
-        .additionalPracticeCost(accompanimentPostRequest.getAdditionalPracticeCost())
-        .isMrIncluded(accompanimentPostRequest.getIsMrIncluded())
-        .practiceLocation(accompanimentPostRequest.getPracticeLocation())
-        .videoUrls(accompanimentPostRequest.getVideoUrls())
+          ServiceCost.builder().cost(accompanimentServicePostCreateRequest.getCost()).unit("학교")
+            .build())
+        .additionalCostPolicy(accompanimentServicePostCreateRequest.getAdditionalCostPolicy())
+        .instrument(accompanimentServicePostCreateRequest.getInstrument())
+        .includedPracticeCount(accompanimentServicePostCreateRequest.getIncludedPracticeCount())
+        .additionalPracticeCost(accompanimentServicePostCreateRequest.getAdditionalPracticeCost())
+        .isMrIncluded(accompanimentServicePostCreateRequest.getIsMrIncluded())
+        .practiceLocation(accompanimentServicePostCreateRequest.getPracticeLocation())
+        .videoUrls(accompanimentServicePostCreateRequest.getVideoUrls())
         .build();
     servicePostRepository.save(accompanimentServicePost);
 
