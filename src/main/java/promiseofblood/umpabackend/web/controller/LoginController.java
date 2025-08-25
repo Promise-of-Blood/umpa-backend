@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.web.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import promiseofblood.umpabackend.application.service.UserService;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
+import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -55,10 +57,18 @@ public class LoginController {
 
     return ResponseEntity.ok(userService.refreshToken(request.getRefreshToken()));
   }
-  
+
   @GetMapping("/oauth2-authorization-urls")
   public ResponseEntity<Map<String, Oauth2ProviderDto>> getAuthorizationUrls() {
 
     return ResponseEntity.ok(oauth2Service.generateAuthorizationUrls());
+  }
+
+  @GetMapping("/callback/{providerName}")
+  @Hidden
+  public ResponseEntity<Oauth2ProfileResponse> oauth2AuthorizationCallback(
+    @PathVariable String providerName, String code) {
+
+    return ResponseEntity.ok(oauth2Service.getOauth2Profile(providerName, code));
   }
 }
