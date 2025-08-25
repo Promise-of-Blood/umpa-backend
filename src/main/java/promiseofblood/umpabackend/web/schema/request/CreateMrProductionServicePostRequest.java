@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @AllArgsConstructor
-public class MrProductionServicePostCreateRequest {
+public class CreateMrProductionServicePostRequest {
 
   @Schema(type = "string", format = "binary", description = "대표 사진")
   @NotBlank

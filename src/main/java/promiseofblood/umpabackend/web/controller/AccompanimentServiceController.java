@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
-import promiseofblood.umpabackend.web.schema.request.AccompanimentServicePostCreateRequest;
-import promiseofblood.umpabackend.web.schema.response.AccompanimentServicePostDetailResponse;
+import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
+import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -28,16 +28,16 @@ public class AccompanimentServiceController {
   @Tag(name = "서비스 관리 API(합주)")
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<AccompanimentServicePostDetailResponse>
+  public ResponseEntity<RetrieveAccompanimentServicePostResponse>
   registerAccompaniment(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute
-    AccompanimentServicePostCreateRequest accompanimentServicePostCreateRequest) {
+    CreateAccompanimentServicePostRequest createAccompanimentServicePostRequest) {
     String loginId = securityUserDetails.getUsername();
 
-    AccompanimentServicePostDetailResponse accompanimentPostResponse =
+    RetrieveAccompanimentServicePostResponse accompanimentPostResponse =
       serviceBoardService.createAccompanimentServicePost(loginId,
-        accompanimentServicePostCreateRequest);
+        createAccompanimentServicePostRequest);
 
     return ResponseEntity.ok(accompanimentPostResponse);
   }

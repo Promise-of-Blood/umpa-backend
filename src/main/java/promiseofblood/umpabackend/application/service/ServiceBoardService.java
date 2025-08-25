@@ -18,12 +18,12 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.ServicePostDto;
-import promiseofblood.umpabackend.web.schema.request.AccompanimentServicePostCreateRequest;
-import promiseofblood.umpabackend.web.schema.request.MrProductionServicePostCreateRequest;
-import promiseofblood.umpabackend.web.schema.request.ScoreProductionServicePostCreateRequest;
-import promiseofblood.umpabackend.web.schema.response.AccompanimentServicePostDetailResponse;
-import promiseofblood.umpabackend.web.schema.response.MrProductionServicePostDetailResponse;
-import promiseofblood.umpabackend.web.schema.response.ScoreProductionServicePostDetailResponse;
+import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
+import promiseofblood.umpabackend.web.schema.request.CreateMrProductionServicePostRequest;
+import promiseofblood.umpabackend.web.schema.request.CreateScoreProductionServicePostRequest;
+import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveMrProductionServiceResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServiceResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -59,10 +59,10 @@ public class ServiceBoardService {
   }
 
   @Transactional
-  public AccompanimentServicePostDetailResponse
+  public RetrieveAccompanimentServicePostResponse
   createAccompanimentServicePost(
     String loginId,
-    AccompanimentServicePostCreateRequest accompanimentServicePostCreateRequest) {
+    CreateAccompanimentServicePostRequest createAccompanimentServicePostRequest) {
 
     User user =
       userRepository
@@ -71,36 +71,36 @@ public class ServiceBoardService {
 
     String filePath =
       storageService.store(
-        accompanimentServicePostCreateRequest.getThumbnailImage(),
+        createAccompanimentServicePostRequest.getThumbnailImage(),
         "service/" + user.getId() + "/mr-production");
 
     AccompanimentServicePost accompanimentServicePost =
       AccompanimentServicePost.builder()
         .user(user)
-        .title(accompanimentServicePostCreateRequest.getTitle())
-        .description(accompanimentServicePostCreateRequest.getDescription())
+        .title(createAccompanimentServicePostRequest.getTitle())
+        .description(createAccompanimentServicePostRequest.getDescription())
         .thumbnailImageUrl(filePath)
         .serviceCost(
-          ServiceCost.builder().cost(accompanimentServicePostCreateRequest.getCost()).unit("학교")
+          ServiceCost.builder().cost(createAccompanimentServicePostRequest.getCost()).unit("학교")
             .build())
-        .additionalCostPolicy(accompanimentServicePostCreateRequest.getAdditionalCostPolicy())
-        .instrument(accompanimentServicePostCreateRequest.getInstrument())
-        .includedPracticeCount(accompanimentServicePostCreateRequest.getIncludedPracticeCount())
-        .additionalPracticeCost(accompanimentServicePostCreateRequest.getAdditionalPracticeCost())
-        .isMrIncluded(accompanimentServicePostCreateRequest.getIsMrIncluded())
-        .practiceLocation(accompanimentServicePostCreateRequest.getPracticeLocation())
-        .videoUrls(accompanimentServicePostCreateRequest.getVideoUrls())
+        .additionalCostPolicy(createAccompanimentServicePostRequest.getAdditionalCostPolicy())
+        .instrument(createAccompanimentServicePostRequest.getInstrument())
+        .includedPracticeCount(createAccompanimentServicePostRequest.getIncludedPracticeCount())
+        .additionalPracticeCost(createAccompanimentServicePostRequest.getAdditionalPracticeCost())
+        .isMrIncluded(createAccompanimentServicePostRequest.getIsMrIncluded())
+        .practiceLocation(createAccompanimentServicePostRequest.getPracticeLocation())
+        .videoUrls(createAccompanimentServicePostRequest.getVideoUrls())
         .build();
     servicePostRepository.save(accompanimentServicePost);
 
-    return AccompanimentServicePostDetailResponse.from(
+    return RetrieveAccompanimentServicePostResponse.from(
       accompanimentServicePost, user);
   }
 
   @Transactional
-  public ScoreProductionServicePostDetailResponse createScoreProductionServicePost(
+  public RetrieveScoreProductionServiceResponse createScoreProductionServicePost(
     String loginId,
-    ScoreProductionServicePostCreateRequest scoreProductionRequest) {
+    CreateScoreProductionServicePostRequest scoreProductionRequest) {
 
     User user =
       userRepository
@@ -141,25 +141,25 @@ public class ServiceBoardService {
         .build();
     servicePostRepository.save(scoreProductionServicePost);
 
-    return ScoreProductionServicePostDetailResponse.from(
+    return RetrieveScoreProductionServiceResponse.from(
       scoreProductionServicePost);
   }
 
   @Transactional(readOnly = true)
-  public ScoreProductionServicePostDetailResponse getScoreProductionServicePost(
+  public RetrieveScoreProductionServiceResponse getScoreProductionServicePost(
     Long id) {
 
     ScoreProductionServicePost mrProductionServicePost =
       (ScoreProductionServicePost) servicePostRepository.findById(id).get();
 
-    return ScoreProductionServicePostDetailResponse.from(
+    return RetrieveScoreProductionServiceResponse.from(
       mrProductionServicePost
     );
   }
 
   @Transactional
-  public MrProductionServicePostDetailResponse createMrProductionServicePost(
-    String loginId, MrProductionServicePostCreateRequest mrProductionServicePostCreateRequest) {
+  public RetrieveMrProductionServiceResponse createMrProductionServicePost(
+    String loginId, CreateMrProductionServicePostRequest createMrProductionServicePostRequest) {
 
     User user =
       userRepository
@@ -168,38 +168,38 @@ public class ServiceBoardService {
 
     String filePath =
       storageService.store(
-        mrProductionServicePostCreateRequest.getThumbnailImage(),
+        createMrProductionServicePostRequest.getThumbnailImage(),
         "service/" + user.getId() + "/mr-production");
 
     MrProductionServicePost mrProductionServicePost =
       MrProductionServicePost.builder()
         .user(user)
-        .title(mrProductionServicePostCreateRequest.getTitle())
+        .title(createMrProductionServicePostRequest.getTitle())
         .thumbnailImageUrl(filePath)
-        .description(mrProductionServicePostCreateRequest.getDescription())
+        .description(createMrProductionServicePostRequest.getDescription())
         .serviceCost(
-          ServiceCost.builder().cost(mrProductionServicePostCreateRequest.getCost()).unit("곡")
+          ServiceCost.builder().cost(createMrProductionServicePostRequest.getCost()).unit("곡")
             .build())
-        .additionalCostPolicy(mrProductionServicePostCreateRequest.getAdditionalCostPolicy())
-        .freeRevisionCount(mrProductionServicePostCreateRequest.getFreeRevisionCount())
+        .additionalCostPolicy(createMrProductionServicePostRequest.getAdditionalCostPolicy())
+        .freeRevisionCount(createMrProductionServicePostRequest.getFreeRevisionCount())
         .averageDuration(
-          DurationRange.of(mrProductionServicePostCreateRequest.getAverageDuration()))
-        .softwareUsed(mrProductionServicePostCreateRequest.getSoftwareUsed())
+          DurationRange.of(createMrProductionServicePostRequest.getAverageDuration()))
+        .softwareUsed(createMrProductionServicePostRequest.getSoftwareUsed())
         .sampleMrUrls(
-          mrProductionServicePostCreateRequest.getSampleMrUrls().stream().map(SampleMrUrl::of)
+          createMrProductionServicePostRequest.getSampleMrUrls().stream().map(SampleMrUrl::of)
             .toList())
         .build();
     servicePostRepository.save(mrProductionServicePost);
 
-    return MrProductionServicePostDetailResponse.of(mrProductionServicePost);
+    return RetrieveMrProductionServiceResponse.of(mrProductionServicePost);
   }
 
   @Transactional(readOnly = true)
-  public MrProductionServicePostDetailResponse getMrProductionServicePost(Long id) {
+  public RetrieveMrProductionServiceResponse getMrProductionServicePost(Long id) {
 
     MrProductionServicePost mrProductionServicePost =
       (MrProductionServicePost) servicePostRepository.findById(id).get();
 
-    return MrProductionServicePostDetailResponse.of(mrProductionServicePost);
+    return RetrieveMrProductionServiceResponse.of(mrProductionServicePost);
   }
 }

@@ -13,7 +13,7 @@ import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class ScoreProductionServicePostDetailResponse {
+public class RetrieveScoreProductionServiceResponse {
 
   private long id;
 
@@ -39,7 +39,7 @@ public class ScoreProductionServicePostDetailResponse {
 
   private float reviewRating;
 
-  public static ScoreProductionServicePostDetailResponse from(
+  public static RetrieveScoreProductionServiceResponse from(
     ScoreProductionServicePost scoreProductionServicePost) {
 
     List<CostPerUnitDto> costPerUnits = new ArrayList<>();
@@ -47,7 +47,7 @@ public class ScoreProductionServicePostDetailResponse {
       costPerUnits.add(CostPerUnitDto.from(serviceCost));
     }
 
-    return ScoreProductionServicePostDetailResponse.builder()
+    return RetrieveScoreProductionServiceResponse.builder()
       .id(scoreProductionServicePost.getId())
       .title(scoreProductionServicePost.getTitle())
       .description(scoreProductionServicePost.getDescription())

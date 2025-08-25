@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @AllArgsConstructor
-public class ScoreProductionServicePostCreateRequest {
+public class CreateScoreProductionServicePostRequest {
 
   @Schema(type = "string", format = "binary", description = "대표 사진")
   @NotBlank
