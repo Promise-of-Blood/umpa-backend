@@ -1,11 +1,9 @@
 package promiseofblood.umpabackend.web.controller;
 
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.beans.PropertyEditorSupport;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -27,11 +25,9 @@ import promiseofblood.umpabackend.application.service.Oauth2Service;
 import promiseofblood.umpabackend.application.service.ProfileService;
 import promiseofblood.umpabackend.application.service.UserService;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 
 @RestController
@@ -144,58 +140,6 @@ public class UserController {
         securityUserDetails.getUsername(), defaultProfilePatchRequest);
 
     return ResponseEntity.ok(updatedUser);
-  }
-
-  // ***************
-  // * 토큰 발급 API *
-  // ***************
-  @Tag(name = "토큰 발급 API")
-  @PostMapping("token/{providerName}")
-  public ResponseEntity<LoginDto.LoginCompleteResponse> createOauth2Token(
-    @PathVariable String providerName,
-    @RequestBody LoginDto.Oauth2LoginRequest oauth2LoginRequest) {
-
-    LoginDto.LoginCompleteResponse loginCompleteResponse =
-      oauth2Service.generateOauth2Jwt(
-        providerName,
-        oauth2LoginRequest.getExternalIdToken(),
-        oauth2LoginRequest.getExternalAccessToken());
-
-    return ResponseEntity.ok(loginCompleteResponse);
-  }
-
-  @Tag(name = "토큰 발급 API")
-  @PostMapping("/token/general")
-  public ResponseEntity<LoginDto.LoginCompleteResponse> createToken(
-    @RequestBody LoginDto.LoginIdPasswordLoginRequest request) {
-
-    LoginDto.LoginCompleteResponse loginCompleteResponse =
-      userService.loginIdPasswordJwtLogin(request.getLoginId(), request.getPassword());
-
-    return ResponseEntity.ok(loginCompleteResponse);
-  }
-
-  @Tag(name = "토큰 발급 API")
-  @PostMapping("/refresh-token")
-  public ResponseEntity<LoginDto.LoginCompleteResponse> refreshToken(
-    @RequestBody LoginDto.TokenRefreshRequest request) {
-
-    return ResponseEntity.ok(userService.refreshToken(request.getRefreshToken()));
-  }
-
-  @Tag(name = "토큰 발급 API")
-  @GetMapping("/oauth2-authorization-urls")
-  public ResponseEntity<Map<String, Oauth2ProviderDto>> getAuthorizationUrls() {
-
-    return ResponseEntity.ok(oauth2Service.generateAuthorizationUrls());
-  }
-
-  @GetMapping("/callback/{providerName}")
-  @Hidden
-  public Oauth2ProfileResponse oauth2AuthorizationCallback(
-    @PathVariable String providerName, String code) {
-
-    return oauth2Service.getOauth2Profile(providerName, code);
   }
 
   @InitBinder
