@@ -19,10 +19,11 @@ import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionPostRequest;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionResponse;
-import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.web.schema.request.AccompanimentServicePostCreateRequest;
+import promiseofblood.umpabackend.web.schema.request.ScoreProductionServicePostCreateRequest;
 import promiseofblood.umpabackend.web.schema.response.AccompanimentServicePostDetailResponse;
+import promiseofblood.umpabackend.web.schema.response.ScoreProductionServicePostDetailResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -97,9 +98,9 @@ public class ServiceBoardService {
   }
 
   @Transactional
-  public ScoreProductionServicePostDto.ScoreProductionServicePostResponse createScoreProductionServicePost(
+  public ScoreProductionServicePostDetailResponse createScoreProductionServicePost(
     String loginId,
-    ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+    ScoreProductionServicePostCreateRequest scoreProductionRequest) {
 
     User user =
       userRepository
@@ -140,18 +141,18 @@ public class ServiceBoardService {
         .build();
     servicePostRepository.save(scoreProductionServicePost);
 
-    return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
+    return ScoreProductionServicePostDetailResponse.from(
       scoreProductionServicePost);
   }
 
   @Transactional(readOnly = true)
-  public ScoreProductionServicePostDto.ScoreProductionServicePostResponse getScoreProductionServicePost(
+  public ScoreProductionServicePostDetailResponse getScoreProductionServicePost(
     Long id) {
 
     ScoreProductionServicePost mrProductionServicePost =
       (ScoreProductionServicePost) servicePostRepository.findById(id).get();
 
-    return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
+    return ScoreProductionServicePostDetailResponse.from(
       mrProductionServicePost
     );
   }
