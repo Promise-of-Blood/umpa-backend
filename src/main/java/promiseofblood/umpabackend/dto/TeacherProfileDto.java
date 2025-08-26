@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.domain.vo.Region;
+import promiseofblood.umpabackend.dto.ConstantDto.MajorResponse;
 
 public class TeacherProfileDto {
 
@@ -84,19 +85,27 @@ public class TeacherProfileDto {
     public static TeacherProfileResponse from(TeacherProfile teacherProfile) {
 
       List<TeacherCareerDto> teacherCareerDtoList = new ArrayList<>();
-      for (TeacherCareer teacherCareer : teacherProfile.getCareers()) {
-        teacherCareerDtoList.add(TeacherCareerDto.from(teacherCareer));
+      List<TeacherCareer> teacherCareers = teacherProfile.getCareers();
+      if (teacherCareers != null) {
+        for (TeacherCareer teacherCareer : teacherCareers) {
+          teacherCareerDtoList.add(TeacherCareerDto.from(teacherCareer));
+        }
       }
 
       List<TeacherLinkDto> teacherLinkDtoList = new ArrayList<>();
-      for (TeacherLink teacherLink : teacherProfile.getLinks()) {
-        teacherLinkDtoList.add(TeacherLinkDto.from(teacherLink));
+      List<TeacherLink> teacherLinks = teacherProfile.getLinks();
+      if (teacherLinks != null) {
+        for (TeacherLink teacherLink : teacherLinks) {
+          teacherLinkDtoList.add(TeacherLinkDto.from(teacherLink));
+        }
       }
 
       return TeacherProfileResponse.builder()
           .keyphrase(teacherProfile.getKeyphrase())
           .description(teacherProfile.getDescription())
-          .major(ConstantDto.MajorResponse.from(teacherProfile.getMajor()))
+          .major(Optional.ofNullable(teacherProfile.getMajor())
+            .map(MajorResponse::from)
+            .orElse(null))
           .careers(teacherCareerDtoList)
           .links(teacherLinkDtoList)
           .build();

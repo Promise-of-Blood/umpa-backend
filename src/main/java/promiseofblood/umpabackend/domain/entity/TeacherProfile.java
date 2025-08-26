@@ -18,10 +18,8 @@ import promiseofblood.umpabackend.dto.TeacherProfileDto;
 
 @Entity
 @Getter
-@Setter
-@SuperBuilder
 @Table(name = "teacher_profiles")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class TeacherProfile extends TimeStampedEntity {
 
   private String keyphrase;
@@ -36,17 +34,6 @@ public class TeacherProfile extends TimeStampedEntity {
 
   @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TeacherLink> links;
-
-  public static TeacherProfile from(TeacherProfileDto.TeacherProfileRequest request) {
-
-    return TeacherProfile.builder()
-      .keyphrase(request.getKeyphrase())
-      .description(request.getDescription())
-      .major(request.getMajor())
-      .careers(request.getCareers().stream().map(TeacherCareer::from).toList())
-      .links(request.getLinks().stream().map(TeacherLink::from).toList())
-      .build();
-  }
 
   public boolean isProfileComplete() {
     return description != null && !description.isEmpty() &&

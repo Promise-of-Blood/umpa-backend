@@ -27,7 +27,9 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
+import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
+import promiseofblood.umpabackend.dto.StudentProfileDto.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherProfileRequest;
 import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.UserDto.ProfileResponse;
@@ -115,7 +117,7 @@ class ProfileServiceTest {
   void patchTeacherProfile_whenOnlyUpdateKeyphrase() {
     // Given
     String newKeyphrase = "new_keyphrase";
-    final User user = createTestUser();
+    final User user = createTestTeacherUser();
     final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
       .keyphrase(newKeyphrase)
       .build();
@@ -128,6 +130,48 @@ class ProfileServiceTest {
 
     // Then
     assertEquals(newKeyphrase, profileResponseDto.getTeacherProfile().getKeyphrase());
+  }
+
+  @Test
+  @DisplayName("처음 회원가입 시 선생님 프로필 항목:전공 입력 테스트")
+  void patchTeacherProfile_withMajorOnly_whenUserHasNotTeacherProfile() {
+    // Given
+    Major newMajor = Major.BASS;
+    final User user = createTestPendingUser();
+    user.patchDefaultProfile(null, null, null, ProfileType.TEACHER);
+    final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
+      .major(newMajor)
+      .build();
+
+    when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
+    when(userRepository.save(any())).thenReturn(user);
+
+    // When
+    ProfileResponse profileResponseDto = subject.patchTeacherProfile(any(), teacherProfileRequest);
+
+    // Then
+    assertEquals(newMajor.name(), profileResponseDto.getTeacherProfile().getMajor().getCode());
+  }
+
+  @Test
+  @DisplayName("처음 회원가입 시 학생 프로필 항목:전공 입력 테스트")
+  void patchStudentProfile_withMajorOnly_whenUserHasNotStudentProfile() {
+    // Given
+    Major newMajor = Major.BASS;
+    final User user = createTestPendingUser();
+    user.patchDefaultProfile(null, null, null, ProfileType.STUDENT);
+    final StudentProfileRequest studentProfileRequest = StudentProfileRequest.builder()
+      .major(newMajor)
+      .build();
+
+    when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
+    when(userRepository.save(any())).thenReturn(user);
+
+    // When
+    ProfileResponse profileResponseDto = subject.patchStudentProfile(any(), studentProfileRequest);
+
+    // Then
+    assertEquals(newMajor.name(), profileResponseDto.getStudentProfile().getMajor().getCode());
   }
 
 //  @Test
@@ -157,18 +201,30 @@ class ProfileServiceTest {
 //    );
 //  }
 
-  private User createTestUser() {
-    final TeacherProfile teacherProfile = TeacherProfile.builder()
+  private User createTestTeacherUser() {
+    final TeacherProfile teacherProfile = new TeacherProfile();
+
+    TeacherProfileRequest request = TeacherProfileRequest.builder()
       .keyphrase("keyphrase")
       .careers(Collections.emptyList())
       .links(Collections.emptyList())
       .description("description")
       .major(Major.BASS)
       .build();
+
+    teacherProfile.update(request);
+
+    User user = createTestPendingUser();
+    user.patchTeacherProfile(teacherProfile);
+    user.patchDefaultProfile(null, null, null, ProfileType.TEACHER);
+
+    return user;
+  }
+
+  private User createTestPendingUser() {
     return User.builder()
       .username(new Username("username"))
-      .profileType(ProfileType.STUDENT)
-      .teacherProfile(teacherProfile)
+      .userStatus(UserStatus.PENDING)
       .build();
   }
 }

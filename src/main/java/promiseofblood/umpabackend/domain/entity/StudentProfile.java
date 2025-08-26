@@ -20,9 +20,8 @@ import promiseofblood.umpabackend.dto.StudentProfileDto;
 
 @Entity
 @Getter
-@SuperBuilder
 @Table(name = "student_profiles")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class StudentProfile extends TimeStampedEntity {
 
   @Enumerated(EnumType.STRING)
@@ -37,14 +36,6 @@ public class StudentProfile extends TimeStampedEntity {
 
   @Enumerated(EnumType.STRING)
   private Grade grade;
-
-  public static StudentProfile from(StudentProfileDto.StudentProfileRequest request) {
-    return StudentProfile.builder()
-      .major(request.getMajor())
-      .preferredColleges(request.getPreferredColleges())
-      .grade(request.getGrade())
-      .build();
-  }
 
   public void update(StudentProfileDto.StudentProfileRequest request) {
     if (request.getMajor() != null) {

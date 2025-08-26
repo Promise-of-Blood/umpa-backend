@@ -51,10 +51,10 @@ public class ProfileService {
     TeacherProfile teacherProfile = user.getTeacherProfile();
 
     if (teacherProfile == null) {
-      teacherProfile = TeacherProfile.from(teacherProfileRequest);
-    } else {
-      teacherProfile.update(teacherProfileRequest);
+      teacherProfile = new TeacherProfile();
     }
+
+    teacherProfile.update(teacherProfileRequest);
 
     user.patchTeacherProfile(teacherProfile);
     User updatedUser = userRepository.save(user);
@@ -74,10 +74,10 @@ public class ProfileService {
     StudentProfile studentProfile = user.getStudentProfile();
 
     if (studentProfile == null) {
-      studentProfile = StudentProfile.from(studentProfileRequest);
-    } else {
-      studentProfile.update(studentProfileRequest);
+      studentProfile = new StudentProfile();
     }
+
+    studentProfile.update(studentProfileRequest);
 
     user.patchStudentProfile(studentProfile);
     User updatedUser = userRepository.save(user);
