@@ -174,6 +174,26 @@ class ProfileServiceTest {
     assertEquals(newMajor.name(), profileResponseDto.getStudentProfile().getMajor().getCode());
   }
 
+  @Test
+  @DisplayName("처음 선생님 회원가입 중 빈 대표 경력 입력 테스트")
+  void patchTeacherProfile_withEmptyCareerList_whenUserSignUp() {
+    // Given
+    final User user = createTestPendingUser();
+    user.patchDefaultProfile(null, null, null, ProfileType.TEACHER);
+    final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
+      .careers(Collections.emptyList())
+      .build();
+
+    when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
+    when(userRepository.save(any())).thenReturn(user);
+
+    // When
+    ProfileResponse profileResponseDto = subject.patchTeacherProfile(any(), teacherProfileRequest);
+
+    // Then
+    assertEquals(Collections.emptyList(), profileResponseDto.getTeacherProfile().getCareers());
+  }
+
 //  @Test
 //  void patchDefaultProfile_whenUsernameIsInvalid() {
 //    // Given
@@ -202,7 +222,7 @@ class ProfileServiceTest {
 //  }
 
   private User createTestTeacherUser() {
-    final TeacherProfile teacherProfile = new TeacherProfile();
+    final TeacherProfile teacherProfile = TeacherProfile.empty();
 
     TeacherProfileRequest request = TeacherProfileRequest.builder()
       .keyphrase("keyphrase")

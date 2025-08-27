@@ -51,7 +51,7 @@ public class ProfileService {
     TeacherProfile teacherProfile = user.getTeacherProfile();
 
     if (teacherProfile == null) {
-      teacherProfile = new TeacherProfile();
+      teacherProfile = TeacherProfile.empty();
     }
 
     teacherProfile.update(teacherProfileRequest);
@@ -74,7 +74,7 @@ public class ProfileService {
     StudentProfile studentProfile = user.getStudentProfile();
 
     if (studentProfile == null) {
-      studentProfile = new StudentProfile();
+      studentProfile = StudentProfile.empty();
     }
 
     studentProfile.update(studentProfileRequest);

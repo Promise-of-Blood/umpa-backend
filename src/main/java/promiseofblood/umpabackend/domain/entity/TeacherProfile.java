@@ -6,12 +6,11 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
@@ -19,7 +18,7 @@ import promiseofblood.umpabackend.dto.TeacherProfileDto;
 @Entity
 @Getter
 @Table(name = "teacher_profiles")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherProfile extends TimeStampedEntity {
 
   private String keyphrase;
@@ -34,6 +33,13 @@ public class TeacherProfile extends TimeStampedEntity {
 
   @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TeacherLink> links;
+
+  public static TeacherProfile empty() {
+    var teacherProfile = new TeacherProfile();
+    teacherProfile.careers = new ArrayList<>();
+    teacherProfile.links = new ArrayList<>();
+    return teacherProfile;
+  }
 
   public boolean isProfileComplete() {
     return description != null && !description.isEmpty() &&
