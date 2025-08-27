@@ -1,10 +1,12 @@
 package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,20 +19,34 @@ import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
+import promiseofblood.umpabackend.infrastructure.config.StaticResourcePathConfig;
 import promiseofblood.umpabackend.web.schema.response.ConstantResponses;
+import promiseofblood.umpabackend.web.schema.response.ConstantResponses.MajorResponse;
 
 @RestController
 @RequestMapping("api/v1/constants")
 @Tag(name = "상수 API", description = "서버에서 필요한 상수 값들을 조회하는 API")
+@RequiredArgsConstructor
 public class ConstantsController {
+
+  private final StaticResourcePathConfig staticResourcePathConfig;
 
   @GetMapping("/majors")
   public ResponseEntity<List<ConstantResponses.MajorResponse>> getMajors() {
 
+    Path svgPath = staticResourcePathConfig.getSvgPath();
+
     List<ConstantResponses.MajorResponse> majorResponses =
-        Stream.of(Major.values())
-            .map(ConstantResponses.MajorResponse::from)
-            .collect(Collectors.toList());
+        Arrays.stream(Major.values())
+            .map(
+                major -> {
+                  String assetName = major.getAssetName();
+                  MajorResponse majorResponse = ConstantResponses.MajorResponse.from(major);
+                  Path svgFilePath = svgPath.resolve(assetName + ".svg");
+                  majorResponse.setSvg(svgFilePath.toString());
+                  return majorResponse;
+                })
+            .toList();
 
     return ResponseEntity.ok(majorResponses);
   }
