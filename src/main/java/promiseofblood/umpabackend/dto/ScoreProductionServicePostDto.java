@@ -60,8 +60,8 @@ public class ScoreProductionServicePostDto {
       message = "형식은 {숫자}{DAY|WEEK|MONTH}~{숫자}{DAY|WEEK|MONTH} 이어야 합니다.")
     private String averageDuration;
 
-    @Schema(description = "사용 소프트웨어", example = "Logic Pro X")
-    private String softwareUsed;
+    @Schema(description = "사용 소프트웨어", example = "[\"Sibelius\", \"Finale\"]")
+    private List<String> softwareList;
 
     @Schema(type = "string", format = "binary", description = "샘플 악보 사진")
     @NotBlank
@@ -88,7 +88,7 @@ public class ScoreProductionServicePostDto {
 
     private int freeRevisionCount;
 
-    private String softwareUsed;
+    private List<String> softwareList;
 
     private int additionalRevisionCost;
 
@@ -114,7 +114,7 @@ public class ScoreProductionServicePostDto {
         .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
         .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
-        .softwareUsed(scoreProductionServicePost.getSoftwareUsed())
+        .softwareList(scoreProductionServicePost.getUsingSoftwareList())
         .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
         .sampleScoreImageUrl(scoreProductionServicePost.getSampleScoreImageUrl())
         .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))

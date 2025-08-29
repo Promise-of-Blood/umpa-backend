@@ -133,7 +133,7 @@ public class ServiceBoardService {
         .freeRevisionCount(scoreProductionRequest.getFreeRevisionCount())
         .additionalRevisionCost(scoreProductionRequest.getAdditionalRevisionCost())
         .averageDuration(DurationRange.of(scoreProductionRequest.getAverageDuration()))
-        .softwareUsed(scoreProductionRequest.getSoftwareUsed())
+        .usingSoftwareList(scoreProductionRequest.getSoftwareList())
         .sampleScoreImageUrl(sampleScoreFilePath)
         .build();
     servicePostRepository.save(scoreProductionServicePost);
@@ -179,7 +179,7 @@ public class ServiceBoardService {
         .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
         .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
         .averageDuration(DurationRange.of(mrProductionPostRequest.getAverageDuration()))
-        .softwareUsed(mrProductionPostRequest.getSoftwareUsed())
+        .usingSoftwareList(mrProductionPostRequest.getSoftwareList())
         .sampleMrUrls(
           mrProductionPostRequest.getSampleMrUrls().stream().map(SampleMrUrl::of).toList())
         .build();

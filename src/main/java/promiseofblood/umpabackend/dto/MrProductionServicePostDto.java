@@ -44,8 +44,8 @@ public class MrProductionServicePostDto {
     @Pattern(regexp = "^[0-9]+(DAY|WEEK|MONTH)~[0-9]+(DAY|WEEK|MONTH)$", message = "형식은 {숫자}{DAY|WEEK|MONTH}~{숫자}{DAY|WEEK|MONTH} 이어야 합니다.")
     private String averageDuration;
 
-    @Schema(description = "사용 소프트웨어", example = "Logic Pro X")
-    private String softwareUsed;
+    @Schema(description = "사용 소프트웨어", example = "[\"Logic Pro X\", \"Ableton Live\"]")
+    private List<String> softwareList;
 
     @Schema(description = "샘플 MR URL 목록", example = "[\"https://example.com/sample1.mp3\", \"https://example.com/sample2.mp3\"]")
     private List<String> sampleMrUrls;
@@ -69,7 +69,7 @@ public class MrProductionServicePostDto {
 
     private int freeRevisionCount;
 
-    private String softwareUsed;
+    private List<String> softwareList;
 
     private List<SampleMrUrlResponse> sampleUrls;
 
@@ -86,7 +86,7 @@ public class MrProductionServicePostDto {
         .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
-        .softwareUsed(mrProductionServicePost.getSoftwareUsed())
+        .softwareList(mrProductionServicePost.getUsingSoftwareList())
         .sampleUrls(SampleMrUrlResponse.fromList(mrProductionServicePost.getSampleMrUrls()))
         .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
         .reviewRating(0.0f).build();
