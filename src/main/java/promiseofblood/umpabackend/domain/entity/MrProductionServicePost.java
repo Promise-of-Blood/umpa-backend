@@ -30,6 +30,8 @@ public class MrProductionServicePost extends ServicePost {
 
   private int freeRevisionCount;
 
+  private int additionalRevisionCost;
+
   @Embedded
   private DurationRange averageDuration;
 

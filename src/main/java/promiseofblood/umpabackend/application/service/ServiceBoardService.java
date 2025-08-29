@@ -178,6 +178,7 @@ public class ServiceBoardService {
           ServiceCost.builder().cost(mrProductionPostRequest.getCost()).unit("곡").build())
         .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
         .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
+        .additionalRevisionCost(mrProductionPostRequest.getAdditionalRevisionCost())
         .averageDuration(DurationRange.of(mrProductionPostRequest.getAverageDuration()))
         .usingSoftwareList(mrProductionPostRequest.getSoftwareList())
         .sampleMrUrls(
