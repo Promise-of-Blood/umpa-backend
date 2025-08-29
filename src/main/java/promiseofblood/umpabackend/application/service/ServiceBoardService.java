@@ -116,7 +116,7 @@ public class ServiceBoardService {
 
     List<ServiceCost> serviceCosts = new ArrayList<>();
     for (String costByScoreType : scoreProductionRequest.getCostByScoreType().split(",")) {
-      String[] parts = costByScoreType.split("-");
+      String[] parts = costByScoreType.split(":");
       String scoreType = parts[0];
       int cost = Integer.parseInt(parts[1]);
       serviceCosts.add(ServiceCost.builder().unit(scoreType).cost(cost).build());
