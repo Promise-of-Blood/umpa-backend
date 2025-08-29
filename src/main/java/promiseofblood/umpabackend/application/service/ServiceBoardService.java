@@ -85,7 +85,7 @@ public class ServiceBoardService {
         .includedPracticeCount(accompanimentPostRequest.getIncludedPracticeCount())
         .additionalPracticeCost(accompanimentPostRequest.getAdditionalPracticeCost())
         .isMrIncluded(accompanimentPostRequest.getIsMrIncluded())
-        .practiceLocation(accompanimentPostRequest.getPracticeLocation())
+        .practiceLocations(accompanimentPostRequest.getPracticeLocations())
         .videoUrls(accompanimentPostRequest.getVideoUrls())
         .build();
     servicePostRepository.save(accompanimentServicePost);
