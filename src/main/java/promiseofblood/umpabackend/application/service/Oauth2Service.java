@@ -20,11 +20,11 @@ import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.LoginDto.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
-import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2Strategy;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2StrategyFactory;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -80,7 +80,7 @@ public class Oauth2Service {
     User user = userRepository.save(newUser);
 
     return LoginCompleteResponse.of(
-      UserDto.ProfileResponse.from(user),
+      RetrieveFullProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId())));
@@ -111,7 +111,7 @@ public class Oauth2Service {
         .orElseThrow(() -> new UnauthorizedException("가입하지 않은 Oauth2 사용자입니다."));
 
     return LoginCompleteResponse.of(
-      UserDto.ProfileResponse.from(user),
+      RetrieveFullProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId())));

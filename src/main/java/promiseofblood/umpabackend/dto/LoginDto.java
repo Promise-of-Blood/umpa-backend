@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
+import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 public class LoginDto {
 
@@ -107,11 +108,12 @@ public class LoginDto {
   @AllArgsConstructor
   public static class LoginCompleteResponse {
 
-    private UserDto.ProfileResponse user;
+    private RetrieveFullProfileResponse user;
 
     private JwtPairResponse jwtPair;
 
-    public static LoginCompleteResponse of(UserDto.ProfileResponse user, JwtPairResponse jwtPair) {
+    public static LoginCompleteResponse of(RetrieveFullProfileResponse user,
+      JwtPairResponse jwtPair) {
       return new LoginCompleteResponse(user, jwtPair);
     }
   }

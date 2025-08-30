@@ -28,9 +28,9 @@ import promiseofblood.umpabackend.application.service.UserService;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
-import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -46,8 +46,8 @@ public class UserController {
   // ****************
   @Tag(name = "사용자 관리 API")
   @GetMapping("")
-  public ResponseEntity<List<UserDto.ProfileResponse>> getUser() {
-    List<UserDto.ProfileResponse> users = userService.getUsers();
+  public ResponseEntity<List<RetrieveFullProfileResponse>> getUser() {
+    List<RetrieveFullProfileResponse> users = userService.getUsers();
 
     return ResponseEntity.ok(users);
   }
@@ -102,7 +102,7 @@ public class UserController {
   // ****************
   @Tag(name = "프로필 관리 API")
   @GetMapping("/me")
-  public ResponseEntity<UserDto.ProfileResponse> getCurrentUser(
+  public ResponseEntity<RetrieveFullProfileResponse> getCurrentUser(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
     return ResponseEntity.ok(userService.getUserByLoginId(securityUserDetails.getUsername()));
@@ -110,11 +110,11 @@ public class UserController {
 
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/teacher-profile")
-  public ResponseEntity<UserDto.ProfileResponse> patchTeacherProfile(
+  public ResponseEntity<RetrieveFullProfileResponse> patchTeacherProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @RequestBody TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
 
-    UserDto.ProfileResponse teacherProfileResponse =
+    RetrieveFullProfileResponse teacherProfileResponse =
       profileService.patchTeacherProfile(
         securityUserDetails.getUsername(), teacherProfileRequest);
 
@@ -123,11 +123,11 @@ public class UserController {
 
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/student-profile")
-  public ResponseEntity<UserDto.ProfileResponse> patchStudentProfile(
+  public ResponseEntity<RetrieveFullProfileResponse> patchStudentProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @RequestBody @Valid StudentProfileDto.StudentProfileRequest studentProfileRequest) {
 
-    UserDto.ProfileResponse studentProfileDto =
+    RetrieveFullProfileResponse studentProfileDto =
       profileService.patchStudentProfile(
         securityUserDetails.getUsername(), studentProfileRequest);
 
@@ -136,11 +136,11 @@ public class UserController {
 
   @Tag(name = "프로필 관리 API")
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<UserDto.ProfileResponse> patchDefaultProfile(
+  public ResponseEntity<RetrieveFullProfileResponse> patchDefaultProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @Validated @ModelAttribute PatchDefaultProfileRequest patchDefaultProfileRequest) {
 
-    UserDto.ProfileResponse updatedUser =
+    RetrieveFullProfileResponse updatedUser =
       profileService.patchDefaultProfile(
         securityUserDetails.getUsername(), patchDefaultProfileRequest);
 

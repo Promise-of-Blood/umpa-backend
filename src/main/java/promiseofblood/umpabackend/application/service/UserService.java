@@ -16,7 +16,7 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
-import promiseofblood.umpabackend.dto.UserDto;
+import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 @Service
 @Slf4j
@@ -51,7 +51,7 @@ public class UserService {
     user = userRepository.save(user);
 
     return LoginCompleteResponse.of(
-      UserDto.ProfileResponse.from(user),
+      RetrieveFullProfileResponse.from(user),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId())));
@@ -63,20 +63,20 @@ public class UserService {
    * @return 사용자 목록
    */
   @Transactional(readOnly = true)
-  public List<UserDto.ProfileResponse> getUsers() {
+  public List<RetrieveFullProfileResponse> getUsers() {
 
-    return userRepository.findAll().stream().map(UserDto.ProfileResponse::from).toList();
+    return userRepository.findAll().stream().map(RetrieveFullProfileResponse::from).toList();
   }
 
   @Transactional(readOnly = true)
-  public UserDto.ProfileResponse getUserByLoginId(String loginId) {
+  public RetrieveFullProfileResponse getUserByLoginId(String loginId) {
 
     User user =
       userRepository
         .findByLoginId(loginId)
         .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
-    return UserDto.ProfileResponse.from(user);
+    return RetrieveFullProfileResponse.from(user);
   }
 
   @Transactional(readOnly = true)
@@ -92,7 +92,7 @@ public class UserService {
     }
 
     return LoginCompleteResponse.of(
-      UserDto.ProfileResponse.from(optionalUser.get()),
+      RetrieveFullProfileResponse.from(optionalUser.get()),
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(
           optionalUser.get().getId(), optionalUser.get().getLoginId()),
@@ -112,7 +112,7 @@ public class UserService {
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
 
-    return LoginCompleteResponse.of(UserDto.ProfileResponse.from(user), jwtPairResponse);
+    return LoginCompleteResponse.of(RetrieveFullProfileResponse.from(user), jwtPairResponse);
   }
 
   public LoginDto.IsUsernameAvailableResponse isUsernameAvailable(String username) {

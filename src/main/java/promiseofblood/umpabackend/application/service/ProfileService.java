@@ -10,8 +10,8 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
-import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -21,7 +21,7 @@ public class ProfileService {
   private final StorageService storageService;
 
   @Transactional
-  public UserDto.ProfileResponse patchDefaultProfile(
+  public RetrieveFullProfileResponse patchDefaultProfile(
     String loginId, PatchDefaultProfileRequest patchDefaultProfileRequest) {
 
     User user =
@@ -36,11 +36,11 @@ public class ProfileService {
       patchDefaultProfileRequest.getProfileType());
     User updatedUser = userRepository.save(user);
 
-    return UserDto.ProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser);
   }
 
   @Transactional
-  public UserDto.ProfileResponse patchTeacherProfile(
+  public RetrieveFullProfileResponse patchTeacherProfile(
     String loginId, TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
 
     User user =
@@ -59,11 +59,11 @@ public class ProfileService {
     user.patchTeacherProfile(teacherProfile);
     User updatedUser = userRepository.save(user);
 
-    return UserDto.ProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser);
   }
 
   @Transactional
-  public UserDto.ProfileResponse patchStudentProfile(
+  public RetrieveFullProfileResponse patchStudentProfile(
     String loginId, StudentProfileDto.StudentProfileRequest studentProfileRequest) {
 
     User user =
@@ -82,7 +82,7 @@ public class ProfileService {
     user.patchStudentProfile(studentProfile);
     User updatedUser = userRepository.save(user);
 
-    return UserDto.ProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser);
   }
 
   public String uploadProfileImageIfExists(String loginId, MultipartFile profileImage) {

@@ -28,8 +28,8 @@ import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
 import promiseofblood.umpabackend.dto.StudentProfileDto.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherProfileRequest;
-import promiseofblood.umpabackend.dto.UserDto.ProfileResponse;
 import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceTest {
@@ -123,7 +123,8 @@ class ProfileServiceTest {
     when(userRepository.save(any())).thenReturn(user);
 
     // When
-    ProfileResponse profileResponseDto = subject.patchTeacherProfile(any(), teacherProfileRequest);
+    RetrieveFullProfileResponse profileResponseDto = subject.patchTeacherProfile(any(),
+      teacherProfileRequest);
 
     // Then
     assertEquals(newKeyphrase, profileResponseDto.getTeacherProfile().getKeyphrase());
