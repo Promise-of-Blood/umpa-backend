@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import promiseofblood.umpabackend.application.command.CreateMrProductionCommand;
 import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.application.service.MrProductionService;
 import promiseofblood.umpabackend.application.service.ReviewService;
@@ -27,6 +28,7 @@ import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.ApiResponse.PaginatedResponse;
+import promiseofblood.umpabackend.web.schema.MrProductionResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -54,21 +56,34 @@ public class MrProductionServiceController {
   @Tag(name = "서비스 관리 API(MR제작)")
   @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<MrProductionServicePostDto.MrProductionResponse> registerMrProduction(
+  public ResponseEntity<MrProductionResponse> registerMrProduction(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
     @ModelAttribute MrProductionServicePostDto.MrProductionPostRequest mrProductionPostRequest) {
 
     String loginId = securityUserDetails.getUsername();
 
-    MrProductionServicePostDto.MrProductionResponse mrProductionResponse =
-      mrProductionService.createMrProductionServicePost(loginId, mrProductionPostRequest);
+    CreateMrProductionCommand command = CreateMrProductionCommand.builder()
+      .loginId(loginId)
+      .title(mrProductionPostRequest.getTitle())
+      .thumbnailImage(mrProductionPostRequest.getThumbnailImage())
+      .description(mrProductionPostRequest.getDescription())
+      .serviceCostValue(mrProductionPostRequest.getCost())
+      .serviceCostUnit("곡")
+      .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
+      .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
+      .additionalRevisionCost(mrProductionPostRequest.getAdditionalRevisionCost())
+      .averageDuration(mrProductionPostRequest.getAverageDuration())
+      .usingSoftwareList(mrProductionPostRequest.getSoftwareList())
+      .sampleMrUrls(mrProductionPostRequest.getSampleMrUrls())
+      .build();
+    mrProductionService.createMrProductionServicePost(command);
 
-    return ResponseEntity.ok(mrProductionResponse);
+    return ResponseEntity.ok(null);
   }
 
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production/{id}")
-  public ResponseEntity<MrProductionServicePostDto.MrProductionResponse> getMrProductionServicePost(
+  public ResponseEntity<MrProductionResponse> getMrProductionServicePost(
     @PathVariable Long id) {
 
     RetrieveMrServicePostQuery query = new RetrieveMrServicePostQuery(id);

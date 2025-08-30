@@ -3,6 +3,7 @@ package promiseofblood.umpabackend.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.application.command.CreateMrProductionCommand;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
@@ -12,8 +13,7 @@ import promiseofblood.umpabackend.domain.repository.MrProductionServicePostRepos
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionPostRequest;
-import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionResponse;
+import promiseofblood.umpabackend.web.schema.MrProductionResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -24,33 +24,36 @@ public class MrProductionService {
   private final StorageService storageService;
 
   @Transactional
-  public MrProductionResponse createMrProductionServicePost(
-    String loginId, MrProductionPostRequest mrProductionPostRequest) {
+  public MrProductionResponse createMrProductionServicePost(CreateMrProductionCommand command) {
 
     User user = userRepository
-      .findByLoginId(loginId)
+      .findByLoginId(command.getLoginId())
       .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
-    String filePath = storageService.store(
-      mrProductionPostRequest.getThumbnailImage(),
+    String thumbnailImageFilePath = storageService.store(
+      command.getThumbnailImage(),
       "service/" + user.getId() + "/mr-production");
 
-    MrProductionServicePost mrProductionServicePost =
-      MrProductionServicePost.builder()
-        .user(user)
-        .title(mrProductionPostRequest.getTitle())
-        .thumbnailImageUrl(filePath)
-        .description(mrProductionPostRequest.getDescription())
-        .serviceCost(
-          ServiceCost.builder().cost(mrProductionPostRequest.getCost()).unit("곡").build())
-        .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
-        .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
-        .additionalRevisionCost(mrProductionPostRequest.getAdditionalRevisionCost())
-        .averageDuration(DurationRange.of(mrProductionPostRequest.getAverageDuration()))
-        .usingSoftwareList(mrProductionPostRequest.getSoftwareList())
-        .sampleMrUrls(
-          mrProductionPostRequest.getSampleMrUrls().stream().map(SampleMrUrl::of).toList())
-        .build();
+    ServiceCost serviceCost = ServiceCost.of(
+      command.getServiceCostValue(),
+      command.getServiceCostUnit()
+    );
+
+    DurationRange durationRange = DurationRange.of(command.getAverageDuration());
+
+    MrProductionServicePost mrProductionServicePost = MrProductionServicePost.create(
+      user,
+      thumbnailImageFilePath,
+      command.getTitle(),
+      command.getDescription(),
+      serviceCost,
+      command.getAdditionalCostPolicy(),
+      command.getFreeRevisionCount(),
+      command.getAdditionalRevisionCost(),
+      durationRange,
+      command.getUsingSoftwareList(),
+      command.getSampleMrUrls().stream().map(SampleMrUrl::of).toList()
+    );
     mrProductionServicePostRepository.save(mrProductionServicePost);
 
     return MrProductionResponse.of(mrProductionServicePost);
