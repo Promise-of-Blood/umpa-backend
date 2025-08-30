@@ -15,7 +15,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.dto.TeacherProfileDto;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest.TeacherCareerRequest;
 
 @Entity
 @Getter
@@ -51,7 +52,7 @@ public class TeacherProfile extends TimeStampedEntity {
       careers != null && !careers.isEmpty();
   }
 
-  public void update(TeacherProfileDto.TeacherProfileRequest request) {
+  public void update(PatchTeacherProfileRequest request) {
     if (request.getKeyphrase() != null) {
       this.keyphrase = request.getKeyphrase();
     }
@@ -63,7 +64,7 @@ public class TeacherProfile extends TimeStampedEntity {
     }
     if (request.getCareers() != null) {
       this.careers.clear();
-      for (TeacherProfileDto.TeacherProfileRequest.TeacherCareerRequest careerRequest :
+      for (TeacherCareerRequest careerRequest :
         request.getCareers()) {
         TeacherCareer career = TeacherCareer.from(careerRequest);
         this.careers.add(career);

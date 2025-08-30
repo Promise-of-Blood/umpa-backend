@@ -17,7 +17,7 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
+import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
 
 @Entity
 @Getter
@@ -45,7 +45,7 @@ public class StudentProfile extends TimeStampedEntity {
     return studentProfile;
   }
 
-  public void update(StudentProfileDto.StudentProfileRequest request) {
+  public void update(PatchStudentProfileRequest request) {
     if (request.getMajor() != null) {
       this.major = request.getMajor();
     }

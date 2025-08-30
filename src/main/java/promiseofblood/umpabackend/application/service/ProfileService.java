@@ -8,9 +8,9 @@ import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
-import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
 import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @Service
@@ -64,7 +64,7 @@ public class ProfileService {
 
   @Transactional
   public RetrieveFullProfileResponse patchStudentProfile(
-    String loginId, StudentProfileDto.StudentProfileRequest studentProfileRequest) {
+    String loginId, PatchStudentProfileRequest studentProfileRequest) {
 
     User user =
       userRepository
