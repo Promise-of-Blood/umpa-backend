@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import promiseofblood.umpabackend.application.command.CreateMrProductionCommand;
+import promiseofblood.umpabackend.application.command.CreateMrProductionServicePostCommand;
 import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.application.service.MrProductionService;
 import promiseofblood.umpabackend.application.service.ReviewService;
@@ -62,7 +62,7 @@ public class MrProductionServiceController {
 
     String loginId = securityUserDetails.getUsername();
 
-    CreateMrProductionCommand command = CreateMrProductionCommand.builder()
+    CreateMrProductionServicePostCommand command = CreateMrProductionServicePostCommand.builder()
       .loginId(loginId)
       .title(createMrProductionServicePostRequest.getTitle())
       .thumbnailImage(createMrProductionServicePostRequest.getThumbnailImage())

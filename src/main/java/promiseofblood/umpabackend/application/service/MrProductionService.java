@@ -3,7 +3,7 @@ package promiseofblood.umpabackend.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import promiseofblood.umpabackend.application.command.CreateMrProductionCommand;
+import promiseofblood.umpabackend.application.command.CreateMrProductionServicePostCommand;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
@@ -25,7 +25,7 @@ public class MrProductionService {
 
   @Transactional
   public RetrieveMrProductionServicePostResponse createMrProductionServicePost(
-    CreateMrProductionCommand command) {
+    CreateMrProductionServicePostCommand command) {
 
     User user = userRepository
       .findByLoginId(command.getLoginId())
