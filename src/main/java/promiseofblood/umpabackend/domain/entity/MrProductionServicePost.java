@@ -44,4 +44,34 @@ public class MrProductionServicePost extends ServicePost {
   public String getCostAndUnit() {
     return serviceCost.getCost() + "원/" + serviceCost.getUnit();
   }
+
+  public static MrProductionServicePost create(
+    // 공통 필드
+    User user,
+    String thumbnailImageUrl,
+    String title,
+    String description,
+    // MR 제작 전용 필드
+    ServiceCost serviceCost,
+    String additionalCostPolicy,
+    int freeRevisionCount,
+    int additionalRevisionCost,
+    DurationRange averageDuration,
+    List<String> usingSoftwareList,
+    List<SampleMrUrl> sampleMrUrls
+  ) {
+    return MrProductionServicePost.builder()
+      .thumbnailImageUrl(thumbnailImageUrl)
+      .title(title)
+      .description(description)
+      .user(user)
+      .serviceCost(serviceCost)
+      .additionalCostPolicy(additionalCostPolicy)
+      .freeRevisionCount(freeRevisionCount)
+      .additionalRevisionCost(additionalRevisionCost)
+      .averageDuration(averageDuration)
+      .usingSoftwareList(usingSoftwareList)
+      .sampleMrUrls(sampleMrUrls)
+      .build();
+  }
 }
