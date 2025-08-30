@@ -18,8 +18,8 @@ public class PatchStudentProfileRequest {
   private final Major major;
 
   @Schema(
-    description = "선호하는 학교",
-    example = "[\"GANGDONG_UNIVERSITY\", \"KYONGBUK_SCIENCE_COLLEGE\"]")
+      description = "선호하는 학교",
+      example = "[\"GANGDONG_UNIVERSITY\", \"KYONGBUK_SCIENCE_COLLEGE\"]")
   private final List<College> preferredColleges;
 
   @Schema(description = "학년", example = "HIGH_3")

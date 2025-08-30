@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class LessonServiceController {
 
-  //*************
+  // *************
   // * 레슨 서비스 *
-  //*************
+  // *************
   @Tag(name = "서비스 관리 API(레슨)")
   @PostMapping("/lesson")
   @PreAuthorize("isAuthenticated()")
-  public void registerLesson() {
-  }
+  public void registerLesson() {}
 }

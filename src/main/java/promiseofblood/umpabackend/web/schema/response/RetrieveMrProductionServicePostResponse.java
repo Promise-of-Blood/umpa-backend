@@ -37,20 +37,21 @@ public class RetrieveMrProductionServicePostResponse {
   private float reviewRating;
 
   public static RetrieveMrProductionServicePostResponse of(
-    MrProductionServicePost mrProductionServicePost) {
+      MrProductionServicePost mrProductionServicePost) {
 
     return RetrieveMrProductionServicePostResponse.builder()
-      .id(mrProductionServicePost.getId())
-      .title(mrProductionServicePost.getTitle())
-      .description(mrProductionServicePost.getDescription())
-      .costPerUnit(CostPerUnitDto.from(mrProductionServicePost.getServiceCost()))
-      .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
-      .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
-      .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
-      .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
-      .softwareList(mrProductionServicePost.getUsingSoftwareList())
-      .sampleUrls(SampleMrUrlResponse.fromList(mrProductionServicePost.getSampleMrUrls()))
-      .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
-      .reviewRating(0.0f).build();
+        .id(mrProductionServicePost.getId())
+        .title(mrProductionServicePost.getTitle())
+        .description(mrProductionServicePost.getDescription())
+        .costPerUnit(CostPerUnitDto.from(mrProductionServicePost.getServiceCost()))
+        .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
+        .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
+        .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
+        .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
+        .softwareList(mrProductionServicePost.getUsingSoftwareList())
+        .sampleUrls(SampleMrUrlResponse.fromList(mrProductionServicePost.getSampleMrUrls()))
+        .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
+        .reviewRating(0.0f)
+        .build();
   }
 }

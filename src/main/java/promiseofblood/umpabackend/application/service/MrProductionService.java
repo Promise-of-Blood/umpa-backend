@@ -25,36 +25,35 @@ public class MrProductionService {
 
   @Transactional
   public RetrieveMrProductionServicePostResponse createMrProductionServicePost(
-    CreateMrProductionServicePostCommand command) {
+      CreateMrProductionServicePostCommand command) {
 
-    User user = userRepository
-      .findByLoginId(command.getLoginId())
-      .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
+    User user =
+        userRepository
+            .findByLoginId(command.getLoginId())
+            .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
-    String thumbnailImageFilePath = storageService.store(
-      command.getThumbnailImage(),
-      "service/" + user.getId() + "/mr-production");
+    String thumbnailImageFilePath =
+        storageService.store(
+            command.getThumbnailImage(), "service/" + user.getId() + "/mr-production");
 
-    ServiceCost serviceCost = ServiceCost.of(
-      command.getServiceCostValue(),
-      command.getServiceCostUnit()
-    );
+    ServiceCost serviceCost =
+        ServiceCost.of(command.getServiceCostValue(), command.getServiceCostUnit());
 
     DurationRange durationRange = DurationRange.of(command.getAverageDuration());
 
-    MrProductionServicePost mrProductionServicePost = MrProductionServicePost.create(
-      user,
-      thumbnailImageFilePath,
-      command.getTitle(),
-      command.getDescription(),
-      serviceCost,
-      command.getAdditionalCostPolicy(),
-      command.getFreeRevisionCount(),
-      command.getAdditionalRevisionCost(),
-      durationRange,
-      command.getUsingSoftwareList(),
-      command.getSampleMrUrls().stream().map(SampleMrUrl::of).toList()
-    );
+    MrProductionServicePost mrProductionServicePost =
+        MrProductionServicePost.create(
+            user,
+            thumbnailImageFilePath,
+            command.getTitle(),
+            command.getDescription(),
+            serviceCost,
+            command.getAdditionalCostPolicy(),
+            command.getFreeRevisionCount(),
+            command.getAdditionalRevisionCost(),
+            durationRange,
+            command.getUsingSoftwareList(),
+            command.getSampleMrUrls().stream().map(SampleMrUrl::of).toList());
     mrProductionServicePostRepository.save(mrProductionServicePost);
 
     return RetrieveMrProductionServicePostResponse.of(mrProductionServicePost);
@@ -62,11 +61,12 @@ public class MrProductionService {
 
   @Transactional(readOnly = true)
   public RetrieveMrProductionServicePostResponse retrieveMrProductionServicePost(
-    RetrieveMrServicePostQuery query) {
+      RetrieveMrServicePostQuery query) {
 
-    MrProductionServicePost mrProductionServicePost = mrProductionServicePostRepository.findById(
-        query.id())
-      .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 MR 제작 서비스 게시글이 존재하지 않습니다."));
+    MrProductionServicePost mrProductionServicePost =
+        mrProductionServicePostRepository
+            .findById(query.id())
+            .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 MR 제작 서비스 게시글이 존재하지 않습니다."));
 
     return RetrieveMrProductionServicePostResponse.of(mrProductionServicePost);
   }

@@ -31,25 +31,26 @@ public class ScoreProductionController {
   @PostMapping(value = "/score-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<ScoreProductionServicePostResponse> registerScoreProduction(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @ModelAttribute
+          ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
 
     String loginId = securityUserDetails.getUsername();
-    ScoreProductionServicePostDto.ScoreProductionServicePostResponse scoreProductionServicePostResponse = serviceBoardService.createScoreProductionServicePost(
-      loginId, scoreProductionRequest);
+    ScoreProductionServicePostDto.ScoreProductionServicePostResponse
+        scoreProductionServicePostResponse =
+            serviceBoardService.createScoreProductionServicePost(loginId, scoreProductionRequest);
 
     return ResponseEntity.ok(scoreProductionServicePostResponse);
   }
 
   @Tag(name = "서비스 관리 API(악보 제작)")
   @GetMapping(path = "/score-production/{id}")
-  public ResponseEntity<ScoreProductionServicePostDto.ScoreProductionServicePostResponse> getScoreProductionServicePost(
-    @PathVariable Long id) {
+  public ResponseEntity<ScoreProductionServicePostDto.ScoreProductionServicePostResponse>
+      getScoreProductionServicePost(@PathVariable Long id) {
 
     ScoreProductionServicePostDto.ScoreProductionServicePostResponse scoreProductionResponse =
-      serviceBoardService.getScoreProductionServicePost(id);
+        serviceBoardService.getScoreProductionServicePost(id);
 
     return ResponseEntity.ok(scoreProductionResponse);
   }
-
 }

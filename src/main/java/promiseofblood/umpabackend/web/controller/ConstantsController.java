@@ -28,8 +28,9 @@ public class ConstantsController {
   public ResponseEntity<List<ConstantResponses.MajorResponse>> getMajors() {
 
     List<ConstantResponses.MajorResponse> majorResponses =
-      Stream.of(Major.values()).map(ConstantResponses.MajorResponse::from)
-        .collect(Collectors.toList());
+        Stream.of(Major.values())
+            .map(ConstantResponses.MajorResponse::from)
+            .collect(Collectors.toList());
 
     return ResponseEntity.ok(majorResponses);
   }
@@ -93,8 +94,9 @@ public class ConstantsController {
   public ResponseEntity<List<ConstantResponses.RegionCategoryResponse>> getRegions() {
 
     List<ConstantResponses.RegionCategoryResponse> regionCategories =
-      Stream.of(RegionCategory.values()).map(ConstantResponses.RegionCategoryResponse::from)
-        .toList();
+        Stream.of(RegionCategory.values())
+            .map(ConstantResponses.RegionCategoryResponse::from)
+            .toList();
 
     return ResponseEntity.ok(regionCategories);
   }

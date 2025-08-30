@@ -17,9 +17,7 @@ import promiseofblood.umpabackend.web.schema.response.ListTeacherLinkResponse;
 
 public class ServicePostDto {
 
-  /**
-   * 선생님 프로필 응답 형식 DTO
-   */
+  /** 선생님 프로필 응답 형식 DTO */
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class TeacherAuthorProfileDto {
@@ -49,18 +47,16 @@ public class ServicePostDto {
       }
 
       return TeacherAuthorProfileDto.builder()
-        .keyphrase(teacherProfile.getKeyphrase())
-        .profileImageUrl(user.getProfileImageUrl())
-        .description(teacherProfile.getDescription())
-        .careers(careers)
-        .links(links)
-        .build();
+          .keyphrase(teacherProfile.getKeyphrase())
+          .profileImageUrl(user.getProfileImageUrl())
+          .description(teacherProfile.getDescription())
+          .careers(careers)
+          .links(links)
+          .build();
     }
   }
 
-  /**
-   * 서비스 단위당 비용 DTO
-   */
+  /** 서비스 단위당 비용 DTO */
   @Getter
   @AllArgsConstructor
   public static class CostPerUnitDto {
@@ -74,9 +70,7 @@ public class ServicePostDto {
     }
   }
 
-  /**
-   * 서비스 평균 소요 기간 DTO
-   */
+  /** 서비스 평균 소요 기간 DTO */
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class AverageDurationDto {
@@ -91,11 +85,11 @@ public class ServicePostDto {
 
     public static AverageDurationDto from(DurationRange durationRange) {
       return AverageDurationDto.builder()
-        .minValue(durationRange.getMinValue())
-        .minUnit(durationRange.getMinUnit().name())
-        .maxValue(durationRange.getMaxValue())
-        .maxUnit(durationRange.getMaxUnit().name())
-        .build();
+          .minValue(durationRange.getMinValue())
+          .minUnit(durationRange.getMinUnit().name())
+          .maxValue(durationRange.getMaxValue())
+          .maxUnit(durationRange.getMaxUnit().name())
+          .build();
     }
   }
 

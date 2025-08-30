@@ -78,9 +78,9 @@ public class ConstantResponses {
 
     public static LessonStyleResponse from(LessonStyle lessonStyle) {
       return LessonStyleResponse.builder()
-        .code(lessonStyle.name())
-        .name(lessonStyle.getKoreanName())
-        .build();
+          .code(lessonStyle.name())
+          .name(lessonStyle.getKoreanName())
+          .build();
     }
   }
 
@@ -107,9 +107,9 @@ public class ConstantResponses {
 
     public static InstrumentResponse from(Instrument instrument) {
       return InstrumentResponse.builder()
-        .code(instrument.name())
-        .name(instrument.getKoreanName())
-        .build();
+          .code(instrument.name())
+          .name(instrument.getKoreanName())
+          .build();
     }
   }
 
@@ -125,10 +125,10 @@ public class ConstantResponses {
 
     public static RegionCategoryResponse from(RegionCategory regionCategory) {
       return RegionCategoryResponse.builder()
-        .code(regionCategory.getCode())
-        .name(regionCategory.getKoreanName())
-        .regions(regionCategory.getRegions().stream().map(RegionResponse::from).toList())
-        .build();
+          .code(regionCategory.getCode())
+          .name(regionCategory.getKoreanName())
+          .regions(regionCategory.getRegions().stream().map(RegionResponse::from).toList())
+          .build();
     }
   }
 

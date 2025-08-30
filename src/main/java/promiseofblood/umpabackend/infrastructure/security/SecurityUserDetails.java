@@ -13,8 +13,7 @@ import promiseofblood.umpabackend.domain.vo.Role;
 @RequiredArgsConstructor
 public class SecurityUserDetails implements UserDetails {
 
-  @Getter
-  private final String loginId;
+  @Getter private final String loginId;
   private final String password;
   private final Role role;
 

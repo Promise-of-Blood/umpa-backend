@@ -21,14 +21,14 @@ public class ReviewService {
     ServicePost servicePost = servicePostRepository.findById(servicePostId).orElse(null);
 
     Review review =
-      Review.builder()
-        .servicePost(servicePost)
-        .rating(reviewRequest.getRating())
-        .content(reviewRequest.getContent())
-        .reviewImageUrl1(reviewRequest.getReviewImageUrl1())
-        .reviewImageUrl2(reviewRequest.getReviewImageUrl2())
-        .reviewImageUrl3(reviewRequest.getReviewImageUrl3())
-        .build();
+        Review.builder()
+            .servicePost(servicePost)
+            .rating(reviewRequest.getRating())
+            .content(reviewRequest.getContent())
+            .reviewImageUrl1(reviewRequest.getReviewImageUrl1())
+            .reviewImageUrl2(reviewRequest.getReviewImageUrl2())
+            .reviewImageUrl3(reviewRequest.getReviewImageUrl3())
+            .build();
 
     reviewRepository.save(review);
     return review;

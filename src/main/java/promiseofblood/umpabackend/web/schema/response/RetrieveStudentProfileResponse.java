@@ -27,11 +27,15 @@ public class RetrieveStudentProfileResponse {
     }
 
     return RetrieveStudentProfileResponse.builder()
-      .major(
-        studentProfile.getMajor() != null ? MajorResponse.from(studentProfile.getMajor()) : null)
-      .preferredColleges(preferredColleges)
-      .grade(studentProfile.getGrade() != null ? ConstantResponses.GradeResponse.from(
-        studentProfile.getGrade()) : null)
-      .build();
+        .major(
+            studentProfile.getMajor() != null
+                ? MajorResponse.from(studentProfile.getMajor())
+                : null)
+        .preferredColleges(preferredColleges)
+        .grade(
+            studentProfile.getGrade() != null
+                ? ConstantResponses.GradeResponse.from(studentProfile.getGrade())
+                : null)
+        .build();
   }
 }

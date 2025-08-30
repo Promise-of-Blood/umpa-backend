@@ -22,18 +22,18 @@ public class ProfileService {
 
   @Transactional
   public RetrieveFullProfileResponse patchDefaultProfile(
-    String loginId, PatchDefaultProfileRequest patchDefaultProfileRequest) {
+      String loginId, PatchDefaultProfileRequest patchDefaultProfileRequest) {
 
     User user =
-      userRepository
-        .findByLoginId(loginId)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     user.patchDefaultProfile(
-      patchDefaultProfileRequest.getUsername(),
-      patchDefaultProfileRequest.getGender(),
-      uploadProfileImageIfExists(user.getLoginId(), patchDefaultProfileRequest.getProfileImage()),
-      patchDefaultProfileRequest.getProfileType());
+        patchDefaultProfileRequest.getUsername(),
+        patchDefaultProfileRequest.getGender(),
+        uploadProfileImageIfExists(user.getLoginId(), patchDefaultProfileRequest.getProfileImage()),
+        patchDefaultProfileRequest.getProfileType());
     User updatedUser = userRepository.save(user);
 
     return RetrieveFullProfileResponse.from(updatedUser);
@@ -41,12 +41,12 @@ public class ProfileService {
 
   @Transactional
   public RetrieveFullProfileResponse patchTeacherProfile(
-    String loginId, PatchTeacherProfileRequest teacherProfileRequest) {
+      String loginId, PatchTeacherProfileRequest teacherProfileRequest) {
 
     User user =
-      userRepository
-        .findByLoginId(loginId)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     TeacherProfile teacherProfile = user.getTeacherProfile();
 
@@ -64,12 +64,12 @@ public class ProfileService {
 
   @Transactional
   public RetrieveFullProfileResponse patchStudentProfile(
-    String loginId, PatchStudentProfileRequest studentProfileRequest) {
+      String loginId, PatchStudentProfileRequest studentProfileRequest) {
 
     User user =
-      userRepository
-        .findByLoginId(loginId)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     StudentProfile studentProfile = user.getStudentProfile();
 

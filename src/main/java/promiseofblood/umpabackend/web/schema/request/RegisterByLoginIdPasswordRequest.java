@@ -17,8 +17,7 @@ public class RegisterByLoginIdPasswordRequest {
   @Schema(description = "사용자 닉네임", example = "홍길동")
   private final String username;
 
-  @NotNull
-  @Schema(type = "enum", description = "가입하고자 하는 프로필 타입")
+  @NotNull @Schema(type = "enum", description = "가입하고자 하는 프로필 타입")
   private final ProfileType profileType;
 
   @NotBlank

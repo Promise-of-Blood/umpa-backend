@@ -61,10 +61,10 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/general", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
-    @Validated @ModelAttribute RegisterByLoginIdPasswordRequest loginIdPasswordRequest) {
+      @Validated @ModelAttribute RegisterByLoginIdPasswordRequest loginIdPasswordRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
-      userService.registerUser(loginIdPasswordRequest);
+        userService.registerUser(loginIdPasswordRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
@@ -72,11 +72,11 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/{providerName}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
-    @PathVariable String providerName,
-    @Validated @ModelAttribute RegisterByOauth2Request oauth2RegisterRequest) {
+      @PathVariable String providerName,
+      @Validated @ModelAttribute RegisterByOauth2Request oauth2RegisterRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
-      oauth2Service.registerOauth2User(providerName, oauth2RegisterRequest);
+        oauth2Service.registerOauth2User(providerName, oauth2RegisterRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
@@ -84,7 +84,7 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @GetMapping(value = "/register/check/username")
   public ResponseEntity<CheckIsUsernameAvailableResponse> isUsernameAvailable(
-    @RequestParam String username) {
+      @RequestParam String username) {
 
     return ResponseEntity.ok(userService.isUsernameAvailable(username));
   }
@@ -92,12 +92,12 @@ public class UserController {
   @Tag(name = "회원가입 API", description = "이미 가입한 OAuth2 사용자인지 확인합니다.")
   @GetMapping(value = "/register/check/oauth2")
   public ResponseEntity<LoginDto.IsOauth2RegisterAvailableResponse> isOauth2Available(
-    @RequestParam @NotNull String providerName,
-    @RequestParam String accessToken,
-    @RequestParam String idToken) {
+      @RequestParam @NotNull String providerName,
+      @RequestParam String accessToken,
+      @RequestParam String idToken) {
 
     return ResponseEntity.ok(
-      oauth2Service.isOauth2RegisterAvailable(providerName, idToken, accessToken));
+        oauth2Service.isOauth2RegisterAvailable(providerName, idToken, accessToken));
   }
 
   // ****************
@@ -106,7 +106,7 @@ public class UserController {
   @Tag(name = "프로필 관리 API")
   @GetMapping("/me")
   public ResponseEntity<RetrieveFullProfileResponse> getCurrentUser(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
     return ResponseEntity.ok(userService.getUserByLoginId(securityUserDetails.getUsername()));
   }
@@ -114,12 +114,12 @@ public class UserController {
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/teacher-profile")
   public ResponseEntity<RetrieveFullProfileResponse> patchTeacherProfile(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody PatchTeacherProfileRequest teacherProfileRequest) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @RequestBody PatchTeacherProfileRequest teacherProfileRequest) {
 
     RetrieveFullProfileResponse teacherProfileResponse =
-      profileService.patchTeacherProfile(
-        securityUserDetails.getUsername(), teacherProfileRequest);
+        profileService.patchTeacherProfile(
+            securityUserDetails.getUsername(), teacherProfileRequest);
 
     return ResponseEntity.ok(teacherProfileResponse);
   }
@@ -127,12 +127,12 @@ public class UserController {
   @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/student-profile")
   public ResponseEntity<RetrieveFullProfileResponse> patchStudentProfile(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody @Valid PatchStudentProfileRequest patchStudentProfileRequest) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @RequestBody @Valid PatchStudentProfileRequest patchStudentProfileRequest) {
 
     RetrieveFullProfileResponse studentProfileDto =
-      profileService.patchStudentProfile(
-        securityUserDetails.getUsername(), patchStudentProfileRequest);
+        profileService.patchStudentProfile(
+            securityUserDetails.getUsername(), patchStudentProfileRequest);
 
     return ResponseEntity.ok(studentProfileDto);
   }
@@ -140,12 +140,12 @@ public class UserController {
   @Tag(name = "프로필 관리 API")
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<RetrieveFullProfileResponse> patchDefaultProfile(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @Validated @ModelAttribute PatchDefaultProfileRequest patchDefaultProfileRequest) {
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @Validated @ModelAttribute PatchDefaultProfileRequest patchDefaultProfileRequest) {
 
     RetrieveFullProfileResponse updatedUser =
-      profileService.patchDefaultProfile(
-        securityUserDetails.getUsername(), patchDefaultProfileRequest);
+        profileService.patchDefaultProfile(
+            securityUserDetails.getUsername(), patchDefaultProfileRequest);
 
     return ResponseEntity.ok(updatedUser);
   }
@@ -153,12 +153,12 @@ public class UserController {
   @InitBinder
   public void initBinder(WebDataBinder binder) {
     binder.registerCustomEditor(
-      MultipartFile.class,
-      new PropertyEditorSupport() {
-        @Override
-        public void setAsText(String text) {
-          setValue(null);
-        }
-      });
+        MultipartFile.class,
+        new PropertyEditorSupport() {
+          @Override
+          public void setAsText(String text) {
+            setValue(null);
+          }
+        });
   }
 }

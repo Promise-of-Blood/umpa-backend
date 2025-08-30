@@ -47,9 +47,11 @@ public class TeacherProfile extends TimeStampedEntity {
   }
 
   public boolean isProfileComplete() {
-    return description != null && !description.isEmpty() &&
-      major != null &&
-      careers != null && !careers.isEmpty();
+    return description != null
+        && !description.isEmpty()
+        && major != null
+        && careers != null
+        && !careers.isEmpty();
   }
 
   public void update(PatchTeacherProfileRequest request) {
@@ -64,8 +66,7 @@ public class TeacherProfile extends TimeStampedEntity {
     }
     if (request.getCareers() != null) {
       this.careers.clear();
-      for (TeacherCareerRequest careerRequest :
-        request.getCareers()) {
+      for (TeacherCareerRequest careerRequest : request.getCareers()) {
         TeacherCareer career = TeacherCareer.from(careerRequest);
         this.careers.add(career);
         career.setTeacherProfile(this);

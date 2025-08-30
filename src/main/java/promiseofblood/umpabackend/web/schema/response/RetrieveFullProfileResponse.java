@@ -47,25 +47,25 @@ public class RetrieveFullProfileResponse {
 
   public static RetrieveFullProfileResponse from(User user) {
     return RetrieveFullProfileResponse.builder()
-      .id(user.getId())
-      .loginId(user.getLoginId())
-      .username(user.getUsername().getValue())
-      .status(user.getUserStatus())
-      .role(user.getRole())
-      .gender(user.getGender() == null ? null : user.getGender().name())
-      .profileImageUrl(user.getProfileImageUrl())
-      .profileType(user.getProfileType().name())
-      .teacherProfile(
-        user.getTeacherProfile() == null
-          ? null
-          : RetrieveTeacherProfileResponse.from(user.getTeacherProfile()))
-      .studentProfile(
-        user.getStudentProfile() == null
-          ? null
-          : RetrieveStudentProfileResponse.from(user.getStudentProfile()))
-      .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
-      .createdAt(user.getCreatedAt())
-      .updatedAt(user.getUpdatedAt())
-      .build();
+        .id(user.getId())
+        .loginId(user.getLoginId())
+        .username(user.getUsername().getValue())
+        .status(user.getUserStatus())
+        .role(user.getRole())
+        .gender(user.getGender() == null ? null : user.getGender().name())
+        .profileImageUrl(user.getProfileImageUrl())
+        .profileType(user.getProfileType().name())
+        .teacherProfile(
+            user.getTeacherProfile() == null
+                ? null
+                : RetrieveTeacherProfileResponse.from(user.getTeacherProfile()))
+        .studentProfile(
+            user.getStudentProfile() == null
+                ? null
+                : RetrieveStudentProfileResponse.from(user.getStudentProfile()))
+        .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
+        .createdAt(user.getCreatedAt())
+        .updatedAt(user.getUpdatedAt())
+        .build();
   }
 }

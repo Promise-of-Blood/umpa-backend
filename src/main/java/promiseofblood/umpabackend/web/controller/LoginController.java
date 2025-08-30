@@ -32,31 +32,30 @@ public class LoginController {
 
   @PostMapping("token/{providerName}")
   public ResponseEntity<LoginCompleteResponse> createOauth2Token(
-    @PathVariable String providerName,
-    @RequestBody LoginByOauth2Request oauth2LoginRequest) {
+      @PathVariable String providerName, @RequestBody LoginByOauth2Request oauth2LoginRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
-      oauth2Service.generateOauth2Jwt(
-        providerName,
-        oauth2LoginRequest.getExternalIdToken(),
-        oauth2LoginRequest.getExternalAccessToken());
+        oauth2Service.generateOauth2Jwt(
+            providerName,
+            oauth2LoginRequest.getExternalIdToken(),
+            oauth2LoginRequest.getExternalAccessToken());
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @PostMapping("/token/general")
   public ResponseEntity<LoginDto.LoginCompleteResponse> createToken(
-    @RequestBody LoginByLoginIdPasswordRequest request) {
+      @RequestBody LoginByLoginIdPasswordRequest request) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
-      userService.loginIdPasswordJwtLogin(request.getLoginId(), request.getPassword());
+        userService.loginIdPasswordJwtLogin(request.getLoginId(), request.getPassword());
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @PostMapping("/refresh-token")
   public ResponseEntity<LoginDto.LoginCompleteResponse> refreshToken(
-    @RequestBody RefreshJwtRequest request) {
+      @RequestBody RefreshJwtRequest request) {
 
     return ResponseEntity.ok(userService.refreshToken(request.getRefreshToken()));
   }
@@ -70,7 +69,7 @@ public class LoginController {
   @GetMapping("/callback/{providerName}")
   @Hidden
   public ResponseEntity<Oauth2ProfileResponse> oauth2AuthorizationCallback(
-    @PathVariable String providerName, String code) {
+      @PathVariable String providerName, String code) {
 
     return ResponseEntity.ok(oauth2Service.getOauth2Profile(providerName, code));
   }

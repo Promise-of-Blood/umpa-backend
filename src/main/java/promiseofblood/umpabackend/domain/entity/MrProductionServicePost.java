@@ -23,8 +23,7 @@ import promiseofblood.umpabackend.domain.vo.ServiceCost;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MrProductionServicePost extends ServicePost {
 
-  @Embedded
-  private ServiceCost serviceCost;
+  @Embedded private ServiceCost serviceCost;
 
   private String additionalCostPolicy;
 
@@ -32,13 +31,11 @@ public class MrProductionServicePost extends ServicePost {
 
   private int additionalRevisionCost;
 
-  @Embedded
-  private DurationRange averageDuration;
+  @Embedded private DurationRange averageDuration;
 
   private List<String> usingSoftwareList;
 
-  @ElementCollection
-  private List<SampleMrUrl> sampleMrUrls;
+  @ElementCollection private List<SampleMrUrl> sampleMrUrls;
 
   @Override
   public String getCostAndUnit() {
@@ -46,32 +43,31 @@ public class MrProductionServicePost extends ServicePost {
   }
 
   public static MrProductionServicePost create(
-    // 공통 필드
-    User user,
-    String thumbnailImageUrl,
-    String title,
-    String description,
-    // MR 제작 전용 필드
-    ServiceCost serviceCost,
-    String additionalCostPolicy,
-    int freeRevisionCount,
-    int additionalRevisionCost,
-    DurationRange averageDuration,
-    List<String> usingSoftwareList,
-    List<SampleMrUrl> sampleMrUrls
-  ) {
+      // 공통 필드
+      User user,
+      String thumbnailImageUrl,
+      String title,
+      String description,
+      // MR 제작 전용 필드
+      ServiceCost serviceCost,
+      String additionalCostPolicy,
+      int freeRevisionCount,
+      int additionalRevisionCost,
+      DurationRange averageDuration,
+      List<String> usingSoftwareList,
+      List<SampleMrUrl> sampleMrUrls) {
     return MrProductionServicePost.builder()
-      .thumbnailImageUrl(thumbnailImageUrl)
-      .title(title)
-      .description(description)
-      .user(user)
-      .serviceCost(serviceCost)
-      .additionalCostPolicy(additionalCostPolicy)
-      .freeRevisionCount(freeRevisionCount)
-      .additionalRevisionCost(additionalRevisionCost)
-      .averageDuration(averageDuration)
-      .usingSoftwareList(usingSoftwareList)
-      .sampleMrUrls(sampleMrUrls)
-      .build();
+        .thumbnailImageUrl(thumbnailImageUrl)
+        .title(title)
+        .description(description)
+        .user(user)
+        .serviceCost(serviceCost)
+        .additionalCostPolicy(additionalCostPolicy)
+        .freeRevisionCount(freeRevisionCount)
+        .additionalRevisionCost(additionalRevisionCost)
+        .averageDuration(averageDuration)
+        .usingSoftwareList(usingSoftwareList)
+        .sampleMrUrls(sampleMrUrls)
+        .build();
   }
 }

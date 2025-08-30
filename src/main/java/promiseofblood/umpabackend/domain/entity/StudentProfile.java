@@ -31,8 +31,8 @@ public class StudentProfile extends TimeStampedEntity {
 
   @ElementCollection(targetClass = College.class)
   @CollectionTable(
-    name = "student_profile_preferred_colleges",
-    joinColumns = @JoinColumn(name = "student_profile_id"))
+      name = "student_profile_preferred_colleges",
+      joinColumns = @JoinColumn(name = "student_profile_id"))
   @Enumerated(EnumType.STRING)
   private List<College> preferredColleges;
 

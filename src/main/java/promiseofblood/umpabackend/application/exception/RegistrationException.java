@@ -5,5 +5,4 @@ public class RegistrationException extends ApplicationException {
   public RegistrationException(String message) {
     super(message);
   }
-
 }

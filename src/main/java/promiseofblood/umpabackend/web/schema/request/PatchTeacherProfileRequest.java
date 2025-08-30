@@ -19,20 +19,20 @@ public class PatchTeacherProfileRequest {
   private String keyphrase;
 
   @Schema(
-    description = "선생님 소개",
-    example = "안녕하세요, 저는 전자 음악을 전공한 선생님입니다. 레슨을 통해 여러분과 함께 음악의 즐거움을 나누고 싶습니다.")
+      description = "선생님 소개",
+      example = "안녕하세요, 저는 전자 음악을 전공한 선생님입니다. 레슨을 통해 여러분과 함께 음악의 즐거움을 나누고 싶습니다.")
   private String description;
 
   @Schema(description = "선생님 전공", example = "ELECTRONIC_MUSIC")
   private Major major;
 
   @Schema(
-    description = "경력",
-    example =
-      "["
-        + "{\"title\":\"인덕대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true},"
-        + "{\"title\":\"서울대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true}"
-        + "]")
+      description = "경력",
+      example =
+          "["
+              + "{\"title\":\"인덕대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true},"
+              + "{\"title\":\"서울대학교 컴퓨터소프트웨어학과 졸업\",\"start\":\"2020.03\",\"end\":\"2024.02\",\"isRepresentative\":true}"
+              + "]")
   private List<TeacherCareerRequest> careers;
 
   @Schema(example = "[\"https://gdsnadevlog.com\",\"https://www.gdsnadevlog.com\"]")

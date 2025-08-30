@@ -29,17 +29,15 @@ public class AccompanimentServiceController {
   @Tag(name = "서비스 관리 API(합주)")
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<AccompanimentServicePostResponse>
-  registerAccompaniment(
-    @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute @Valid
-    AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+  public ResponseEntity<AccompanimentServicePostResponse> registerAccompaniment(
+      @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
+      @ModelAttribute @Valid
+          AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
     String loginId = securityUserDetails.getUsername();
 
     AccompanimentServicePostDto.AccompanimentServicePostResponse accompanimentPostResponse =
-      serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
+        serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
 
     return ResponseEntity.ok(accompanimentPostResponse);
   }
-
 }

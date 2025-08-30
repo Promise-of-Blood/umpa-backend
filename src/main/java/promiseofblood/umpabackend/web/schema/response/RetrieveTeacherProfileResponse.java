@@ -46,14 +46,11 @@ public class RetrieveTeacherProfileResponse {
     }
 
     return RetrieveTeacherProfileResponse.builder()
-      .keyphrase(teacherProfile.getKeyphrase())
-      .description(teacherProfile.getDescription())
-      .major(Optional.ofNullable(teacherProfile.getMajor())
-        .map(MajorResponse::from)
-        .orElse(null))
-      .careers(teacherCareerDtoList)
-      .links(teacherLinkDtoList)
-      .build();
+        .keyphrase(teacherProfile.getKeyphrase())
+        .description(teacherProfile.getDescription())
+        .major(Optional.ofNullable(teacherProfile.getMajor()).map(MajorResponse::from).orElse(null))
+        .careers(teacherCareerDtoList)
+        .links(teacherLinkDtoList)
+        .build();
   }
-
 }

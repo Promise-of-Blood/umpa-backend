@@ -50,23 +50,23 @@ public class AccompanimentServicePostDto {
     private List<String> videoUrls;
 
     public static AccompanimentServicePostResponse from(
-      AccompanimentServicePost accompanimentServicePost, User user) {
+        AccompanimentServicePost accompanimentServicePost, User user) {
 
       return AccompanimentServicePostResponse.builder()
-        .title(accompanimentServicePost.getTitle())
-        .description(accompanimentServicePost.getDescription())
-        .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-        .teacherProfile(RetrieveTeacherProfileResponse.from(user.getTeacherProfile()))
-        .reviewRating("0.0")
-        .costPerUnit(accompanimentServicePost.getCostAndUnit())
-        .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
-        .instrument(accompanimentServicePost.getInstrument())
-        .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
-        .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
-        .isMrIncluded(accompanimentServicePost.isMrIncluded())
-        .practiceLocations(accompanimentServicePost.getPracticeLocations())
-        .videoUrls(accompanimentServicePost.getVideoUrls())
-        .build();
+          .title(accompanimentServicePost.getTitle())
+          .description(accompanimentServicePost.getDescription())
+          .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
+          .teacherProfile(RetrieveTeacherProfileResponse.from(user.getTeacherProfile()))
+          .reviewRating("0.0")
+          .costPerUnit(accompanimentServicePost.getCostAndUnit())
+          .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
+          .instrument(accompanimentServicePost.getInstrument())
+          .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
+          .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
+          .isMrIncluded(accompanimentServicePost.isMrIncluded())
+          .practiceLocations(accompanimentServicePost.getPracticeLocations())
+          .videoUrls(accompanimentServicePost.getVideoUrls())
+          .build();
     }
   }
 
@@ -75,8 +75,7 @@ public class AccompanimentServicePostDto {
   public static class AccompanimentPostRequest {
 
     @Schema(type = "string", format = "binary", description = "대표 사진")
-    @NotNull
-    private MultipartFile thumbnailImage;
+    @NotNull private MultipartFile thumbnailImage;
 
     @Schema(type = "string", description = "서비스 제목")
     @NotBlank

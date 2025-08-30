@@ -16,7 +16,9 @@ public class ListTeacherLinkResponse {
   private String link;
 
   public static ListTeacherLinkResponse from(TeacherLink teacherLink) {
-    return ListTeacherLinkResponse.builder().id(teacherLink.getId()).link(teacherLink.getLink())
-      .build();
+    return ListTeacherLinkResponse.builder()
+        .id(teacherLink.getId())
+        .link(teacherLink.getLink())
+        .build();
   }
 }

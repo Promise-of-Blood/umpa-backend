@@ -18,8 +18,8 @@ public class LoginDto {
 
     private JwtPairResponse jwtPair;
 
-    public static LoginCompleteResponse of(RetrieveFullProfileResponse user,
-      JwtPairResponse jwtPair) {
+    public static LoginCompleteResponse of(
+        RetrieveFullProfileResponse user, JwtPairResponse jwtPair) {
       return new LoginCompleteResponse(user, jwtPair);
     }
   }

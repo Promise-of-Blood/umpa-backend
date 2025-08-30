@@ -13,20 +13,16 @@ import promiseofblood.umpabackend.domain.vo.ProfileType;
 @AllArgsConstructor
 public class PatchDefaultProfileRequest {
 
-  @Nullable
-  @Schema(description = "사용자 닉네임", example = "홍길동")
+  @Nullable @Schema(description = "사용자 닉네임", example = "홍길동")
   @Size(max = 8, message = "사용자 닉네임은 최대 8자까지 가능합니다.")
   private final String username;
 
-  @Nullable
-  @Schema(description = "성별", example = "MALE")
+  @Nullable @Schema(description = "성별", example = "MALE")
   private final Gender gender;
 
-  @Nullable
-  @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
+  @Nullable @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
   private final ProfileType profileType;
 
-  @Nullable
-  @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
+  @Nullable @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
   private final MultipartFile profileImage;
 }

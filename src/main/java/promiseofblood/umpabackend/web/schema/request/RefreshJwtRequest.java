@@ -8,6 +8,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class RefreshJwtRequest {
 
-  @NotBlank
-  private final String refreshToken;
+  @NotBlank private final String refreshToken;
 }

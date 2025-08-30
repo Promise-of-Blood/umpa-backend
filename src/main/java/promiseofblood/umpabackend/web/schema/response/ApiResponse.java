@@ -12,17 +12,17 @@ public class ApiResponse {
 
   @Builder
   public record PaginatedResponse<T>(
-    int page, int count, int totalPage, long totalCount, List<T> items) {
+      int page, int count, int totalPage, long totalCount, List<T> items) {
 
     public static <T> PaginatedResponse<T> from(Page<T> page) {
 
       return PaginatedResponse.<T>builder()
-        .page(page.getNumber())
-        .count(page.getNumberOfElements())
-        .totalPage(page.getTotalPages())
-        .totalCount(page.getTotalElements())
-        .items(page.getContent())
-        .build();
+          .page(page.getNumber())
+          .count(page.getNumberOfElements())
+          .totalPage(page.getTotalPages())
+          .totalCount(page.getTotalElements())
+          .items(page.getContent())
+          .build();
     }
   }
 
@@ -32,6 +32,5 @@ public class ApiResponse {
 
     private final String message;
     private final LocalDateTime timestamp = LocalDateTime.now();
-
   }
 }

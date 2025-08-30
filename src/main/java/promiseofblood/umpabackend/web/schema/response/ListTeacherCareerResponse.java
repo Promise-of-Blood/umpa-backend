@@ -24,11 +24,11 @@ public class ListTeacherCareerResponse {
 
   public static ListTeacherCareerResponse from(TeacherCareer teacherCareer) {
     return ListTeacherCareerResponse.builder()
-      .id(teacherCareer.getId())
-      .isRepresentative(teacherCareer.isRepresentative())
-      .title(teacherCareer.getTitle())
-      .start(teacherCareer.getStart())
-      .end(teacherCareer.getEnd())
-      .build();
+        .id(teacherCareer.getId())
+        .isRepresentative(teacherCareer.isRepresentative())
+        .title(teacherCareer.getTitle())
+        .start(teacherCareer.getStart())
+        .end(teacherCareer.getEnd())
+        .build();
   }
 }
