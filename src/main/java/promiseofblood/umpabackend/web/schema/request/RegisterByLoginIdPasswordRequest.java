@@ -18,11 +18,7 @@ public class RegisterByLoginIdPasswordRequest {
   private final String username;
 
   @NotNull
-  @Schema(description = "성별", example = "MALE")
-  private final Gender gender;
-
-  @NotNull
-  @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
+  @Schema(type = "enum", description = "가입하고자 하는 프로필 타입")
   private final ProfileType profileType;
 
   @NotBlank
@@ -33,7 +29,10 @@ public class RegisterByLoginIdPasswordRequest {
   @Schema(description = "비밀번호")
   private final String password;
 
-  @NotNull
+  // 선택 필드들
+  @Schema(description = "성별", example = "MALE")
+  private final Gender gender;
+
   @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
   private final MultipartFile profileImage;
 }

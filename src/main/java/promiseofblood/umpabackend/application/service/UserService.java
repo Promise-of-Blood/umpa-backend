@@ -38,24 +38,22 @@ public class UserService {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
-    User user =
-      User.register(
-        loginIdPasswordRegisterRequest.getLoginId(),
-        passwordEncoder.encode(loginIdPasswordRegisterRequest.getPassword()),
-        loginIdPasswordRegisterRequest.getGender(),
-        UserStatus.PENDING,
-        Role.USER,
-        loginIdPasswordRegisterRequest.getUsername(),
-        loginIdPasswordRegisterRequest.getProfileType(),
-        this.uploadProfileImage(
-          loginIdPasswordRegisterRequest.getLoginId(),
-          loginIdPasswordRegisterRequest.getProfileImage()));
+    // TODO 이 더러운 코드를 해결하기
+    String storedFilePath = null;
+    if (loginIdPasswordRegisterRequest.getProfileImage() != null) {
+      storedFilePath = this.uploadProfileImage(loginIdPasswordRegisterRequest.getLoginId(),
+        loginIdPasswordRegisterRequest.getProfileImage());
+    }
+
+    User user = User.register(loginIdPasswordRegisterRequest.getLoginId(),
+      passwordEncoder.encode(loginIdPasswordRegisterRequest.getPassword()),
+      loginIdPasswordRegisterRequest.getGender(), UserStatus.PENDING, Role.USER,
+      loginIdPasswordRegisterRequest.getUsername(), loginIdPasswordRegisterRequest.getProfileType(),
+      storedFilePath);
     user = userRepository.save(user);
 
-    return LoginCompleteResponse.of(
-      RetrieveFullProfileResponse.from(user),
-      LoginDto.JwtPairResponse.of(
-        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+    return LoginCompleteResponse.of(RetrieveFullProfileResponse.from(user),
+      LoginDto.JwtPairResponse.of(jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId())));
   }
 
@@ -73,10 +71,8 @@ public class UserService {
   @Transactional(readOnly = true)
   public RetrieveFullProfileResponse getUserByLoginId(String loginId) {
 
-    User user =
-      userRepository
-        .findByLoginId(loginId)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+    User user = userRepository.findByLoginId(loginId)
+      .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     return RetrieveFullProfileResponse.from(user);
   }
@@ -93,34 +89,31 @@ public class UserService {
       throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
     }
 
-    return LoginCompleteResponse.of(
-      RetrieveFullProfileResponse.from(optionalUser.get()),
+    return LoginCompleteResponse.of(RetrieveFullProfileResponse.from(optionalUser.get()),
       LoginDto.JwtPairResponse.of(
-        jwtService.createAccessToken(
-          optionalUser.get().getId(), optionalUser.get().getLoginId()),
-        jwtService.createRefreshToken(
-          optionalUser.get().getId(), optionalUser.get().getLoginId())));
+        jwtService.createAccessToken(optionalUser.get().getId(), optionalUser.get().getLoginId()),
+        jwtService.createRefreshToken(optionalUser.get().getId(),
+          optionalUser.get().getLoginId())));
   }
 
   @Transactional
   public LoginDto.LoginCompleteResponse refreshToken(String refreshToken) {
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
-    User user =
-      userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+    User user = userRepository.findById(userId)
+      .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-    LoginDto.JwtPairResponse jwtPairResponse =
-      LoginDto.JwtPairResponse.of(
-        jwtService.createAccessToken(user.getId(), user.getLoginId()),
-        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
+    LoginDto.JwtPairResponse jwtPairResponse = LoginDto.JwtPairResponse.of(
+      jwtService.createAccessToken(user.getId(), user.getLoginId()),
+      jwtService.createRefreshToken(user.getId(), user.getLoginId()));
 
     return LoginCompleteResponse.of(RetrieveFullProfileResponse.from(user), jwtPairResponse);
   }
 
   public CheckIsUsernameAvailableResponse isUsernameAvailable(String username) {
     if (!isUsernamePatternValid(username)) {
-      return new CheckIsUsernameAvailableResponse(
-        username, false, "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
+      return new CheckIsUsernameAvailableResponse(username, false,
+        "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
     }
 
     if (!isUsernameDuplicated(username)) {

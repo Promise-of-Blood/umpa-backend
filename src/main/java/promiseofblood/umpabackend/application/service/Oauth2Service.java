@@ -63,8 +63,13 @@ public class Oauth2Service {
         .build();
 
     String loginId = oauth2ProfileResponse.getProviderUid();
-    String storedFilePath =
-      userService.uploadProfileImage(loginId, oauth2RegisterRequest.getProfileImage());
+
+    // TODO 이 더러운 코드를 해결하기
+    String storedFilePath = null;
+    if (oauth2RegisterRequest.getProfileImage() != null) {
+      storedFilePath = userService.uploadProfileImage(loginId,
+        oauth2RegisterRequest.getProfileImage());
+    }
 
     User newUser =
       User.register(
