@@ -191,15 +191,6 @@ public class ServiceBoardService {
   }
 
   @Transactional(readOnly = true)
-  public MrProductionResponse getMrProductionServicePost(Long id) {
-
-    MrProductionServicePost mrProductionServicePost =
-      (MrProductionServicePost) servicePostRepository.findById(id).get();
-
-    return MrProductionResponse.of(mrProductionServicePost);
-  }
-
-  @Transactional(readOnly = true)
   public MrProductionResponse retrieveMrProductionServicePost(RetrieveMrServicePostQuery query) {
 
     var mrProductionServicePost = (MrProductionServicePost) servicePostRepository.findById(
