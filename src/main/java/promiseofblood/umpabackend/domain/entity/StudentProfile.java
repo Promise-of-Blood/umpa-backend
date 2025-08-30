@@ -7,11 +7,11 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
@@ -20,7 +20,6 @@ import promiseofblood.umpabackend.dto.StudentProfileDto;
 
 @Entity
 @Getter
-@SuperBuilder
 @Table(name = "student_profiles")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudentProfile extends TimeStampedEntity {
@@ -38,12 +37,10 @@ public class StudentProfile extends TimeStampedEntity {
   @Enumerated(EnumType.STRING)
   private Grade grade;
 
-  public static StudentProfile from(StudentProfileDto.StudentProfileRequest request) {
-    return StudentProfile.builder()
-      .major(request.getMajor())
-      .preferredColleges(request.getPreferredColleges())
-      .grade(request.getGrade())
-      .build();
+  public static StudentProfile empty() {
+    var studentProfile = new StudentProfile();
+    studentProfile.preferredColleges = new ArrayList<>();
+    return studentProfile;
   }
 
   public void update(StudentProfileDto.StudentProfileRequest request) {

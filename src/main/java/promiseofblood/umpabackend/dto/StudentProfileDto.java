@@ -3,6 +3,7 @@ package promiseofblood.umpabackend.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -44,15 +45,22 @@ public class StudentProfileDto {
 
     public static StudentProfileResponse from(StudentProfile studentProfile) {
 
-      List<ConstantDto.CollegeResponse> preferredColleges = new ArrayList<>();
-      for (College college : studentProfile.getPreferredColleges()) {
-        preferredColleges.add(ConstantDto.CollegeResponse.from(college));
+      List<ConstantDto.CollegeResponse> preferredCollegeDtoList = new ArrayList<>();
+      List<College> preferredColleges = studentProfile.getPreferredColleges();
+      if (preferredColleges != null) {
+        for (College college : preferredColleges) {
+          preferredCollegeDtoList.add(ConstantDto.CollegeResponse.from(college));
+        }
       }
 
       return StudentProfileResponse.builder()
-          .major(MajorResponse.from(studentProfile.getMajor()))
-          .preferredColleges(preferredColleges)
-          .grade(ConstantDto.GradeResponse.from(studentProfile.getGrade()))
+          .major(Optional.ofNullable(studentProfile.getMajor())
+            .map(MajorResponse::from)
+            .orElse(null))
+          .preferredColleges(preferredCollegeDtoList)
+          .grade(Optional.ofNullable(studentProfile.getGrade())
+            .map(ConstantDto.GradeResponse::from)
+            .orElse(null))
           .build();
     }
   }
