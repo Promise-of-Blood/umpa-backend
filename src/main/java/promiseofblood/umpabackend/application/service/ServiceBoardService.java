@@ -7,7 +7,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
@@ -186,15 +185,6 @@ public class ServiceBoardService {
           mrProductionPostRequest.getSampleMrUrls().stream().map(SampleMrUrl::of).toList())
         .build();
     servicePostRepository.save(mrProductionServicePost);
-
-    return MrProductionResponse.of(mrProductionServicePost);
-  }
-
-  @Transactional(readOnly = true)
-  public MrProductionResponse retrieveMrProductionServicePost(RetrieveMrServicePostQuery query) {
-
-    var mrProductionServicePost = (MrProductionServicePost) servicePostRepository.findById(
-      query.id()).get(); // TODO: 예외처리
 
     return MrProductionResponse.of(mrProductionServicePost);
   }

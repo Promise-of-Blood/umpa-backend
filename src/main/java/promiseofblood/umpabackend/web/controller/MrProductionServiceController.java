@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
+import promiseofblood.umpabackend.application.service.MrProductionService;
 import promiseofblood.umpabackend.application.service.ReviewService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto;
@@ -32,12 +33,11 @@ import promiseofblood.umpabackend.web.schema.ApiResponse.PaginatedResponse;
 @RequiredArgsConstructor
 public class MrProductionServiceController {
 
+  private final MrProductionService mrProductionService;
   private final ServiceBoardService serviceBoardService;
   private final ReviewService reviewService;
 
-  // **************
-  // * MR제작 서비스 *
-  // **************
+
   @Tag(name = "서비스 관리 API(MR제작)")
   @GetMapping(path = "/mr-production")
   public ResponseEntity<PaginatedResponse<ServicePostResponse>>
@@ -72,7 +72,7 @@ public class MrProductionServiceController {
     @PathVariable Long id) {
 
     RetrieveMrServicePostQuery query = new RetrieveMrServicePostQuery(id);
-    var response = serviceBoardService.retrieveMrProductionServicePost(query);
+    var response = mrProductionService.retrieveMrProductionServicePost(query);
 
     return ResponseEntity.ok(response);
   }
