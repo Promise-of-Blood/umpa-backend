@@ -30,12 +30,10 @@ public class MrProductionServicePost extends ServicePost {
 
   private int freeRevisionCount;
 
-  private int additionalRevisionCost;
-
   @Embedded
   private DurationRange averageDuration;
 
-  private List<String> usingSoftwareList;
+  private String softwareUsed;
 
   @ElementCollection
   private List<SampleMrUrl> sampleMrUrls;

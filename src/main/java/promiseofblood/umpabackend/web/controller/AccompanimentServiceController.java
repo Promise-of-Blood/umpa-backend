@@ -1,7 +1,6 @@
 package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ public class AccompanimentServiceController {
   public ResponseEntity<AccompanimentServicePostResponse>
   registerAccompaniment(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute @Valid
+    @ModelAttribute
     AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
     String loginId = securityUserDetails.getUsername();
 

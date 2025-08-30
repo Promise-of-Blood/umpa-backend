@@ -2,7 +2,6 @@ package promiseofblood.umpabackend.application.service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -115,30 +114,6 @@ public class Oauth2Service {
       LoginDto.JwtPairResponse.of(
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId())));
-  }
-
-
-  public LoginDto.IsOauth2RegisterAvailableResponse isOauth2RegisterAvailable(
-    String providerName, String idToken, String accessToken) {
-
-    Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
-    Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
-
-    Oauth2ProfileResponse oauth2ProfileResponse =
-      oauth2Strategy.getOauth2UserProfile(oauth2Provider, accessToken, idToken);
-    String providerUid = oauth2ProfileResponse.getProviderUid();
-
-    Optional<User> user = userRepository.findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
-      providerName, providerUid);
-
-    String message;
-    if (user.isPresent()) {
-      message = "이미 가입된 사용자입니다.";
-    } else {
-      message = "가입 가능한 사용자입니다.";
-    }
-
-    return new LoginDto.IsOauth2RegisterAvailableResponse(providerName, user.isEmpty(), message);
   }
 
   public Map<String, Oauth2ProviderDto> generateAuthorizationUrls() {

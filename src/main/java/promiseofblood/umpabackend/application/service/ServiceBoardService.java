@@ -85,7 +85,7 @@ public class ServiceBoardService {
         .includedPracticeCount(accompanimentPostRequest.getIncludedPracticeCount())
         .additionalPracticeCost(accompanimentPostRequest.getAdditionalPracticeCost())
         .isMrIncluded(accompanimentPostRequest.getIsMrIncluded())
-        .practiceLocations(accompanimentPostRequest.getPracticeLocations())
+        .practiceLocation(accompanimentPostRequest.getPracticeLocation())
         .videoUrls(accompanimentPostRequest.getVideoUrls())
         .build();
     servicePostRepository.save(accompanimentServicePost);
@@ -116,7 +116,7 @@ public class ServiceBoardService {
 
     List<ServiceCost> serviceCosts = new ArrayList<>();
     for (String costByScoreType : scoreProductionRequest.getCostByScoreType().split(",")) {
-      String[] parts = costByScoreType.split(":");
+      String[] parts = costByScoreType.split("-");
       String scoreType = parts[0];
       int cost = Integer.parseInt(parts[1]);
       serviceCosts.add(ServiceCost.builder().unit(scoreType).cost(cost).build());
@@ -133,7 +133,7 @@ public class ServiceBoardService {
         .freeRevisionCount(scoreProductionRequest.getFreeRevisionCount())
         .additionalRevisionCost(scoreProductionRequest.getAdditionalRevisionCost())
         .averageDuration(DurationRange.of(scoreProductionRequest.getAverageDuration()))
-        .usingSoftwareList(scoreProductionRequest.getSoftwareList())
+        .softwareUsed(scoreProductionRequest.getSoftwareUsed())
         .sampleScoreImageUrl(sampleScoreFilePath)
         .build();
     servicePostRepository.save(scoreProductionServicePost);
@@ -178,9 +178,8 @@ public class ServiceBoardService {
           ServiceCost.builder().cost(mrProductionPostRequest.getCost()).unit("곡").build())
         .additionalCostPolicy(mrProductionPostRequest.getAdditionalCostPolicy())
         .freeRevisionCount(mrProductionPostRequest.getFreeRevisionCount())
-        .additionalRevisionCost(mrProductionPostRequest.getAdditionalRevisionCost())
         .averageDuration(DurationRange.of(mrProductionPostRequest.getAverageDuration()))
-        .usingSoftwareList(mrProductionPostRequest.getSoftwareList())
+        .softwareUsed(mrProductionPostRequest.getSoftwareUsed())
         .sampleMrUrls(
           mrProductionPostRequest.getSampleMrUrls().stream().map(SampleMrUrl::of).toList())
         .build();

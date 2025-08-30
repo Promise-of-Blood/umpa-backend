@@ -33,7 +33,7 @@ public class ScoreProductionServicePost extends ServicePost {
   @Embedded
   private DurationRange averageDuration;
 
-  private List<String> usingSoftwareList;
+  private String softwareUsed;
 
   private String sampleScoreImageUrl;
 

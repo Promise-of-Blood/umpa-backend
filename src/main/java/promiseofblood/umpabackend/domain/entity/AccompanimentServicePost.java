@@ -12,7 +12,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 
@@ -38,9 +37,7 @@ public class AccompanimentServicePost extends ServicePost {
 
   private boolean isMrIncluded;
 
-  @ElementCollection
-  @Enumerated(EnumType.STRING)
-  private List<AccompanimentPracticeLocation> practiceLocations;
+  private String practiceLocation;
 
   @ElementCollection
   private List<String> videoUrls;

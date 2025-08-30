@@ -24,8 +24,6 @@ import promiseofblood.umpabackend.dto.TeacherProfileDto;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherProfile extends TimeStampedEntity {
 
-  private String keyphrase;
-
   private String description;
 
   @Enumerated(EnumType.STRING)
@@ -40,7 +38,6 @@ public class TeacherProfile extends TimeStampedEntity {
   public static TeacherProfile from(TeacherProfileDto.TeacherProfileRequest request) {
 
     return TeacherProfile.builder()
-      .keyphrase(request.getKeyphrase())
       .description(request.getDescription())
       .major(request.getMajor())
       .careers(request.getCareers().stream().map(TeacherCareer::from).toList())
@@ -55,9 +52,6 @@ public class TeacherProfile extends TimeStampedEntity {
   }
 
   public void update(TeacherProfileDto.TeacherProfileRequest request) {
-    if (request.getKeyphrase() != null) {
-      this.keyphrase = request.getKeyphrase();
-    }
     if (request.getDescription() != null) {
       this.description = request.getDescription();
     }

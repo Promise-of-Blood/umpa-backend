@@ -25,12 +25,10 @@ public class LoginDto {
     @Schema(description = "사용자 닉네임", example = "홍길동")
     private String username;
 
-    @NotNull
-    @Schema(description = "성별", example = "MALE")
+    @NotNull @Schema(description = "성별", example = "MALE")
     private Gender gender;
 
-    @NotNull
-    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
+    @NotNull @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
     private ProfileType profileType;
 
     @NotBlank
@@ -41,8 +39,7 @@ public class LoginDto {
     @Schema(description = "비밀번호")
     private String password;
 
-    @NotNull
-    @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
+    @NotNull @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
     private MultipartFile profileImage;
   }
 
@@ -55,16 +52,13 @@ public class LoginDto {
     @Schema(description = "사용자 닉네임", example = "홍길동")
     private String username;
 
-    @NotNull
-    @Schema(description = "성별", example = "MALE")
+    @NotNull @Schema(description = "성별", example = "MALE")
     private Gender gender;
 
-    @NotNull
-    @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
+    @NotNull @Schema(type = "enum", description = "현재 활성화된 프로필 타입")
     private ProfileType profileType;
 
-    @NotNull
-    @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
+    @NotNull @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
     private MultipartFile profileImage;
 
     @NotBlank
@@ -74,6 +68,23 @@ public class LoginDto {
     @NotBlank
     @Schema(description = "oauth2 제공자로부터 발급된 액세스 토큰")
     private String externalAccessToken;
+  }
+
+  @Getter
+  public static class IsOauth2UserRegistered {
+
+    @NotBlank
+    @Schema(description = "사용자 닉네임", example = "홍길동")
+    private String username;
+
+    @NotBlank
+    @Schema(description = "OAuth2 제공자 이름", example = "google")
+    private String providerName;
+
+    public IsOauth2UserRegistered(String username, String providerName) {
+      this.username = username;
+      this.providerName = providerName;
+    }
   }
 
   // ****************
@@ -99,8 +110,7 @@ public class LoginDto {
   @NoArgsConstructor
   public static class TokenRefreshRequest {
 
-    @NotBlank
-    private String refreshToken;
+    @NotBlank private String refreshToken;
   }
 
   @Getter
@@ -134,17 +144,6 @@ public class LoginDto {
   public static class IsUsernameAvailableResponse {
 
     private String username;
-
-    private boolean isAvailable;
-
-    private String message;
-  }
-
-  @Getter
-  @AllArgsConstructor
-  public static class IsOauth2RegisterAvailableResponse {
-
-    private String providerName;
 
     private boolean isAvailable;
 

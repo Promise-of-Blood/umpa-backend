@@ -40,15 +40,12 @@ public class MrProductionServicePostDto {
     @Schema(description = "무료 수정 횟수", example = "2")
     private int freeRevisionCount;
 
-    @Schema(type = "integer", description = "추가 수정 비용")
-    private int additionalRevisionCost;
-
     @Schema(description = "서비스 평균 소요 기간", example = "3WEEK~6MONTH")
     @Pattern(regexp = "^[0-9]+(DAY|WEEK|MONTH)~[0-9]+(DAY|WEEK|MONTH)$", message = "형식은 {숫자}{DAY|WEEK|MONTH}~{숫자}{DAY|WEEK|MONTH} 이어야 합니다.")
     private String averageDuration;
 
-    @Schema(description = "사용 소프트웨어", example = "[\"Logic Pro X\", \"Ableton Live\"]")
-    private List<String> softwareList;
+    @Schema(description = "사용 소프트웨어", example = "Logic Pro X")
+    private String softwareUsed;
 
     @Schema(description = "샘플 MR URL 목록", example = "[\"https://example.com/sample1.mp3\", \"https://example.com/sample2.mp3\"]")
     private List<String> sampleMrUrls;
@@ -72,9 +69,7 @@ public class MrProductionServicePostDto {
 
     private int freeRevisionCount;
 
-    private int additionalRevisionCost;
-
-    private List<String> softwareList;
+    private String softwareUsed;
 
     private List<SampleMrUrlResponse> sampleUrls;
 
@@ -91,8 +86,7 @@ public class MrProductionServicePostDto {
         .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
-        .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
-        .softwareList(mrProductionServicePost.getUsingSoftwareList())
+        .softwareUsed(mrProductionServicePost.getSoftwareUsed())
         .sampleUrls(SampleMrUrlResponse.fromList(mrProductionServicePost.getSampleMrUrls()))
         .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
         .reviewRating(0.0f).build();

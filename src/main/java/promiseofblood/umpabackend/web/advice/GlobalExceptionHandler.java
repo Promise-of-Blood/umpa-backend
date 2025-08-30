@@ -2,7 +2,6 @@ package promiseofblood.umpabackend.web.advice;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
-import java.util.Arrays;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
-import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import promiseofblood.umpabackend.application.exception.NotFoundException;
 import promiseofblood.umpabackend.application.exception.NotSupportedOauth2ProviderException;
 import promiseofblood.umpabackend.application.exception.Oauth2UserAlreadyExists;
@@ -109,23 +107,6 @@ public class GlobalExceptionHandler {
       new ApiResponse.ExceptionResponse("유효성 검사 실패: " + builder);
 
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exceptionResponse);
-  }
-
-  @ExceptionHandler(HandlerMethodValidationException.class)
-  public ResponseEntity<ApiResponse.ExceptionResponse> handleHandlerMethodValidationException(
-    HandlerMethodValidationException ex, WebRequest request) {
-
-    log.error(ex.getMessage(), ex);
-
-    String message = Arrays.stream(ex.getDetailMessageArguments())
-      .findFirst()
-      .orElse("유효성 검사 실패")
-      .toString();
-
-    ApiResponse.ExceptionResponse exceptionResponse =
-      new ApiResponse.ExceptionResponse(message);
-
-    return ResponseEntity.status(ex.getStatusCode()).body(exceptionResponse);
   }
 
   // 404
