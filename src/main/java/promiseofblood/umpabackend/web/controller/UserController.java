@@ -30,6 +30,7 @@ import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -137,11 +138,11 @@ public class UserController {
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<UserDto.ProfileResponse> patchDefaultProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @Validated @ModelAttribute UserDto.DefaultProfilePatchRequest defaultProfilePatchRequest) {
+    @Validated @ModelAttribute PatchDefaultProfileRequest patchDefaultProfileRequest) {
 
     UserDto.ProfileResponse updatedUser =
       profileService.patchDefaultProfile(
-        securityUserDetails.getUsername(), defaultProfilePatchRequest);
+        securityUserDetails.getUsername(), patchDefaultProfileRequest);
 
     return ResponseEntity.ok(updatedUser);
   }

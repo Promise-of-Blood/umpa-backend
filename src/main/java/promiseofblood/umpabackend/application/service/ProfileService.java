@@ -11,7 +11,7 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
+import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +22,7 @@ public class ProfileService {
 
   @Transactional
   public UserDto.ProfileResponse patchDefaultProfile(
-    String loginId, DefaultProfilePatchRequest defaultProfilePatchRequest) {
+    String loginId, PatchDefaultProfileRequest patchDefaultProfileRequest) {
 
     User user =
       userRepository
@@ -30,10 +30,10 @@ public class ProfileService {
         .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     user.patchDefaultProfile(
-      defaultProfilePatchRequest.getUsername(),
-      defaultProfilePatchRequest.getGender(),
-      uploadProfileImageIfExists(user.getLoginId(), defaultProfilePatchRequest.getProfileImage()),
-      defaultProfilePatchRequest.getProfileType());
+      patchDefaultProfileRequest.getUsername(),
+      patchDefaultProfileRequest.getGender(),
+      uploadProfileImageIfExists(user.getLoginId(), patchDefaultProfileRequest.getProfileImage()),
+      patchDefaultProfileRequest.getProfileType());
     User updatedUser = userRepository.save(user);
 
     return UserDto.ProfileResponse.from(updatedUser);

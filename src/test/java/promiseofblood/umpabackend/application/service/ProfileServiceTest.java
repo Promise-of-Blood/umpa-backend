@@ -1,9 +1,7 @@
 package promiseofblood.umpabackend.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import jakarta.validation.ConstraintViolation;
@@ -11,7 +9,6 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,8 +28,8 @@ import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
 import promiseofblood.umpabackend.dto.StudentProfileDto.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherProfileRequest;
-import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
 import promiseofblood.umpabackend.dto.UserDto.ProfileResponse;
+import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
 
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceTest {
@@ -58,7 +55,7 @@ class ProfileServiceTest {
   @DisplayName("사용자 닉네임이 8자를 초과하면 검증 오류가 발생해야 한다")
   void validateUsername_whenExceedsMaxLength_shouldFailValidation() {
     // Given
-    DefaultProfilePatchRequest requestWithLongUsername = new DefaultProfilePatchRequest(
+    PatchDefaultProfileRequest requestWithLongUsername = new PatchDefaultProfileRequest(
       "닉네임이너무길어요", // 8자 초과 닉네임
       Gender.MALE,
       ProfileType.STUDENT,
@@ -66,7 +63,7 @@ class ProfileServiceTest {
     );
 
     // When
-    Set<ConstraintViolation<DefaultProfilePatchRequest>> violations = validator.validate(
+    Set<ConstraintViolation<PatchDefaultProfileRequest>> violations = validator.validate(
       requestWithLongUsername);
 
     // Then
@@ -78,7 +75,7 @@ class ProfileServiceTest {
   @DisplayName("사용자 닉네임이 8자 이하면 검증에 성공해야 한다")
   void validateUsername_whenWithinMaxLength_shouldPassValidation() {
     // Given
-    DefaultProfilePatchRequest requestWithValidUsername = new DefaultProfilePatchRequest(
+    PatchDefaultProfileRequest requestWithValidUsername = new PatchDefaultProfileRequest(
       "홍길동", // 8자 이하 닉네임
       Gender.MALE,
       ProfileType.STUDENT,
@@ -86,7 +83,7 @@ class ProfileServiceTest {
     );
 
     // When
-    Set<ConstraintViolation<DefaultProfilePatchRequest>> violations = validator.validate(
+    Set<ConstraintViolation<PatchDefaultProfileRequest>> violations = validator.validate(
       requestWithValidUsername);
 
     // Then
@@ -97,7 +94,7 @@ class ProfileServiceTest {
   @DisplayName("정확히 8자의 닉네임은 검증에 성공해야 한다")
   void validateUsername_whenExactlyMaxLength_shouldPassValidation() {
     // Given
-    DefaultProfilePatchRequest requestWithBorderlineUsername = new DefaultProfilePatchRequest(
+    PatchDefaultProfileRequest requestWithBorderlineUsername = new PatchDefaultProfileRequest(
       "12345678", // 정확히 8자 닉네임
       Gender.MALE,
       ProfileType.STUDENT,
@@ -105,7 +102,7 @@ class ProfileServiceTest {
     );
 
     // When
-    Set<ConstraintViolation<DefaultProfilePatchRequest>> violations = validator.validate(
+    Set<ConstraintViolation<PatchDefaultProfileRequest>> violations = validator.validate(
       requestWithBorderlineUsername);
 
     // Then
