@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Builder
-public class CreateMrProductionCommand {
+public class CreateMrProductionServicePostCommand {
 
   @NotNull
   final String loginId;
