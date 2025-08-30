@@ -14,10 +14,10 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
-import promiseofblood.umpabackend.application.exception.NotFoundException;
 import promiseofblood.umpabackend.application.exception.NotSupportedOauth2ProviderException;
 import promiseofblood.umpabackend.application.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.application.exception.RegistrationException;
+import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.web.schema.ApiResponse;
 
@@ -129,7 +129,7 @@ public class GlobalExceptionHandler {
   }
 
   // 404
-  @ExceptionHandler(NotFoundException.class)
+  @ExceptionHandler(ResourceNotFoundException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleNotFoundException(
     Exception ex, WebRequest request) {
     log.error(ex.getMessage(), ex);
