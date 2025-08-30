@@ -13,7 +13,7 @@ import promiseofblood.umpabackend.domain.repository.MrProductionServicePostRepos
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.web.schema.MrProductionResponse;
+import promiseofblood.umpabackend.web.schema.RetrieveMrProductionServicePostResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -24,7 +24,8 @@ public class MrProductionService {
   private final StorageService storageService;
 
   @Transactional
-  public MrProductionResponse createMrProductionServicePost(CreateMrProductionCommand command) {
+  public RetrieveMrProductionServicePostResponse createMrProductionServicePost(
+    CreateMrProductionCommand command) {
 
     User user = userRepository
       .findByLoginId(command.getLoginId())
@@ -56,16 +57,17 @@ public class MrProductionService {
     );
     mrProductionServicePostRepository.save(mrProductionServicePost);
 
-    return MrProductionResponse.of(mrProductionServicePost);
+    return RetrieveMrProductionServicePostResponse.of(mrProductionServicePost);
   }
 
   @Transactional(readOnly = true)
-  public MrProductionResponse retrieveMrProductionServicePost(RetrieveMrServicePostQuery query) {
+  public RetrieveMrProductionServicePostResponse retrieveMrProductionServicePost(
+    RetrieveMrServicePostQuery query) {
 
     MrProductionServicePost mrProductionServicePost = mrProductionServicePostRepository.findById(
         query.id())
       .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 MR 제작 서비스 게시글이 존재하지 않습니다."));
 
-    return MrProductionResponse.of(mrProductionServicePost);
+    return RetrieveMrProductionServicePostResponse.of(mrProductionServicePost);
   }
 }
