@@ -8,10 +8,10 @@ import promiseofblood.umpabackend.domain.entity.StudentProfile;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
-import promiseofblood.umpabackend.dto.TeacherProfileDto;
-import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -21,32 +21,32 @@ public class ProfileService {
   private final StorageService storageService;
 
   @Transactional
-  public UserDto.ProfileResponse patchDefaultProfile(
-    String loginId, DefaultProfilePatchRequest defaultProfilePatchRequest) {
+  public RetrieveFullProfileResponse patchDefaultProfile(
+      String loginId, PatchDefaultProfileRequest patchDefaultProfileRequest) {
 
     User user =
-      userRepository
-        .findByLoginId(loginId)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     user.patchDefaultProfile(
-      defaultProfilePatchRequest.getUsername(),
-      defaultProfilePatchRequest.getGender(),
-      uploadProfileImageIfExists(user.getLoginId(), defaultProfilePatchRequest.getProfileImage()),
-      defaultProfilePatchRequest.getProfileType());
+        patchDefaultProfileRequest.getUsername(),
+        patchDefaultProfileRequest.getGender(),
+        uploadProfileImageIfExists(user.getLoginId(), patchDefaultProfileRequest.getProfileImage()),
+        patchDefaultProfileRequest.getProfileType());
     User updatedUser = userRepository.save(user);
 
-    return UserDto.ProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser);
   }
 
   @Transactional
-  public UserDto.ProfileResponse patchTeacherProfile(
-    String loginId, TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
+  public RetrieveFullProfileResponse patchTeacherProfile(
+      String loginId, PatchTeacherProfileRequest teacherProfileRequest) {
 
     User user =
-      userRepository
-        .findByLoginId(loginId)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     TeacherProfile teacherProfile = user.getTeacherProfile();
 
@@ -59,17 +59,17 @@ public class ProfileService {
     user.patchTeacherProfile(teacherProfile);
     User updatedUser = userRepository.save(user);
 
-    return UserDto.ProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser);
   }
 
   @Transactional
-  public UserDto.ProfileResponse patchStudentProfile(
-    String loginId, StudentProfileDto.StudentProfileRequest studentProfileRequest) {
+  public RetrieveFullProfileResponse patchStudentProfile(
+      String loginId, PatchStudentProfileRequest studentProfileRequest) {
 
     User user =
-      userRepository
-        .findByLoginId(loginId)
-        .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
 
     StudentProfile studentProfile = user.getStudentProfile();
 
@@ -82,7 +82,7 @@ public class ProfileService {
     user.patchStudentProfile(studentProfile);
     User updatedUser = userRepository.save(user);
 
-    return UserDto.ProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser);
   }
 
   public String uploadProfileImageIfExists(String loginId, MultipartFile profileImage) {

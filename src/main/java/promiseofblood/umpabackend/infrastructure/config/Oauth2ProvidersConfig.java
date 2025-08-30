@@ -18,10 +18,10 @@ public class Oauth2ProvidersConfig {
 
   public Oauth2Provider get(String providerName) {
     return providers.stream()
-      .filter(provider -> provider.getName().equalsIgnoreCase(providerName))
-      .findFirst()
-      .orElseThrow(
-        () ->
-          new NotSupportedOauth2ProviderException("지원하지 않는 OAuth2 제공자입니다: " + providerName));
+        .filter(provider -> provider.getName().equalsIgnoreCase(providerName))
+        .findFirst()
+        .orElseThrow(
+            () ->
+                new NotSupportedOauth2ProviderException("지원하지 않는 OAuth2 제공자입니다: " + providerName));
   }
 }

@@ -86,7 +86,7 @@ spotless {
     }
 }
 
-tasks.named('build') {
+tasks.named('compileJava') {
     dependsOn 'spotlessCheck'
 }
 

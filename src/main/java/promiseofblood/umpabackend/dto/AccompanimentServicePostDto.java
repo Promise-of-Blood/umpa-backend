@@ -14,6 +14,7 @@ import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.web.schema.response.RetrieveTeacherProfileResponse;
 
 @Getter
 public class AccompanimentServicePostDto {
@@ -28,7 +29,7 @@ public class AccompanimentServicePostDto {
 
     private String thumbnailImage;
 
-    private TeacherProfileDto.TeacherProfileResponse teacherProfile;
+    private RetrieveTeacherProfileResponse teacherProfile;
 
     private String reviewRating;
 
@@ -55,7 +56,7 @@ public class AccompanimentServicePostDto {
           .title(accompanimentServicePost.getTitle())
           .description(accompanimentServicePost.getDescription())
           .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-          .teacherProfile(TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
+          .teacherProfile(RetrieveTeacherProfileResponse.from(user.getTeacherProfile()))
           .reviewRating("0.0")
           .costPerUnit(accompanimentServicePost.getCostAndUnit())
           .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
@@ -74,8 +75,7 @@ public class AccompanimentServicePostDto {
   public static class AccompanimentPostRequest {
 
     @Schema(type = "string", format = "binary", description = "대표 사진")
-    @NotNull
-    private MultipartFile thumbnailImage;
+    @NotNull private MultipartFile thumbnailImage;
 
     @Schema(type = "string", description = "서비스 제목")
     @NotBlank

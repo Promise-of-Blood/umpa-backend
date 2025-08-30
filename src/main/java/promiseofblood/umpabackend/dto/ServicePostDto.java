@@ -6,13 +6,14 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import promiseofblood.umpabackend.domain.entity.TeacherProfile;
-import promiseofblood.umpabackend.domain.vo.DurationRange;
-import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;
+import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
-import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherCareerDto;
+import promiseofblood.umpabackend.domain.vo.DurationRange;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
+import promiseofblood.umpabackend.web.schema.response.ListTeacherCareerResponse;
+import promiseofblood.umpabackend.web.schema.response.ListTeacherLinkResponse;
 
 public class ServicePostDto {
 
@@ -27,22 +28,22 @@ public class ServicePostDto {
 
     private String description;
 
-    private List<TeacherProfileDto.TeacherCareerDto> careers;
+    private List<ListTeacherCareerResponse> careers;
 
-    private List<TeacherProfileDto.TeacherLinkDto> links;
+    private List<ListTeacherLinkResponse> links;
 
     public static TeacherAuthorProfileDto from(User user) {
 
       TeacherProfile teacherProfile = user.getTeacherProfile();
 
-      List<TeacherProfileDto.TeacherCareerDto> careers = new ArrayList<>();
+      List<ListTeacherCareerResponse> careers = new ArrayList<>();
       for (TeacherCareer career : teacherProfile.getCareers()) {
-        careers.add(TeacherCareerDto.from(career));
+        careers.add(ListTeacherCareerResponse.from(career));
       }
 
-      List<TeacherProfileDto.TeacherLinkDto> links = new ArrayList<>();
+      List<ListTeacherLinkResponse> links = new ArrayList<>();
       for (TeacherLink link : teacherProfile.getLinks()) {
-        links.add(TeacherProfileDto.TeacherLinkDto.from(link));
+        links.add(ListTeacherLinkResponse.from(link));
       }
 
       return TeacherAuthorProfileDto.builder()

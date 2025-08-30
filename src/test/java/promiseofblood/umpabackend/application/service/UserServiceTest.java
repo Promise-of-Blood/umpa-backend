@@ -15,11 +15,9 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-  @Mock
-  private UserRepository userRepository;
+  @Mock private UserRepository userRepository;
 
-  @InjectMocks
-  private UserService userService;
+  @InjectMocks private UserService userService;
 
   @Test
   @DisplayName("isUsernameDuplicated 메서드는 닉네임이 중복되었을 경우 false를 반환한다.")

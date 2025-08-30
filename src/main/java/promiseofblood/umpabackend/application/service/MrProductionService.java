@@ -3,7 +3,7 @@ package promiseofblood.umpabackend.application.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import promiseofblood.umpabackend.application.command.CreateMrProductionCommand;
+import promiseofblood.umpabackend.application.command.CreateMrProductionServicePostCommand;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
@@ -13,7 +13,7 @@ import promiseofblood.umpabackend.domain.repository.MrProductionServicePostRepos
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.web.schema.RetrieveMrProductionServicePostResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveMrProductionServicePostResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -25,36 +25,35 @@ public class MrProductionService {
 
   @Transactional
   public RetrieveMrProductionServicePostResponse createMrProductionServicePost(
-    CreateMrProductionCommand command) {
+      CreateMrProductionServicePostCommand command) {
 
-    User user = userRepository
-      .findByLoginId(command.getLoginId())
-      .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
+    User user =
+        userRepository
+            .findByLoginId(command.getLoginId())
+            .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
-    String thumbnailImageFilePath = storageService.store(
-      command.getThumbnailImage(),
-      "service/" + user.getId() + "/mr-production");
+    String thumbnailImageFilePath =
+        storageService.store(
+            command.getThumbnailImage(), "service/" + user.getId() + "/mr-production");
 
-    ServiceCost serviceCost = ServiceCost.of(
-      command.getServiceCostValue(),
-      command.getServiceCostUnit()
-    );
+    ServiceCost serviceCost =
+        ServiceCost.of(command.getServiceCostValue(), command.getServiceCostUnit());
 
     DurationRange durationRange = DurationRange.of(command.getAverageDuration());
 
-    MrProductionServicePost mrProductionServicePost = MrProductionServicePost.create(
-      user,
-      thumbnailImageFilePath,
-      command.getTitle(),
-      command.getDescription(),
-      serviceCost,
-      command.getAdditionalCostPolicy(),
-      command.getFreeRevisionCount(),
-      command.getAdditionalRevisionCost(),
-      durationRange,
-      command.getUsingSoftwareList(),
-      command.getSampleMrUrls().stream().map(SampleMrUrl::of).toList()
-    );
+    MrProductionServicePost mrProductionServicePost =
+        MrProductionServicePost.create(
+            user,
+            thumbnailImageFilePath,
+            command.getTitle(),
+            command.getDescription(),
+            serviceCost,
+            command.getAdditionalCostPolicy(),
+            command.getFreeRevisionCount(),
+            command.getAdditionalRevisionCost(),
+            durationRange,
+            command.getUsingSoftwareList(),
+            command.getSampleMrUrls().stream().map(SampleMrUrl::of).toList());
     mrProductionServicePostRepository.save(mrProductionServicePost);
 
     return RetrieveMrProductionServicePostResponse.of(mrProductionServicePost);
@@ -62,11 +61,12 @@ public class MrProductionService {
 
   @Transactional(readOnly = true)
   public RetrieveMrProductionServicePostResponse retrieveMrProductionServicePost(
-    RetrieveMrServicePostQuery query) {
+      RetrieveMrServicePostQuery query) {
 
-    MrProductionServicePost mrProductionServicePost = mrProductionServicePostRepository.findById(
-        query.id())
-      .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 MR 제작 서비스 게시글이 존재하지 않습니다."));
+    MrProductionServicePost mrProductionServicePost =
+        mrProductionServicePostRepository
+            .findById(query.id())
+            .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 MR 제작 서비스 게시글이 존재하지 않습니다."));
 
     return RetrieveMrProductionServicePostResponse.of(mrProductionServicePost);
   }

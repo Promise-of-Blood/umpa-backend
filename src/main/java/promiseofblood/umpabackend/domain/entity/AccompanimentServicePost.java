@@ -24,8 +24,7 @@ import promiseofblood.umpabackend.domain.vo.ServiceCost;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccompanimentServicePost extends ServicePost {
 
-  @Embedded
-  private ServiceCost serviceCost;
+  @Embedded private ServiceCost serviceCost;
 
   private String additionalCostPolicy;
 
@@ -42,8 +41,7 @@ public class AccompanimentServicePost extends ServicePost {
   @Enumerated(EnumType.STRING)
   private List<AccompanimentPracticeLocation> practiceLocations;
 
-  @ElementCollection
-  private List<String> videoUrls;
+  @ElementCollection private List<String> videoUrls;
 
   @Override
   public String getCostAndUnit() {

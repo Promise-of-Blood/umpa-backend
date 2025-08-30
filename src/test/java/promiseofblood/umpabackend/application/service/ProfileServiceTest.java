@@ -1,9 +1,7 @@
 package promiseofblood.umpabackend.application.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import jakarta.validation.ConstraintViolation;
@@ -11,7 +9,6 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,22 +26,19 @@ import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
-import promiseofblood.umpabackend.dto.StudentProfileDto.StudentProfileRequest;
-import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherProfileRequest;
-import promiseofblood.umpabackend.dto.UserDto.DefaultProfilePatchRequest;
-import promiseofblood.umpabackend.dto.UserDto.ProfileResponse;
+import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceTest {
 
-  @Mock
-  private UserRepository userRepository;
+  @Mock private UserRepository userRepository;
 
-  @Mock
-  private StorageService storageService;
+  @Mock private StorageService storageService;
 
-  @InjectMocks
-  private ProfileService subject;
+  @InjectMocks private ProfileService subject;
 
   private Validator validator;
 
@@ -58,16 +52,16 @@ class ProfileServiceTest {
   @DisplayName("사용자 닉네임이 8자를 초과하면 검증 오류가 발생해야 한다")
   void validateUsername_whenExceedsMaxLength_shouldFailValidation() {
     // Given
-    DefaultProfilePatchRequest requestWithLongUsername = new DefaultProfilePatchRequest(
-      "닉네임이너무길어요", // 8자 초과 닉네임
-      Gender.MALE,
-      ProfileType.STUDENT,
-      null
-    );
+    PatchDefaultProfileRequest requestWithLongUsername =
+        new PatchDefaultProfileRequest(
+            "닉네임이너무길어요", // 8자 초과 닉네임
+            Gender.MALE,
+            ProfileType.STUDENT,
+            null);
 
     // When
-    Set<ConstraintViolation<DefaultProfilePatchRequest>> violations = validator.validate(
-      requestWithLongUsername);
+    Set<ConstraintViolation<PatchDefaultProfileRequest>> violations =
+        validator.validate(requestWithLongUsername);
 
     // Then
     assertEquals(1, violations.size());
@@ -78,16 +72,16 @@ class ProfileServiceTest {
   @DisplayName("사용자 닉네임이 8자 이하면 검증에 성공해야 한다")
   void validateUsername_whenWithinMaxLength_shouldPassValidation() {
     // Given
-    DefaultProfilePatchRequest requestWithValidUsername = new DefaultProfilePatchRequest(
-      "홍길동", // 8자 이하 닉네임
-      Gender.MALE,
-      ProfileType.STUDENT,
-      null
-    );
+    PatchDefaultProfileRequest requestWithValidUsername =
+        new PatchDefaultProfileRequest(
+            "홍길동", // 8자 이하 닉네임
+            Gender.MALE,
+            ProfileType.STUDENT,
+            null);
 
     // When
-    Set<ConstraintViolation<DefaultProfilePatchRequest>> violations = validator.validate(
-      requestWithValidUsername);
+    Set<ConstraintViolation<PatchDefaultProfileRequest>> violations =
+        validator.validate(requestWithValidUsername);
 
     // Then
     assertEquals(0, violations.size());
@@ -97,16 +91,16 @@ class ProfileServiceTest {
   @DisplayName("정확히 8자의 닉네임은 검증에 성공해야 한다")
   void validateUsername_whenExactlyMaxLength_shouldPassValidation() {
     // Given
-    DefaultProfilePatchRequest requestWithBorderlineUsername = new DefaultProfilePatchRequest(
-      "12345678", // 정확히 8자 닉네임
-      Gender.MALE,
-      ProfileType.STUDENT,
-      null
-    );
+    PatchDefaultProfileRequest requestWithBorderlineUsername =
+        new PatchDefaultProfileRequest(
+            "12345678", // 정확히 8자 닉네임
+            Gender.MALE,
+            ProfileType.STUDENT,
+            null);
 
     // When
-    Set<ConstraintViolation<DefaultProfilePatchRequest>> violations = validator.validate(
-      requestWithBorderlineUsername);
+    Set<ConstraintViolation<PatchDefaultProfileRequest>> violations =
+        validator.validate(requestWithBorderlineUsername);
 
     // Then
     assertEquals(0, violations.size());
@@ -118,15 +112,15 @@ class ProfileServiceTest {
     // Given
     String newKeyphrase = "new_keyphrase";
     final User user = createTestTeacherUser();
-    final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
-      .keyphrase(newKeyphrase)
-      .build();
+    final PatchTeacherProfileRequest teacherProfileRequest =
+        PatchTeacherProfileRequest.builder().keyphrase(newKeyphrase).build();
 
     when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
     when(userRepository.save(any())).thenReturn(user);
 
     // When
-    ProfileResponse profileResponseDto = subject.patchTeacherProfile(any(), teacherProfileRequest);
+    RetrieveFullProfileResponse profileResponseDto =
+        subject.patchTeacherProfile(any(), teacherProfileRequest);
 
     // Then
     assertEquals(newKeyphrase, profileResponseDto.getTeacherProfile().getKeyphrase());
@@ -139,15 +133,15 @@ class ProfileServiceTest {
     Major newMajor = Major.BASS;
     final User user = createTestPendingUser();
     user.patchDefaultProfile(null, null, null, ProfileType.TEACHER);
-    final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
-      .major(newMajor)
-      .build();
+    final PatchTeacherProfileRequest teacherProfileRequest =
+        PatchTeacherProfileRequest.builder().major(newMajor).build();
 
     when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
     when(userRepository.save(any())).thenReturn(user);
 
     // When
-    ProfileResponse profileResponseDto = subject.patchTeacherProfile(any(), teacherProfileRequest);
+    RetrieveFullProfileResponse profileResponseDto =
+        subject.patchTeacherProfile(any(), teacherProfileRequest);
 
     // Then
     assertEquals(newMajor.name(), profileResponseDto.getTeacherProfile().getMajor().getCode());
@@ -160,15 +154,15 @@ class ProfileServiceTest {
     Major newMajor = Major.BASS;
     final User user = createTestPendingUser();
     user.patchDefaultProfile(null, null, null, ProfileType.STUDENT);
-    final StudentProfileRequest studentProfileRequest = StudentProfileRequest.builder()
-      .major(newMajor)
-      .build();
+    final PatchStudentProfileRequest studentProfileRequest =
+        PatchStudentProfileRequest.builder().major(newMajor).build();
 
     when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
     when(userRepository.save(any())).thenReturn(user);
 
     // When
-    ProfileResponse profileResponseDto = subject.patchStudentProfile(any(), studentProfileRequest);
+    RetrieveFullProfileResponse profileResponseDto =
+        subject.patchStudentProfile(any(), studentProfileRequest);
 
     // Then
     assertEquals(newMajor.name(), profileResponseDto.getStudentProfile().getMajor().getCode());
@@ -180,57 +174,31 @@ class ProfileServiceTest {
     // Given
     final User user = createTestPendingUser();
     user.patchDefaultProfile(null, null, null, ProfileType.TEACHER);
-    final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
-      .careers(Collections.emptyList())
-      .build();
+    final PatchTeacherProfileRequest teacherProfileRequest =
+        PatchTeacherProfileRequest.builder().careers(Collections.emptyList()).build();
 
     when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
     when(userRepository.save(any())).thenReturn(user);
 
     // When
-    ProfileResponse profileResponseDto = subject.patchTeacherProfile(any(), teacherProfileRequest);
+    RetrieveFullProfileResponse profileResponseDto =
+        subject.patchTeacherProfile(any(), teacherProfileRequest);
 
     // Then
     assertEquals(Collections.emptyList(), profileResponseDto.getTeacherProfile().getCareers());
   }
 
-//  @Test
-//  void patchDefaultProfile_whenUsernameIsInvalid() {
-//    // Given
-//    User user = User.builder()
-//      .username("name")
-//      .profileType(ProfileType.STUDENT)
-//      .build();
-//
-//    when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
-//    when(userRepository.save(user)).thenReturn(user);
-//
-//    DefaultProfilePatchRequest defaultProfilePatchRequest = new DefaultProfilePatchRequest(
-//      // 긴 닉네임
-//      "ABCABCABC",
-//      null,
-//      null,
-//      null
-//    );
-//
-//    // When
-//    // Then
-//    assertThrows(
-//      Exception.class,
-//      () -> subject.patchDefaultProfile(any(), defaultProfilePatchRequest)
-//    );
-//  }
-
   private User createTestTeacherUser() {
     final TeacherProfile teacherProfile = TeacherProfile.empty();
 
-    TeacherProfileRequest request = TeacherProfileRequest.builder()
-      .keyphrase("keyphrase")
-      .careers(Collections.emptyList())
-      .links(Collections.emptyList())
-      .description("description")
-      .major(Major.BASS)
-      .build();
+    PatchTeacherProfileRequest request =
+        PatchTeacherProfileRequest.builder()
+            .keyphrase("keyphrase")
+            .careers(Collections.emptyList())
+            .links(Collections.emptyList())
+            .description("description")
+            .major(Major.BASS)
+            .build();
 
     teacherProfile.update(request);
 
@@ -242,9 +210,6 @@ class ProfileServiceTest {
   }
 
   private User createTestPendingUser() {
-    return User.builder()
-      .username(new Username("username"))
-      .userStatus(UserStatus.PENDING)
-      .build();
+    return User.builder().username(new Username("username")).userStatus(UserStatus.PENDING).build();
   }
 }

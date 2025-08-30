@@ -12,14 +12,16 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
+import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
 
 @Entity
 @Getter
+@SuperBuilder
 @Table(name = "student_profiles")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StudentProfile extends TimeStampedEntity {
@@ -29,8 +31,8 @@ public class StudentProfile extends TimeStampedEntity {
 
   @ElementCollection(targetClass = College.class)
   @CollectionTable(
-    name = "student_profile_preferred_colleges",
-    joinColumns = @JoinColumn(name = "student_profile_id"))
+      name = "student_profile_preferred_colleges",
+      joinColumns = @JoinColumn(name = "student_profile_id"))
   @Enumerated(EnumType.STRING)
   private List<College> preferredColleges;
 
@@ -43,7 +45,7 @@ public class StudentProfile extends TimeStampedEntity {
     return studentProfile;
   }
 
-  public void update(StudentProfileDto.StudentProfileRequest request) {
+  public void update(PatchStudentProfileRequest request) {
     if (request.getMajor() != null) {
       this.major = request.getMajor();
     }

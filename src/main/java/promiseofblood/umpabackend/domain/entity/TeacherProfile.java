@@ -11,12 +11,17 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.dto.TeacherProfileDto;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest.TeacherCareerRequest;
 
 @Entity
 @Getter
+@Setter
+@SuperBuilder
 @Table(name = "teacher_profiles")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherProfile extends TimeStampedEntity {
@@ -42,12 +47,14 @@ public class TeacherProfile extends TimeStampedEntity {
   }
 
   public boolean isProfileComplete() {
-    return description != null && !description.isEmpty() &&
-      major != null &&
-      careers != null && !careers.isEmpty();
+    return description != null
+        && !description.isEmpty()
+        && major != null
+        && careers != null
+        && !careers.isEmpty();
   }
 
-  public void update(TeacherProfileDto.TeacherProfileRequest request) {
+  public void update(PatchTeacherProfileRequest request) {
     if (request.getKeyphrase() != null) {
       this.keyphrase = request.getKeyphrase();
     }
@@ -59,8 +66,7 @@ public class TeacherProfile extends TimeStampedEntity {
     }
     if (request.getCareers() != null) {
       this.careers.clear();
-      for (TeacherProfileDto.TeacherProfileRequest.TeacherCareerRequest careerRequest :
-        request.getCareers()) {
+      for (TeacherCareerRequest careerRequest : request.getCareers()) {
         TeacherCareer career = TeacherCareer.from(careerRequest);
         this.careers.add(career);
         career.setTeacherProfile(this);

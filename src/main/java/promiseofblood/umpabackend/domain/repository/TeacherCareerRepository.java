@@ -5,6 +5,4 @@ import org.springframework.stereotype.Repository;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 
 @Repository
-public interface TeacherCareerRepository extends JpaRepository<TeacherCareer, Long> {
-
-}
+public interface TeacherCareerRepository extends JpaRepository<TeacherCareer, Long> {}
