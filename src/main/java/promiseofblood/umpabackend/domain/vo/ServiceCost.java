@@ -16,4 +16,11 @@ public class ServiceCost {
   private int cost;
 
   private String unit;
+
+  public static ServiceCost of(int cost, String unit) {
+    return ServiceCost.builder()
+      .cost(cost)
+      .unit(unit)
+      .build();
+  }
 }
