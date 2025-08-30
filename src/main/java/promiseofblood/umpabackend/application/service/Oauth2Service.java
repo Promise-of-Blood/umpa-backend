@@ -18,12 +18,12 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
-import promiseofblood.umpabackend.dto.LoginDto.Oauth2RegisterRequest;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2Strategy;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2StrategyFactory;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.web.schema.RegisterByOauth2Request;
 import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 @Service
@@ -39,7 +39,7 @@ public class Oauth2Service {
 
   @Transactional
   public LoginCompleteResponse registerOauth2User(
-    String providerName, Oauth2RegisterRequest oauth2RegisterRequest) {
+    String providerName, RegisterByOauth2Request oauth2RegisterRequest) {
     Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 

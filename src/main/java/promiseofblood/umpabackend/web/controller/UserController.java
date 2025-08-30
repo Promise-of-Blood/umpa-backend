@@ -30,6 +30,8 @@ import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.RegisterByLoginIdPasswordRequest;
+import promiseofblood.umpabackend.web.schema.RegisterByOauth2Request;
 import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 @RestController
@@ -58,7 +60,7 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/general", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
-    @Validated @ModelAttribute LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
+    @Validated @ModelAttribute RegisterByLoginIdPasswordRequest loginIdPasswordRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
       userService.registerUser(loginIdPasswordRequest);
@@ -70,7 +72,7 @@ public class UserController {
   @PostMapping(value = "/register/{providerName}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
     @PathVariable String providerName,
-    @Validated @ModelAttribute LoginDto.Oauth2RegisterRequest oauth2RegisterRequest) {
+    @Validated @ModelAttribute RegisterByOauth2Request oauth2RegisterRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
       oauth2Service.registerOauth2User(providerName, oauth2RegisterRequest);

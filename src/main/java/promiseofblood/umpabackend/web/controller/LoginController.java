@@ -17,6 +17,9 @@ import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
+import promiseofblood.umpabackend.web.schema.LoginByLoginIdPasswordRequest;
+import promiseofblood.umpabackend.web.schema.LoginByOauth2Request;
+import promiseofblood.umpabackend.web.schema.RefreshJwtRequest;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -30,7 +33,7 @@ public class LoginController {
   @PostMapping("token/{providerName}")
   public ResponseEntity<LoginCompleteResponse> createOauth2Token(
     @PathVariable String providerName,
-    @RequestBody LoginDto.Oauth2LoginRequest oauth2LoginRequest) {
+    @RequestBody LoginByOauth2Request oauth2LoginRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
       oauth2Service.generateOauth2Jwt(
@@ -43,7 +46,7 @@ public class LoginController {
 
   @PostMapping("/token/general")
   public ResponseEntity<LoginDto.LoginCompleteResponse> createToken(
-    @RequestBody LoginDto.LoginIdPasswordLoginRequest request) {
+    @RequestBody LoginByLoginIdPasswordRequest request) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
       userService.loginIdPasswordJwtLogin(request.getLoginId(), request.getPassword());
@@ -53,7 +56,7 @@ public class LoginController {
 
   @PostMapping("/refresh-token")
   public ResponseEntity<LoginDto.LoginCompleteResponse> refreshToken(
-    @RequestBody LoginDto.TokenRefreshRequest request) {
+    @RequestBody RefreshJwtRequest request) {
 
     return ResponseEntity.ok(userService.refreshToken(request.getRefreshToken()));
   }

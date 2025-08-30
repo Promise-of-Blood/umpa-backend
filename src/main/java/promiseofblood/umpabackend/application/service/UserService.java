@@ -16,6 +16,7 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
+import promiseofblood.umpabackend.web.schema.RegisterByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
 
 @Service
@@ -30,7 +31,7 @@ public class UserService {
 
   @Transactional
   public LoginCompleteResponse registerUser(
-    LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRegisterRequest) {
+    RegisterByLoginIdPasswordRequest loginIdPasswordRegisterRequest) {
 
     if (this.isLoginIdAvailable(loginIdPasswordRegisterRequest.getLoginId())) {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
