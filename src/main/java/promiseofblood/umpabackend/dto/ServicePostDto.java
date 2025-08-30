@@ -6,17 +6,20 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import promiseofblood.umpabackend.domain.entity.TeacherProfile;
-import promiseofblood.umpabackend.domain.vo.DurationRange;
-import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
 import promiseofblood.umpabackend.domain.entity.TeacherLink;
+import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
-import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherCareerDto;
+import promiseofblood.umpabackend.domain.vo.DurationRange;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
+import promiseofblood.umpabackend.web.schema.response.ListTeacherCareerResponse;
+import promiseofblood.umpabackend.web.schema.response.ListTeacherLinkResponse;
 
 public class ServicePostDto {
 
-  /** 선생님 프로필 응답 형식 DTO */
+  /**
+   * 선생님 프로필 응답 형식 DTO
+   */
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class TeacherAuthorProfileDto {
@@ -27,35 +30,37 @@ public class ServicePostDto {
 
     private String description;
 
-    private List<TeacherProfileDto.TeacherCareerDto> careers;
+    private List<ListTeacherCareerResponse> careers;
 
-    private List<TeacherProfileDto.TeacherLinkDto> links;
+    private List<ListTeacherLinkResponse> links;
 
     public static TeacherAuthorProfileDto from(User user) {
 
       TeacherProfile teacherProfile = user.getTeacherProfile();
 
-      List<TeacherProfileDto.TeacherCareerDto> careers = new ArrayList<>();
+      List<ListTeacherCareerResponse> careers = new ArrayList<>();
       for (TeacherCareer career : teacherProfile.getCareers()) {
-        careers.add(TeacherCareerDto.from(career));
+        careers.add(ListTeacherCareerResponse.from(career));
       }
 
-      List<TeacherProfileDto.TeacherLinkDto> links = new ArrayList<>();
+      List<ListTeacherLinkResponse> links = new ArrayList<>();
       for (TeacherLink link : teacherProfile.getLinks()) {
-        links.add(TeacherProfileDto.TeacherLinkDto.from(link));
+        links.add(ListTeacherLinkResponse.from(link));
       }
 
       return TeacherAuthorProfileDto.builder()
-          .keyphrase(teacherProfile.getKeyphrase())
-          .profileImageUrl(user.getProfileImageUrl())
-          .description(teacherProfile.getDescription())
-          .careers(careers)
-          .links(links)
-          .build();
+        .keyphrase(teacherProfile.getKeyphrase())
+        .profileImageUrl(user.getProfileImageUrl())
+        .description(teacherProfile.getDescription())
+        .careers(careers)
+        .links(links)
+        .build();
     }
   }
 
-  /** 서비스 단위당 비용 DTO */
+  /**
+   * 서비스 단위당 비용 DTO
+   */
   @Getter
   @AllArgsConstructor
   public static class CostPerUnitDto {
@@ -69,7 +74,9 @@ public class ServicePostDto {
     }
   }
 
-  /** 서비스 평균 소요 기간 DTO */
+  /**
+   * 서비스 평균 소요 기간 DTO
+   */
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class AverageDurationDto {
@@ -84,11 +91,11 @@ public class ServicePostDto {
 
     public static AverageDurationDto from(DurationRange durationRange) {
       return AverageDurationDto.builder()
-          .minValue(durationRange.getMinValue())
-          .minUnit(durationRange.getMinUnit().name())
-          .maxValue(durationRange.getMaxValue())
-          .maxUnit(durationRange.getMaxUnit().name())
-          .build();
+        .minValue(durationRange.getMinValue())
+        .minUnit(durationRange.getMinUnit().name())
+        .maxValue(durationRange.getMaxValue())
+        .maxUnit(durationRange.getMaxUnit().name())
+        .build();
     }
   }
 

@@ -11,12 +11,16 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 
 @Entity
 @Getter
+@Setter
+@SuperBuilder
 @Table(name = "teacher_profiles")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherProfile extends TimeStampedEntity {

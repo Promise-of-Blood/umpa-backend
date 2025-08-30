@@ -39,17 +39,6 @@ public class LoginDto {
 
   @Getter
   @AllArgsConstructor
-  public static class IsUsernameAvailableResponse {
-
-    private String username;
-
-    private boolean isAvailable;
-
-    private String message;
-  }
-
-  @Getter
-  @AllArgsConstructor
   public static class IsOauth2RegisterAvailableResponse {
 
     private String providerName;

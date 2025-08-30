@@ -24,12 +24,14 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
+
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
-import promiseofblood.umpabackend.dto.StudentProfileDto.StudentProfileRequest;
-import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherProfileRequest;
-import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+
 
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceTest {
@@ -115,7 +117,7 @@ class ProfileServiceTest {
     // Given
     String newKeyphrase = "new_keyphrase";
     final User user = createTestTeacherUser();
-    final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
+    final PatchTeacherProfileRequest teacherProfileRequest = PatchTeacherProfileRequest.builder()
       .keyphrase(newKeyphrase)
       .build();
 
@@ -137,7 +139,7 @@ class ProfileServiceTest {
     Major newMajor = Major.BASS;
     final User user = createTestPendingUser();
     user.patchDefaultProfile(null, null, null, ProfileType.TEACHER);
-    final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
+    final PatchTeacherProfileRequest teacherProfileRequest = PatchTeacherProfileRequest.builder()
       .major(newMajor)
       .build();
 
@@ -145,7 +147,8 @@ class ProfileServiceTest {
     when(userRepository.save(any())).thenReturn(user);
 
     // When
-    ProfileResponse profileResponseDto = subject.patchTeacherProfile(any(), teacherProfileRequest);
+    RetrieveFullProfileResponse profileResponseDto = subject.patchTeacherProfile(any(),
+      teacherProfileRequest);
 
     // Then
     assertEquals(newMajor.name(), profileResponseDto.getTeacherProfile().getMajor().getCode());
@@ -158,7 +161,7 @@ class ProfileServiceTest {
     Major newMajor = Major.BASS;
     final User user = createTestPendingUser();
     user.patchDefaultProfile(null, null, null, ProfileType.STUDENT);
-    final StudentProfileRequest studentProfileRequest = StudentProfileRequest.builder()
+    final PatchStudentProfileRequest studentProfileRequest = PatchStudentProfileRequest.builder()
       .major(newMajor)
       .build();
 
@@ -166,7 +169,8 @@ class ProfileServiceTest {
     when(userRepository.save(any())).thenReturn(user);
 
     // When
-    ProfileResponse profileResponseDto = subject.patchStudentProfile(any(), studentProfileRequest);
+    RetrieveFullProfileResponse profileResponseDto = subject.patchStudentProfile(any(),
+      studentProfileRequest);
 
     // Then
     assertEquals(newMajor.name(), profileResponseDto.getStudentProfile().getMajor().getCode());
@@ -178,7 +182,7 @@ class ProfileServiceTest {
     // Given
     final User user = createTestPendingUser();
     user.patchDefaultProfile(null, null, null, ProfileType.TEACHER);
-    final TeacherProfileRequest teacherProfileRequest = TeacherProfileRequest.builder()
+    final PatchTeacherProfileRequest teacherProfileRequest = PatchTeacherProfileRequest.builder()
       .careers(Collections.emptyList())
       .build();
 
@@ -186,43 +190,17 @@ class ProfileServiceTest {
     when(userRepository.save(any())).thenReturn(user);
 
     // When
-    ProfileResponse profileResponseDto = subject.patchTeacherProfile(any(), teacherProfileRequest);
+    RetrieveFullProfileResponse profileResponseDto = subject.patchTeacherProfile(any(),
+      teacherProfileRequest);
 
     // Then
     assertEquals(Collections.emptyList(), profileResponseDto.getTeacherProfile().getCareers());
   }
 
-//  @Test
-//  void patchDefaultProfile_whenUsernameIsInvalid() {
-//    // Given
-//    User user = User.builder()
-//      .username("name")
-//      .profileType(ProfileType.STUDENT)
-//      .build();
-//
-//    when(userRepository.findByLoginId(any())).thenReturn(Optional.of(user));
-//    when(userRepository.save(user)).thenReturn(user);
-//
-//    DefaultProfilePatchRequest defaultProfilePatchRequest = new DefaultProfilePatchRequest(
-//      // 긴 닉네임
-//      "ABCABCABC",
-//      null,
-//      null,
-//      null
-//    );
-//
-//    // When
-//    // Then
-//    assertThrows(
-//      Exception.class,
-//      () -> subject.patchDefaultProfile(any(), defaultProfilePatchRequest)
-//    );
-//  }
-
   private User createTestTeacherUser() {
     final TeacherProfile teacherProfile = TeacherProfile.empty();
 
-    TeacherProfileRequest request = TeacherProfileRequest.builder()
+    PatchTeacherProfileRequest request = PatchTeacherProfileRequest.builder()
       .keyphrase("keyphrase")
       .careers(Collections.emptyList())
       .links(Collections.emptyList())

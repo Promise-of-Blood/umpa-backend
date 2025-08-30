@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.dto;
+package promiseofblood.umpabackend.web.schema.response;
 
 import java.util.List;
 import lombok.AccessLevel;
@@ -14,7 +14,7 @@ import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 
-public class ConstantDto {
+public class ConstantResponses {
 
   @Getter
   @Builder(access = AccessLevel.PRIVATE)

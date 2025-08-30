@@ -14,6 +14,7 @@ import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.web.schema.response.RetrieveTeacherProfileResponse;
 
 @Getter
 public class AccompanimentServicePostDto {
@@ -28,7 +29,7 @@ public class AccompanimentServicePostDto {
 
     private String thumbnailImage;
 
-    private TeacherProfileDto.TeacherProfileResponse teacherProfile;
+    private RetrieveTeacherProfileResponse teacherProfile;
 
     private String reviewRating;
 
@@ -49,23 +50,23 @@ public class AccompanimentServicePostDto {
     private List<String> videoUrls;
 
     public static AccompanimentServicePostResponse from(
-        AccompanimentServicePost accompanimentServicePost, User user) {
+      AccompanimentServicePost accompanimentServicePost, User user) {
 
       return AccompanimentServicePostResponse.builder()
-          .title(accompanimentServicePost.getTitle())
-          .description(accompanimentServicePost.getDescription())
-          .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-          .teacherProfile(TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
-          .reviewRating("0.0")
-          .costPerUnit(accompanimentServicePost.getCostAndUnit())
-          .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
-          .instrument(accompanimentServicePost.getInstrument())
-          .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
-          .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
-          .isMrIncluded(accompanimentServicePost.isMrIncluded())
-          .practiceLocations(accompanimentServicePost.getPracticeLocations())
-          .videoUrls(accompanimentServicePost.getVideoUrls())
-          .build();
+        .title(accompanimentServicePost.getTitle())
+        .description(accompanimentServicePost.getDescription())
+        .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
+        .teacherProfile(RetrieveTeacherProfileResponse.from(user.getTeacherProfile()))
+        .reviewRating("0.0")
+        .costPerUnit(accompanimentServicePost.getCostAndUnit())
+        .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
+        .instrument(accompanimentServicePost.getInstrument())
+        .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
+        .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
+        .isMrIncluded(accompanimentServicePost.isMrIncluded())
+        .practiceLocations(accompanimentServicePost.getPracticeLocations())
+        .videoUrls(accompanimentServicePost.getVideoUrls())
+        .build();
     }
   }
 

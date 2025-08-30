@@ -26,12 +26,13 @@ import promiseofblood.umpabackend.application.service.Oauth2Service;
 import promiseofblood.umpabackend.application.service.ProfileService;
 import promiseofblood.umpabackend.application.service.UserService;
 import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
-import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
+import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @RestController
@@ -82,7 +83,7 @@ public class UserController {
 
   @Tag(name = "회원가입 API")
   @GetMapping(value = "/register/check/username")
-  public ResponseEntity<LoginDto.IsUsernameAvailableResponse> isUsernameAvailable(
+  public ResponseEntity<CheckIsUsernameAvailableResponse> isUsernameAvailable(
     @RequestParam String username) {
 
     return ResponseEntity.ok(userService.isUsernameAvailable(username));
@@ -114,7 +115,7 @@ public class UserController {
   @PatchMapping("/me/teacher-profile")
   public ResponseEntity<RetrieveFullProfileResponse> patchTeacherProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody TeacherProfileDto.TeacherProfileRequest teacherProfileRequest) {
+    @RequestBody PatchTeacherProfileRequest teacherProfileRequest) {
 
     RetrieveFullProfileResponse teacherProfileResponse =
       profileService.patchTeacherProfile(
@@ -127,11 +128,11 @@ public class UserController {
   @PatchMapping("/me/student-profile")
   public ResponseEntity<RetrieveFullProfileResponse> patchStudentProfile(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @RequestBody @Valid StudentProfileDto.StudentProfileRequest studentProfileRequest) {
+    @RequestBody @Valid PatchStudentProfileRequest patchStudentProfileRequest) {
 
     RetrieveFullProfileResponse studentProfileDto =
       profileService.patchStudentProfile(
-        securityUserDetails.getUsername(), studentProfileRequest);
+        securityUserDetails.getUsername(), patchStudentProfileRequest);
 
     return ResponseEntity.ok(studentProfileDto);
   }

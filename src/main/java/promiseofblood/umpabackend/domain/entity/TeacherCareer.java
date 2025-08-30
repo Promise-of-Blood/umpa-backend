@@ -17,7 +17,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
-import promiseofblood.umpabackend.dto.TeacherProfileDto;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
 
 @Entity
 @Getter
@@ -44,7 +44,7 @@ public class TeacherCareer extends TimeStampedEntity {
   private TeacherProfile teacherProfile;
 
   public static TeacherCareer from(
-    TeacherProfileDto.TeacherProfileRequest.TeacherCareerRequest request) {
+    PatchTeacherProfileRequest.TeacherCareerRequest request) {
     return TeacherCareer.builder()
       .isRepresentative(request.isRepresentative())
       .title(request.getTitle())

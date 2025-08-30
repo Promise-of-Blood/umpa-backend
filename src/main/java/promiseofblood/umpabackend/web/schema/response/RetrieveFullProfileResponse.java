@@ -8,8 +8,6 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.Oauth2UserDto;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
-import promiseofblood.umpabackend.dto.TeacherProfileDto;
 
 @Getter
 @Builder
@@ -35,10 +33,10 @@ public class RetrieveFullProfileResponse {
   private String profileType;
 
   @Schema(nullable = true)
-  private TeacherProfileDto.TeacherProfileResponse teacherProfile;
+  private RetrieveTeacherProfileResponse teacherProfile;
 
   @Schema(nullable = true)
-  private StudentProfileDto.StudentProfileResponse studentProfile;
+  private RetrieveStudentProfileResponse studentProfile;
 
   @Schema(nullable = true)
   private Oauth2UserDto oauth2User;
@@ -60,11 +58,11 @@ public class RetrieveFullProfileResponse {
       .teacherProfile(
         user.getTeacherProfile() == null
           ? null
-          : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
+          : RetrieveTeacherProfileResponse.from(user.getTeacherProfile()))
       .studentProfile(
         user.getStudentProfile() == null
           ? null
-          : StudentProfileDto.StudentProfileResponse.from(user.getStudentProfile()))
+          : RetrieveStudentProfileResponse.from(user.getStudentProfile()))
       .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
       .createdAt(user.getCreatedAt())
       .updatedAt(user.getUpdatedAt())

@@ -17,6 +17,7 @@ import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
+import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @Service
@@ -116,17 +117,17 @@ public class UserService {
     return LoginCompleteResponse.of(RetrieveFullProfileResponse.from(user), jwtPairResponse);
   }
 
-  public LoginDto.IsUsernameAvailableResponse isUsernameAvailable(String username) {
+  public CheckIsUsernameAvailableResponse isUsernameAvailable(String username) {
     if (!isUsernamePatternValid(username)) {
-      return new LoginDto.IsUsernameAvailableResponse(
+      return new CheckIsUsernameAvailableResponse(
         username, false, "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
     }
 
     if (!isUsernameDuplicated(username)) {
-      return new LoginDto.IsUsernameAvailableResponse(username, false, "이미 사용 중인 아이디입니다.");
+      return new CheckIsUsernameAvailableResponse(username, false, "이미 사용 중인 아이디입니다.");
     }
 
-    return new LoginDto.IsUsernameAvailableResponse(username, true, "사용 가능한 아이디입니다.");
+    return new CheckIsUsernameAvailableResponse(username, true, "사용 가능한 아이디입니다.");
   }
 
   public boolean isUsernamePatternValid(String username) {
