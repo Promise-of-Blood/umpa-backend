@@ -2,6 +2,8 @@ package promiseofblood.umpabackend.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,6 +12,7 @@ import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 
 @Getter
@@ -41,7 +44,7 @@ public class AccompanimentServicePostDto {
 
     private Boolean isMrIncluded;
 
-    private String practiceLocation;
+    private List<AccompanimentPracticeLocation> practiceLocations;
 
     private List<String> videoUrls;
 
@@ -60,7 +63,7 @@ public class AccompanimentServicePostDto {
           .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
           .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
           .isMrIncluded(accompanimentServicePost.isMrIncluded())
-          .practiceLocation(accompanimentServicePost.getPracticeLocation())
+          .practiceLocations(accompanimentServicePost.getPracticeLocations())
           .videoUrls(accompanimentServicePost.getVideoUrls())
           .build();
     }
@@ -71,7 +74,7 @@ public class AccompanimentServicePostDto {
   public static class AccompanimentPostRequest {
 
     @Schema(type = "string", format = "binary", description = "대표 사진")
-    @NotBlank
+    @NotNull
     private MultipartFile thumbnailImage;
 
     @Schema(type = "string", description = "서비스 제목")
@@ -101,8 +104,9 @@ public class AccompanimentServicePostDto {
     @Schema(description = "MR 포함 여부")
     private Boolean isMrIncluded;
 
-    @Schema(type = "string", description = "연습 장소")
-    private String practiceLocation;
+    @Schema(type = "array", description = "연습 장소")
+    @NotEmpty
+    private List<AccompanimentPracticeLocation> practiceLocations;
 
     @Schema(type = "array", description = "연주 영상 URL들")
     private List<String> videoUrls;
