@@ -29,10 +29,10 @@ import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
-import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
-import promiseofblood.umpabackend.web.schema.RegisterByLoginIdPasswordRequest;
-import promiseofblood.umpabackend.web.schema.RegisterByOauth2Request;
-import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
+import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")

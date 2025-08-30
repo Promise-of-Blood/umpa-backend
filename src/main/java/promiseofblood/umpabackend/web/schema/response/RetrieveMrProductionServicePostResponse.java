@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.web.schema;
+package promiseofblood.umpabackend.web.schema.response;
 
 import java.util.List;
 import lombok.Builder;

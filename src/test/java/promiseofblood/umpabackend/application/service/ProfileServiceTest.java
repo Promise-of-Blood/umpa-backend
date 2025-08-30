@@ -28,8 +28,8 @@ import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
 import promiseofblood.umpabackend.dto.StudentProfileDto.StudentProfileRequest;
 import promiseofblood.umpabackend.dto.TeacherProfileDto.TeacherProfileRequest;
-import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
-import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ProfileServiceTest {

@@ -17,9 +17,9 @@ import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.web.schema.LoginByLoginIdPasswordRequest;
-import promiseofblood.umpabackend.web.schema.LoginByOauth2Request;
-import promiseofblood.umpabackend.web.schema.RefreshJwtRequest;
+import promiseofblood.umpabackend.web.schema.request.LoginByLoginIdPasswordRequest;
+import promiseofblood.umpabackend.web.schema.request.LoginByOauth2Request;
+import promiseofblood.umpabackend.web.schema.request.RefreshJwtRequest;
 
 @RestController
 @RequestMapping("/api/v1/users")

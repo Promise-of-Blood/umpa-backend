@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.web.schema;
+package promiseofblood.umpabackend.web.schema.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

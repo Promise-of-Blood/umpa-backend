@@ -13,7 +13,7 @@ import promiseofblood.umpabackend.domain.repository.MrProductionServicePostRepos
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.web.schema.RetrieveMrProductionServicePostResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveMrProductionServicePostResponse;
 
 @Service
 @RequiredArgsConstructor

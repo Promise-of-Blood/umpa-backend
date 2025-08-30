@@ -2,7 +2,7 @@ package promiseofblood.umpabackend.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 public class LoginDto {
 

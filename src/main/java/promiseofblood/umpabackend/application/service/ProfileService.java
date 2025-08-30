@@ -10,8 +10,8 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
-import promiseofblood.umpabackend.web.schema.PatchDefaultProfileRequest;
-import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @Service
 @RequiredArgsConstructor

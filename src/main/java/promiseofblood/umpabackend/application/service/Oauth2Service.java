@@ -23,8 +23,8 @@ import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2Strategy;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2StrategyFactory;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
-import promiseofblood.umpabackend.web.schema.RegisterByOauth2Request;
-import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @Service
 @RequiredArgsConstructor

@@ -26,9 +26,9 @@ import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.dto.ServiceReviewDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
-import promiseofblood.umpabackend.web.schema.ApiResponse.PaginatedResponse;
-import promiseofblood.umpabackend.web.schema.CreateMrProductionServicePostRequest;
-import promiseofblood.umpabackend.web.schema.RetrieveMrProductionServicePostResponse;
+import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
+import promiseofblood.umpabackend.web.schema.request.CreateMrProductionServicePostRequest;
+import promiseofblood.umpabackend.web.schema.response.RetrieveMrProductionServicePostResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")

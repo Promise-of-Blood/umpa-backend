@@ -16,8 +16,8 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
-import promiseofblood.umpabackend.web.schema.RegisterByLoginIdPasswordRequest;
-import promiseofblood.umpabackend.web.schema.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @Service
 @Slf4j

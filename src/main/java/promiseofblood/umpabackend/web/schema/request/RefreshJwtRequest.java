@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.web.schema;
+package promiseofblood.umpabackend.web.schema.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;

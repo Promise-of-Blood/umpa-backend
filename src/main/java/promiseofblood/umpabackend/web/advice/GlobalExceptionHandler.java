@@ -19,7 +19,7 @@ import promiseofblood.umpabackend.application.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.application.exception.RegistrationException;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
-import promiseofblood.umpabackend.web.schema.ApiResponse;
+import promiseofblood.umpabackend.web.schema.response.ApiResponse;
 
 @Slf4j
 @RestControllerAdvice

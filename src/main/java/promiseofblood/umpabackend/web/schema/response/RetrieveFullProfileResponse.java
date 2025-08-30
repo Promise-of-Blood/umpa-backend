@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.web.schema;
+package promiseofblood.umpabackend.web.schema.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
