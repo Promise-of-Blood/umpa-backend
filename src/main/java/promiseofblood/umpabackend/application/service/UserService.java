@@ -17,7 +17,6 @@ import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.UserDto;
-import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 
 @Service
 @Slf4j
@@ -31,24 +30,24 @@ public class UserService {
 
   @Transactional
   public LoginCompleteResponse registerUser(
-    RegisterByLoginIdPasswordRequest registerByLoginIdPasswordRequest) {
+    LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRegisterRequest) {
 
-    if (this.isLoginIdAvailable(registerByLoginIdPasswordRequest.getLoginId())) {
+    if (this.isLoginIdAvailable(loginIdPasswordRegisterRequest.getLoginId())) {
       throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
     }
 
     User user =
       User.register(
-        registerByLoginIdPasswordRequest.getLoginId(),
-        passwordEncoder.encode(registerByLoginIdPasswordRequest.getPassword()),
-        registerByLoginIdPasswordRequest.getGender(),
+        loginIdPasswordRegisterRequest.getLoginId(),
+        passwordEncoder.encode(loginIdPasswordRegisterRequest.getPassword()),
+        loginIdPasswordRegisterRequest.getGender(),
         UserStatus.PENDING,
         Role.USER,
-        registerByLoginIdPasswordRequest.getUsername(),
-        registerByLoginIdPasswordRequest.getProfileType(),
+        loginIdPasswordRegisterRequest.getUsername(),
+        loginIdPasswordRegisterRequest.getProfileType(),
         this.uploadProfileImage(
-          registerByLoginIdPasswordRequest.getLoginId(),
-          registerByLoginIdPasswordRequest.getProfileImage()));
+          loginIdPasswordRegisterRequest.getLoginId(),
+          loginIdPasswordRegisterRequest.getProfileImage()));
     user = userRepository.save(user);
 
     return LoginCompleteResponse.of(

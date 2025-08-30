@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
+import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
+import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto.ScoreProductionServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
-import promiseofblood.umpabackend.web.schema.request.CreateScoreProductionServicePostRequest;
-import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServiceResponse;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -30,12 +30,12 @@ public class ScoreProductionController {
   @Tag(name = "서비스 관리 API(악보 제작)")
   @PostMapping(value = "/score-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<RetrieveScoreProductionServiceResponse> registerScoreProduction(
+  public ResponseEntity<ScoreProductionServicePostResponse> registerScoreProduction(
     @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-    @ModelAttribute CreateScoreProductionServicePostRequest scoreProductionRequest) {
+    @ModelAttribute ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
 
     String loginId = securityUserDetails.getUsername();
-    RetrieveScoreProductionServiceResponse scoreProductionServicePostResponse = serviceBoardService.createScoreProductionServicePost(
+    ScoreProductionServicePostDto.ScoreProductionServicePostResponse scoreProductionServicePostResponse = serviceBoardService.createScoreProductionServicePost(
       loginId, scoreProductionRequest);
 
     return ResponseEntity.ok(scoreProductionServicePostResponse);
@@ -43,10 +43,10 @@ public class ScoreProductionController {
 
   @Tag(name = "서비스 관리 API(악보 제작)")
   @GetMapping(path = "/score-production/{id}")
-  public ResponseEntity<RetrieveScoreProductionServiceResponse> getScoreProductionServicePost(
+  public ResponseEntity<ScoreProductionServicePostDto.ScoreProductionServicePostResponse> getScoreProductionServicePost(
     @PathVariable Long id) {
 
-    RetrieveScoreProductionServiceResponse scoreProductionResponse =
+    ScoreProductionServicePostDto.ScoreProductionServicePostResponse scoreProductionResponse =
       serviceBoardService.getScoreProductionServicePost(id);
 
     return ResponseEntity.ok(scoreProductionResponse);

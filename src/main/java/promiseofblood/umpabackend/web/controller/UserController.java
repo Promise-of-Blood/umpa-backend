@@ -30,7 +30,6 @@ import promiseofblood.umpabackend.dto.StudentProfileDto;
 import promiseofblood.umpabackend.dto.TeacherProfileDto;
 import promiseofblood.umpabackend.dto.UserDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
-import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -58,7 +57,7 @@ public class UserController {
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/register/general", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
-    @Validated @ModelAttribute RegisterByLoginIdPasswordRequest loginIdPasswordRequest) {
+    @Validated @ModelAttribute LoginDto.LoginIdPasswordRegisterRequest loginIdPasswordRequest) {
 
     LoginDto.LoginCompleteResponse loginCompleteResponse =
       userService.registerUser(loginIdPasswordRequest);
