@@ -1,6 +1,7 @@
 package promiseofblood.umpabackend.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import javax.annotation.Nullable;
 import lombok.AllArgsConstructor;
@@ -56,16 +57,27 @@ public class UserDto {
     private LocalDateTime updatedAt;
 
     public static ProfileResponse from(User user) {
-      return ProfileResponse.builder().id(user.getId()).loginId(user.getLoginId())
-        .username(user.getUsername()).status(user.getUserStatus()).role(user.getRole())
+      return ProfileResponse.builder()
+        .id(user.getId())
+        .loginId(user.getLoginId())
+        .username(user.getUsername().getValue())
+        .status(user.getUserStatus())
+        .role(user.getRole())
         .gender(user.getGender() == null ? null : user.getGender().name())
-        .profileImageUrl(user.getProfileImageUrl()).profileType(user.getProfileType().name())
-        .teacherProfile(user.getTeacherProfile() == null ? null
-          : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile())).studentProfile(
-          user.getStudentProfile() == null ? null
+        .profileImageUrl(user.getProfileImageUrl())
+        .profileType(user.getProfileType().name())
+        .teacherProfile(
+          user.getTeacherProfile() == null
+            ? null
+            : TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
+        .studentProfile(
+          user.getStudentProfile() == null
+            ? null
             : StudentProfileDto.StudentProfileResponse.from(user.getStudentProfile()))
         .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
-        .createdAt(user.getCreatedAt()).updatedAt(user.getUpdatedAt()).build();
+        .createdAt(user.getCreatedAt())
+        .updatedAt(user.getUpdatedAt())
+        .build();
     }
   }
 
@@ -75,6 +87,7 @@ public class UserDto {
 
     @Nullable
     @Schema(description = "사용자 닉네임", example = "홍길동")
+    @Size(max = 8, message = "사용자 닉네임은 최대 8자까지 가능합니다.")
     private String username;
 
     @Nullable
@@ -88,6 +101,5 @@ public class UserDto {
     @Nullable
     @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
     private MultipartFile profileImage;
-
   }
 }

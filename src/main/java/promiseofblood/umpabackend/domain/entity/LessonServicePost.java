@@ -6,14 +6,17 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import java.time.DayOfWeek;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
 
 @Entity
+@Table(name = "lesson_service_posts")
 @DiscriminatorValue("LESSON")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LessonServicePost extends ServicePost {
@@ -40,8 +43,8 @@ public class LessonServicePost extends ServicePost {
   @ElementCollection
   private List<String> studioPhotoUrls;
 
-//  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-//  private List<LessonCurriculum> curriculum;
+  //  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+  //  private List<LessonCurriculum> curriculum;
 
   @Override
   public String getCostAndUnit() {

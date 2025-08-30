@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.domain.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -18,7 +19,7 @@ import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
-
+import promiseofblood.umpabackend.domain.vo.Username;
 
 @Entity
 @Getter
@@ -43,8 +44,8 @@ public class User extends TimeStampedEntity {
   private Role role;
 
   // 닉네임, 성별, 프로필사진
-  @Column(nullable = false, unique = true)
-  private String username;
+  @Embedded
+  private Username username;
 
   @Column(nullable = false)
   @Enumerated(EnumType.STRING)
@@ -71,9 +72,14 @@ public class User extends TimeStampedEntity {
   private Oauth2User oauth2User;
 
   public static User register(
-    String loginId, String password, Gender gender, UserStatus userStatus, Role role,
+    String loginId,
+    String password,
+    Gender gender,
+    UserStatus userStatus,
+    Role role,
     String username,
-    ProfileType profileType, String profileImageUrl) {
+    ProfileType profileType,
+    String profileImageUrl) {
 
     return User.builder()
       .loginId(loginId)
@@ -81,22 +87,28 @@ public class User extends TimeStampedEntity {
       .gender(gender)
       .userStatus(userStatus)
       .role(role)
-      .username(username)
+      .username(new Username(username))
       .profileType(profileType)
       .profileImageUrl(profileImageUrl)
       .build();
   }
 
-  public static User register(String loginId, Gender gender, UserStatus userStatus, Role role,
+  public static User register(
+    String loginId,
+    Gender gender,
+    UserStatus userStatus,
+    Role role,
     String username,
-    ProfileType profileType, String profileImageUrl, Oauth2User oauth2User) {
+    ProfileType profileType,
+    String profileImageUrl,
+    Oauth2User oauth2User) {
 
     return User.builder()
       .loginId(loginId)
       .gender(gender)
       .userStatus(userStatus)
       .role(role)
-      .username(username)
+      .username(new Username(username))
       .profileType(profileType)
       .profileImageUrl(profileImageUrl)
       .oauth2User(oauth2User)
@@ -109,13 +121,18 @@ public class User extends TimeStampedEntity {
 
   public void patchTeacherProfile(TeacherProfile teacherProfile) {
     this.teacherProfile = teacherProfile;
+
+    if (this.teacherProfile.isProfileComplete()) {
+      this.userStatus = UserStatus.ACTIVE;
+    } else {
+      this.userStatus = UserStatus.PENDING;
+    }
   }
 
   public void patchDefaultProfile(
-    String username, Gender gender, String profileImageUrl, ProfileType profileType
-  ) {
+    String username, Gender gender, String profileImageUrl, ProfileType profileType) {
     if (username != null) {
-      this.username = username;
+      this.username = new Username(username);
     }
     if (gender != null) {
       this.gender = gender;

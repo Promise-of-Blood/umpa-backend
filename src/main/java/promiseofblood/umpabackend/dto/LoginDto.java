@@ -11,7 +11,6 @@ import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.vo.Gender;
 import promiseofblood.umpabackend.domain.vo.ProfileType;
 
-
 public class LoginDto {
 
   // ******************
@@ -45,7 +44,6 @@ public class LoginDto {
     @NotNull
     @Schema(type = "string", format = "binary", description = "프로필 이미지 파일")
     private MultipartFile profileImage;
-
   }
 
   @Builder
@@ -76,7 +74,6 @@ public class LoginDto {
     @NotBlank
     @Schema(description = "oauth2 제공자로부터 발급된 액세스 토큰")
     private String externalAccessToken;
-
   }
 
   // ****************
@@ -88,7 +85,6 @@ public class LoginDto {
     private String externalIdToken;
 
     private String externalAccessToken;
-
   }
 
   @Getter
@@ -97,7 +93,6 @@ public class LoginDto {
     private String loginId;
 
     private String password;
-
   }
 
   @Getter
@@ -106,7 +101,6 @@ public class LoginDto {
 
     @NotBlank
     private String refreshToken;
-
   }
 
   @Getter
@@ -120,7 +114,6 @@ public class LoginDto {
     public static LoginCompleteResponse of(UserDto.ProfileResponse user, JwtPairResponse jwtPair) {
       return new LoginCompleteResponse(user, jwtPair);
     }
-
   }
 
   @Getter
@@ -136,5 +129,25 @@ public class LoginDto {
     }
   }
 
+  @Getter
+  @AllArgsConstructor
+  public static class IsUsernameAvailableResponse {
 
+    private String username;
+
+    private boolean isAvailable;
+
+    private String message;
+  }
+
+  @Getter
+  @AllArgsConstructor
+  public static class IsOauth2RegisterAvailableResponse {
+
+    private String providerName;
+
+    private boolean isAvailable;
+
+    private String message;
+  }
 }

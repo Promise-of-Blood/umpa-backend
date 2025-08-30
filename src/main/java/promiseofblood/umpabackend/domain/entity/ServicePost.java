@@ -9,6 +9,7 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -21,6 +22,7 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "service_type")
 @Getter
+@Table(name = "service_posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ServicePost extends TimeStampedEntity {
 
@@ -40,5 +42,5 @@ public abstract class ServicePost extends TimeStampedEntity {
   @OneToMany(mappedBy = "servicePost", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Review> reviews;
 
-  abstract public String getCostAndUnit();
+  public abstract String getCostAndUnit();
 }

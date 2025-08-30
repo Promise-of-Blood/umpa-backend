@@ -6,17 +6,21 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.Table;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
 
 @Entity
 @DiscriminatorValue("ACCOMPANIMENT")
 @Getter
 @SuperBuilder
+@Table(name = "accompaniment_service_posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AccompanimentServicePost extends ServicePost {
 
@@ -34,7 +38,9 @@ public class AccompanimentServicePost extends ServicePost {
 
   private boolean isMrIncluded;
 
-  private String practiceLocation;
+  @ElementCollection
+  @Enumerated(EnumType.STRING)
+  private List<AccompanimentPracticeLocation> practiceLocations;
 
   @ElementCollection
   private List<String> videoUrls;
@@ -43,5 +49,4 @@ public class AccompanimentServicePost extends ServicePost {
   public String getCostAndUnit() {
     return this.serviceCost.getCost() + "원/" + this.serviceCost.getUnit();
   }
-
 }

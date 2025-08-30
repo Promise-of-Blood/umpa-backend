@@ -14,9 +14,7 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.domain.vo.Region;
-import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
-
+import promiseofblood.umpabackend.dto.TeacherProfileDto;
 
 @Entity
 @Getter
@@ -26,13 +24,12 @@ import promiseofblood.umpabackend.dto.request.TeacherProfileRequest;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TeacherProfile extends TimeStampedEntity {
 
+  private String keyphrase;
+
   private String description;
 
   @Enumerated(EnumType.STRING)
   private Major major;
-
-  @Enumerated(EnumType.STRING)
-  private Region lessonRegion;
 
   @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TeacherCareer> careers;
@@ -40,34 +37,37 @@ public class TeacherProfile extends TimeStampedEntity {
   @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TeacherLink> links;
 
-  public static TeacherProfile from(TeacherProfileRequest request) {
+  public static TeacherProfile from(TeacherProfileDto.TeacherProfileRequest request) {
 
     return TeacherProfile.builder()
+      .keyphrase(request.getKeyphrase())
       .description(request.getDescription())
       .major(request.getMajor())
-      .lessonRegion(request.getLessonRegion())
-      .careers(request.getCareers().stream()
-        .map(TeacherCareer::from)
-        .toList())
-      .links(request.getLinks().stream()
-        .map(TeacherLink::from)
-        .toList())
+      .careers(request.getCareers().stream().map(TeacherCareer::from).toList())
+      .links(request.getLinks().stream().map(TeacherLink::from).toList())
       .build();
   }
 
-  public void update(TeacherProfileRequest request) {
+  public boolean isProfileComplete() {
+    return description != null && !description.isEmpty() &&
+      major != null &&
+      careers != null && !careers.isEmpty();
+  }
+
+  public void update(TeacherProfileDto.TeacherProfileRequest request) {
+    if (request.getKeyphrase() != null) {
+      this.keyphrase = request.getKeyphrase();
+    }
     if (request.getDescription() != null) {
       this.description = request.getDescription();
     }
     if (request.getMajor() != null) {
       this.major = request.getMajor();
     }
-    if (request.getLessonRegion() != null) {
-      this.lessonRegion = request.getLessonRegion();
-    }
     if (request.getCareers() != null) {
       this.careers.clear();
-      for (TeacherProfileRequest.TeacherCareerRequest careerRequest : request.getCareers()) {
+      for (TeacherProfileDto.TeacherProfileRequest.TeacherCareerRequest careerRequest :
+        request.getCareers()) {
         TeacherCareer career = TeacherCareer.from(careerRequest);
         this.careers.add(career);
         career.setTeacherProfile(this);
@@ -82,5 +82,4 @@ public class TeacherProfile extends TimeStampedEntity {
       }
     }
   }
-
 }

@@ -16,7 +16,7 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.dto.request.StudentProfileRequest;
+import promiseofblood.umpabackend.dto.StudentProfileDto;
 
 @Entity
 @Getter
@@ -29,14 +29,16 @@ public class StudentProfile extends TimeStampedEntity {
   private Major major;
 
   @ElementCollection(targetClass = College.class)
-  @CollectionTable(name = "student_preferred_colleges", joinColumns = @JoinColumn(name = "student_profile_id"))
+  @CollectionTable(
+    name = "student_profile_preferred_colleges",
+    joinColumns = @JoinColumn(name = "student_profile_id"))
   @Enumerated(EnumType.STRING)
   private List<College> preferredColleges;
 
   @Enumerated(EnumType.STRING)
   private Grade grade;
 
-  public static StudentProfile from(StudentProfileRequest request) {
+  public static StudentProfile from(StudentProfileDto.StudentProfileRequest request) {
     return StudentProfile.builder()
       .major(request.getMajor())
       .preferredColleges(request.getPreferredColleges())
@@ -44,7 +46,7 @@ public class StudentProfile extends TimeStampedEntity {
       .build();
   }
 
-  public void update(StudentProfileRequest request) {
+  public void update(StudentProfileDto.StudentProfileRequest request) {
     if (request.getMajor() != null) {
       this.major = request.getMajor();
     }
@@ -55,5 +57,4 @@ public class StudentProfile extends TimeStampedEntity {
       this.grade = request.getGrade();
     }
   }
-
 }

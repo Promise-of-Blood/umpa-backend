@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Instrument {
-
   PIANO("피아노"),
 
   VOCAL("보컬"),
@@ -22,5 +21,4 @@ public enum Instrument {
   WIND_INSTRUMENT("관악");
 
   private final String koreanName;
-
 }

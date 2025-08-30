@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum WeekDay {
-
   MONDAY("월요일"),
 
   TUESDAY("화요일"),
@@ -22,5 +21,4 @@ public enum WeekDay {
   SUNDAY("일요일");
 
   private final String koreanName;
-  
 }
