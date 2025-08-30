@@ -61,7 +61,7 @@ public class MrProductionServiceController {
     String loginId = securityUserDetails.getUsername();
 
     MrProductionServicePostDto.MrProductionResponse mrProductionResponse =
-      serviceBoardService.createMrProductionServicePost(loginId, mrProductionPostRequest);
+      mrProductionService.createMrProductionServicePost(loginId, mrProductionPostRequest);
 
     return ResponseEntity.ok(mrProductionResponse);
   }
