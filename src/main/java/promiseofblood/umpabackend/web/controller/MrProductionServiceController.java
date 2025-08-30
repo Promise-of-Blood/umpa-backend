@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.application.service.ReviewService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto;
@@ -69,10 +70,11 @@ public class MrProductionServiceController {
   @GetMapping(path = "/mr-production/{id}")
   public ResponseEntity<MrProductionServicePostDto.MrProductionResponse> getMrProductionServicePost(
     @PathVariable Long id) {
-    MrProductionServicePostDto.MrProductionResponse mrProductionResponse =
-      serviceBoardService.getMrProductionServicePost(id);
 
-    return ResponseEntity.ok(mrProductionResponse);
+    RetrieveMrServicePostQuery query = new RetrieveMrServicePostQuery(id);
+    var response = serviceBoardService.retrieveMrProductionServicePost(query);
+
+    return ResponseEntity.ok(response);
   }
 
   @Tag(name = "서비스 관리 API(MR제작)")

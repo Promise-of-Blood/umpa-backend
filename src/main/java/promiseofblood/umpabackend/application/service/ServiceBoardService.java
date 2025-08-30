@@ -7,16 +7,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
-import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
-import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
+import promiseofblood.umpabackend.domain.vo.DurationRange;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionPostRequest;
 import promiseofblood.umpabackend.dto.MrProductionServicePostDto.MrProductionResponse;
@@ -194,6 +195,15 @@ public class ServiceBoardService {
 
     MrProductionServicePost mrProductionServicePost =
       (MrProductionServicePost) servicePostRepository.findById(id).get();
+
+    return MrProductionResponse.of(mrProductionServicePost);
+  }
+
+  @Transactional(readOnly = true)
+  public MrProductionResponse retrieveMrProductionServicePost(RetrieveMrServicePostQuery query) {
+
+    var mrProductionServicePost = (MrProductionServicePost) servicePostRepository.findById(
+      query.id()).get(); // TODO: 예외처리
 
     return MrProductionResponse.of(mrProductionServicePost);
   }
