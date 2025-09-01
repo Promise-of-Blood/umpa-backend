@@ -64,7 +64,7 @@ public class ConstantResponses {
     private String name;
 
     public static SubjectResponse from(Subject subject) {
-      return SubjectResponse.builder().code(subject.name()).name(subject.name()).build();
+      return SubjectResponse.builder().code(subject.name()).name(subject.getKoreanName()).build();
     }
   }
 
