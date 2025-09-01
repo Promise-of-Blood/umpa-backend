@@ -8,26 +8,23 @@ import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
 public class RetrieveAccompanimentServicePostResponse {
 
+  private long id;
+
+  private String thumbnailImage;
+
   private String title;
 
   private String description;
 
-  private String thumbnailImage;
-
-  private RetrieveTeacherProfileResponse teacherProfile;
-
-  private String reviewRating;
-
   private String costPerUnit;
 
   private String additionalCostPolicy;
-
-  private Instrument instrument;
 
   private int includedPracticeCount;
 
@@ -35,9 +32,15 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private Boolean isMrIncluded;
 
+  private Instrument instrument;
+
   private List<AccompanimentPracticeLocation> practiceLocations;
 
   private List<String> videoUrls;
+
+  private TeacherAuthorProfileDto teacherProfile;
+
+  private String reviewRating;
 
   public static RetrieveAccompanimentServicePostResponse from(
       AccompanimentServicePost accompanimentServicePost, User user) {
@@ -46,7 +49,7 @@ public class RetrieveAccompanimentServicePostResponse {
         .title(accompanimentServicePost.getTitle())
         .description(accompanimentServicePost.getDescription())
         .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-        .teacherProfile(RetrieveTeacherProfileResponse.from(user.getTeacherProfile()))
+        .teacherProfile(TeacherAuthorProfileDto.from(user))
         .reviewRating("0.0")
         .costPerUnit(accompanimentServicePost.getCostAndUnit())
         .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())

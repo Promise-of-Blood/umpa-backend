@@ -19,6 +19,7 @@ import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServicePostResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -90,10 +91,9 @@ public class ServiceBoardService {
   }
 
   @Transactional
-  public ScoreProductionServicePostDto.ScoreProductionServicePostResponse
-      createScoreProductionServicePost(
-          String loginId,
-          ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+  public RetrieveScoreProductionServicePostResponse createScoreProductionServicePost(
+      String loginId,
+      ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
 
     User user =
         userRepository
@@ -134,18 +134,15 @@ public class ServiceBoardService {
             .build();
     servicePostRepository.save(scoreProductionServicePost);
 
-    return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
-        scoreProductionServicePost);
+    return RetrieveScoreProductionServicePostResponse.from(scoreProductionServicePost);
   }
 
   @Transactional(readOnly = true)
-  public ScoreProductionServicePostDto.ScoreProductionServicePostResponse
-      getScoreProductionServicePost(Long id) {
+  public RetrieveScoreProductionServicePostResponse getScoreProductionServicePost(Long id) {
 
     ScoreProductionServicePost mrProductionServicePost =
         (ScoreProductionServicePost) servicePostRepository.findById(id).get();
 
-    return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
-        mrProductionServicePost);
+    return RetrieveScoreProductionServicePostResponse.from(mrProductionServicePost);
   }
 }
