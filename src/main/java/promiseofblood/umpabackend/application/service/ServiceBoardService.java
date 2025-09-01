@@ -18,6 +18,7 @@ import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
+import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -53,10 +54,9 @@ public class ServiceBoardService {
   }
 
   @Transactional
-  public AccompanimentServicePostDto.AccompanimentServicePostResponse
-      createAccompanimentServicePost(
-          String loginId,
-          AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+  public RetrieveAccompanimentServicePostResponse createAccompanimentServicePost(
+      String loginId,
+      AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
 
     User user =
         userRepository
@@ -86,8 +86,7 @@ public class ServiceBoardService {
             .build();
     servicePostRepository.save(accompanimentServicePost);
 
-    return AccompanimentServicePostDto.AccompanimentServicePostResponse.from(
-        accompanimentServicePost, user);
+    return RetrieveAccompanimentServicePostResponse.from(accompanimentServicePost, user);
   }
 
   @Transactional
