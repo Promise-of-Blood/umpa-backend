@@ -3,18 +3,10 @@ package promiseofblood.umpabackend.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import java.util.ArrayList;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
-import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
-import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 public class ScoreProductionServicePostDto {
@@ -63,58 +55,5 @@ public class ScoreProductionServicePostDto {
     @Schema(type = "string", format = "binary", description = "샘플 악보 사진")
     @NotBlank
     private MultipartFile sampleScoreImage;
-  }
-
-  @Getter
-  @Builder(access = AccessLevel.PRIVATE)
-  public static class ScoreProductionServicePostResponse {
-
-    private long id;
-
-    private String title;
-
-    private String description;
-
-    private List<CostPerUnitDto> costsPerUnits;
-
-    private String additionalCostPolicy;
-
-    private AverageDurationDto averageDuration;
-
-    private int freeRevisionCount;
-
-    private List<String> softwareList;
-
-    private int additionalRevisionCost;
-
-    private String sampleScoreImageUrl;
-
-    private TeacherAuthorProfileDto teacherProfile;
-
-    private float reviewRating;
-
-    public static ScoreProductionServicePostResponse from(
-        ScoreProductionServicePost scoreProductionServicePost) {
-
-      List<CostPerUnitDto> costPerUnits = new ArrayList<>();
-      for (ServiceCost serviceCost : scoreProductionServicePost.getServiceCosts()) {
-        costPerUnits.add(CostPerUnitDto.from(serviceCost));
-      }
-
-      return ScoreProductionServicePostResponse.builder()
-          .id(scoreProductionServicePost.getId())
-          .title(scoreProductionServicePost.getTitle())
-          .description(scoreProductionServicePost.getDescription())
-          .costsPerUnits(costPerUnits)
-          .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
-          .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
-          .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
-          .softwareList(scoreProductionServicePost.getUsingSoftwareList())
-          .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
-          .sampleScoreImageUrl(scoreProductionServicePost.getSampleScoreImageUrl())
-          .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
-          .reviewRating(0.1f)
-          .build();
-    }
   }
 }
