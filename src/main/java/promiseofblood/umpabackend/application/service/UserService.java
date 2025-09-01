@@ -14,6 +14,7 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
+import promiseofblood.umpabackend.domain.vo.Username;
 import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
@@ -124,17 +125,19 @@ public class UserService {
     return LoginCompleteResponse.of(RetrieveFullProfileResponse.from(user), jwtPairResponse);
   }
 
-  public CheckIsUsernameAvailableResponse isUsernameAvailable(String username) {
-    if (!isUsernamePatternValid(username)) {
+  public CheckIsUsernameAvailableResponse isUsernameAvailable(String rawUsername) {
+    if (!isUsernamePatternValid(rawUsername)) {
       return new CheckIsUsernameAvailableResponse(
-          username, false, "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
+          rawUsername, false, "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
     }
+
+    Username username = new Username(rawUsername);
 
     if (!isUsernameDuplicated(username)) {
-      return new CheckIsUsernameAvailableResponse(username, false, "이미 사용 중인 아이디입니다.");
+      return new CheckIsUsernameAvailableResponse(rawUsername, false, "이미 사용 중인 아이디입니다.");
     }
 
-    return new CheckIsUsernameAvailableResponse(username, true, "사용 가능한 아이디입니다.");
+    return new CheckIsUsernameAvailableResponse(rawUsername, true, "사용 가능한 아이디입니다.");
   }
 
   public boolean isUsernamePatternValid(String username) {
@@ -143,7 +146,7 @@ public class UserService {
     return username != null && username.matches(regex);
   }
 
-  public boolean isUsernameDuplicated(String username) {
+  public boolean isUsernameDuplicated(Username username) {
 
     return !userRepository.existsByUsername(username);
   }
