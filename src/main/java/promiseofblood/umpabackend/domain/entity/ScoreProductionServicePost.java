@@ -23,9 +23,9 @@ public class ScoreProductionServicePost extends ServicePost {
 
   @ElementCollection private List<ServiceCost> serviceCosts;
 
-  private int freeRevisionCount;
+  private Integer freeRevisionCount;
 
-  private int additionalRevisionCost;
+  private Integer additionalRevisionCost;
 
   private String additionalCostPolicy;
 
