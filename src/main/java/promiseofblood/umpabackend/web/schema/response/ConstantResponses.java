@@ -4,12 +4,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
-import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
@@ -86,18 +84,13 @@ public class ConstantResponses {
   }
 
   @Builder
-  @Getter
   public static class MajorResponse {
 
     private String code;
 
     private String name;
 
-    @Setter private String svg;
-
-    public static MajorResponse from(Major major) {
-      return MajorResponse.builder().code(major.name()).name(major.getKoreanName()).build();
-    }
+    private String svg;
   }
 
   @Builder

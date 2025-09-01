@@ -41,10 +41,13 @@ public class ConstantsController {
             .map(
                 major -> {
                   String assetName = major.getAssetName();
-                  MajorResponse majorResponse = ConstantResponses.MajorResponse.from(major);
                   Path svgFilePath = svgPath.resolve(assetName + ".svg");
-                  majorResponse.setSvg(svgFilePath.toString());
-                  return majorResponse;
+
+                  return MajorResponse.builder()
+                      .code(major.name())
+                      .name(major.getKoreanName())
+                      .svg(svgFilePath.toString())
+                      .build();
                 })
             .toList();
 
