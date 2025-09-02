@@ -4,15 +4,19 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import promiseofblood.umpabackend.application.query.ConstantListQuery;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
+import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ConstantResponses {
 
   @Getter
@@ -68,6 +72,25 @@ public class ConstantResponses {
   }
 
   @Getter
+  @Builder
+  public static class SubjectIconResponse {
+
+    private String code;
+
+    private String name;
+
+    private String svg;
+
+    public static SubjectIconResponse from(ConstantListQuery.Result result) {
+      return SubjectIconResponse.builder()
+          .code(result.code())
+          .name(result.name())
+          .svg(result.svg())
+          .build();
+    }
+  }
+
+  @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class LessonStyleResponse {
 
@@ -84,13 +107,54 @@ public class ConstantResponses {
   }
 
   @Builder
-  public static class MajorResponse {
+  @Getter
+  public static class ScoreTypeIconResponse {
 
     private String code;
 
     private String name;
 
     private String svg;
+
+    public static ScoreTypeIconResponse from(ConstantListQuery.Result result) {
+      return ScoreTypeIconResponse.builder()
+          .code(result.code())
+          .name(result.name())
+          .svg(result.svg())
+          .build();
+    }
+  }
+
+  @Builder
+  @Getter
+  public static class MajorResponse {
+
+    private String code;
+
+    private String name;
+
+    public static MajorResponse from(Major major) {
+      return MajorResponse.builder().code(major.name()).name(major.getKoreanName()).build();
+    }
+  }
+
+  @Builder
+  @Getter
+  public static class MajorIconResponse {
+
+    private String code;
+
+    private String name;
+
+    private String svg;
+
+    public static MajorIconResponse from(ConstantListQuery.Result result) {
+      return MajorIconResponse.builder()
+          .code(result.code())
+          .name(result.name())
+          .svg(result.svg())
+          .build();
+    }
   }
 
   @Builder
@@ -105,6 +169,25 @@ public class ConstantResponses {
       return InstrumentResponse.builder()
           .code(instrument.name())
           .name(instrument.getKoreanName())
+          .build();
+    }
+  }
+
+  @Builder
+  @Getter
+  public static class InstrumentIconResponse {
+
+    private String code;
+
+    private String name;
+
+    private String svg;
+
+    public static InstrumentIconResponse from(ConstantListQuery.Result result) {
+      return InstrumentIconResponse.builder()
+          .code(result.code())
+          .name(result.name())
+          .svg(result.svg())
           .build();
     }
   }
