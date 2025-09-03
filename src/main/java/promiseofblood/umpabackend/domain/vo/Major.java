@@ -5,21 +5,23 @@ import lombok.*;
 @Getter
 @RequiredArgsConstructor
 public enum Major {
-  PIANO("피아노"),
+  PIANO("피아노", "piano"),
 
-  COMPOSITION("작곡"),
+  COMPOSITION("작곡", "composition"),
 
-  VOCAL("보컬"),
+  VOCAL("보컬", "vocal"),
 
-  DRUM("드럼"),
+  DRUM("드럼", "drum"),
 
-  BASS("베이스"),
+  BASS("베이스", "bass"),
 
-  GUITAR("기타"),
+  GUITAR("기타", "guitar"),
 
-  ELECTRONIC_MUSIC("전자음악"),
+  ELECTRONIC_MUSIC("전자음악", "electronic_music"),
 
-  WIND_INSTRUMENT("관악");
+  WIND_INSTRUMENT("관악", "wind_instrument");
 
   private final String koreanName;
+
+  private final String assetName;
 }
