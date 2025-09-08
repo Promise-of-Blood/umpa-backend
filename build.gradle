@@ -24,6 +24,10 @@ configurations {
     }
 }
 
+configurations.configureEach {
+    exclude group: 'commons-logging', module: 'commons-logging'
+}
+
 repositories {
     mavenCentral()
     google()
@@ -87,7 +91,7 @@ spotless {
 }
 
 tasks.named('compileJava') {
-    dependsOn 'spotlessCheck'
+    dependsOn 'spotlessApply'
 }
 
 tasks.named('test') {
