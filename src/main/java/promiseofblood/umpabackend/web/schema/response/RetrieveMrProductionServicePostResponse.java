@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
+import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
@@ -13,6 +14,8 @@ import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 public class RetrieveMrProductionServicePostResponse {
 
   private long id;
+
+  private String thumbnailImage;
 
   private String title;
 
@@ -24,13 +27,13 @@ public class RetrieveMrProductionServicePostResponse {
 
   private AverageDurationDto averageDuration;
 
-  private int freeRevisionCount;
+  private Integer freeRevisionCount;
 
-  private int additionalRevisionCost;
+  private Integer additionalRevisionCost;
 
   private List<String> softwareList;
 
-  private List<SampleMrUrlResponse> sampleUrls;
+  private List<String> sampleMrUrls;
 
   private TeacherAuthorProfileDto teacherProfile;
 
@@ -38,6 +41,9 @@ public class RetrieveMrProductionServicePostResponse {
 
   public static RetrieveMrProductionServicePostResponse of(
       MrProductionServicePost mrProductionServicePost) {
+
+    List<String> sampleMrUrls =
+        mrProductionServicePost.getSampleMrUrls().stream().map(SampleMrUrl::getUrl).toList();
 
     return RetrieveMrProductionServicePostResponse.builder()
         .id(mrProductionServicePost.getId())
@@ -49,7 +55,7 @@ public class RetrieveMrProductionServicePostResponse {
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
         .softwareList(mrProductionServicePost.getUsingSoftwareList())
-        .sampleUrls(SampleMrUrlResponse.fromList(mrProductionServicePost.getSampleMrUrls()))
+        .sampleMrUrls(sampleMrUrls)
         .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
         .reviewRating(0.0f)
         .build();

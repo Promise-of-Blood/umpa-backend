@@ -2,9 +2,6 @@ spring:
   application:
     name: umpa-backend
 
-  mvc:
-    static-path-pattern: /static/**
-
   jpa:
     hibernate:
       ddl-auto: validate
