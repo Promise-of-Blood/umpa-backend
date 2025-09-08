@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.web.schema.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +18,13 @@ import promiseofblood.umpabackend.web.schema.response.ConstantResponses.MajorRes
 @ToString
 public class RetrieveTeacherProfileResponse {
 
+  @Schema(nullable = true)
   private String keyphrase;
 
+  @Schema(nullable = true)
   private String description;
 
+  @Schema(nullable = true)
   private ConstantResponses.MajorResponse major;
 
   private List<ListTeacherCareerResponse> careers;
