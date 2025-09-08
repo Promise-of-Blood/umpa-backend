@@ -31,6 +31,13 @@ springdoc:
 
 spring:
   config.activate.on-profile: prod
+
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        show_sql: false
+
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
