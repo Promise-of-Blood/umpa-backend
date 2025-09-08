@@ -1,8 +1,20 @@
 package promiseofblood.umpabackend.domain.entity;
 
-import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
+import jakarta.persistence.Embeddable;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
-public class LessonCurriculum extends TimeStampedEntity {
+@Embeddable
+@Getter
+@SuperBuilder
+@Table(name = "lesson_service_post_curriculums")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+public class LessonCurriculum {
 
   private String title;
 
