@@ -12,12 +12,14 @@ import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
+import promiseofblood.umpabackend.infrastructure.validation.ValidImageFile;
 
 @Getter
 @AllArgsConstructor
 public class CreateLessonServicePostRequest {
 
   @Schema(type = "string", format = "binary", description = "대표 사진")
+  @ValidImageFile
   @NotNull private final MultipartFile thumbnailImage;
 
   @Schema(description = "서비스 제목", example = "전문가의 레슨 서비스")
