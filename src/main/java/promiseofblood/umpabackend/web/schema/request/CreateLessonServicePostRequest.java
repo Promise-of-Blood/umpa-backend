@@ -3,6 +3,7 @@ package promiseofblood.umpabackend.web.schema.request;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,6 +53,13 @@ public class CreateLessonServicePostRequest {
       description = "추천 대상",
       example = "[\"시작은 하고 싶지만, 어디서부터 시작해야 할지 모르는 분들.\", \"기초부터 탄탄하게 배우고 싶은 분들.\"]")
   private final List<String> recommendedTargets;
+
+  // 제목과 내용을 콜론으로 구분
+  // example: "curriculums": ["기초 이론:음악 이론의 기초를 다집니다", "실습:간단한 곡을 만들어봅니다"]
+  @ArraySchema(schema = @Schema(description = "커리큘럼 목록", example = "기초 이론:음악 이론의 기초를 다집니다"))
+  private final List<
+          @Pattern(regexp = "^[^:]+:\\s?.+$", message = "각 항목은 '제목: 내용' 형식이어야 합니다") String>
+      curriculums;
 
   @ArraySchema(schema = @Schema(description = "연습실 사진 목록", type = "string", format = "binary"))
   private final List<MultipartFile> studioPhotos;

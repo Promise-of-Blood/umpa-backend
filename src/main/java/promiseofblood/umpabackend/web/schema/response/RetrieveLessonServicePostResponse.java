@@ -1,7 +1,11 @@
 package promiseofblood.umpabackend.web.schema.response;
 
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
+import promiseofblood.umpabackend.domain.entity.LessonServicePost;
+import promiseofblood.umpabackend.domain.vo.Subject;
+import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
@@ -19,7 +23,50 @@ public class RetrieveLessonServicePostResponse {
 
   private CostPerUnitDto costPerUnit;
 
+  //
+  private Subject subject;
+
+  private List<WeekDay> availableWeekDays;
+
+  private String lessonStyle;
+
+  private Boolean isDemoLessonProvided;
+
+  private Integer demoLessonCost;
+
+  private List<String> recommendedTargets;
+
+  private List<ListCurriculumResponse> curriculums;
+
+  private List<String> studioPhotoUrls;
+
   private TeacherAuthorProfileDto teacherProfile;
 
   private float reviewRating;
+
+  public static RetrieveLessonServicePostResponse of(LessonServicePost lessonServicePost) {
+
+    List<ListCurriculumResponse> curriculumResponses =
+        lessonServicePost.getCurriculums().stream()
+            .map(c -> ListCurriculumResponse.of(c.getTitle(), c.getContent()))
+            .toList();
+
+    return RetrieveLessonServicePostResponse.builder()
+        .id(lessonServicePost.getId())
+        .thumbnailImage(lessonServicePost.getThumbnailImageUrl())
+        .title(lessonServicePost.getTitle())
+        .description(lessonServicePost.getDescription())
+        .costPerUnit(CostPerUnitDto.from(lessonServicePost.getServiceCost()))
+        .subject(lessonServicePost.getSubject())
+        .availableWeekDays(lessonServicePost.getAvailableWeekDays())
+        .lessonStyle(lessonServicePost.getLessonStyle().name())
+        .isDemoLessonProvided(lessonServicePost.getIsDemoLessonProvided())
+        .demoLessonCost(lessonServicePost.getDemoLessonCost())
+        .recommendedTargets(lessonServicePost.getRecommendedTargets())
+        .curriculums(curriculumResponses)
+        .studioPhotoUrls(lessonServicePost.getStudioPhotoUrls())
+        .teacherProfile(TeacherAuthorProfileDto.from(lessonServicePost.getUser()))
+        .reviewRating(0.0f)
+        .build();
+  }
 }
