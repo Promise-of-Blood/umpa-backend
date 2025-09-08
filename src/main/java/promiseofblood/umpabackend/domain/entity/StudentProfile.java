@@ -7,6 +7,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -16,7 +17,7 @@ import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.dto.StudentProfileDto;
+import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
 
 @Entity
 @Getter
@@ -30,23 +31,21 @@ public class StudentProfile extends TimeStampedEntity {
 
   @ElementCollection(targetClass = College.class)
   @CollectionTable(
-    name = "student_profile_preferred_colleges",
-    joinColumns = @JoinColumn(name = "student_profile_id"))
+      name = "student_profile_preferred_colleges",
+      joinColumns = @JoinColumn(name = "student_profile_id"))
   @Enumerated(EnumType.STRING)
   private List<College> preferredColleges;
 
   @Enumerated(EnumType.STRING)
   private Grade grade;
 
-  public static StudentProfile from(StudentProfileDto.StudentProfileRequest request) {
-    return StudentProfile.builder()
-      .major(request.getMajor())
-      .preferredColleges(request.getPreferredColleges())
-      .grade(request.getGrade())
-      .build();
+  public static StudentProfile empty() {
+    var studentProfile = new StudentProfile();
+    studentProfile.preferredColleges = new ArrayList<>();
+    return studentProfile;
   }
 
-  public void update(StudentProfileDto.StudentProfileRequest request) {
+  public void update(PatchStudentProfileRequest request) {
     if (request.getMajor() != null) {
       this.major = request.getMajor();
     }

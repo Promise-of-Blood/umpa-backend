@@ -24,8 +24,8 @@ public class Oauth2StrategyFactory {
   private String resolveKey(String providerName) {
     // example: "naver" -> "oauth2NaverStrategy"
     return "oauth2"
-      + providerName.substring(0, 1).toUpperCase()
-      + providerName.substring(1)
-      + "Strategy";
+        + providerName.substring(0, 1).toUpperCase()
+        + providerName.substring(1)
+        + "Strategy";
   }
 }

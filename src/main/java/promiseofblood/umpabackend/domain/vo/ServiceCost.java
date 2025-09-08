@@ -18,9 +18,6 @@ public class ServiceCost {
   private String unit;
 
   public static ServiceCost of(int cost, String unit) {
-    return ServiceCost.builder()
-      .cost(cost)
-      .unit(unit)
-      .build();
+    return ServiceCost.builder().cost(cost).unit(unit).build();
   }
 }

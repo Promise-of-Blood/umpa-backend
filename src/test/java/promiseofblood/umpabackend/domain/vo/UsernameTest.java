@@ -12,7 +12,7 @@ class UsernameTest {
   @ParameterizedTest
   @DisplayName("유효한 사용자 이름은 생성될 수 있다.")
   @ValueSource(strings = {"홍길동", "abc", "user123", "테스트1", "ABCDEFGH"})
-    // 8자 이하, 허용 문자
+  // 8자 이하, 허용 문자
   void valid_usernames_should_be_created(String value) {
     Username username = new Username(value);
     assertThat(username.getValue()).isEqualTo(value);
@@ -22,8 +22,7 @@ class UsernameTest {
   @DisplayName("유효하지 않은 사용자 이름은 예외를 던진다.")
   @ValueSource(strings = {"", "ABCDEFGHIJ", "John_Doe", "테스트!", "123456789", " "})
   void invalid_usernames_should_throw_exception(String value) {
-    assertThatThrownBy(() -> new Username(value))
-      .isInstanceOf(IllegalArgumentException.class);
+    assertThatThrownBy(() -> new Username(value)).isInstanceOf(IllegalArgumentException.class);
   }
 
   @ParameterizedTest

@@ -6,6 +6,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -14,7 +15,8 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import promiseofblood.umpabackend.domain.entity.abs.TimeStampedEntity;
 import promiseofblood.umpabackend.domain.vo.Major;
-import promiseofblood.umpabackend.dto.TeacherProfileDto;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
+import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest.TeacherCareerRequest;
 
 @Entity
 @Getter
@@ -37,24 +39,22 @@ public class TeacherProfile extends TimeStampedEntity {
   @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<TeacherLink> links;
 
-  public static TeacherProfile from(TeacherProfileDto.TeacherProfileRequest request) {
-
-    return TeacherProfile.builder()
-      .keyphrase(request.getKeyphrase())
-      .description(request.getDescription())
-      .major(request.getMajor())
-      .careers(request.getCareers().stream().map(TeacherCareer::from).toList())
-      .links(request.getLinks().stream().map(TeacherLink::from).toList())
-      .build();
+  public static TeacherProfile empty() {
+    var teacherProfile = new TeacherProfile();
+    teacherProfile.careers = new ArrayList<>();
+    teacherProfile.links = new ArrayList<>();
+    return teacherProfile;
   }
 
   public boolean isProfileComplete() {
-    return description != null && !description.isEmpty() &&
-      major != null &&
-      careers != null && !careers.isEmpty();
+    return description != null
+        && !description.isEmpty()
+        && major != null
+        && careers != null
+        && !careers.isEmpty();
   }
 
-  public void update(TeacherProfileDto.TeacherProfileRequest request) {
+  public void update(PatchTeacherProfileRequest request) {
     if (request.getKeyphrase() != null) {
       this.keyphrase = request.getKeyphrase();
     }
@@ -66,8 +66,7 @@ public class TeacherProfile extends TimeStampedEntity {
     }
     if (request.getCareers() != null) {
       this.careers.clear();
-      for (TeacherProfileDto.TeacherProfileRequest.TeacherCareerRequest careerRequest :
-        request.getCareers()) {
+      for (TeacherCareerRequest careerRequest : request.getCareers()) {
         TeacherCareer career = TeacherCareer.from(careerRequest);
         this.careers.add(career);
         career.setTeacherProfile(this);

@@ -21,17 +21,15 @@ import promiseofblood.umpabackend.domain.vo.ServiceCost;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ScoreProductionServicePost extends ServicePost {
 
-  @ElementCollection
-  private List<ServiceCost> serviceCosts;
+  @ElementCollection private List<ServiceCost> serviceCosts;
 
-  private int freeRevisionCount;
+  private Integer freeRevisionCount;
 
-  private int additionalRevisionCost;
+  private Integer additionalRevisionCost;
 
   private String additionalCostPolicy;
 
-  @Embedded
-  private DurationRange averageDuration;
+  @Embedded private DurationRange averageDuration;
 
   private List<String> usingSoftwareList;
 

@@ -41,45 +41,45 @@ public class SecurityConfig {
     http.formLogin(AbstractHttpConfigurer::disable);
     http.logout(AbstractHttpConfigurer::disable);
     http.sessionManagement(
-      session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     http.csrf(AbstractHttpConfigurer::disable);
     http.authorizeHttpRequests(
-      (authorizeRequests) ->
-        authorizeRequests
-          // 정적 리소스 접근 허용
-          .requestMatchers("/static/**")
-          .permitAll()
-          .requestMatchers("/api/docs/**")
-          .permitAll()
-          .requestMatchers("/api/swagger-ui/**")
-          .permitAll()
-          // 상수 API 접근 허용
-          .requestMatchers("/api/v1/constants/**")
-          .permitAll()
-          // 회원가입/토큰발급 API 접근 허용
-          .requestMatchers("/api/v1/users/register/**")
-          .permitAll()
-          .requestMatchers("/api/v1/users/callback/**")
-          .permitAll()
-          .requestMatchers("/api/v1/users/token/**")
-          .permitAll()
-          .requestMatchers("/api/v1/users/oauth2-authorization-urls")
-          .permitAll()
-          // 서비스 API 접근 제어 - GET 요청은 모두 허용, POST/PUT/DELETE는 인증 필요
-          .requestMatchers(GET, "/api/v1/services/**")
-          .permitAll()
-          .requestMatchers(POST, "/api/v1/services/**")
-          .authenticated()
-          .requestMatchers(PUT, "/api/v1/services/**")
-          .authenticated()
-          .requestMatchers(DELETE, "/api/v1/services/**")
-          .authenticated()
-          .anyRequest()
-          .authenticated());
+        (authorizeRequests) ->
+            authorizeRequests
+                // 정적 리소스 접근 허용
+                .requestMatchers("/static/**")
+                .permitAll()
+                .requestMatchers("/api/docs/**")
+                .permitAll()
+                .requestMatchers("/api/swagger-ui/**")
+                .permitAll()
+                // 상수 API 접근 허용
+                .requestMatchers("/api/v1/constants/**")
+                .permitAll()
+                // 회원가입/토큰발급 API 접근 허용
+                .requestMatchers("/api/v1/users/register/**")
+                .permitAll()
+                .requestMatchers("/api/v1/users/callback/**")
+                .permitAll()
+                .requestMatchers("/api/v1/users/token/**")
+                .permitAll()
+                .requestMatchers("/api/v1/users/oauth2-authorization-urls")
+                .permitAll()
+                // 서비스 API 접근 제어 - GET 요청은 모두 허용, POST/PUT/DELETE는 인증 필요
+                .requestMatchers(GET, "/api/v1/services/**")
+                .permitAll()
+                .requestMatchers(POST, "/api/v1/services/**")
+                .authenticated()
+                .requestMatchers(PUT, "/api/v1/services/**")
+                .authenticated()
+                .requestMatchers(DELETE, "/api/v1/services/**")
+                .authenticated()
+                .anyRequest()
+                .authenticated());
     http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
     http.exceptionHandling(
-      exceptionHandling ->
-        exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint));
+        exceptionHandling ->
+            exceptionHandling.authenticationEntryPoint(jwtAuthenticationEntryPoint));
 
     return http.build();
   }
@@ -93,18 +93,18 @@ public class SecurityConfig {
   @Bean
   static RoleHierarchy roleHierarchy() {
     return RoleHierarchyImpl.withDefaultRolePrefix()
-      .role("ADMIN")
-      .implies(Role.STAFF.name())
-      .role("STAFF")
-      .implies(Role.USER.name())
-      .build();
+        .role("ADMIN")
+        .implies(Role.STAFF.name())
+        .role("STAFF")
+        .implies(Role.USER.name())
+        .build();
   }
 
   @Bean
   static MethodSecurityExpressionHandler methodSecurityExpressionHandler(
-    RoleHierarchy roleHierarchy) {
+      RoleHierarchy roleHierarchy) {
     DefaultMethodSecurityExpressionHandler expressionHandler =
-      new DefaultMethodSecurityExpressionHandler();
+        new DefaultMethodSecurityExpressionHandler();
     expressionHandler.setRoleHierarchy(roleHierarchy);
     return expressionHandler;
   }

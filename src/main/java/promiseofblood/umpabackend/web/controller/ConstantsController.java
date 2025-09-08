@@ -17,7 +17,7 @@ import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
-import promiseofblood.umpabackend.dto.ConstantDto;
+import promiseofblood.umpabackend.web.schema.response.ConstantResponses;
 
 @RestController
 @RequestMapping("api/v1/constants")
@@ -25,84 +25,88 @@ import promiseofblood.umpabackend.dto.ConstantDto;
 public class ConstantsController {
 
   @GetMapping("/majors")
-  public ResponseEntity<List<ConstantDto.MajorResponse>> getMajors() {
+  public ResponseEntity<List<ConstantResponses.MajorResponse>> getMajors() {
 
-    List<ConstantDto.MajorResponse> majorResponses =
-      Stream.of(Major.values()).map(ConstantDto.MajorResponse::from).collect(Collectors.toList());
+    List<ConstantResponses.MajorResponse> majorResponses =
+        Stream.of(Major.values())
+            .map(ConstantResponses.MajorResponse::from)
+            .collect(Collectors.toList());
 
     return ResponseEntity.ok(majorResponses);
   }
 
   @GetMapping("/weekdays")
-  public ResponseEntity<List<ConstantDto.WeekdayResponse>> getWeekDays() {
+  public ResponseEntity<List<ConstantResponses.WeekdayResponse>> getWeekDays() {
 
-    List<ConstantDto.WeekdayResponse> weekdayResponses = new ArrayList<>();
+    List<ConstantResponses.WeekdayResponse> weekdayResponses = new ArrayList<>();
     for (WeekDay weekday : WeekDay.values()) {
-      weekdayResponses.add(ConstantDto.WeekdayResponse.from(weekday));
+      weekdayResponses.add(ConstantResponses.WeekdayResponse.from(weekday));
     }
 
     return ResponseEntity.ok(weekdayResponses);
   }
 
   @GetMapping("/colleges")
-  public ResponseEntity<List<ConstantDto.CollegeResponse>> getColleges() {
+  public ResponseEntity<List<ConstantResponses.CollegeResponse>> getColleges() {
 
-    List<ConstantDto.CollegeResponse> collegeResponses = new ArrayList<>();
+    List<ConstantResponses.CollegeResponse> collegeResponses = new ArrayList<>();
     for (College college : College.values()) {
-      collegeResponses.add(ConstantDto.CollegeResponse.from(college));
+      collegeResponses.add(ConstantResponses.CollegeResponse.from(college));
     }
 
     return ResponseEntity.ok(collegeResponses);
   }
 
   @GetMapping("/subjects")
-  public ResponseEntity<List<ConstantDto.SubjectResponse>> getSubjects() {
+  public ResponseEntity<List<ConstantResponses.SubjectResponse>> getSubjects() {
 
-    List<ConstantDto.SubjectResponse> subjectResponses = new ArrayList<>();
+    List<ConstantResponses.SubjectResponse> subjectResponses = new ArrayList<>();
     for (Subject subject : Subject.values()) {
-      subjectResponses.add(ConstantDto.SubjectResponse.from(subject));
+      subjectResponses.add(ConstantResponses.SubjectResponse.from(subject));
     }
 
     return ResponseEntity.ok(subjectResponses);
   }
 
   @GetMapping("lessonStyles")
-  public ResponseEntity<List<ConstantDto.LessonStyleResponse>> getLessonStyles() {
+  public ResponseEntity<List<ConstantResponses.LessonStyleResponse>> getLessonStyles() {
 
-    List<ConstantDto.LessonStyleResponse> lessonStyleResponses = new ArrayList<>();
+    List<ConstantResponses.LessonStyleResponse> lessonStyleResponses = new ArrayList<>();
     for (LessonStyle lessonStyle : LessonStyle.values()) {
-      lessonStyleResponses.add(ConstantDto.LessonStyleResponse.from(lessonStyle));
+      lessonStyleResponses.add(ConstantResponses.LessonStyleResponse.from(lessonStyle));
     }
 
     return ResponseEntity.ok(lessonStyleResponses);
   }
 
   @GetMapping("/grades")
-  public ResponseEntity<List<ConstantDto.GradeResponse>> getGrades() {
+  public ResponseEntity<List<ConstantResponses.GradeResponse>> getGrades() {
 
-    List<ConstantDto.GradeResponse> gradeResponses = new ArrayList<>();
+    List<ConstantResponses.GradeResponse> gradeResponses = new ArrayList<>();
     for (Grade grade : Grade.values()) {
-      gradeResponses.add(ConstantDto.GradeResponse.from(grade));
+      gradeResponses.add(ConstantResponses.GradeResponse.from(grade));
     }
 
     return ResponseEntity.ok(gradeResponses);
   }
 
   @GetMapping("/regions")
-  public ResponseEntity<List<ConstantDto.RegionCategoryResponse>> getRegions() {
+  public ResponseEntity<List<ConstantResponses.RegionCategoryResponse>> getRegions() {
 
-    List<ConstantDto.RegionCategoryResponse> regionCategories =
-      Stream.of(RegionCategory.values()).map(ConstantDto.RegionCategoryResponse::from).toList();
+    List<ConstantResponses.RegionCategoryResponse> regionCategories =
+        Stream.of(RegionCategory.values())
+            .map(ConstantResponses.RegionCategoryResponse::from)
+            .toList();
 
     return ResponseEntity.ok(regionCategories);
   }
 
   @GetMapping("/instruments")
-  public ResponseEntity<List<ConstantDto.InstrumentResponse>> getInstruments() {
+  public ResponseEntity<List<ConstantResponses.InstrumentResponse>> getInstruments() {
 
-    List<ConstantDto.InstrumentResponse> instrumentResponses = new ArrayList<>();
+    List<ConstantResponses.InstrumentResponse> instrumentResponses = new ArrayList<>();
     for (Instrument instrument : Instrument.values()) {
-      instrumentResponses.add(ConstantDto.InstrumentResponse.from(instrument));
+      instrumentResponses.add(ConstantResponses.InstrumentResponse.from(instrument));
     }
 
     return ResponseEntity.ok(instrumentResponses);

@@ -11,20 +11,19 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
+import promiseofblood.umpabackend.domain.vo.Username;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-  @Mock
-  private UserRepository userRepository;
+  @Mock private UserRepository userRepository;
 
-  @InjectMocks
-  private UserService userService;
+  @InjectMocks private UserService userService;
 
   @Test
   @DisplayName("isUsernameDuplicated 메서드는 닉네임이 중복되었을 경우 false를 반환한다.")
   void isUsernameDuplicated_UsernameExists_ReturnsTrue() {
-    String username = "existing-user";
+    Username username = new Username("existing");
     when(userRepository.existsByUsername(username)).thenReturn(true);
 
     boolean isAvailable = userService.isUsernameDuplicated(username);
@@ -35,7 +34,7 @@ class UserServiceTest {
   @Test
   @DisplayName("isUsernameDuplicated 메서드는 닉네임이 중복되지 않았을 경우 true를 반환한다.")
   void isUsernameDuplicated_UsernameDoesNotExist_ReturnsFalse() {
-    String username = "new-user";
+    Username username = new Username("new");
     when(userRepository.existsByUsername(username)).thenReturn(false);
 
     boolean isAvailable = userService.isUsernameDuplicated(username);

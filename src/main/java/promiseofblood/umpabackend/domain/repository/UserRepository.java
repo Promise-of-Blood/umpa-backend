@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.vo.Username;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -12,8 +13,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
   boolean existsByLoginId(String loginId);
 
-  boolean existsByUsername(String username);
+  boolean existsByUsername(Username username);
 
   Optional<User> findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
-    String providerName, String providerUid);
+      String providerName, String providerUid);
 }

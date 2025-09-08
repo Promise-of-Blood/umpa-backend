@@ -5,13 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
-import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
-import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 
@@ -19,63 +15,11 @@ import promiseofblood.umpabackend.domain.vo.Instrument;
 public class AccompanimentServicePostDto {
 
   @Getter
-  @Builder(access = AccessLevel.PRIVATE)
-  public static class AccompanimentServicePostResponse {
-
-    private String title;
-
-    private String description;
-
-    private String thumbnailImage;
-
-    private TeacherProfileDto.TeacherProfileResponse teacherProfile;
-
-    private String reviewRating;
-
-    private String costPerUnit;
-
-    private String additionalCostPolicy;
-
-    private Instrument instrument;
-
-    private int includedPracticeCount;
-
-    private int additionalPracticeCost;
-
-    private Boolean isMrIncluded;
-
-    private List<AccompanimentPracticeLocation> practiceLocations;
-
-    private List<String> videoUrls;
-
-    public static AccompanimentServicePostResponse from(
-        AccompanimentServicePost accompanimentServicePost, User user) {
-
-      return AccompanimentServicePostResponse.builder()
-          .title(accompanimentServicePost.getTitle())
-          .description(accompanimentServicePost.getDescription())
-          .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-          .teacherProfile(TeacherProfileDto.TeacherProfileResponse.from(user.getTeacherProfile()))
-          .reviewRating("0.0")
-          .costPerUnit(accompanimentServicePost.getCostAndUnit())
-          .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
-          .instrument(accompanimentServicePost.getInstrument())
-          .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
-          .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
-          .isMrIncluded(accompanimentServicePost.isMrIncluded())
-          .practiceLocations(accompanimentServicePost.getPracticeLocations())
-          .videoUrls(accompanimentServicePost.getVideoUrls())
-          .build();
-    }
-  }
-
-  @Getter
   @AllArgsConstructor
   public static class AccompanimentPostRequest {
 
     @Schema(type = "string", format = "binary", description = "대표 사진")
-    @NotNull
-    private MultipartFile thumbnailImage;
+    @NotNull private MultipartFile thumbnailImage;
 
     @Schema(type = "string", description = "서비스 제목")
     @NotBlank
