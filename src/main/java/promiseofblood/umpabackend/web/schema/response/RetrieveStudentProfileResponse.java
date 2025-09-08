@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.web.schema.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
@@ -13,10 +14,12 @@ import promiseofblood.umpabackend.web.schema.response.ConstantResponses.MajorRes
 @Builder(access = lombok.AccessLevel.PRIVATE)
 public class RetrieveStudentProfileResponse {
 
+  @Schema(nullable = true)
   private MajorResponse major;
 
   private List<CollegeResponse> preferredColleges;
 
+  @Schema(nullable = true)
   private ConstantResponses.GradeResponse grade;
 
   public static RetrieveStudentProfileResponse from(StudentProfile studentProfile) {
