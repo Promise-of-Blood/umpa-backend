@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 public enum LessonStyle {
   FACE_TO_FACE("대면"),
 
-  NON_FACE_TO_FACE("비대면");
+  NON_FACE_TO_FACE("비대면"),
+
+  ALL("전체");
 
   private final String koreanName;
 }
