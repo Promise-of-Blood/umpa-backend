@@ -7,10 +7,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.repository.ScoreProductionServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
@@ -18,6 +20,8 @@ import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.dto.ServicePostDto;
+import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServicePostResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,7 @@ public class ServiceBoardService {
 
   private final StorageService storageService;
   private final UserRepository userRepository;
+  private final ScoreProductionServicePostRepository scoreProductionServicePostRepository;
   private final ServicePostRepository servicePostRepository;
 
   @Transactional
@@ -53,10 +58,9 @@ public class ServiceBoardService {
   }
 
   @Transactional
-  public AccompanimentServicePostDto.AccompanimentServicePostResponse
-      createAccompanimentServicePost(
-          String loginId,
-          AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+  public RetrieveAccompanimentServicePostResponse createAccompanimentServicePost(
+      String loginId,
+      AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
 
     User user =
         userRepository
@@ -86,15 +90,13 @@ public class ServiceBoardService {
             .build();
     servicePostRepository.save(accompanimentServicePost);
 
-    return AccompanimentServicePostDto.AccompanimentServicePostResponse.from(
-        accompanimentServicePost, user);
+    return RetrieveAccompanimentServicePostResponse.from(accompanimentServicePost, user);
   }
 
   @Transactional
-  public ScoreProductionServicePostDto.ScoreProductionServicePostResponse
-      createScoreProductionServicePost(
-          String loginId,
-          ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+  public RetrieveScoreProductionServicePostResponse createScoreProductionServicePost(
+      String loginId,
+      ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
 
     User user =
         userRepository
@@ -135,18 +137,17 @@ public class ServiceBoardService {
             .build();
     servicePostRepository.save(scoreProductionServicePost);
 
-    return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
-        scoreProductionServicePost);
+    return RetrieveScoreProductionServicePostResponse.from(scoreProductionServicePost);
   }
 
   @Transactional(readOnly = true)
-  public ScoreProductionServicePostDto.ScoreProductionServicePostResponse
-      getScoreProductionServicePost(Long id) {
+  public RetrieveScoreProductionServicePostResponse getScoreProductionServicePost(Long id) {
 
-    ScoreProductionServicePost mrProductionServicePost =
-        (ScoreProductionServicePost) servicePostRepository.findById(id).get();
+    ScoreProductionServicePost scoreProductionServicePost =
+        scoreProductionServicePostRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 악보 제작 서비스 게시글이 존재하지 않습니다."));
 
-    return ScoreProductionServicePostDto.ScoreProductionServicePostResponse.from(
-        mrProductionServicePost);
+    return RetrieveScoreProductionServicePostResponse.from(scoreProductionServicePost);
   }
 }
