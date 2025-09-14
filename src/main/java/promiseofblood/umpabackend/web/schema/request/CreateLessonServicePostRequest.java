@@ -1,12 +1,15 @@
 package promiseofblood.umpabackend.web.schema.request;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.MediaType;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Region;
@@ -63,6 +66,11 @@ public class CreateLessonServicePostRequest {
           @Pattern(regexp = "^[^:]+:\\s?.+$", message = "각 항목은 '제목: 내용' 형식이어야 합니다") String>
       curriculums;
 
-  @ArraySchema(schema = @Schema(description = "연습실 사진 목록", type = "string", format = "binary"))
+  @Parameter(
+      description = "연습실 사진 목록",
+      content =
+          @Content(
+              mediaType = MediaType.MULTIPART_FORM_DATA_VALUE,
+              schema = @Schema(type = "string", format = "binary")))
   private final List<MultipartFile> studioPhotos;
 }

@@ -30,12 +30,18 @@ public class LessonService {
             .findByLoginId(command.getLoginId())
             .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
-    List<String> studioPhotoUrls =
-        command.getStudioPhotos().stream()
-            .map(
-                file ->
-                    storageService.store(file, "service/" + user.getId() + "/lesson/studio-photos"))
-            .toList();
+    List<String> studioPhotoUrls;
+    if (command.getStudioPhotos() == null) {
+      studioPhotoUrls = List.of();
+    } else {
+      studioPhotoUrls =
+          command.getStudioPhotos().stream()
+              .map(
+                  file ->
+                      storageService.store(
+                          file, "service/" + user.getId() + "/lesson/studio-photos"))
+              .toList();
+    }
 
     List<LessonCurriculum> curriculums =
         command.getCurriculums().stream()
