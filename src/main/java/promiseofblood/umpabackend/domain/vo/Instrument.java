@@ -6,19 +6,21 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Instrument {
-  PIANO("피아노"),
+  PIANO("피아노", "piano"),
 
-  VOCAL("보컬"),
+  VOCAL("보컬", "vocal"),
 
-  COMPOSITION("작곡"),
+  COMPOSITION("작곡", "composition"),
 
-  DRUM("드럼"),
+  DRUM("드럼", "drum"),
 
-  GUITAR("기타"),
+  GUITAR("기타", "guitar"),
 
-  BASS("베이스"),
+  BASS("베이스", "bass"),
 
-  WIND_INSTRUMENT("관악");
+  WIND_INSTRUMENT("관악", "wind_instrument");
 
   private final String koreanName;
+
+  private final String assetName;
 }

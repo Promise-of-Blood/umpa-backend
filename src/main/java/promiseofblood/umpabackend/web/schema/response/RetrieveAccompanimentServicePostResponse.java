@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
+import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
@@ -40,9 +41,10 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private TeacherAuthorProfileDto teacherProfile;
 
-  private float reviewRating;
+  private String reviewRating;
 
-  public static RetrieveAccompanimentServicePostResponse from(AccompanimentServicePost post) {
+  public static RetrieveAccompanimentServicePostResponse from(
+      AccompanimentServicePost accompanimentServicePost, User user) {
 
     return RetrieveAccompanimentServicePostResponse.builder()
         // 공통 필드
