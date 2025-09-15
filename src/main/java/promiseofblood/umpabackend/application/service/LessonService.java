@@ -3,13 +3,19 @@ package promiseofblood.umpabackend.application.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
+import promiseofblood.umpabackend.domain.entity.LessonCurriculum;
+
 import promiseofblood.umpabackend.domain.entity.LessonServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.LessonServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
+import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostResponse;
+
 
 @Service
 @RequiredArgsConstructor
@@ -19,17 +25,32 @@ public class LessonService {
   private final UserRepository userRepository;
   private final LessonServicePostRepository lessonServicePostRepository;
 
-  public void createLessonServicePost(CreateLessonServicePostCommand command) {
+
+  @Transactional
+  public RetrieveLessonServicePostResponse createLessonServicePost(
+      CreateLessonServicePostCommand command) {
+
     User user =
         userRepository
             .findByLoginId(command.getLoginId())
             .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
-    List<String> studioPhotoUrls =
-        command.getStudioPhotos().stream()
-            .map(
-                file ->
-                    storageService.store(file, "service/" + user.getId() + "/lesson/studio-photos"))
+    List<String> studioPhotoUrls;
+    if (command.getStudioPhotos() == null) {
+      studioPhotoUrls = List.of();
+    } else {
+      studioPhotoUrls =
+          command.getStudioPhotos().stream()
+              .map(
+                  file ->
+                      storageService.store(
+                          file, "service/" + user.getId() + "/lesson/studio-photos"))
+              .toList();
+    }
+
+    List<LessonCurriculum> curriculums =
+        command.getCurriculums().stream()
+            .map(c -> new LessonCurriculum(c.getTitle(), c.getContent()))
             .toList();
 
     LessonServicePost lessonServicePost =
@@ -47,8 +68,11 @@ public class LessonService {
             command.isDemoLessonProvided(),
             command.getDemoLessonCost(),
             command.getRecommendedTargets(),
+            curriculums,
             studioPhotoUrls);
 
     lessonServicePostRepository.save(lessonServicePost);
+
+    return RetrieveLessonServicePostResponse.of(lessonServicePost);
   }
 }

@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.application.command;
 
 import jakarta.validation.constraints.NotNull;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
@@ -31,6 +32,20 @@ public class CreateLessonServicePostCommand {
   @NotNull final boolean isDemoLessonProvided;
   @NotNull final Integer demoLessonCost;
 
+  @NotNull final List<CreateLessonCurriculumCommand> curriculums;
   @NotNull final List<String> recommendedTargets;
   @NotNull final List<MultipartFile> studioPhotos;
+
+  @Getter
+  @AllArgsConstructor
+  public static class CreateLessonCurriculumCommand {
+
+    @NotNull final String title;
+    @NotNull final String content;
+
+    public static CreateLessonCurriculumCommand of(String oneLineValue) {
+      String[] parts = oneLineValue.split(":", 2);
+      return new CreateLessonCurriculumCommand(parts[0], parts[1]);
+    }
+  }
 }

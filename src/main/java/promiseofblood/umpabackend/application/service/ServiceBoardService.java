@@ -7,10 +7,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
+import promiseofblood.umpabackend.domain.repository.ScoreProductionServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
@@ -27,6 +29,7 @@ public class ServiceBoardService {
 
   private final StorageService storageService;
   private final UserRepository userRepository;
+  private final ScoreProductionServicePostRepository scoreProductionServicePostRepository;
   private final ServicePostRepository servicePostRepository;
 
   @Transactional
@@ -140,9 +143,11 @@ public class ServiceBoardService {
   @Transactional(readOnly = true)
   public RetrieveScoreProductionServicePostResponse getScoreProductionServicePost(Long id) {
 
-    ScoreProductionServicePost mrProductionServicePost =
-        (ScoreProductionServicePost) servicePostRepository.findById(id).get();
+    ScoreProductionServicePost scoreProductionServicePost =
+        scoreProductionServicePostRepository
+            .findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 악보 제작 서비스 게시글이 존재하지 않습니다."));
 
-    return RetrieveScoreProductionServicePostResponse.from(mrProductionServicePost);
+    return RetrieveScoreProductionServicePostResponse.from(scoreProductionServicePost);
   }
 }
