@@ -6,19 +6,21 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ScoreType {
-  FULL_SCORE("풀스코어"),
+  FULL_SCORE("풀스코어", "composition"),
 
-  VOCAL("보컬곡"),
+  VOCAL("보컬곡", "vocal"),
 
-  PIANO("피아노"),
+  PIANO("피아노", "piano"),
 
-  GUITAR("기타"),
+  GUITAR("기타", "guitar"),
 
-  BASS("베이스"),
+  BASS("베이스", "bass"),
 
-  WIND_INSTRUMENT("관악"),
+  WIND_INSTRUMENT("관악", "wind_instrument"),
 
-  DRUM("드럼");
+  DRUM("드럼", "drum");
 
   private final String koreanName;
+
+  private final String assetName;
 }

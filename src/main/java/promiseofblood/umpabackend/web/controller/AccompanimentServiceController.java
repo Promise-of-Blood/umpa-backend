@@ -40,4 +40,25 @@ public class AccompanimentServiceController {
 
     return ResponseEntity.ok(accompanimentPostResponse);
   }
+
+  @GetMapping("/accompaniment")
+  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
+
+    Page<ServicePostResponse> servicePostResponsePage =
+        this.serviceBoardService.getAllServices("ACCOMPANIMENT", page, size);
+
+    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
+  }
+
+  @GetMapping(path = "/accompaniment/{postId}")
+  public ResponseEntity<RetrieveAccompanimentServicePostResponse> getAccompanimentPost(
+      @PathVariable Long postId) {
+
+    var query = new RetrieveAccompanimentServicePostQuery(postId);
+    var response = accompanimentService.retrieveAccompanimentServicePost(query);
+
+    return ResponseEntity.ok(response);
+  }
 }
