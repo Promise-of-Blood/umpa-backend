@@ -8,6 +8,7 @@ import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
@@ -22,7 +23,7 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private String description;
 
-  private String costPerUnit;
+  private CostPerUnitDto costPerUnit;
 
   private String additionalCostPolicy;
 
@@ -46,19 +47,23 @@ public class RetrieveAccompanimentServicePostResponse {
       AccompanimentServicePost accompanimentServicePost, User user) {
 
     return RetrieveAccompanimentServicePostResponse.builder()
-        .title(accompanimentServicePost.getTitle())
-        .description(accompanimentServicePost.getDescription())
-        .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-        .teacherProfile(TeacherAuthorProfileDto.from(user))
-        .reviewRating("0.0")
-        .costPerUnit(accompanimentServicePost.getCostAndUnit())
-        .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
-        .instrument(accompanimentServicePost.getInstrument())
-        .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
-        .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
-        .isMrIncluded(accompanimentServicePost.isMrIncluded())
-        .practiceLocations(accompanimentServicePost.getPracticeLocations())
-        .videoUrls(accompanimentServicePost.getVideoUrls())
+        // 공통 필드
+        .id(post.getId())
+        .thumbnailImage(post.getThumbnailImageUrl())
+        .title(post.getTitle())
+        .description(post.getDescription())
+        .costPerUnit(CostPerUnitDto.from(post.getServiceCost()))
+        // 합주 서비스 필드
+        .additionalCostPolicy(post.getAdditionalCostPolicy())
+        .instrument(post.getInstrument())
+        .includedPracticeCount(post.getIncludedPracticeCount())
+        .additionalPracticeCost(post.getAdditionalPracticeCost())
+        .isMrIncluded(post.isMrIncluded())
+        .practiceLocations(post.getPracticeLocations())
+        .videoUrls(post.getVideoUrls())
+        // 선생님 프로필, 리뷰
+        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
+        .reviewRating(0.0f)
         .build();
   }
 }
