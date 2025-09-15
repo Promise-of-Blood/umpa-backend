@@ -2,7 +2,6 @@ package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.beans.PropertyEditorSupport;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,24 +14,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import promiseofblood.umpabackend.application.service.Oauth2Service;
 import promiseofblood.umpabackend.application.service.ProfileService;
 import promiseofblood.umpabackend.application.service.UserService;
-import promiseofblood.umpabackend.dto.LoginDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.PatchDefaultProfileRequest;
 import promiseofblood.umpabackend.web.schema.request.PatchStudentProfileRequest;
 import promiseofblood.umpabackend.web.schema.request.PatchTeacherProfileRequest;
-import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
-import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
-import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @RestController
@@ -42,7 +33,6 @@ public class UserController {
 
   private final UserService userService;
   private final ProfileService profileService;
-  private final Oauth2Service oauth2Service;
 
   // ****************
   // * 사용자 관리 API *
@@ -53,51 +43,6 @@ public class UserController {
     List<RetrieveFullProfileResponse> users = userService.getUsers();
 
     return ResponseEntity.ok(users);
-  }
-
-  // **************
-  // * 회원가입 API *
-  // **************
-  @Tag(name = "회원가입 API")
-  @PostMapping(value = "/register/general", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<LoginDto.LoginCompleteResponse> registerUser(
-      @Validated @ModelAttribute RegisterByLoginIdPasswordRequest loginIdPasswordRequest) {
-
-    LoginDto.LoginCompleteResponse loginCompleteResponse =
-        userService.registerUser(loginIdPasswordRequest);
-
-    return ResponseEntity.ok(loginCompleteResponse);
-  }
-
-  @Tag(name = "회원가입 API")
-  @PostMapping(value = "/register/{providerName}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
-      @PathVariable String providerName,
-      @Validated @ModelAttribute RegisterByOauth2Request oauth2RegisterRequest) {
-
-    LoginDto.LoginCompleteResponse loginCompleteResponse =
-        oauth2Service.registerOauth2User(providerName, oauth2RegisterRequest);
-
-    return ResponseEntity.ok(loginCompleteResponse);
-  }
-
-  @Tag(name = "회원가입 API")
-  @GetMapping(value = "/register/check/username")
-  public ResponseEntity<CheckIsUsernameAvailableResponse> isUsernameAvailable(
-      @RequestParam String username) {
-
-    return ResponseEntity.ok(userService.isUsernameAvailable(username));
-  }
-
-  @Tag(name = "회원가입 API", description = "이미 가입한 OAuth2 사용자인지 확인합니다.")
-  @GetMapping(value = "/register/check/oauth2")
-  public ResponseEntity<LoginDto.IsOauth2RegisterAvailableResponse> isOauth2Available(
-      @RequestParam @NotNull String providerName,
-      @RequestParam String accessToken,
-      @RequestParam String idToken) {
-
-    return ResponseEntity.ok(
-        oauth2Service.isOauth2RegisterAvailable(providerName, idToken, accessToken));
   }
 
   // ****************
