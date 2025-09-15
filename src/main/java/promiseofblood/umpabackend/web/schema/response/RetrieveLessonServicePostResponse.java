@@ -44,28 +44,31 @@ public class RetrieveLessonServicePostResponse {
 
   private float reviewRating;
 
-  public static RetrieveLessonServicePostResponse of(LessonServicePost lessonServicePost) {
+  public static RetrieveLessonServicePostResponse of(LessonServicePost post) {
 
     List<ListCurriculumResponse> curriculumResponses =
-        lessonServicePost.getCurriculums().stream()
+        post.getCurriculums().stream()
             .map(c -> ListCurriculumResponse.of(c.getTitle(), c.getContent()))
             .toList();
 
     return RetrieveLessonServicePostResponse.builder()
-        .id(lessonServicePost.getId())
-        .thumbnailImage(lessonServicePost.getThumbnailImageUrl())
-        .title(lessonServicePost.getTitle())
-        .description(lessonServicePost.getDescription())
-        .costPerUnit(CostPerUnitDto.from(lessonServicePost.getServiceCost()))
-        .subject(lessonServicePost.getSubject())
-        .availableWeekDays(lessonServicePost.getAvailableWeekDays())
-        .lessonStyle(lessonServicePost.getLessonStyle().name())
-        .isDemoLessonProvided(lessonServicePost.getIsDemoLessonProvided())
-        .demoLessonCost(lessonServicePost.getDemoLessonCost())
-        .recommendedTargets(lessonServicePost.getRecommendedTargets())
+        // 공통 필드
+        .id(post.getId())
+        .thumbnailImage(post.getThumbnailImageUrl())
+        .title(post.getTitle())
+        .description(post.getDescription())
+        .costPerUnit(CostPerUnitDto.from(post.getServiceCost()))
+        // 레슨 서비스 필드
+        .subject(post.getSubject())
+        .availableWeekDays(post.getAvailableWeekDays())
+        .lessonStyle(post.getLessonStyle().name())
+        .isDemoLessonProvided(post.getIsDemoLessonProvided())
+        .demoLessonCost(post.getDemoLessonCost())
+        .recommendedTargets(post.getRecommendedTargets())
         .curriculums(curriculumResponses)
-        .studioPhotoUrls(lessonServicePost.getStudioPhotoUrls())
-        .teacherProfile(TeacherAuthorProfileDto.from(lessonServicePost.getUser()))
+        .studioPhotoUrls(post.getStudioPhotoUrls())
+        // 선생님 프로필, 리뷰
+        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
         .reviewRating(0.0f)
         .build();
   }
