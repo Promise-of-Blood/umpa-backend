@@ -52,11 +52,13 @@ public class RetrieveLessonServicePostResponse {
             .toList();
 
     return RetrieveLessonServicePostResponse.builder()
+        // 공통 필드
         .id(post.getId())
         .thumbnailImage(post.getThumbnailImageUrl())
         .title(post.getTitle())
         .description(post.getDescription())
         .costPerUnit(CostPerUnitDto.from(post.getServiceCost()))
+        // 레슨 서비스 필드
         .subject(post.getSubject())
         .availableWeekDays(post.getAvailableWeekDays())
         .lessonStyle(post.getLessonStyle().name())
@@ -65,6 +67,7 @@ public class RetrieveLessonServicePostResponse {
         .recommendedTargets(post.getRecommendedTargets())
         .curriculums(curriculumResponses)
         .studioPhotoUrls(post.getStudioPhotoUrls())
+        // 선생님 프로필, 리뷰
         .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
         .reviewRating(0.0f)
         .build();
