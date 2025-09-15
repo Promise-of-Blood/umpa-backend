@@ -6,33 +6,35 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Subject {
-  PIANO("피아노"),
+  PIANO("피아노", "piano"),
 
-  COMPOSITION("작곡"),
+  COMPOSITION("작곡", "composition"),
 
-  VOCAL("보컬"),
+  VOCAL("보컬", "vocal"),
 
-  DRUM("드럼"),
+  DRUM("드럼", "drum"),
 
-  BASS("베이스"),
+  BASS("베이스", "bass"),
 
-  GUITAR("기타"),
+  GUITAR("기타", "guitar"),
 
-  ELECTRONIC_MUSIC("전자음악"),
+  ELECTRONIC_MUSIC("전자음악", "electronic_music"),
 
-  WIND_INSTRUMENT("관악"),
+  WIND_INSTRUMENT("관악", "wind_instrument"),
 
-  TRADITIONAL_HARMONY("전통화성학"),
+  TRADITIONAL_HARMONY("전통화성학", "traditional_harmony"),
 
-  SIGHT_SINGING("시창청음"),
+  SIGHT_SINGING("시창청음", "sight_singing"),
 
-  PRACTICAL_HARMONY("실용 화성학"),
+  PRACTICAL_HARMONY("실용 화성학", "_harmony"),
 
-  SCORE_PRODUCTION("악보제작"),
+  SCORE_PRODUCTION("악보제작", "score_production"),
 
-  ACCOMPANIST("반주자"),
+  ACCOMPANIST("반주자", "accompaniment"),
 
-  MR_PRODUCTION("MR제작");
+  MR_PRODUCTION("MR제작", "mr_production");
 
   private final String koreanName;
+
+  private final String assetName;
 }
