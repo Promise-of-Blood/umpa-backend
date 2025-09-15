@@ -2,7 +2,9 @@ package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,12 +14,15 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.query.RetrieveAccompanimentServicePostQuery;
 import promiseofblood.umpabackend.application.service.AccompanimentService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
+import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 
 @RestController
@@ -45,6 +50,17 @@ public class AccompanimentServiceController {
         serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
 
     return ResponseEntity.ok(accompanimentPostResponse);
+  }
+
+  @GetMapping("")
+  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
+
+    Page<ServicePostResponse> servicePostResponsePage =
+        this.serviceBoardService.getAllServices("ACCOMPANIMENT", page, size);
+
+    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }
 
   @GetMapping(path = "/accompaniment/{postId}")
