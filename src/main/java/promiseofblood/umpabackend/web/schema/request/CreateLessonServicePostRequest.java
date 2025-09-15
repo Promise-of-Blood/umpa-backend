@@ -10,7 +10,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.MediaType;
-
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Region;
