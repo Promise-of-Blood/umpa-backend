@@ -39,24 +39,22 @@ public class RetrieveMrProductionServicePostResponse {
 
   private float reviewRating;
 
-  public static RetrieveMrProductionServicePostResponse of(
-      MrProductionServicePost mrProductionServicePost) {
+  public static RetrieveMrProductionServicePostResponse of(MrProductionServicePost post) {
 
-    List<String> sampleMrUrls =
-        mrProductionServicePost.getSampleMrUrls().stream().map(SampleMrUrl::getUrl).toList();
+    List<String> sampleMrUrls = post.getSampleMrUrls().stream().map(SampleMrUrl::getUrl).toList();
 
     return RetrieveMrProductionServicePostResponse.builder()
-        .id(mrProductionServicePost.getId())
-        .title(mrProductionServicePost.getTitle())
-        .description(mrProductionServicePost.getDescription())
-        .costPerUnit(CostPerUnitDto.from(mrProductionServicePost.getServiceCost()))
-        .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
-        .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
-        .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
-        .softwareList(mrProductionServicePost.getUsingSoftwareList())
+        .id(post.getId())
+        .title(post.getTitle())
+        .description(post.getDescription())
+        .costPerUnit(CostPerUnitDto.from(post.getServiceCost()))
+        .additionalCostPolicy(post.getAdditionalCostPolicy())
+        .averageDuration(AverageDurationDto.from(post.getAverageDuration()))
+        .freeRevisionCount(post.getFreeRevisionCount())
+        .additionalRevisionCost(post.getAdditionalRevisionCost())
+        .softwareList(post.getUsingSoftwareList())
         .sampleMrUrls(sampleMrUrls)
-        .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
+        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
         .reviewRating(0.0f)
         .build();
   }
