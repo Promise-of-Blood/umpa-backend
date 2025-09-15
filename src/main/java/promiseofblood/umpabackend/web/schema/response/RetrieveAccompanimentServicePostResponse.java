@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
-import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
@@ -42,23 +41,22 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private String reviewRating;
 
-  public static RetrieveAccompanimentServicePostResponse from(
-      AccompanimentServicePost accompanimentServicePost, User user) {
+  public static RetrieveAccompanimentServicePostResponse from(AccompanimentServicePost post) {
 
     return RetrieveAccompanimentServicePostResponse.builder()
-        .title(accompanimentServicePost.getTitle())
-        .description(accompanimentServicePost.getDescription())
-        .thumbnailImage(accompanimentServicePost.getThumbnailImageUrl())
-        .teacherProfile(TeacherAuthorProfileDto.from(user))
+        .title(post.getTitle())
+        .description(post.getDescription())
+        .thumbnailImage(post.getThumbnailImageUrl())
+        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
         .reviewRating("0.0")
-        .costPerUnit(accompanimentServicePost.getCostAndUnit())
-        .additionalCostPolicy(accompanimentServicePost.getAdditionalCostPolicy())
-        .instrument(accompanimentServicePost.getInstrument())
-        .includedPracticeCount(accompanimentServicePost.getIncludedPracticeCount())
-        .additionalPracticeCost(accompanimentServicePost.getAdditionalPracticeCost())
-        .isMrIncluded(accompanimentServicePost.isMrIncluded())
-        .practiceLocations(accompanimentServicePost.getPracticeLocations())
-        .videoUrls(accompanimentServicePost.getVideoUrls())
+        .costPerUnit(post.getCostAndUnit())
+        .additionalCostPolicy(post.getAdditionalCostPolicy())
+        .instrument(post.getInstrument())
+        .includedPracticeCount(post.getIncludedPracticeCount())
+        .additionalPracticeCost(post.getAdditionalPracticeCost())
+        .isMrIncluded(post.isMrIncluded())
+        .practiceLocations(post.getPracticeLocations())
+        .videoUrls(post.getVideoUrls())
         .build();
   }
 }
