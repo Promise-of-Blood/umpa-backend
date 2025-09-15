@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
+
 public enum ScoreType implements EnumVoType {
   FULL_SCORE("풀스코어", "full_score"),
 

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Instrument implements EnumVoType {
+
   PIANO("피아노", "piano"),
 
   VOCAL("보컬", "vocal"),

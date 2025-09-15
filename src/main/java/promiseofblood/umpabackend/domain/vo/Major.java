@@ -5,6 +5,7 @@ import lombok.*;
 @Getter
 @RequiredArgsConstructor
 public enum Major implements EnumVoType {
+
   PIANO("피아노", "piano"),
 
   COMPOSITION("작곡", "composition"),
