@@ -39,17 +39,18 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private TeacherAuthorProfileDto teacherProfile;
 
-  private String reviewRating;
+  private float reviewRating;
 
   public static RetrieveAccompanimentServicePostResponse from(AccompanimentServicePost post) {
 
     return RetrieveAccompanimentServicePostResponse.builder()
+        // 공통 필드
+        .id(post.getId())
+        .thumbnailImage(post.getThumbnailImageUrl())
         .title(post.getTitle())
         .description(post.getDescription())
-        .thumbnailImage(post.getThumbnailImageUrl())
-        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
-        .reviewRating("0.0")
         .costPerUnit(post.getCostAndUnit())
+        // 합주 서비스 필드
         .additionalCostPolicy(post.getAdditionalCostPolicy())
         .instrument(post.getInstrument())
         .includedPracticeCount(post.getIncludedPracticeCount())
@@ -57,6 +58,9 @@ public class RetrieveAccompanimentServicePostResponse {
         .isMrIncluded(post.isMrIncluded())
         .practiceLocations(post.getPracticeLocations())
         .videoUrls(post.getVideoUrls())
+        // 선생님 프로필, 리뷰
+        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
+        .reviewRating(0.0f)
         .build();
   }
 }

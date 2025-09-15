@@ -7,10 +7,14 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import promiseofblood.umpabackend.application.query.RetrieveAccompanimentServicePostQuery;
+import promiseofblood.umpabackend.application.service.AccompanimentService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
@@ -18,15 +22,17 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServi
 
 @RestController
 @RequestMapping("/api/v1/services")
+@Tag(name = "서비스 관리 API(합주)")
 @RequiredArgsConstructor
 public class AccompanimentServiceController {
 
   private final ServiceBoardService serviceBoardService;
+  private final AccompanimentService accompanimentService;
 
   // ************
   // * 합주 서비스 *
   // ************
-  @Tag(name = "서비스 관리 API(합주)")
+
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveAccompanimentServicePostResponse> registerAccompaniment(
@@ -39,5 +45,15 @@ public class AccompanimentServiceController {
         serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
 
     return ResponseEntity.ok(accompanimentPostResponse);
+  }
+
+  @GetMapping(path = "/accompaniment/{postId}")
+  public ResponseEntity<RetrieveAccompanimentServicePostResponse> getAccompanimentPost(
+      @PathVariable Long postId) {
+
+    var query = new RetrieveAccompanimentServicePostQuery(postId);
+    var response = accompanimentService.retrieveAccompanimentServicePost(query);
+
+    return ResponseEntity.ok(response);
   }
 }
