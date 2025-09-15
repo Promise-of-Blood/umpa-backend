@@ -1,9 +1,11 @@
 package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,13 +16,17 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand.CreateLessonCurriculumCommand;
 import promiseofblood.umpabackend.application.query.RetrieveLessonServicePostQuery;
 import promiseofblood.umpabackend.application.service.LessonService;
+import promiseofblood.umpabackend.application.service.ServiceBoardService;
+import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateLessonServicePostRequest;
+import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostResponse;
 
 @RestController
@@ -30,6 +36,7 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostR
 public class LessonServiceController {
 
   private final LessonService lessonService;
+  private final ServiceBoardService serviceBoardService;
 
   @PostMapping(value = "/lesson", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
@@ -64,6 +71,17 @@ public class LessonServiceController {
     var post = lessonService.createLessonServicePost(command);
 
     return ResponseEntity.ok(post);
+  }
+
+  @GetMapping("/lesson")
+  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
+
+    Page<ServicePostResponse> servicePostResponsePage =
+        this.serviceBoardService.getAllServices("LESSON", page, size);
+
+    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }
 
   @GetMapping("/lesson/{id}")
