@@ -5,8 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ScoreType {
-  FULL_SCORE("풀스코어", "composition"),
+public enum ScoreType implements EnumVoType {
+  FULL_SCORE("풀스코어", "full_score"),
 
   VOCAL("보컬곡", "vocal"),
 
@@ -23,4 +23,14 @@ public enum ScoreType {
   private final String koreanName;
 
   private final String assetName;
+
+  @Override
+  public String getName() {
+    return this.getCode();
+  }
+
+  @Override
+  public String getCode() {
+    return this.getKoreanName();
+  }
 }

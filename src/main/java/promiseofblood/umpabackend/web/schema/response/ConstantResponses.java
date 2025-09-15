@@ -220,7 +220,7 @@ public class ConstantResponses {
     private String name;
 
     public static RegionResponse from(Region region) {
-      return RegionResponse.builder().code(region.getCode()).name(region.getKoreanName()).build();
+      return RegionResponse.builder().code(region.getCode()).name(region.getName()).build();
     }
   }
 }
