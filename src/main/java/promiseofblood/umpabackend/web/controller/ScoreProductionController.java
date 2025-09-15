@@ -1,7 +1,9 @@
 package promiseofblood.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,24 +13,24 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
+import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServicePostResponse;
 
 @RestController
-@RequestMapping("/api/v1/services")
 @RequiredArgsConstructor
+@Tag(name = "서비스 관리 API(악보 제작)")
+@RequestMapping("/api/v1/services/score-production")
 public class ScoreProductionController {
 
   private final ServiceBoardService serviceBoardService;
 
-  // ***************
-  // * 악보제작 서비스 *
-  // ***************
-  @Tag(name = "서비스 관리 API(악보 제작)")
-  @PostMapping(value = "/score-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveScoreProductionServicePostResponse> registerScoreProduction(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
@@ -42,8 +44,18 @@ public class ScoreProductionController {
     return ResponseEntity.ok(scoreProductionServicePostResponse);
   }
 
-  @Tag(name = "서비스 관리 API(악보 제작)")
-  @GetMapping(path = "/score-production/{id}")
+  @GetMapping("")
+  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
+
+    Page<ServicePostResponse> servicePostResponsePage =
+        this.serviceBoardService.getAllServices("SCORE_PRODUCTION", page, size);
+
+    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
+  }
+
+  @GetMapping(path = "/{id}")
   public ResponseEntity<RetrieveScoreProductionServicePostResponse> getScoreProductionServicePost(
       @PathVariable Long id) {
 

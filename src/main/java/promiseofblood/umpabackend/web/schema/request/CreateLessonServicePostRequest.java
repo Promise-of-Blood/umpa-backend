@@ -1,6 +1,5 @@
 package promiseofblood.umpabackend.web.schema.request;
 
-
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -11,7 +10,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.MediaType;
-
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Region;
@@ -19,13 +17,11 @@ import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.infrastructure.validation.ValidImageFile;
 
-
 @Getter
 @AllArgsConstructor
 public class CreateLessonServicePostRequest {
 
   @Schema(type = "string", format = "binary", description = "대표 사진")
-
   @ValidImageFile
   @NotNull private final MultipartFile thumbnailImage;
 

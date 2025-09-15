@@ -90,7 +90,7 @@ public class ServiceBoardService {
             .build();
     servicePostRepository.save(accompanimentServicePost);
 
-    return RetrieveAccompanimentServicePostResponse.from(accompanimentServicePost, user);
+    return RetrieveAccompanimentServicePostResponse.from(accompanimentServicePost);
   }
 
   @Transactional
