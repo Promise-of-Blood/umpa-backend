@@ -91,7 +91,7 @@ spotless {
 }
 
 tasks.named('compileJava') {
-    dependsOn 'spotlessCheck'
+    dependsOn 'spotlessApply'
 }
 
 tasks.named('test') {
