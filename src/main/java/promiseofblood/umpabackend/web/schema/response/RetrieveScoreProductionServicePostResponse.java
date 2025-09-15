@@ -41,26 +41,25 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private float reviewRating;
 
-  public static RetrieveScoreProductionServicePostResponse from(
-      ScoreProductionServicePost scoreProductionServicePost) {
+  public static RetrieveScoreProductionServicePostResponse from(ScoreProductionServicePost post) {
 
     List<CostPerUnitDto> costPerUnits = new ArrayList<>();
-    for (ServiceCost serviceCost : scoreProductionServicePost.getServiceCosts()) {
+    for (ServiceCost serviceCost : post.getServiceCosts()) {
       costPerUnits.add(CostPerUnitDto.from(serviceCost));
     }
-    System.out.println(scoreProductionServicePost.getAverageDuration());
+
     return RetrieveScoreProductionServicePostResponse.builder()
-        .id(scoreProductionServicePost.getId())
-        .title(scoreProductionServicePost.getTitle())
-        .description(scoreProductionServicePost.getDescription())
+        .id(post.getId())
+        .title(post.getTitle())
+        .description(post.getDescription())
         .costsPerUnits(costPerUnits)
-        .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
-        .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
-        .softwareList(scoreProductionServicePost.getUsingSoftwareList())
-        .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
-        .sampleScoreImageUrl(scoreProductionServicePost.getSampleScoreImageUrl())
-        .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
+        .additionalCostPolicy(post.getAdditionalCostPolicy())
+        .averageDuration(AverageDurationDto.from(post.getAverageDuration()))
+        .freeRevisionCount(post.getFreeRevisionCount())
+        .softwareList(post.getUsingSoftwareList())
+        .additionalRevisionCost(post.getAdditionalRevisionCost())
+        .sampleScoreImageUrl(post.getSampleScoreImageUrl())
+        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
         .reviewRating(0.1f)
         .build();
   }
