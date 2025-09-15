@@ -39,11 +39,9 @@ public class RetrieveMrProductionServicePostResponse {
 
   private float reviewRating;
 
-  public static RetrieveMrProductionServicePostResponse of(
-      MrProductionServicePost post) {
+  public static RetrieveMrProductionServicePostResponse of(MrProductionServicePost post) {
 
-    List<String> sampleMrUrls =
-        post.getSampleMrUrls().stream().map(SampleMrUrl::getUrl).toList();
+    List<String> sampleMrUrls = post.getSampleMrUrls().stream().map(SampleMrUrl::getUrl).toList();
 
     return RetrieveMrProductionServicePostResponse.builder()
         .id(post.getId())
