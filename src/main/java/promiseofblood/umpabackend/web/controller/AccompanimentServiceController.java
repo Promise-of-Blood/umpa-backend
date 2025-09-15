@@ -52,7 +52,7 @@ public class AccompanimentServiceController {
     return ResponseEntity.ok(accompanimentPostResponse);
   }
 
-  @GetMapping("")
+  @GetMapping("/accompaniment")
   public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
