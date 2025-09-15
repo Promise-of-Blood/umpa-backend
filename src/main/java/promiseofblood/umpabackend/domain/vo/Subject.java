@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Subject {
+public enum Subject implements EnumVoType {
   PIANO("피아노", "piano"),
 
   COMPOSITION("작곡", "composition"),
@@ -37,4 +37,14 @@ public enum Subject {
   private final String koreanName;
 
   private final String assetName;
+
+  @Override
+  public String getName() {
+    return this.getCode();
+  }
+
+  @Override
+  public String getCode() {
+    return this.getKoreanName();
+  }
 }

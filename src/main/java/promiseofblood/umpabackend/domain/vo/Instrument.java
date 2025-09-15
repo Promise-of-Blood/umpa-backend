@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Instrument {
+public enum Instrument implements EnumVoType {
   PIANO("피아노", "piano"),
 
   VOCAL("보컬", "vocal"),
@@ -23,4 +23,14 @@ public enum Instrument {
   private final String koreanName;
 
   private final String assetName;
+
+  @Override
+  public String getName() {
+    return this.getCode();
+  }
+
+  @Override
+  public String getCode() {
+    return this.getKoreanName();
+  }
 }

@@ -1,10 +1,24 @@
 package promiseofblood.umpabackend.domain.vo;
 
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-public enum ProfileType {
-  TEACHER,
+@RequiredArgsConstructor
+public enum ProfileType implements EnumVoType {
+  TEACHER("선생님"),
 
-  STUDENT;
+  STUDENT("학생");
+
+  private final String koreanName;
+
+  @Override
+  public String getName() {
+    return this.getCode();
+  }
+
+  @Override
+  public String getCode() {
+    return this.getKoreanName();
+  }
 }
