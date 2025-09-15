@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Grade {
+public enum Grade implements EnumVoType {
   MIDDLE_3("중3"),
 
   HIGH_1("고1"),
@@ -21,4 +21,14 @@ public enum Grade {
   WORKER("사회인");
 
   private final String koreanName;
+
+  @Override
+  public String getName() {
+    return this.getCode();
+  }
+
+  @Override
+  public String getCode() {
+    return this.getKoreanName();
+  }
 }

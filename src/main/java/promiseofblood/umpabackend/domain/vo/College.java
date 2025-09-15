@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum College {
+public enum College implements EnumVoType {
   // 강동대학교
   GANGDONG_COLLEGE("강동대학교"),
   // 경북과학대학교
@@ -166,4 +166,14 @@ public enum College {
   HONGIK_COLLEGE("홍익대학교");
 
   private final String koreanName;
+
+  @Override
+  public String getName() {
+    return this.getCode();
+  }
+
+  @Override
+  public String getCode() {
+    return this.getKoreanName();
+  }
 }
