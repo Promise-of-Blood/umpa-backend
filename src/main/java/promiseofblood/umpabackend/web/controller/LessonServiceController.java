@@ -11,11 +11,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand.CreateLessonCurriculumCommand;
+import promiseofblood.umpabackend.application.query.RetrieveLessonServicePostQuery;
 import promiseofblood.umpabackend.application.service.LessonService;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateLessonServicePostRequest;
@@ -24,11 +26,11 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostR
 @RestController
 @RequestMapping("/api/v1/services")
 @RequiredArgsConstructor
+@Tag(name = "서비스 관리 API(레슨)")
 public class LessonServiceController {
 
   private final LessonService lessonService;
 
-  @Tag(name = "서비스 관리 API(레슨)")
   @PostMapping(value = "/lesson", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveLessonServicePostResponse> registerLesson(
@@ -64,8 +66,13 @@ public class LessonServiceController {
     return ResponseEntity.ok(post);
   }
 
-  @Tag(name = "서비스 관리 API(레슨)")
   @GetMapping("/lesson/{id}")
-  @PreAuthorize("isAuthenticated()")
-  public void list() {}
+  public ResponseEntity<RetrieveLessonServicePostResponse> retrieveLessonServicePost(
+      @PathVariable Long id) {
+
+    var query = new RetrieveLessonServicePostQuery(id);
+    var lessonServicePost = lessonService.retrieveLessonServicePost(query);
+
+    return ResponseEntity.ok(lessonServicePost);
+  }
 }
