@@ -1,4 +1,4 @@
-name: PR Build Check
+name: PR 테스트 워크플로우
 
 on:
   pull_request
@@ -22,7 +22,3 @@ jobs:
 
       - name: Test with Gradle
         run: ./gradlew test -Pspring.profiles.active=test
-
-      - name: Build with Gradle
-        run: ./gradlew bootJar -Pspring.profiles.active=prod
-
