@@ -1,13 +1,17 @@
 name: CI/CD Pipeline
 
 on:
-  push:
+  workflow_run:
+    workflows: ["테스트 실행"]
+    types:
+      - completed
     branches:
       - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     steps:
       - uses: actions/checkout@v3
@@ -22,15 +26,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Test with Gradle
-        run: ./gradlew test -Pspring.profiles.active=test
-
       - name: Build and package
-        env:
-          JWT_SECRET_KEY: ${{ secrets.JWT_SECRET_KEY }}
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
         run: ./gradlew bootJar -Pspring.profiles.active=prod
 
       - name: Upload build artifacts
