@@ -24,5 +24,5 @@ jobs:
         run: ./gradlew test -Pspring.profiles.active=test
 
       - name: Build with Gradle
-        run: ./gradlew bootJar -Pspring.profiles.active=test
+        run: ./gradlew bootJar -Pspring.profiles.active=prod
 
