@@ -1,4 +1,4 @@
-name: PR 테스트 워크플로우
+name: 테스트 실행
 
 on:
   pull_request
