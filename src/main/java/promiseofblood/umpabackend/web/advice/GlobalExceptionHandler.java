@@ -2,8 +2,12 @@ package promiseofblood.umpabackend.web.advice;
 
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InsufficientAuthenticationException;
@@ -19,11 +23,16 @@ import promiseofblood.umpabackend.application.exception.Oauth2UserAlreadyExists;
 import promiseofblood.umpabackend.application.exception.RegistrationException;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
+import promiseofblood.umpabackend.application.service.DiscordService;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse;
 
 @Slf4j
 @RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+  private final DiscordService discordService;
+  private final Environment environment;
 
   /**
    * 전역 예외 처리 핸들러 (500 Internal Server Error)
@@ -33,7 +42,14 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(RuntimeException.class)
   public ResponseEntity<ApiResponse.ExceptionResponse> handleGlobalException(
       Exception ex, WebRequest request) {
-    log.error("서버 내부 오류가 발생했습니다: {}", ex.getMessage(), ex);
+
+    log.error("서버 내부 오류가 발생했습니다: {}", ex.getMessage());
+
+    String path = request.getDescription(false).replace("uri=", "");
+
+    if (environment.acceptsProfiles(Profiles.of("prod"))) {
+      discordService.sendErrorMessage(ex, path, LocalDateTime.now());
+    }
 
     ApiResponse.ExceptionResponse exceptionResponse =
         new ApiResponse.ExceptionResponse("서버 내부 오류가 발생했습니다.");
