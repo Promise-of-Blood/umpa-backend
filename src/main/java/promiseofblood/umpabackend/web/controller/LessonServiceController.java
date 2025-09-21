@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -78,12 +79,10 @@ public class LessonServiceController {
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
 
-    throw new RuntimeException("test exception");
+    Page<ServicePostResponse> servicePostResponsePage =
+        this.serviceBoardService.getAllServices("LESSON", page, size);
 
-    //    Page<ServicePostResponse> servicePostResponsePage =
-    //        this.serviceBoardService.getAllServices("LESSON", page, size);
-
-    //    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
+    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }
 
   @GetMapping(path = "/lesson/{id}")
