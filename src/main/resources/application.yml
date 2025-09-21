@@ -23,7 +23,6 @@ springdoc:
     tags-sorter: alpha
     operations-sorter: alpha
 
-
 ---
 
 spring:
@@ -69,6 +68,9 @@ oauth2:
       profileUri: https://openapi.naver.com/v1/nid/me
       redirect-uri: https://um-pa.duckdns.org/api/v1/users/callback/naver
 
+discord:
+  webhook:
+    url: ${DISCORD_WEBHOOK_URL}
 ---
 
 spring:
@@ -107,6 +109,10 @@ oauth2:
       profileUri: https://openapi.naver.com/v1/nid/me
       redirect-uri: http://localhost:8080/api/v1/users/callback/naver
 
+discord:
+  webhook:
+    url: ""
+
 ---
 
 spring:
@@ -131,3 +137,7 @@ jwt:
 
 oauth2:
   providers: [ ]
+
+discord:
+  webhook:
+    url: ""
