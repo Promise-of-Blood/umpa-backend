@@ -53,7 +53,10 @@ public class RetrieveMrProductionServicePostResponse {
         .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
-        .softwareList(mrProductionServicePost.getUsingSoftwareList())
+        .softwareList(
+            mrProductionServicePost.getUsingSoftwareList() != null
+                ? mrProductionServicePost.getUsingSoftwareList()
+                : List.of())
         .sampleMrUrls(sampleMrUrls)
         .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
         .reviewRating(0.0f)

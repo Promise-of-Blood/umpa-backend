@@ -56,7 +56,10 @@ public class RetrieveScoreProductionServicePostResponse {
         .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
         .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
-        .softwareList(scoreProductionServicePost.getUsingSoftwareList())
+        .softwareList(
+            scoreProductionServicePost.getUsingSoftwareList() != null
+                ? scoreProductionServicePost.getUsingSoftwareList()
+                : List.of())
         .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
         .sampleScoreImageUrl(scoreProductionServicePost.getSampleScoreImageUrl())
         .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
