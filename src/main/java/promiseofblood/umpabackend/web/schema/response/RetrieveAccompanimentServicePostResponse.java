@@ -7,7 +7,6 @@ import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
-import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
@@ -22,7 +21,7 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private String description;
 
-  private CostPerUnitDto costPerUnit;
+  private ServiceCostResponse costPerUnit;
 
   private String additionalCostPolicy;
 
@@ -50,7 +49,7 @@ public class RetrieveAccompanimentServicePostResponse {
         .thumbnailImage(post.getThumbnailImageUrl())
         .title(post.getTitle())
         .description(post.getDescription())
-        .costPerUnit(CostPerUnitDto.from(post.getServiceCost()))
+        .costPerUnit(ServiceCostResponse.from(post.getServiceCost()))
         // 합주 서비스 필드
         .additionalCostPolicy(post.getAdditionalCostPolicy())
         .instrument(post.getInstrument())

@@ -3,7 +3,6 @@ package promiseofblood.umpabackend.dto;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.TeacherCareer;
@@ -11,7 +10,6 @@ import promiseofblood.umpabackend.domain.entity.TeacherLink;
 import promiseofblood.umpabackend.domain.entity.TeacherProfile;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
-import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.web.schema.response.ListTeacherCareerResponse;
 import promiseofblood.umpabackend.web.schema.response.ListTeacherLinkResponse;
 
@@ -53,20 +51,6 @@ public class ServicePostDto {
           .careers(careers)
           .links(links)
           .build();
-    }
-  }
-
-  /** 서비스 단위당 비용 DTO */
-  @Getter
-  @AllArgsConstructor
-  public static class CostPerUnitDto {
-
-    private int cost;
-
-    private String unit;
-
-    public static CostPerUnitDto from(ServiceCost serviceCost) {
-      return new CostPerUnitDto(serviceCost.getCost(), serviceCost.getUnit());
     }
   }
 

@@ -7,7 +7,6 @@ import promiseofblood.umpabackend.domain.entity.LessonServicePost;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
-import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
@@ -22,7 +21,7 @@ public class RetrieveLessonServicePostResponse {
 
   private String description;
 
-  private CostPerUnitDto costPerUnit;
+  private ServiceCostResponse costPerUnit;
 
   private ConstantResponse<Subject> subject; // 상수
 
@@ -56,7 +55,7 @@ public class RetrieveLessonServicePostResponse {
         .thumbnailImage(lessonServicePost.getThumbnailImageUrl())
         .title(lessonServicePost.getTitle())
         .description(lessonServicePost.getDescription())
-        .costPerUnit(CostPerUnitDto.from(lessonServicePost.getServiceCost()))
+        .costPerUnit(ServiceCostResponse.from(lessonServicePost.getServiceCost()))
         .subject(new ConstantResponse<>(lessonServicePost.getSubject()))
         .availableWeekDays(
             lessonServicePost.getAvailableWeekDays().stream().map(ConstantResponse::new).toList())
