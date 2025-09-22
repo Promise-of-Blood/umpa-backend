@@ -8,8 +8,8 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
-import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.domain.vo.PracticeLocation;
 
 @Getter
 public class AccompanimentServicePostDto {
@@ -50,7 +50,7 @@ public class AccompanimentServicePostDto {
 
     @Schema(type = "array", description = "연습 장소")
     @NotEmpty
-    private List<AccompanimentPracticeLocation> practiceLocations;
+    private List<PracticeLocation> practiceLocations;
 
     @Schema(type = "array", description = "연주 영상 URL들")
     private List<String> videoUrls;

@@ -8,11 +8,10 @@ import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class RetrieveScoreProductionServicePostResponse {
+public class ListScoreProductionServicePostResponse {
 
   private long id;
 
@@ -24,23 +23,15 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private List<ServiceCostResponse> serviceCostList;
 
-  private String additionalCostPolicy;
-
   private AverageDurationDto averageDuration;
-
-  private int freeRevisionCount;
-
-  private int additionalRevisionCost;
 
   private List<String> softwareList;
 
-  private String sampleScoreImageUrl;
-
-  private TeacherAuthorProfileDto teacherProfile;
+  private String teacherName;
 
   private float reviewRating;
 
-  public static RetrieveScoreProductionServicePostResponse from(
+  public static ListScoreProductionServicePostResponse from(
       ScoreProductionServicePost scoreProductionServicePost) {
 
     List<ServiceCostResponse> costPerUnits = new ArrayList<>();
@@ -48,19 +39,18 @@ public class RetrieveScoreProductionServicePostResponse {
       costPerUnits.add(ServiceCostResponse.from(serviceCost));
     }
     System.out.println(scoreProductionServicePost.getAverageDuration());
-    return RetrieveScoreProductionServicePostResponse.builder()
+    return ListScoreProductionServicePostResponse.builder()
         .id(scoreProductionServicePost.getId())
         .title(scoreProductionServicePost.getTitle())
         .description(scoreProductionServicePost.getDescription())
         .serviceCostList(costPerUnits)
-        .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
-        .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
-        .softwareList(scoreProductionServicePost.getUsingSoftwareList())
-        .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
-        .sampleScoreImageUrl(scoreProductionServicePost.getSampleScoreImageUrl())
-        .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
-        .reviewRating(0.1f)
+        .softwareList(
+            scoreProductionServicePost.getUsingSoftwareList() != null
+                ? scoreProductionServicePost.getUsingSoftwareList()
+                : List.of())
+        .teacherName(String.valueOf((scoreProductionServicePost.getUser().getUsername())))
+        .reviewRating(3.1f)
         .build();
   }
 }

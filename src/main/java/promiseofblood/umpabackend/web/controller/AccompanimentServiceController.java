@@ -20,9 +20,9 @@ import promiseofblood.umpabackend.application.query.RetrieveAccompanimentService
 import promiseofblood.umpabackend.application.service.AccompanimentService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
+import promiseofblood.umpabackend.web.schema.response.ListAccompanimentServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 
 @RestController
@@ -53,12 +53,14 @@ public class AccompanimentServiceController {
   }
 
   @GetMapping("/accompaniment")
-  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
+  public ResponseEntity<PaginatedResponse<ListAccompanimentServicePostResponse>>
+      getAllLessonServices(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.")
+              int size) {
 
-    Page<ServicePostResponse> servicePostResponsePage =
-        this.serviceBoardService.getAllServices("ACCOMPANIMENT", page, size);
+    Page<ListAccompanimentServicePostResponse> servicePostResponsePage =
+        accompanimentService.getAllServices(page, size);
 
     return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }

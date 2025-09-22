@@ -26,11 +26,11 @@ public enum Instrument implements EnumVoType {
 
   @Override
   public String getName() {
-    return this.getCode();
+    return this.getKoreanName();
   }
 
   @Override
   public String getCode() {
-    return this.getKoreanName();
+    return this.name();
   }
 }

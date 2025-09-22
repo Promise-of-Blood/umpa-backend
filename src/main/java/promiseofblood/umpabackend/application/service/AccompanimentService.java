@@ -1,12 +1,15 @@
 package promiseofblood.umpabackend.application.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.query.RetrieveAccompanimentServicePostQuery;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.repository.AccompanimentServicePostRepository;
+import promiseofblood.umpabackend.web.schema.response.ListAccompanimentServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 
 @Service
@@ -14,6 +17,15 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServi
 public class AccompanimentService {
 
   private final AccompanimentServicePostRepository accompanimentServicePostRepository;
+
+  @Transactional(readOnly = true)
+  public Page<ListAccompanimentServicePostResponse> getAllServices(int page, int size) {
+
+    Page<AccompanimentServicePost> servicePostPage =
+        accompanimentServicePostRepository.findAll(PageRequest.of(page, size));
+
+    return servicePostPage.map(ListAccompanimentServicePostResponse::from);
+  }
 
   @Transactional(readOnly = true)
   public RetrieveAccompanimentServicePostResponse retrieveAccompanimentServicePost(

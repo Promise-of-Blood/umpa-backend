@@ -7,11 +7,10 @@ import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.PracticeLocation;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
-public class RetrieveAccompanimentServicePostResponse {
+public class ListAccompanimentServicePostResponse {
 
   private long id;
 
@@ -23,27 +22,17 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private ServiceCostResponse serviceCost;
 
-  private String additionalCostPolicy;
-
-  private int includedPracticeCount;
-
-  private int additionalPracticeCost;
-
-  private Boolean isMrIncluded;
-
   private ConstantResponse<Instrument> instrument;
 
   private List<ConstantResponse<PracticeLocation>> practiceLocations;
 
-  private List<String> videoUrls;
-
-  private TeacherAuthorProfileDto teacherProfile;
+  private String teacherName;
 
   private float reviewRating;
 
-  public static RetrieveAccompanimentServicePostResponse from(AccompanimentServicePost post) {
+  public static ListAccompanimentServicePostResponse from(AccompanimentServicePost post) {
 
-    return RetrieveAccompanimentServicePostResponse.builder()
+    return ListAccompanimentServicePostResponse.builder()
         // 공통 필드
         .id(post.getId())
         .thumbnailImage(post.getThumbnailImageUrl())
@@ -51,15 +40,10 @@ public class RetrieveAccompanimentServicePostResponse {
         .description(post.getDescription())
         .serviceCost(ServiceCostResponse.from(post.getServiceCost()))
         // 합주 서비스 필드
-        .additionalCostPolicy(post.getAdditionalCostPolicy())
         .instrument(new ConstantResponse<>(post.getInstrument()))
-        .includedPracticeCount(post.getIncludedPracticeCount())
-        .additionalPracticeCost(post.getAdditionalPracticeCost())
-        .isMrIncluded(post.isMrIncluded())
         .practiceLocations(post.getPracticeLocations().stream().map(ConstantResponse::new).toList())
-        .videoUrls(post.getVideoUrls())
         // 선생님 프로필, 리뷰
-        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
+        .teacherName(String.valueOf((post.getUser().getUsername())))
         .reviewRating(0.0f)
         .build();
   }

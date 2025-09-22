@@ -9,7 +9,6 @@ import promiseofblood.umpabackend.application.query.ConstantListQuery;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.Instrument;
-import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Major;
 import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
@@ -86,22 +85,6 @@ public class ConstantResponses {
           .code(result.code())
           .name(result.name())
           .svg(result.svg())
-          .build();
-    }
-  }
-
-  @Getter
-  @Builder(access = AccessLevel.PRIVATE)
-  public static class LessonStyleResponse {
-
-    private String code;
-
-    private String name;
-
-    public static LessonStyleResponse from(LessonStyle lessonStyle) {
-      return LessonStyleResponse.builder()
-          .code(lessonStyle.name())
-          .name(lessonStyle.getKoreanName())
           .build();
     }
   }

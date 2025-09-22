@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Role implements EnumVoType {
-  ADMIN("관리자"),
+public enum PracticeLocation implements EnumVoType {
+  RENTAL_STUDIO("시간제 연습실"),
 
-  STAFF("스태프"),
+  PRIVATE_STUDIO("개인 작업실"),
 
-  USER("일반 사용자");
+  MUTUAL_CONSULTATION("협의");
 
   private final String koreanName;
 
