@@ -2,6 +2,8 @@ package promiseofblood.umpabackend.application.service;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand;
@@ -13,6 +15,7 @@ import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.LessonServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
+import promiseofblood.umpabackend.web.schema.response.ListLessonServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostResponse;
 
 @Service
@@ -23,8 +26,14 @@ public class LessonService {
   private final UserRepository userRepository;
   private final LessonServicePostRepository lessonServicePostRepository;
 
-  //  @Transactional(readOnly = true)
-  //  public List
+  @Transactional(readOnly = true)
+  public Page<ListLessonServicePostResponse> getAllServices(int page, int size) {
+
+    Page<LessonServicePost> servicePostPage =
+        lessonServicePostRepository.findAll(PageRequest.of(page, size));
+
+    return servicePostPage.map(ListLessonServicePostResponse::of);
+  }
 
   @Transactional
   public RetrieveLessonServicePostResponse createLessonServicePost(
