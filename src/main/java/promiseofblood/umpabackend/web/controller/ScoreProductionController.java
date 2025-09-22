@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import promiseofblood.umpabackend.application.service.ScoreProductionService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
+import promiseofblood.umpabackend.web.schema.response.ListScoreProductionServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServicePostResponse;
 
 @RestController
@@ -29,6 +30,7 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionSer
 public class ScoreProductionController {
 
   private final ServiceBoardService serviceBoardService;
+  private final ScoreProductionService scoreProductionService;
 
   @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
@@ -45,12 +47,14 @@ public class ScoreProductionController {
   }
 
   @GetMapping("")
-  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
+  public ResponseEntity<PaginatedResponse<ListScoreProductionServicePostResponse>>
+      getAllLessonServices(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.")
+              int size) {
 
-    Page<ServicePostResponse> servicePostResponsePage =
-        this.serviceBoardService.getAllServices("SCORE_PRODUCTION", page, size);
+    Page<ListScoreProductionServicePostResponse> servicePostResponsePage =
+        this.scoreProductionService.getAllServices(page, size);
 
     return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }
