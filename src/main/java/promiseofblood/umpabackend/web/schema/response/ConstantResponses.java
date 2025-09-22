@@ -90,22 +90,6 @@ public class ConstantResponses {
     }
   }
 
-  @Getter
-  @Builder(access = AccessLevel.PRIVATE)
-  public static class LessonStyleResponse {
-
-    private String code;
-
-    private String name;
-
-    public static LessonStyleResponse from(LessonStyle lessonStyle) {
-      return LessonStyleResponse.builder()
-          .code(lessonStyle.name())
-          .name(lessonStyle.getKoreanName())
-          .build();
-    }
-  }
-
   @Builder
   @Getter
   public static class ScoreTypeIconResponse {
