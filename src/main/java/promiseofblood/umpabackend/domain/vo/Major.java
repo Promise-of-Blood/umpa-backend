@@ -27,11 +27,11 @@ public enum Major implements EnumVoType {
 
   @Override
   public String getName() {
-    return this.name();
+    return this.getKoreanName();
   }
 
   @Override
   public String getCode() {
-    return this.getKoreanName();
+    return this.name();
   }
 }
