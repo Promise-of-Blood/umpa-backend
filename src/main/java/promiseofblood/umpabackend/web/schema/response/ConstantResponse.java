@@ -13,12 +13,4 @@ public class ConstantResponse<T extends EnumVoType> {
     this.name = enumVoType.getName();
     this.code = enumVoType.getCode();
   }
-
-  public String getName() {
-    return name;
-  }
-
-  public String getCode() {
-    return code;
-  }
 }

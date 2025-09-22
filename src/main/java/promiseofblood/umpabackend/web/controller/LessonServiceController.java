@@ -22,11 +22,10 @@ import promiseofblood.umpabackend.application.command.CreateLessonServicePostCom
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand.CreateLessonCurriculumCommand;
 import promiseofblood.umpabackend.application.query.RetrieveLessonServicePostQuery;
 import promiseofblood.umpabackend.application.service.LessonService;
-import promiseofblood.umpabackend.application.service.ServiceBoardService;
-import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateLessonServicePostRequest;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
+import promiseofblood.umpabackend.web.schema.response.ListLessonServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostResponse;
 
 @RestController
@@ -36,7 +35,6 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostR
 public class LessonServiceController {
 
   private final LessonService lessonService;
-  private final ServiceBoardService serviceBoardService;
 
   @Tag(name = "서비스 관리 API(레슨)")
   @PostMapping(value = "/lesson", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -75,12 +73,12 @@ public class LessonServiceController {
   }
 
   @GetMapping("/lesson")
-  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
+  public ResponseEntity<PaginatedResponse<ListLessonServicePostResponse>> getAllLessonServices(
       @RequestParam(defaultValue = "0") int page,
       @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
 
-    Page<ServicePostResponse> servicePostResponsePage =
-        this.serviceBoardService.getAllServices("LESSON", page, size);
+    Page<ListLessonServicePostResponse> servicePostResponsePage =
+        this.lessonService.getAllServices(page, size);
 
     return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }
