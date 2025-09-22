@@ -70,9 +70,9 @@ public class ServicePostDto {
     public static AverageDurationDto from(DurationRange durationRange) {
       return AverageDurationDto.builder()
           .minValue(durationRange.getMinValue())
-          .minUnit(durationRange.getMinUnit().name())
+          .minUnit(durationRange.getMinUnit().getKoreanName())
           .maxValue(durationRange.getMaxValue())
-          .maxUnit(durationRange.getMaxUnit().name())
+          .maxUnit(durationRange.getMaxUnit().getKoreanName())
           .build();
     }
   }
