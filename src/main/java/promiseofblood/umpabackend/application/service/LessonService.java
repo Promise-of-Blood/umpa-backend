@@ -23,6 +23,9 @@ public class LessonService {
   private final UserRepository userRepository;
   private final LessonServicePostRepository lessonServicePostRepository;
 
+  //  @Transactional(readOnly = true)
+  //  public List
+
   @Transactional
   public RetrieveLessonServicePostResponse createLessonServicePost(
       CreateLessonServicePostCommand command) {

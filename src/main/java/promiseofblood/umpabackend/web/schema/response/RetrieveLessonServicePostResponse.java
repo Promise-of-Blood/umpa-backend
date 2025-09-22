@@ -21,7 +21,7 @@ public class RetrieveLessonServicePostResponse {
 
   private String description;
 
-  private ServiceCostResponse costPerUnit;
+  private ServiceCostResponse serviceCost;
 
   private ConstantResponse<Subject> subject; // 상수
 
@@ -55,7 +55,7 @@ public class RetrieveLessonServicePostResponse {
         .thumbnailImage(lessonServicePost.getThumbnailImageUrl())
         .title(lessonServicePost.getTitle())
         .description(lessonServicePost.getDescription())
-        .costPerUnit(ServiceCostResponse.from(lessonServicePost.getServiceCost()))
+        .serviceCost(ServiceCostResponse.from(lessonServicePost.getServiceCost()))
         .subject(new ConstantResponse<>(lessonServicePost.getSubject()))
         .availableWeekDays(
             lessonServicePost.getAvailableWeekDays().stream().map(ConstantResponse::new).toList())

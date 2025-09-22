@@ -20,7 +20,7 @@ public class RetrieveMrProductionServicePostResponse {
 
   private String description;
 
-  private ServiceCostResponse costPerUnit;
+  private ServiceCostResponse serviceCost;
 
   private String additionalCostPolicy;
 
@@ -48,7 +48,7 @@ public class RetrieveMrProductionServicePostResponse {
         .id(mrProductionServicePost.getId())
         .title(mrProductionServicePost.getTitle())
         .description(mrProductionServicePost.getDescription())
-        .costPerUnit(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
+        .serviceCost(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
         .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())

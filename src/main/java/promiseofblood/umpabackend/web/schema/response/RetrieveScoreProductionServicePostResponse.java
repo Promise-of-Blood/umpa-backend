@@ -22,7 +22,7 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private String description;
 
-  private List<ServiceCostResponse> costsPerUnits;
+  private List<ServiceCostResponse> serviceCostList;
 
   private String additionalCostPolicy;
 
@@ -52,7 +52,7 @@ public class RetrieveScoreProductionServicePostResponse {
         .id(scoreProductionServicePost.getId())
         .title(scoreProductionServicePost.getTitle())
         .description(scoreProductionServicePost.getDescription())
-        .costsPerUnits(costPerUnits)
+        .serviceCostList(costPerUnits)
         .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
         .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())

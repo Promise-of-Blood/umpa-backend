@@ -21,7 +21,7 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private String description;
 
-  private ServiceCostResponse costPerUnit;
+  private ServiceCostResponse serviceCost;
 
   private String additionalCostPolicy;
 
@@ -49,7 +49,7 @@ public class RetrieveAccompanimentServicePostResponse {
         .thumbnailImage(post.getThumbnailImageUrl())
         .title(post.getTitle())
         .description(post.getDescription())
-        .costPerUnit(ServiceCostResponse.from(post.getServiceCost()))
+        .serviceCost(ServiceCostResponse.from(post.getServiceCost()))
         // 합주 서비스 필드
         .additionalCostPolicy(post.getAdditionalCostPolicy())
         .instrument(new ConstantResponse<>(post.getInstrument()))
