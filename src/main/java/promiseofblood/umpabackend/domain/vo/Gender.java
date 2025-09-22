@@ -14,7 +14,7 @@ public enum Gender implements EnumVoType {
 
   @Override
   public String getName() {
-    return this.getCode();
+    return this.name();
   }
 
   @Override

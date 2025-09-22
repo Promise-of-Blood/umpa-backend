@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.LessonServicePost;
+import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
@@ -23,12 +24,11 @@ public class RetrieveLessonServicePostResponse {
 
   private CostPerUnitDto costPerUnit;
 
-  //
-  private Subject subject;
+  private ConstantResponse<Subject> subject; // 상수
 
-  private List<WeekDay> availableWeekDays;
+  private List<ConstantResponse<WeekDay>> availableWeekDays; // 상수
 
-  private String lessonStyle;
+  private ConstantResponse<LessonStyle> lessonStyle; // 상수
 
   private Boolean isDemoLessonProvided;
 
@@ -57,9 +57,10 @@ public class RetrieveLessonServicePostResponse {
         .title(lessonServicePost.getTitle())
         .description(lessonServicePost.getDescription())
         .costPerUnit(CostPerUnitDto.from(lessonServicePost.getServiceCost()))
-        .subject(lessonServicePost.getSubject())
-        .availableWeekDays(lessonServicePost.getAvailableWeekDays())
-        .lessonStyle(lessonServicePost.getLessonStyle().name())
+        .subject(new ConstantResponse<>(lessonServicePost.getSubject()))
+        .availableWeekDays(
+            lessonServicePost.getAvailableWeekDays().stream().map(ConstantResponse::new).toList())
+        .lessonStyle(new ConstantResponse<>(lessonServicePost.getLessonStyle()))
         .isDemoLessonProvided(lessonServicePost.getIsDemoLessonProvided())
         .demoLessonCost(lessonServicePost.getDemoLessonCost())
         .recommendedTargets(lessonServicePost.getRecommendedTargets())

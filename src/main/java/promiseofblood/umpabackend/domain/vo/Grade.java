@@ -24,7 +24,7 @@ public enum Grade implements EnumVoType {
 
   @Override
   public String getName() {
-    return this.getCode();
+    return this.name();
   }
 
   @Override
