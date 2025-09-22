@@ -5,8 +5,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
-import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.domain.vo.PracticeLocation;
 import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
@@ -31,9 +31,9 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private Boolean isMrIncluded;
 
-  private Instrument instrument;
+  private ConstantResponse<Instrument> instrument;
 
-  private List<AccompanimentPracticeLocation> practiceLocations;
+  private List<ConstantResponse<PracticeLocation>> practiceLocations;
 
   private List<String> videoUrls;
 
@@ -52,11 +52,11 @@ public class RetrieveAccompanimentServicePostResponse {
         .costPerUnit(ServiceCostResponse.from(post.getServiceCost()))
         // 합주 서비스 필드
         .additionalCostPolicy(post.getAdditionalCostPolicy())
-        .instrument(post.getInstrument())
+        .instrument(new ConstantResponse<>(post.getInstrument()))
         .includedPracticeCount(post.getIncludedPracticeCount())
         .additionalPracticeCost(post.getAdditionalPracticeCost())
         .isMrIncluded(post.isMrIncluded())
-        .practiceLocations(post.getPracticeLocations())
+        .practiceLocations(post.getPracticeLocations().stream().map(ConstantResponse::new).toList())
         .videoUrls(post.getVideoUrls())
         // 선생님 프로필, 리뷰
         .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
