@@ -15,10 +15,9 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
-import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
+import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @Service
@@ -62,9 +61,8 @@ public class UserService {
 
     return LoginCompleteResponse.of(
         RetrieveFullProfileResponse.from(user),
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(user.getId(), user.getLoginId()),
-            jwtService.createRefreshToken(user.getId(), user.getLoginId())));
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
   /**
@@ -103,26 +101,21 @@ public class UserService {
 
     return LoginCompleteResponse.of(
         RetrieveFullProfileResponse.from(optionalUser.get()),
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(
-                optionalUser.get().getId(), optionalUser.get().getLoginId()),
-            jwtService.createRefreshToken(
-                optionalUser.get().getId(), optionalUser.get().getLoginId())));
+        jwtService.createAccessToken(optionalUser.get().getId(), optionalUser.get().getLoginId()),
+        jwtService.createRefreshToken(optionalUser.get().getId(), optionalUser.get().getLoginId()));
   }
 
   @Transactional
-  public LoginDto.LoginCompleteResponse refreshToken(String refreshToken) {
+  public LoginCompleteResponse refreshToken(String refreshToken) {
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
     User user =
         userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-    LoginDto.JwtPairResponse jwtPairResponse =
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(user.getId(), user.getLoginId()),
-            jwtService.createRefreshToken(user.getId(), user.getLoginId()));
-
-    return LoginCompleteResponse.of(RetrieveFullProfileResponse.from(user), jwtPairResponse);
+    return LoginCompleteResponse.of(
+        RetrieveFullProfileResponse.from(user),
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
   public CheckIsUsernameAvailableResponse isUsernameAvailable(String rawUsername) {
