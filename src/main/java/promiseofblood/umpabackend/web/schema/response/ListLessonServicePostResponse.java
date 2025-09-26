@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.LessonServicePost;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
-import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 
@@ -29,8 +28,6 @@ public class ListLessonServicePostResponse {
 
   private ConstantResponse<LessonStyle> lessonStyle;
 
-  private List<ConstantResponse<Region>> availableRegions;
-
   private String teacherName;
 
   private float reviewRating;
@@ -47,8 +44,6 @@ public class ListLessonServicePostResponse {
         .availableWeekDays(
             lessonServicePost.getAvailableWeekDays().stream().map(ConstantResponse::new).toList())
         .lessonStyle(new ConstantResponse<>(lessonServicePost.getLessonStyle()))
-        .availableRegions(
-            lessonServicePost.getAvailableRegions().stream().map(ConstantResponse::new).toList())
         .teacherName(String.valueOf((lessonServicePost.getUser().getUsername())))
         .reviewRating(0.0f)
         .build();
