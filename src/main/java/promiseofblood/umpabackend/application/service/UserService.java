@@ -1,7 +1,6 @@
 package promiseofblood.umpabackend.application.service;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -90,19 +89,19 @@ public class UserService {
   @Transactional(readOnly = true)
   public LoginCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
 
-    Optional<User> optionalUser = userRepository.findByLoginId(loginId);
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new UnauthorizedException("사용자를 찾을 수 없습니다."));
 
-    boolean userExists = optionalUser.isPresent();
-    boolean isPasswordCorrect = passwordEncoder.matches(password, optionalUser.get().getPassword());
-
-    if (!userExists || !isPasswordCorrect) {
-      throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
+    if (!passwordEncoder.matches(password, user.getPassword())) {
+      throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
     }
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(optionalUser.get()),
-        jwtService.createAccessToken(optionalUser.get().getId(), optionalUser.get().getLoginId()),
-        jwtService.createRefreshToken(optionalUser.get().getId(), optionalUser.get().getLoginId()));
+        RetrieveFullProfileResponse.from(user),
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
   @Transactional
