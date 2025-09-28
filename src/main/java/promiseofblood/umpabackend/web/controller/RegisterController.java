@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.Oauth2Service;
 import promiseofblood.umpabackend.application.service.UserService;
-import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
+import promiseofblood.umpabackend.web.schema.response.CheckIsOauth2RegisterAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
+import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 
 @RestController
 @RequestMapping("/api/v1/users/register")
@@ -35,19 +35,18 @@ public class RegisterController {
   public ResponseEntity<LoginCompleteResponse> registerUser(
       @Validated @ModelAttribute RegisterByLoginIdPasswordRequest loginIdPasswordRequest) {
 
-    LoginDto.LoginCompleteResponse loginCompleteResponse =
-        userService.registerUser(loginIdPasswordRequest);
+    LoginCompleteResponse loginCompleteResponse = userService.registerUser(loginIdPasswordRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @Tag(name = "회원가입 API")
   @PostMapping(value = "/{providerName}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  public ResponseEntity<LoginDto.LoginCompleteResponse> registerOauth2User(
+  public ResponseEntity<LoginCompleteResponse> registerOauth2User(
       @PathVariable String providerName,
       @Validated @ModelAttribute RegisterByOauth2Request oauth2RegisterRequest) {
 
-    LoginDto.LoginCompleteResponse loginCompleteResponse =
+    LoginCompleteResponse loginCompleteResponse =
         oauth2Service.registerOauth2User(providerName, oauth2RegisterRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
@@ -63,7 +62,7 @@ public class RegisterController {
 
   @Tag(name = "회원가입 API", description = "이미 가입한 OAuth2 사용자인지 확인합니다.")
   @GetMapping(value = "/check/oauth2")
-  public ResponseEntity<LoginDto.IsOauth2RegisterAvailableResponse> isOauth2Available(
+  public ResponseEntity<CheckIsOauth2RegisterAvailableResponse> isOauth2Available(
       @RequestParam @NotNull String providerName,
       @RequestParam String accessToken,
       @RequestParam String idToken) {

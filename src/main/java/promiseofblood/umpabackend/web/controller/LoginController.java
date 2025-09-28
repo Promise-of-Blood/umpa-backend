@@ -13,13 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.Oauth2Service;
 import promiseofblood.umpabackend.application.service.UserService;
-import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.web.schema.request.LoginByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.request.LoginByOauth2Request;
 import promiseofblood.umpabackend.web.schema.request.RefreshJwtRequest;
+import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -34,7 +33,7 @@ public class LoginController {
   public ResponseEntity<LoginCompleteResponse> createOauth2Token(
       @PathVariable String providerName, @RequestBody LoginByOauth2Request oauth2LoginRequest) {
 
-    LoginDto.LoginCompleteResponse loginCompleteResponse =
+    LoginCompleteResponse loginCompleteResponse =
         oauth2Service.generateOauth2Jwt(
             providerName,
             oauth2LoginRequest.getExternalIdToken(),
@@ -44,17 +43,17 @@ public class LoginController {
   }
 
   @PostMapping("/token/general")
-  public ResponseEntity<LoginDto.LoginCompleteResponse> createToken(
+  public ResponseEntity<LoginCompleteResponse> createToken(
       @RequestBody LoginByLoginIdPasswordRequest request) {
 
-    LoginDto.LoginCompleteResponse loginCompleteResponse =
+    LoginCompleteResponse loginCompleteResponse =
         userService.loginIdPasswordJwtLogin(request.getLoginId(), request.getPassword());
 
     return ResponseEntity.ok(loginCompleteResponse);
   }
 
   @PostMapping("/refresh-token")
-  public ResponseEntity<LoginDto.LoginCompleteResponse> refreshToken(
+  public ResponseEntity<LoginCompleteResponse> refreshToken(
       @RequestBody RefreshJwtRequest request) {
 
     return ResponseEntity.ok(userService.refreshToken(request.getRefreshToken()));

@@ -1,7 +1,6 @@
 package promiseofblood.umpabackend.application.service;
 
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -15,10 +14,9 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
-import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
+import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @Service
@@ -62,9 +60,8 @@ public class UserService {
 
     return LoginCompleteResponse.of(
         RetrieveFullProfileResponse.from(user),
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(user.getId(), user.getLoginId()),
-            jwtService.createRefreshToken(user.getId(), user.getLoginId())));
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
   /**
@@ -92,37 +89,32 @@ public class UserService {
   @Transactional(readOnly = true)
   public LoginCompleteResponse loginIdPasswordJwtLogin(String loginId, String password) {
 
-    Optional<User> optionalUser = userRepository.findByLoginId(loginId);
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new UnauthorizedException("사용자를 찾을 수 없습니다."));
 
-    boolean userExists = optionalUser.isPresent();
-    boolean isPasswordCorrect = passwordEncoder.matches(password, optionalUser.get().getPassword());
-
-    if (!userExists || !isPasswordCorrect) {
-      throw new UnauthorizedException("사용자를 찾을 수 없습니다. 또는 비밀번호가 일치하지 않습니다.");
+    if (!passwordEncoder.matches(password, user.getPassword())) {
+      throw new UnauthorizedException("비밀번호가 일치하지 않습니다.");
     }
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(optionalUser.get()),
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(
-                optionalUser.get().getId(), optionalUser.get().getLoginId()),
-            jwtService.createRefreshToken(
-                optionalUser.get().getId(), optionalUser.get().getLoginId())));
+        RetrieveFullProfileResponse.from(user),
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
   @Transactional
-  public LoginDto.LoginCompleteResponse refreshToken(String refreshToken) {
+  public LoginCompleteResponse refreshToken(String refreshToken) {
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
     User user =
         userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
 
-    LoginDto.JwtPairResponse jwtPairResponse =
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(user.getId(), user.getLoginId()),
-            jwtService.createRefreshToken(user.getId(), user.getLoginId()));
-
-    return LoginCompleteResponse.of(RetrieveFullProfileResponse.from(user), jwtPairResponse);
+    return LoginCompleteResponse.of(
+        RetrieveFullProfileResponse.from(user),
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
   public CheckIsUsernameAvailableResponse isUsernameAvailable(String rawUsername) {
