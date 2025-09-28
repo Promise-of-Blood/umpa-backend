@@ -1,22 +1,34 @@
 package promiseofblood.umpabackend.application.service;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import promiseofblood.umpabackend.application.exception.UnauthorizedException;
+import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
+import promiseofblood.umpabackend.domain.vo.Gender;
+import promiseofblood.umpabackend.domain.vo.ProfileType;
+import promiseofblood.umpabackend.domain.vo.Role;
+import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
   @Mock private UserRepository userRepository;
+  @Mock private JwtService jwtService;
+  @Mock private PasswordEncoder passwordEncoder;
 
   @InjectMocks private UserService userService;
 
@@ -40,5 +52,51 @@ class UserServiceTest {
     boolean isAvailable = userService.isUsernameDuplicated(username);
 
     assertTrue(isAvailable, "Username은 존재하지 않으므로 사용 가능해야 합니다.");
+  }
+
+  @Test
+  @DisplayName("loginIdPasswordJwtLogin 메서드는 존재하지 않는 로그인ID로 로그인 시도 시 UnauthorizedException을 던진다.")
+  void loginIdPasswordJwtLogin_NonExistentLoginId_ThrowsUnauthorizedException() {
+    String nonExistentLoginId = "nonexistent";
+    String password = "anyPassword";
+
+    when(userRepository.findByLoginId(nonExistentLoginId)).thenReturn(Optional.empty());
+
+    assertThrows(
+        UnauthorizedException.class,
+        () -> userService.loginIdPasswordJwtLogin(nonExistentLoginId, password),
+        "존재하지 않는 로그인ID로 로그인 시도 시 UnauthorizedException이 발생해야 합니다.");
+  }
+
+  @Test
+  @DisplayName(
+      "loginIdPasswordJwtLogin 메서드는 알맞는 로그인ID 와 비밀번호로 로그인 시, user 프로필 정보와 함께 jwtPair를 반환한다.")
+  void loginIdPasswordJwtLogin_ValidCredentials_ReturnsLoginCompleteResponse() {
+    String loginId = "validUser";
+    String rawPassword = "plainPassword";
+    String encodedPassword = "encodedPassword";
+
+    User user =
+        User.register(
+            loginId,
+            encodedPassword,
+            Gender.MALE,
+            UserStatus.ACTIVE,
+            Role.USER,
+            "nickname",
+            ProfileType.STUDENT,
+            "http://example.com/profile.png");
+
+    when(userRepository.findByLoginId(loginId)).thenReturn(Optional.of(user));
+    when(passwordEncoder.matches(rawPassword, encodedPassword)).thenReturn(true);
+    when(jwtService.createAccessToken(user.getId(), user.getLoginId())).thenReturn("access-token");
+    when(jwtService.createRefreshToken(user.getId(), user.getLoginId()))
+        .thenReturn("refresh-token");
+
+    var response = userService.loginIdPasswordJwtLogin(loginId, rawPassword);
+
+    assertEquals(user.getLoginId(), response.getUser().getLoginId());
+    assertEquals("access-token", response.getJwtPair().getAccessToken());
+    assertEquals("refresh-token", response.getJwtPair().getRefreshToken());
   }
 }
