@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +21,7 @@ import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
 import promiseofblood.umpabackend.web.schema.response.CheckIsOauth2RegisterAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
 @RestController
 @RequestMapping("/api/v1/users/register")
@@ -38,6 +40,17 @@ public class RegisterController {
     LoginCompleteResponse loginCompleteResponse = userService.registerUser(loginIdPasswordRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
+  }
+
+  @Tag(name = "회원가입 API")
+  @PostMapping(value = "/admin", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PreAuthorize("hasRole('ADMIN')")
+  public ResponseEntity<RetrieveFullProfileResponse> registerAdmin(
+      @Validated @ModelAttribute RegisterByLoginIdPasswordRequest adminRegisterRequest) {
+
+    RetrieveFullProfileResponse created = userService.registerAdmin(adminRegisterRequest);
+
+    return ResponseEntity.status(201).body(created);
   }
 
   @Tag(name = "회원가입 API")

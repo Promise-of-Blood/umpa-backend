@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.application.exception.RegistrationException;
+import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
@@ -65,6 +66,43 @@ public class UserService {
   }
 
   /**
+   * 관리자 페이지에서 관리자 유저를 생성합니다. 생성 시 상태는 `ACTIVE`, 역할은 `ADMIN`으로 설정합니다.
+   *
+   * @param adminRegisterRequest 일반 회원가입과 동일한 폼
+   * @return 생성된 사용자 프로필
+   */
+  @Transactional
+  public RetrieveFullProfileResponse registerAdmin(
+      RegisterByLoginIdPasswordRequest adminRegisterRequest) {
+
+    if (this.isLoginIdAvailable(adminRegisterRequest.getLoginId())) {
+      throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
+    }
+
+    String storedFilePath = null;
+    if (adminRegisterRequest.getProfileImage() != null) {
+      storedFilePath =
+          this.uploadProfileImage(
+              adminRegisterRequest.getLoginId(), adminRegisterRequest.getProfileImage());
+    }
+
+    User user =
+        User.register(
+            adminRegisterRequest.getLoginId(),
+            passwordEncoder.encode(adminRegisterRequest.getPassword()),
+            adminRegisterRequest.getGender(),
+            UserStatus.ACTIVE,
+            Role.ADMIN,
+            adminRegisterRequest.getUsername(),
+            adminRegisterRequest.getProfileType(),
+            storedFilePath);
+
+    user = userRepository.save(user);
+
+    return RetrieveFullProfileResponse.from(user);
+  }
+
+  /**
    * 사용자 목록을 조회합니다.
    *
    * @return 사용자 목록
@@ -106,10 +144,18 @@ public class UserService {
 
   @Transactional
   public LoginCompleteResponse refreshToken(String refreshToken) {
+    jwtService.verifyJwt(refreshToken);
+
+    if (!jwtService.getTypeFromToken(refreshToken).equals("refresh")) {
+      throw new UnauthorizedException("유효하지 않은 토큰입니다.");
+    }
+
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
     User user =
-        userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
     return LoginCompleteResponse.of(
         RetrieveFullProfileResponse.from(user),
