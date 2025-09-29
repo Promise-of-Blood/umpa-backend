@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.application.exception.RegistrationException;
+import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
@@ -143,10 +144,18 @@ public class UserService {
 
   @Transactional
   public LoginCompleteResponse refreshToken(String refreshToken) {
+    jwtService.verifyJwt(refreshToken);
+
+    if (!jwtService.getTypeFromToken(refreshToken).equals("refresh")) {
+      throw new UnauthorizedException("유효하지 않은 토큰입니다.");
+    }
+
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
     User user =
-        userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
     return LoginCompleteResponse.of(
         RetrieveFullProfileResponse.from(user),
