@@ -65,6 +65,43 @@ public class UserService {
   }
 
   /**
+   * 관리자 페이지에서 관리자 유저를 생성합니다. 생성 시 상태는 `ACTIVE`, 역할은 `ADMIN`으로 설정합니다.
+   *
+   * @param adminRegisterRequest 일반 회원가입과 동일한 폼
+   * @return 생성된 사용자 프로필
+   */
+  @Transactional
+  public RetrieveFullProfileResponse registerAdmin(
+      RegisterByLoginIdPasswordRequest adminRegisterRequest) {
+
+    if (this.isLoginIdAvailable(adminRegisterRequest.getLoginId())) {
+      throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
+    }
+
+    String storedFilePath = null;
+    if (adminRegisterRequest.getProfileImage() != null) {
+      storedFilePath =
+          this.uploadProfileImage(
+              adminRegisterRequest.getLoginId(), adminRegisterRequest.getProfileImage());
+    }
+
+    User user =
+        User.register(
+            adminRegisterRequest.getLoginId(),
+            passwordEncoder.encode(adminRegisterRequest.getPassword()),
+            adminRegisterRequest.getGender(),
+            UserStatus.ACTIVE,
+            Role.ADMIN,
+            adminRegisterRequest.getUsername(),
+            adminRegisterRequest.getProfileType(),
+            storedFilePath);
+
+    user = userRepository.save(user);
+
+    return RetrieveFullProfileResponse.from(user);
+  }
+
+  /**
    * 사용자 목록을 조회합니다.
    *
    * @return 사용자 목록

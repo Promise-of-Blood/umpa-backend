@@ -66,6 +66,9 @@ public class SecurityConfig {
                 // 회원가입/토큰발급 API 접근 허용
                 .requestMatchers("/api/v1/users/register/**")
                 .permitAll()
+                // 어드민 api는 인증되어야지 가능함
+                .requestMatchers("/api/v1/users/register/admin")
+                .authenticated()
                 .requestMatchers("/api/v1/users/callback/**")
                 .permitAll()
                 .requestMatchers("/api/v1/users/token/**")
