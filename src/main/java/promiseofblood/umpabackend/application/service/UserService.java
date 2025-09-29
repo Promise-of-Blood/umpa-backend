@@ -16,6 +16,7 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
+import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordWithRoleRequest;
 import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
@@ -65,36 +66,34 @@ public class UserService {
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
-  /**
-   * 관리자 페이지에서 관리자 유저를 생성합니다. 생성 시 상태는 `ACTIVE`, 역할은 `ADMIN`으로 설정합니다.
-   *
-   * @param adminRegisterRequest 일반 회원가입과 동일한 폼
-   * @return 생성된 사용자 프로필
-   */
   @Transactional
   public RetrieveFullProfileResponse registerAdmin(
-      RegisterByLoginIdPasswordRequest adminRegisterRequest) {
+      RegisterByLoginIdPasswordWithRoleRequest adminRegisterRequest) {
 
-    if (this.isLoginIdAvailable(adminRegisterRequest.getLoginId())) {
-      throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
+    if (this.isLoginIdAvailable(adminRegisterRequest.loginId())) {
+      throw new RegistrationException("이미 사용 중인 로그인ID입니다.");
+    }
+
+    if (!this.isUsernameDuplicated(new Username(adminRegisterRequest.username()))) {
+      throw new RegistrationException("이미 사용 중인 닉네임입니다.");
     }
 
     String storedFilePath = null;
-    if (adminRegisterRequest.getProfileImage() != null) {
+    if (adminRegisterRequest.profileImage() != null) {
       storedFilePath =
           this.uploadProfileImage(
-              adminRegisterRequest.getLoginId(), adminRegisterRequest.getProfileImage());
+              adminRegisterRequest.loginId(), adminRegisterRequest.profileImage());
     }
 
     User user =
         User.register(
-            adminRegisterRequest.getLoginId(),
-            passwordEncoder.encode(adminRegisterRequest.getPassword()),
-            adminRegisterRequest.getGender(),
+            adminRegisterRequest.loginId(),
+            passwordEncoder.encode(adminRegisterRequest.password()),
+            adminRegisterRequest.gender(),
             UserStatus.ACTIVE,
-            Role.ADMIN,
-            adminRegisterRequest.getUsername(),
-            adminRegisterRequest.getProfileType(),
+            adminRegisterRequest.role(),
+            adminRegisterRequest.username(),
+            adminRegisterRequest.profileType(),
             storedFilePath);
 
     user = userRepository.save(user);
