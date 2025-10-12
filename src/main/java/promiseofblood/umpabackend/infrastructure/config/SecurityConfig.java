@@ -84,7 +84,7 @@ public class SecurityConfig {
                 .requestMatchers(DELETE, "/api/v1/services/**")
                 .authenticated()
                 // 어드민 api는 인증되어야지 가능함
-                .requestMatchers("/api/v1/users/register/admin")
+                .requestMatchers("/api/v1/admin/users/register")
                 .authenticated()
                 .anyRequest()
                 .authenticated());
