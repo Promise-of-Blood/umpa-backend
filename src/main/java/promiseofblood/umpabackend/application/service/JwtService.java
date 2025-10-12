@@ -34,6 +34,11 @@ public class JwtService {
     verifier.verify(token);
   }
 
+  public String getTypeFromToken(String token) {
+    DecodedJWT jwt = this.decodeJwt(token);
+    return jwt.getClaim("type").asString();
+  }
+
   public Long getUserIdFromToken(String token) {
     DecodedJWT jwt = this.decodeJwt(token);
     return jwt.getClaim("id").asLong();

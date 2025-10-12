@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import promiseofblood.umpabackend.application.exception.RegistrationException;
+import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
@@ -15,6 +16,7 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
+import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordWithRoleRequest;
 import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
@@ -64,6 +66,41 @@ public class UserService {
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
+  @Transactional
+  public RetrieveFullProfileResponse registerAdmin(
+      RegisterByLoginIdPasswordWithRoleRequest adminRegisterRequest) {
+
+    if (this.isLoginIdAvailable(adminRegisterRequest.loginId())) {
+      throw new RegistrationException("이미 사용 중인 로그인ID입니다.");
+    }
+
+    if (!this.isUsernameDuplicated(new Username(adminRegisterRequest.username()))) {
+      throw new RegistrationException("이미 사용 중인 닉네임입니다.");
+    }
+
+    String storedFilePath = null;
+    if (adminRegisterRequest.profileImage() != null) {
+      storedFilePath =
+          this.uploadProfileImage(
+              adminRegisterRequest.loginId(), adminRegisterRequest.profileImage());
+    }
+
+    User user =
+        User.register(
+            adminRegisterRequest.loginId(),
+            passwordEncoder.encode(adminRegisterRequest.password()),
+            adminRegisterRequest.gender(),
+            UserStatus.ACTIVE,
+            adminRegisterRequest.role(),
+            adminRegisterRequest.username(),
+            adminRegisterRequest.profileType(),
+            storedFilePath);
+
+    user = userRepository.save(user);
+
+    return RetrieveFullProfileResponse.from(user);
+  }
+
   /**
    * 사용자 목록을 조회합니다.
    *
@@ -106,10 +143,18 @@ public class UserService {
 
   @Transactional
   public LoginCompleteResponse refreshToken(String refreshToken) {
+    jwtService.verifyJwt(refreshToken);
+
+    if (!jwtService.getTypeFromToken(refreshToken).equals("refresh")) {
+      throw new UnauthorizedException("유효하지 않은 토큰입니다.");
+    }
+
     Long userId = jwtService.getUserIdFromToken(refreshToken);
 
     User user =
-        userRepository.findById(userId).orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
     return LoginCompleteResponse.of(
         RetrieveFullProfileResponse.from(user),

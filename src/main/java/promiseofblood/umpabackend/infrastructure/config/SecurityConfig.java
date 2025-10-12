@@ -70,6 +70,8 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/api/v1/users/token/**")
                 .permitAll()
+                .requestMatchers("/api/v1/users/refresh-token/**")
+                .permitAll()
                 .requestMatchers("/api/v1/users/oauth2-authorization-urls")
                 .permitAll()
                 // 서비스 API 접근 제어 - GET 요청은 모두 허용, POST/PUT/DELETE는 인증 필요
@@ -80,6 +82,9 @@ public class SecurityConfig {
                 .requestMatchers(PUT, "/api/v1/services/**")
                 .authenticated()
                 .requestMatchers(DELETE, "/api/v1/services/**")
+                .authenticated()
+                // 어드민 api는 인증되어야지 가능함
+                .requestMatchers("/api/v1/admin/users/register")
                 .authenticated()
                 .anyRequest()
                 .authenticated());
