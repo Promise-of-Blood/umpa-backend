@@ -125,7 +125,6 @@ public class UserService {
         userRepository
             .findByLoginId(command.getLoginId())
             .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
-
     if (command.isHardDelete()) {
       userRepository.delete(user);
     } else {
