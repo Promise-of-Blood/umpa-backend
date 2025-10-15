@@ -141,4 +141,8 @@ public class User extends TimeStampedEntity {
       this.profileType = profileType;
     }
   }
+
+  public void withdraw() {
+    this.userStatus = UserStatus.WITHDRAWN;
+  }
 }

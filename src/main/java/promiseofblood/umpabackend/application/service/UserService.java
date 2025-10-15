@@ -7,6 +7,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import promiseofblood.umpabackend.application.command.DeleteUserCommand;
 import promiseofblood.umpabackend.application.exception.RegistrationException;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
@@ -101,11 +102,6 @@ public class UserService {
     return RetrieveFullProfileResponse.from(user);
   }
 
-  /**
-   * 사용자 목록을 조회합니다.
-   *
-   * @return 사용자 목록
-   */
   @Transactional(readOnly = true)
   public List<RetrieveFullProfileResponse> getUsers() {
 
@@ -118,9 +114,23 @@ public class UserService {
     User user =
         userRepository
             .findByLoginId(loginId)
-            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
     return RetrieveFullProfileResponse.from(user);
+  }
+
+  @Transactional
+  public void deleteUser(DeleteUserCommand command) {
+    User user =
+        userRepository
+            .findByLoginId(command.getLoginId())
+            .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
+    if (command.isHardDelete()) {
+      userRepository.delete(user);
+    } else {
+      user.withdraw();
+      userRepository.save(user);
+    }
   }
 
   @Transactional(readOnly = true)
