@@ -19,16 +19,6 @@ public class JwtService {
 
   private final JwtConfig jwtConfig;
 
-  public boolean validateToken(String token) {
-    try {
-      verifyJwt(token);
-      return true;
-    } catch (Exception e) {
-      log.error("Invalid JWT token: {}", e.getMessage());
-      return false;
-    }
-  }
-
   public String createAccessToken(Long id, String loginId) {
 
     return createJwt("access", id, loginId, jwtConfig.getAccessTokenExpiration());

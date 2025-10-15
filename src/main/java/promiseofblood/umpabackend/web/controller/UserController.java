@@ -3,6 +3,7 @@ package promiseofblood.umpabackend.web.controller;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.beans.PropertyEditorSupport;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +33,17 @@ public class UserController {
 
   private final UserService userService;
   private final ProfileService profileService;
+
+  // ****************
+  // * 사용자 관리 API *
+  // ****************
+  @Tag(name = "사용자 관리 API")
+  @GetMapping("")
+  public ResponseEntity<List<RetrieveFullProfileResponse>> getUser() {
+    List<RetrieveFullProfileResponse> users = userService.getUsers();
+
+    return ResponseEntity.ok(users);
+  }
 
   // ****************
   // * 프로필 관리 API *
