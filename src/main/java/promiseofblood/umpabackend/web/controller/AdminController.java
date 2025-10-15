@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.command.DeleteUserCommand;
 import promiseofblood.umpabackend.application.service.UserService;
+import promiseofblood.umpabackend.web.schema.request.DeleteUserRequest;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordWithRoleRequest;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
 
@@ -47,14 +48,9 @@ public class AdminController {
 
   @DeleteMapping("/users/{loginId}")
   public void deleteUser(
-      @PathVariable String loginId,
-      @RequestParam(required = false, name = "hard_delete", defaultValue = "false")
-          boolean isHardDelete) {
+      @PathVariable String loginId, @RequestBody DeleteUserRequest deleteUserRequest) {
 
-    System.out.println("hard_delete: " + isHardDelete);
-    System.out.println(userService.getUserByLoginId(loginId));
-
-    var command = new DeleteUserCommand(loginId, isHardDelete);
+    var command = new DeleteUserCommand(loginId, deleteUserRequest.getIsHardDelete());
     userService.deleteUser(command);
   }
 }
