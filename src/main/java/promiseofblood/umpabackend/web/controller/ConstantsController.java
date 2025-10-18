@@ -13,6 +13,7 @@ import promiseofblood.umpabackend.application.service.ConstantService;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
+import promiseofblood.umpabackend.domain.vo.PracticeLocation;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
 import promiseofblood.umpabackend.web.schema.response.ConstantResponse;
@@ -75,6 +76,17 @@ public class ConstantsController {
     List<ConstantResponse<LessonStyle>> responses = new ArrayList<>();
     for (LessonStyle lessonStyle : LessonStyle.values()) {
       responses.add(new ConstantResponse<>(lessonStyle));
+    }
+
+    return ResponseEntity.ok(responses);
+  }
+
+  @GetMapping("/practiceLocations")
+  public ResponseEntity<List<ConstantResponse<PracticeLocation>>> getPracticeLocations() {
+
+    List<ConstantResponse<PracticeLocation>> responses = new ArrayList<>();
+    for (PracticeLocation practiceLocation : PracticeLocation.values()) {
+      responses.add(new ConstantResponse<>(practiceLocation));
     }
 
     return ResponseEntity.ok(responses);
