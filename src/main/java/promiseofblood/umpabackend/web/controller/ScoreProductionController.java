@@ -17,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ScoreProductionService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
-import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.request.CreateScoreProductionServicePosRequest;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
 import promiseofblood.umpabackend.web.schema.response.ListScoreProductionServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServicePostResponse;
@@ -36,8 +36,7 @@ public class ScoreProductionController {
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveScoreProductionServicePostResponse> registerScoreProduction(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-      @ModelAttribute
-          ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+      @ModelAttribute CreateScoreProductionServicePosRequest scoreProductionRequest) {
 
     String loginId = securityUserDetails.getUsername();
     RetrieveScoreProductionServicePostResponse scoreProductionServicePostResponse =
