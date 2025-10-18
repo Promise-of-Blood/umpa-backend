@@ -7,7 +7,7 @@ import lombok.*;
 public enum DurationUnit implements EnumVoType {
   DAY("일"),
   WEEK("주"),
-  MONTH("월");
+  MONTH("개월");
 
   private final String koreanName;
 

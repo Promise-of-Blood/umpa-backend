@@ -13,14 +13,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import promiseofblood.umpabackend.application.service.JwtService;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class JwtChannelInterceptor implements ChannelInterceptor {
 
-  private final JwtService jwtService;
   private final UserDetailsService userDetailsService;
 
   @Override
@@ -29,22 +27,20 @@ public class JwtChannelInterceptor implements ChannelInterceptor {
         MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
 
     if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-      String jwt = accessor.getFirstNativeHeader("Authorization");
-      log.error("CONNECT jwt: {}", jwt);
+      // Get loginId from session attributes (set during handshake)
+      String loginId = (String) accessor.getSessionAttributes().get("loginId");
 
-      if (jwt != null) {
-        if (jwtService.validateToken(jwt)) {
-          String loginId = jwtService.getLoginIdFromToken(jwt);
-          UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
-          Authentication authentication =
-              new UsernamePasswordAuthenticationToken(
-                  userDetails, "", userDetails.getAuthorities());
-          accessor.getSessionAttributes().put("userAuthentication", authentication);
-          accessor.setUser(authentication);
-          log.error("Set user: {}", authentication.getName());
-        }
+      if (loginId != null) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(loginId);
+        Authentication authentication =
+            new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+        accessor.setUser(authentication);
+        log.info("WebSocket CONNECT: Set user authentication for {}", loginId);
+      } else {
+        log.warn("WebSocket CONNECT: No loginId found in session attributes");
       }
     }
+
     return message;
   }
 }

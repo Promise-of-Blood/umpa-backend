@@ -6,16 +6,18 @@ spring:
     hibernate:
       ddl-auto: validate
     defer-datasource-initialization: true
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
+        show_sql: false
+        format_sql: false
     open-in-view: false
 
 springdoc:
+
   api-docs:
     path: /api/docs/openapi-json
+    version: openapi_3_0
 
   swagger-ui:
     path: /api/docs
