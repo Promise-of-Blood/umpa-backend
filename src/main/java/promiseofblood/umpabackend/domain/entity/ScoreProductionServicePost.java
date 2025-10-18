@@ -33,7 +33,7 @@ public class ScoreProductionServicePost extends ServicePost {
 
   private List<String> usingSoftwareList;
 
-  private String sampleScoreImageUrl;
+  @ElementCollection private List<SampleScoreImageUrl> sampleScoreImageUrls;
 
   @Override
   public String getCostAndUnit() {

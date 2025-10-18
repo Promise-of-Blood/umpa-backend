@@ -5,6 +5,7 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import promiseofblood.umpabackend.domain.entity.SampleScoreImageUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
@@ -34,7 +35,7 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private List<String> softwareList;
 
-  private String sampleScoreImageUrl;
+  private List<String> sampleScoreImageUrls;
 
   private TeacherAuthorProfileDto teacherProfile;
 
@@ -47,7 +48,18 @@ public class RetrieveScoreProductionServicePostResponse {
     for (ServiceCost serviceCost : scoreProductionServicePost.getServiceCosts()) {
       costPerUnits.add(ServiceCostResponse.from(serviceCost));
     }
-    System.out.println(scoreProductionServicePost.getAverageDuration());
+
+    List<String> usingSoftwareList =
+        scoreProductionServicePost.getUsingSoftwareList() != null
+            ? scoreProductionServicePost.getUsingSoftwareList()
+            : List.of();
+
+    List<String> sampleScoreImageUrls = new ArrayList<>();
+    for (SampleScoreImageUrl sampleScoreImageUrl :
+        scoreProductionServicePost.getSampleScoreImageUrls()) {
+      sampleScoreImageUrls.add(sampleScoreImageUrl.getUrl());
+    }
+
     return RetrieveScoreProductionServicePostResponse.builder()
         .id(scoreProductionServicePost.getId())
         .title(scoreProductionServicePost.getTitle())
@@ -56,12 +68,9 @@ public class RetrieveScoreProductionServicePostResponse {
         .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
         .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
-        .softwareList(
-            scoreProductionServicePost.getUsingSoftwareList() != null
-                ? scoreProductionServicePost.getUsingSoftwareList()
-                : List.of())
+        .softwareList(usingSoftwareList)
         .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
-        .sampleScoreImageUrl(scoreProductionServicePost.getSampleScoreImageUrl())
+        .sampleScoreImageUrls(sampleScoreImageUrls)
         .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
         .reviewRating(0.1f)
         .build();
