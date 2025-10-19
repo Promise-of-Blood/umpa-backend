@@ -84,23 +84,4 @@ public class ServicePostDto {
           .build();
     }
   }
-
-  @Getter
-  @Builder
-  public static class ServicePostResponse {
-
-    private Long id;
-
-    private String title;
-
-    private List<String> tags;
-
-    private String teacherName;
-
-    private String thumbnailImageUrl;
-
-    private String costAndUnit;
-
-    private Float reviewRating;
-  }
 }

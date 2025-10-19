@@ -34,31 +34,6 @@ public class ServiceBoardService {
   private final ServicePostRepository servicePostRepository;
 
   @Transactional
-  public Page<ServicePostDto.ServicePostResponse> getAllServices(
-      String serviceType, int page, int size) {
-    Page<ServicePost> servicePostPage =
-        servicePostRepository.findAllByServiceType(serviceType, PageRequest.of(page, size));
-
-    return servicePostPage.map(
-        servicePost -> {
-          User teacherUser =
-              userRepository
-                  .findById(servicePost.getUser().getId())
-                  .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
-          return ServicePostDto.ServicePostResponse.builder()
-              .id(servicePost.getId())
-              .title(servicePost.getTitle())
-              .tags(List.of("기타", "보컬"))
-              .teacherName(teacherUser.getUsername().getValue())
-              .thumbnailImageUrl(servicePost.getThumbnailImageUrl())
-              .costAndUnit(servicePost.getCostAndUnit())
-              .reviewRating(5.0f)
-              .build();
-        });
-  }
-
-  @Transactional
   public RetrieveAccompanimentServicePostResponse createAccompanimentServicePost(
       String loginId,
       AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
