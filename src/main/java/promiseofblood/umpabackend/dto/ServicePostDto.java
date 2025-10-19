@@ -1,5 +1,6 @@
 package promiseofblood.umpabackend.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -19,6 +20,11 @@ public class ServicePostDto {
   @Getter
   @Builder(access = AccessLevel.PRIVATE)
   public static class TeacherAuthorProfileDto {
+
+    private String loginId;
+
+    @Schema(nullable = true)
+    private String username;
 
     private String keyphrase;
 
@@ -45,6 +51,8 @@ public class ServicePostDto {
       }
 
       return TeacherAuthorProfileDto.builder()
+          .loginId(user.getLoginId())
+          .username(user.getUsername().getValue())
           .keyphrase(teacherProfile.getKeyphrase())
           .profileImageUrl(user.getProfileImageUrl())
           .description(teacherProfile.getDescription())
