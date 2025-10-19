@@ -15,7 +15,7 @@ import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
+import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
 import promiseofblood.umpabackend.web.schema.request.CreateScoreProductionServicePosRequest;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServicePostResponse;
@@ -32,7 +32,7 @@ public class ServiceBoardService {
   @Transactional
   public RetrieveAccompanimentServicePostResponse createAccompanimentServicePost(
       String loginId,
-      AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+      CreateAccompanimentServicePostRequest accompanimentPostRequest) {
 
     User user =
         userRepository
