@@ -62,7 +62,10 @@ public class RetrieveFullProfileResponse {
             user.getStudentProfile() == null
                 ? null
                 : RetrieveStudentProfileResponse.from(user.getStudentProfile()))
-        .oauth2User(user.getOauth2User() == null ? null : RetrieveOauth2ProfileResponse.of(user.getOauth2User()))
+        .oauth2User(
+            user.getOauth2User() == null
+                ? null
+                : RetrieveOauth2ProfileResponse.of(user.getOauth2User()))
         .createdAt(user.getCreatedAt())
         .updatedAt(user.getUpdatedAt())
         .build();

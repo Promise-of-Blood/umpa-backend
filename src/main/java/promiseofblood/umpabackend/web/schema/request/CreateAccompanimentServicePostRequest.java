@@ -16,8 +16,7 @@ import promiseofblood.umpabackend.domain.vo.PracticeLocation;
 public class CreateAccompanimentServicePostRequest {
 
   @Schema(type = "string", format = "binary", description = "대표 사진")
-  @NotNull
-  private MultipartFile thumbnailImage;
+  @NotNull private MultipartFile thumbnailImage;
 
   @Schema(type = "string", description = "서비스 제목")
   @NotBlank

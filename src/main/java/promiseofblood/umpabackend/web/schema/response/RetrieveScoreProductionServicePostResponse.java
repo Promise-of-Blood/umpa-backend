@@ -9,7 +9,6 @@ import promiseofblood.umpabackend.domain.entity.SampleScoreImageUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
@@ -37,7 +36,7 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private List<String> sampleScoreImageUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
@@ -71,7 +70,8 @@ public class RetrieveScoreProductionServicePostResponse {
         .softwareList(usingSoftwareList)
         .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
         .sampleScoreImageUrls(sampleScoreImageUrls)
-        .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
+        .teacherProfile(
+            RetrieveTeacherAuthorProfileResponse.from(scoreProductionServicePost.getUser()))
         .reviewRating(0.1f)
         .build();
   }

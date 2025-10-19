@@ -6,7 +6,6 @@ import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
 import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder
@@ -34,7 +33,7 @@ public class RetrieveMrProductionServicePostResponse {
 
   private List<String> sampleMrUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
@@ -58,7 +57,8 @@ public class RetrieveMrProductionServicePostResponse {
                 ? mrProductionServicePost.getUsingSoftwareList()
                 : List.of())
         .sampleMrUrls(sampleMrUrls)
-        .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
+        .teacherProfile(
+            RetrieveTeacherAuthorProfileResponse.from(mrProductionServicePost.getUser()))
         .reviewRating(0.0f)
         .build();
   }

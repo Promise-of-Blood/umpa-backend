@@ -16,7 +16,6 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
-import promiseofblood.umpabackend.web.schema.response.RetrieveOauth2ProviderInfoResponse;
 import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2Strategy;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2StrategyFactory;
@@ -25,6 +24,7 @@ import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
 import promiseofblood.umpabackend.web.schema.response.CheckIsOauth2RegisterAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveOauth2ProviderInfoResponse;
 
 @Service
 @RequiredArgsConstructor

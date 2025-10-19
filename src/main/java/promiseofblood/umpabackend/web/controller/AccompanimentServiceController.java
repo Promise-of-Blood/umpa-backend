@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.query.RetrieveAccompanimentServicePostQuery;
 import promiseofblood.umpabackend.application.service.AccompanimentService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
-import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
 import promiseofblood.umpabackend.web.schema.response.ListAccompanimentServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
@@ -42,8 +42,7 @@ public class AccompanimentServiceController {
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveAccompanimentServicePostResponse> registerAccompaniment(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-      @ModelAttribute @Valid
-      CreateAccompanimentServicePostRequest accompanimentPostRequest) {
+      @ModelAttribute @Valid CreateAccompanimentServicePostRequest accompanimentPostRequest) {
     String loginId = securityUserDetails.getUsername();
 
     RetrieveAccompanimentServicePostResponse accompanimentPostResponse =

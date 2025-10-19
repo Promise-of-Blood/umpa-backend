@@ -31,8 +31,7 @@ public class ServiceBoardService {
 
   @Transactional
   public RetrieveAccompanimentServicePostResponse createAccompanimentServicePost(
-      String loginId,
-      CreateAccompanimentServicePostRequest accompanimentPostRequest) {
+      String loginId, CreateAccompanimentServicePostRequest accompanimentPostRequest) {
 
     User user =
         userRepository

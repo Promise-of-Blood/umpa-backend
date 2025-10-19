@@ -7,7 +7,6 @@ import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.vo.Instrument;
 import promiseofblood.umpabackend.domain.vo.PracticeLocation;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
@@ -37,7 +36,7 @@ public class RetrieveAccompanimentServicePostResponse {
 
   private List<String> videoUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
@@ -59,7 +58,7 @@ public class RetrieveAccompanimentServicePostResponse {
         .practiceLocations(post.getPracticeLocations().stream().map(ConstantResponse::new).toList())
         .videoUrls(post.getVideoUrls())
         // 선생님 프로필, 리뷰
-        .teacherProfile(TeacherAuthorProfileDto.from(post.getUser()))
+        .teacherProfile(RetrieveTeacherAuthorProfileResponse.from(post.getUser()))
         .reviewRating(0.0f)
         .build();
   }
