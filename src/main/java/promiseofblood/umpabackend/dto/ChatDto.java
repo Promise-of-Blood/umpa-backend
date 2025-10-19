@@ -19,10 +19,4 @@ public class ChatDto {
     private String message;
     private String sentAt;
   }
-
-  @Getter
-  @Setter
-  public static class SendMessageRequest {
-    private String message;
-  }
 }
