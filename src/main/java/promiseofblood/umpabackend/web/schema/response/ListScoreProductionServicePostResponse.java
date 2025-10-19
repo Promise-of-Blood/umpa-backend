@@ -7,7 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
@@ -23,7 +22,7 @@ public class ListScoreProductionServicePostResponse {
 
   private List<ServiceCostResponse> serviceCostList;
 
-  private AverageDurationDto averageDuration;
+  private RetrieveAverageDurationResponse averageDuration;
 
   private List<String> softwareList;
 
@@ -44,7 +43,7 @@ public class ListScoreProductionServicePostResponse {
         .title(scoreProductionServicePost.getTitle())
         .description(scoreProductionServicePost.getDescription())
         .serviceCostList(costPerUnits)
-        .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
+        .averageDuration(RetrieveAverageDurationResponse.from(scoreProductionServicePost.getAverageDuration()))
         .softwareList(
             scoreProductionServicePost.getUsingSoftwareList() != null
                 ? scoreProductionServicePost.getUsingSoftwareList()

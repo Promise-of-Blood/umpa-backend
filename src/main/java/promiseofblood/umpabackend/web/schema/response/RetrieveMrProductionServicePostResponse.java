@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
-import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
 
 @Getter
 @Builder
@@ -23,7 +22,7 @@ public class RetrieveMrProductionServicePostResponse {
 
   private String additionalCostPolicy;
 
-  private AverageDurationDto averageDuration;
+  private RetrieveAverageDurationResponse averageDuration;
 
   private Integer freeRevisionCount;
 
@@ -49,7 +48,7 @@ public class RetrieveMrProductionServicePostResponse {
         .description(mrProductionServicePost.getDescription())
         .serviceCost(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
         .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
+        .averageDuration(RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
         .softwareList(
