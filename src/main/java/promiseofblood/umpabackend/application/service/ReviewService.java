@@ -7,7 +7,7 @@ import promiseofblood.umpabackend.domain.entity.Review;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.repository.ReviewRepository;
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
-import promiseofblood.umpabackend.dto.ServiceReviewDto;
+import promiseofblood.umpabackend.web.schema.request.CreateServiceReviewRequest;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +17,7 @@ public class ReviewService {
   private final ReviewRepository reviewRepository;
 
   @Transactional
-  public Review createReview(Long servicePostId, ServiceReviewDto.ReviewRequest reviewRequest) {
+  public Review createReview(Long servicePostId, CreateServiceReviewRequest reviewRequest) {
     ServicePost servicePost = servicePostRepository.findById(servicePostId).orElse(null);
 
     Review review =
