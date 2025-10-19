@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.Oauth2Service;
 import promiseofblood.umpabackend.application.service.UserService;
-import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
+import promiseofblood.umpabackend.web.schema.response.RetrieveOauth2ProviderInfoResponse;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.web.schema.request.LoginByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.request.LoginByOauth2Request;
@@ -60,7 +60,7 @@ public class LoginController {
   }
 
   @GetMapping("/oauth2-authorization-urls")
-  public ResponseEntity<Map<String, Oauth2ProviderDto>> getAuthorizationUrls() {
+  public ResponseEntity<Map<String, RetrieveOauth2ProviderInfoResponse>> getAuthorizationUrls() {
 
     return ResponseEntity.ok(oauth2Service.generateAuthorizationUrls());
   }

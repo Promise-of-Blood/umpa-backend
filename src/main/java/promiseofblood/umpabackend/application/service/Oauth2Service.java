@@ -16,7 +16,7 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
-import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
+import promiseofblood.umpabackend.web.schema.response.RetrieveOauth2ProviderInfoResponse;
 import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2Strategy;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2StrategyFactory;
@@ -144,15 +144,15 @@ public class Oauth2Service {
     return new CheckIsOauth2RegisterAvailableResponse(providerName, user.isEmpty(), message);
   }
 
-  public Map<String, Oauth2ProviderDto> generateAuthorizationUrls() {
-    Map<String, Oauth2ProviderDto> oauth2ProviderNameToInfo = new HashMap<>();
+  public Map<String, RetrieveOauth2ProviderInfoResponse> generateAuthorizationUrls() {
+    Map<String, RetrieveOauth2ProviderInfoResponse> oauth2ProviderNameToInfo = new HashMap<>();
 
     for (Oauth2Provider oauth2Provider : oauth2ProvidersConfig.getProviders()) {
       try {
         Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(oauth2Provider.getName());
         oauth2ProviderNameToInfo.put(
             oauth2Provider.getName(),
-            Oauth2ProviderDto.builder()
+            RetrieveOauth2ProviderInfoResponse.builder()
                 .name(oauth2Provider.getName())
                 .clientId(oauth2Provider.getClientId())
                 .loginUrl(oauth2Strategy.getAuthorizationUrl(oauth2Provider))
