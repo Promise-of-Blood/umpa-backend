@@ -48,7 +48,8 @@ public class RetrieveMrProductionServicePostResponse {
         .description(mrProductionServicePost.getDescription())
         .serviceCost(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
         .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
         .softwareList(

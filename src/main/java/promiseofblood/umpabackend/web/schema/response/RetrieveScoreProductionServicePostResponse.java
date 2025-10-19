@@ -64,7 +64,8 @@ public class RetrieveScoreProductionServicePostResponse {
         .description(scoreProductionServicePost.getDescription())
         .serviceCostList(costPerUnits)
         .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(RetrieveAverageDurationResponse.from(scoreProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(scoreProductionServicePost.getAverageDuration()))
         .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
         .softwareList(usingSoftwareList)
         .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())

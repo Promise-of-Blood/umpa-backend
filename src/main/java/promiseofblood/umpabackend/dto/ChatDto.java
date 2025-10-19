@@ -13,15 +13,6 @@ public class ChatDto {
 
   @Getter
   @Setter
-  public static class ChatRoomResponse {
-    private Long id;
-    private Long servicePostId;
-    private String teacherName;
-    private String studentName;
-  }
-
-  @Getter
-  @Setter
   public static class ChatMessageResponse {
     private Long id;
     private String senderName;

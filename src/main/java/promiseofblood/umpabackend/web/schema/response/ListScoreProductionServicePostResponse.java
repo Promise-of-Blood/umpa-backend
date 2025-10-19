@@ -43,7 +43,8 @@ public class ListScoreProductionServicePostResponse {
         .title(scoreProductionServicePost.getTitle())
         .description(scoreProductionServicePost.getDescription())
         .serviceCostList(costPerUnits)
-        .averageDuration(RetrieveAverageDurationResponse.from(scoreProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(scoreProductionServicePost.getAverageDuration()))
         .softwareList(
             scoreProductionServicePost.getUsingSoftwareList() != null
                 ? scoreProductionServicePost.getUsingSoftwareList()

@@ -35,7 +35,8 @@ public class ListMrProductionServicePostResponse {
         .title(mrProductionServicePost.getTitle())
         .description(mrProductionServicePost.getDescription())
         .serviceCost(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
-        .averageDuration(RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))
         .softwareList(
             mrProductionServicePost.getUsingSoftwareList() != null
                 ? mrProductionServicePost.getUsingSoftwareList()
