@@ -14,7 +14,7 @@ import promiseofblood.umpabackend.domain.repository.ChatMessageRepository;
 import promiseofblood.umpabackend.domain.repository.ChatRoomRepository;
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
-import promiseofblood.umpabackend.dto.ChatDto;
+import promiseofblood.umpabackend.web.schema.response.ChatMessageResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveChatRoomResponse;
 
 @Service
@@ -76,7 +76,7 @@ public class ChatService {
   }
 
   @Transactional(readOnly = true)
-  public List<ChatDto.ChatMessageResponse> getChatMessages(String loginId, Long roomId) {
+  public List<ChatMessageResponse> getChatMessages(String loginId, Long roomId) {
     User user =
         userRepository
             .findByLoginId(loginId)
@@ -96,7 +96,7 @@ public class ChatService {
     return chatMessages.stream()
         .map(
             chatMessage -> {
-              ChatDto.ChatMessageResponse response = new ChatDto.ChatMessageResponse();
+              ChatMessageResponse response = new ChatMessageResponse();
               response.setId(chatMessage.getId());
               response.setSenderName(chatMessage.getSender().getUsername().getValue());
               response.setMessage(chatMessage.getMessage());
@@ -107,7 +107,7 @@ public class ChatService {
   }
 
   @Transactional
-  public ChatDto.ChatMessageResponse sendMessage(String loginId, Long roomId, String message) {
+  public ChatMessageResponse sendMessage(String loginId, Long roomId, String message) {
     User sender =
         userRepository
             .findByLoginId(loginId)
@@ -125,7 +125,7 @@ public class ChatService {
     ChatMessage chatMessage = ChatMessage.create(chatRoom, sender, message);
     chatMessageRepository.save(chatMessage);
 
-    ChatDto.ChatMessageResponse response = new ChatDto.ChatMessageResponse();
+    ChatMessageResponse response = new ChatMessageResponse();
     response.setId(chatMessage.getId());
     response.setSenderName(sender.getUsername().getValue());
     response.setMessage(chatMessage.getMessage());

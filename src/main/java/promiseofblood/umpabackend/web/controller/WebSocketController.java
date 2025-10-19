@@ -7,8 +7,8 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import promiseofblood.umpabackend.application.service.ChatService;
-import promiseofblood.umpabackend.dto.ChatDto;
 import promiseofblood.umpabackend.web.schema.request.SendChatMessageRequest;
+import promiseofblood.umpabackend.web.schema.response.ChatMessageResponse;
 
 @Controller
 @RequiredArgsConstructor
@@ -23,8 +23,7 @@ public class WebSocketController {
       @DestinationVariable Long roomId,
       @Payload SendChatMessageRequest request) {
     String loginId = principal.getName();
-    ChatDto.ChatMessageResponse response =
-        chatService.sendMessage(loginId, roomId, request.getMessage());
+    ChatMessageResponse response = chatService.sendMessage(loginId, roomId, request.getMessage());
     messagingTemplate.convertAndSend("/topic/chat/" + roomId, response);
   }
 }

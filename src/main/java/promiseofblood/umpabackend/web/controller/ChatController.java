@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ChatService;
-import promiseofblood.umpabackend.dto.ChatDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateChatRoomRequest;
+import promiseofblood.umpabackend.web.schema.response.ChatMessageResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveChatRoomResponse;
 
 @RestController
@@ -48,10 +48,10 @@ public class ChatController {
 
   @GetMapping("/rooms/{roomId}/messages")
   @PreAuthorize("isAuthenticated()")
-  public ResponseEntity<List<ChatDto.ChatMessageResponse>> getChatMessages(
+  public ResponseEntity<List<ChatMessageResponse>> getChatMessages(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails, @PathVariable Long roomId) {
     String loginId = securityUserDetails.getUsername();
-    List<ChatDto.ChatMessageResponse> response = chatService.getChatMessages(loginId, roomId);
+    List<ChatMessageResponse> response = chatService.getChatMessages(loginId, roomId);
     return ResponseEntity.ok(response);
   }
 }
