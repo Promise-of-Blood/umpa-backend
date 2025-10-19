@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.ChatService;
 import promiseofblood.umpabackend.dto.ChatDto;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.request.CreateChatRoomRequest;
 import promiseofblood.umpabackend.web.schema.response.RetrieveChatRoomResponse;
 
 @RestController
@@ -29,7 +30,7 @@ public class ChatController {
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveChatRoomResponse> createChatRoom(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-      @RequestBody ChatDto.CreateChatRoomRequest request) {
+      @RequestBody CreateChatRoomRequest request) {
     String loginId = securityUserDetails.getUsername();
     RetrieveChatRoomResponse response =
         chatService.createChatRoom(loginId, request.getServicePostId());

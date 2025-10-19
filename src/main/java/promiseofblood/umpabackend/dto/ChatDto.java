@@ -7,12 +7,6 @@ public class ChatDto {
 
   @Getter
   @Setter
-  public static class CreateChatRoomRequest {
-    private Long servicePostId;
-  }
-
-  @Getter
-  @Setter
   public static class ChatMessageResponse {
     private Long id;
     private String senderName;
