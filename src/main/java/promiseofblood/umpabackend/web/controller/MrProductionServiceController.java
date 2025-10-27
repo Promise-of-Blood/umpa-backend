@@ -25,14 +25,14 @@ import promiseofblood.umpabackend.web.schema.response.ListMrProductionServicePos
 import promiseofblood.umpabackend.web.schema.response.RetrieveMrProductionServicePostResponse;
 
 @RestController
-@RequestMapping("/api/v1/services")
+@RequestMapping("/api/v1/services/mr-production")
 @RequiredArgsConstructor
 public class MrProductionServiceController {
 
   private final MrProductionService mrProductionService;
 
   @Tag(name = "서비스 관리 API(MR제작)")
-  @GetMapping(path = "/mr-production")
+  @GetMapping(path = "")
   public ResponseEntity<PaginatedResponse<ListMrProductionServicePostResponse>>
       getAllMrProductionServices(
           @RequestParam(defaultValue = "0") int page,
@@ -46,7 +46,7 @@ public class MrProductionServiceController {
   }
 
   @Tag(name = "서비스 관리 API(MR제작)")
-  @PostMapping(path = "/mr-production", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveMrProductionServicePostResponse> registerMrProduction(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
@@ -77,7 +77,7 @@ public class MrProductionServiceController {
   }
 
   @Tag(name = "서비스 관리 API(MR제작)")
-  @GetMapping(path = "/mr-production/{id}")
+  @GetMapping(path = "/{id}")
   public ResponseEntity<RetrieveMrProductionServicePostResponse> getMrProductionServicePost(
       @PathVariable Long id) {
 
