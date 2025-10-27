@@ -38,30 +38,6 @@ public class MrProductionServiceController {
   private final MrProductionService mrProductionService;
   private final ServicePostLikeService servicePostLikeService;
 
-  @GetMapping(path = "")
-  public ResponseEntity<PaginatedResponse<ListMrProductionServicePostResponse>>
-      getAllMrProductionServices(
-          @RequestParam(defaultValue = "0") int page,
-          @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.")
-              int size,
-          @RequestParam(defaultValue = "ALL") ServiceFilter filter,
-          @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
-
-    if (filter == ServiceFilter.LIKED && securityUserDetails == null) {
-      throw new UnauthorizedException("좋아요 필터는 로그인이 필요합니다.");
-    }
-
-    Page<ListMrProductionServicePostResponse> servicePostResponsePage =
-        switch (filter) {
-          case LIKED ->
-              this.mrProductionService.getLikedServices(
-                  securityUserDetails.getUsername(), page, size);
-          default -> this.mrProductionService.getAllServices(page, size);
-        };
-
-    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
-  }
-
   @PostMapping(path = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveMrProductionServicePostResponse> registerMrProduction(
@@ -90,6 +66,30 @@ public class MrProductionServiceController {
         mrProductionService.createMrProductionServicePost(command);
 
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping(path = "")
+  public ResponseEntity<PaginatedResponse<ListMrProductionServicePostResponse>>
+      getAllMrProductionServices(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.")
+              int size,
+          @RequestParam(defaultValue = "ALL") ServiceFilter filter,
+          @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    if (filter == ServiceFilter.LIKED && securityUserDetails == null) {
+      throw new UnauthorizedException("좋아요 필터는 로그인이 필요합니다.");
+    }
+
+    Page<ListMrProductionServicePostResponse> servicePostResponsePage =
+        switch (filter) {
+          case LIKED ->
+              this.mrProductionService.getLikedServices(
+                  securityUserDetails.getUsername(), page, size);
+          default -> this.mrProductionService.getAllServices(page, size);
+        };
+
+    return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }
 
   @GetMapping(path = "/{id}")
