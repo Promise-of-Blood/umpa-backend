@@ -51,6 +51,7 @@ src/main/java/promiseofblood/umpabackend/
 ├── web/                                 # Presentation Layer (API endpoints)
 │   ├── controller/                      # 11 REST controllers (User, Login, Register, etc.)
 │   ├── advice/                          # Global exception handlers (@RestControllerAdvice)
+│   ├── filtertype/                      # Filter type definitions for service filtering
 │   └── schema/                          # Request/Response DTOs
 │       ├── request/                     # API request models
 │       └── response/                    # API response models (includes ApiResponse wrapper)
@@ -64,13 +65,13 @@ src/main/java/promiseofblood/umpabackend/
 │   │   └── abs/                         # Abstract base entities
 │   ├── vo/                              # Value Objects (Email, Password, ServiceCost, etc.)
 │   └── repository/                      # Repository interfaces (11 repositories)
-├── infrastructure/                      # Infrastructure Layer (external integrations)
-│   ├── config/                          # Configuration classes (Security, JPA, WebSocket, etc.)
-│   ├── security/                        # Security implementations (JwtFilter, JWT utilities)
-│   ├── oauth/                           # OAuth2 provider integrations
-│   ├── storage/                         # File storage implementations
-│   └── validation/                      # Custom validators
-└── dto/                                 # Shared DTOs (mapper interfaces with MapStruct)
+└── infrastructure/                      # Infrastructure Layer (external integrations)
+    ├── config/                          # Configuration classes (Security, JPA, WebSocket, etc.)
+    ├── security/                        # Security implementations (JwtFilter, JWT utilities)
+    ├── oauth/                           # OAuth2 provider integrations
+    │   └── dto/                         # OAuth2 response DTOs
+    ├── storage/                         # File storage implementations
+    └── validation/                      # Custom validators
 ```
 
 ### Key Files and Locations
@@ -123,7 +124,7 @@ All PRs to `develop`/`main` must pass tests. Spotless auto-applies formatting. B
 - **Spotless**: Auto-applies Google Java Format during compilation
 - **Import order**: java/javax/jakarta → lombok → spring → test → blank → static → package
 - **Lombok**: Widely used (`@Data`, `@Builder`, `@RequiredArgsConstructor`)
-- **MapStruct**: DTO mapping (see `dto/` package)
+- **MapStruct**: DTO mapping (used for OAuth2 DTOs in `infrastructure/oauth/dto/`)
 
 ### Workflow
 1. `./gradlew clean` if dependencies changed
@@ -133,7 +134,7 @@ All PRs to `develop`/`main` must pass tests. Spotless auto-applies formatting. B
 
 ### Patterns
 - **Exceptions**: Domain (`domain/exception`), application (`application/exception`), global handler (`web/advice`)
-- **DTOs**: MapStruct interfaces in `dto/`
+- **DTOs**: Request/Response DTOs in `web/schema/`, OAuth2 DTOs in `infrastructure/oauth/dto/`
 - **Security**: JWT with custom filters in `infrastructure/security`
 - **API**: Wrapped in `ApiResponse<T>` (`web/schema/response/ApiResponse.java`)
 - **Database**: JPA with Spring Data, Lombok entities
