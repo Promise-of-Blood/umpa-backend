@@ -43,8 +43,8 @@ spring:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-  access-token-expiration: 3600000
-  refresh-token-expiration: 604800000
+  access-token-expiration: 300000
+  refresh-token-expiration: 3600000
 
 oauth2:
   providers:
@@ -83,9 +83,9 @@ spring:
     password: ${DB_PASSWORD}
 
 jwt:
-  secret-key: test-jwt-secret-key
-  access-token-expiration: 3600000
-  refresh-token-expiration: 604800000
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration: 300000
+  refresh-token-expiration: 3600000
 
 oauth2:
   providers:
@@ -133,9 +133,9 @@ spring:
         format_sql: true
 
 jwt:
-  secret-key: test-jwt-secret-key
-  access-token-expiration: 3600000
-  refresh-token-expiration: 604800000
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration: 300000
+  refresh-token-expiration: 3600000
 
 oauth2:
   providers: [ ]
