@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.LessonServicePost;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
+import promiseofblood.umpabackend.domain.vo.PostDisplayStatus;
 import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
@@ -20,6 +21,8 @@ public class ListLessonServicePostResponse {
   private String title;
 
   private String description;
+
+  private ConstantResponse<PostDisplayStatus> displayStatus;
 
   private ServiceCostResponse serviceCost;
 
@@ -42,6 +45,7 @@ public class ListLessonServicePostResponse {
         .thumbnailImage(lessonServicePost.getThumbnailImageUrl())
         .title(lessonServicePost.getTitle())
         .description(lessonServicePost.getDescription())
+        .displayStatus(new ConstantResponse<>(lessonServicePost.getDisplayStatus()))
         .serviceCost(ServiceCostResponse.from(lessonServicePost.getServiceCost()))
         .subject(new ConstantResponse<>(lessonServicePost.getSubject()))
         .availableWeekDays(

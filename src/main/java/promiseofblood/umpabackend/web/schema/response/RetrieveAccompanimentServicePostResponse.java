@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.domain.vo.PostDisplayStatus;
 import promiseofblood.umpabackend.domain.vo.PracticeLocation;
 
 @Getter
@@ -19,6 +20,8 @@ public class RetrieveAccompanimentServicePostResponse {
   private String title;
 
   private String description;
+
+  private ConstantResponse<PostDisplayStatus> displayStatus;
 
   private ServiceCostResponse serviceCost;
 
@@ -48,6 +51,7 @@ public class RetrieveAccompanimentServicePostResponse {
         .thumbnailImage(post.getThumbnailImageUrl())
         .title(post.getTitle())
         .description(post.getDescription())
+        .displayStatus(new ConstantResponse<>(post.getDisplayStatus()))
         .serviceCost(ServiceCostResponse.from(post.getServiceCost()))
         // 합주 서비스 필드
         .additionalCostPolicy(post.getAdditionalCostPolicy())

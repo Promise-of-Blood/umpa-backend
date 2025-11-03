@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.SampleScoreImageUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
+import promiseofblood.umpabackend.domain.vo.PostDisplayStatus;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 
 @Getter
@@ -20,6 +21,8 @@ public class RetrieveScoreProductionServicePostResponse {
   private String title;
 
   private String description;
+
+  private ConstantResponse<PostDisplayStatus> displayStatus;
 
   private List<ServiceCostResponse> serviceCostList;
 
@@ -62,6 +65,7 @@ public class RetrieveScoreProductionServicePostResponse {
         .id(scoreProductionServicePost.getId())
         .title(scoreProductionServicePost.getTitle())
         .description(scoreProductionServicePost.getDescription())
+        .displayStatus(new ConstantResponse<>(scoreProductionServicePost.getDisplayStatus()))
         .serviceCostList(costPerUnits)
         .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
         .averageDuration(

@@ -4,6 +4,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
+import promiseofblood.umpabackend.domain.vo.PostDisplayStatus;
 
 @Getter
 @Builder
@@ -16,6 +17,8 @@ public class ListMrProductionServicePostResponse {
   private String title;
 
   private String description;
+
+  private ConstantResponse<PostDisplayStatus> displayStatus;
 
   private ServiceCostResponse serviceCost;
 
@@ -34,6 +37,7 @@ public class ListMrProductionServicePostResponse {
         .id(mrProductionServicePost.getId())
         .title(mrProductionServicePost.getTitle())
         .description(mrProductionServicePost.getDescription())
+        .displayStatus(new ConstantResponse<>(mrProductionServicePost.getDisplayStatus()))
         .serviceCost(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
         .averageDuration(
             RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))

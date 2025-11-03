@@ -42,9 +42,4 @@ public class AccompanimentServicePost extends ServicePost {
   private List<PracticeLocation> practiceLocations;
 
   @ElementCollection private List<String> videoUrls;
-
-  @Override
-  public String getCostAndUnit() {
-    return this.serviceCost.getCost() + "원/" + this.serviceCost.getUnit();
-  }
 }
