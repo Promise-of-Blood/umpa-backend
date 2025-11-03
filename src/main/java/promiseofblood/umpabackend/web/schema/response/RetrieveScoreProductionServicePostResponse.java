@@ -8,8 +8,6 @@ import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.SampleScoreImageUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
@@ -27,7 +25,7 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private String additionalCostPolicy;
 
-  private AverageDurationDto averageDuration;
+  private RetrieveAverageDurationResponse averageDuration;
 
   private int freeRevisionCount;
 
@@ -37,7 +35,7 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private List<String> sampleScoreImageUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
@@ -66,12 +64,14 @@ public class RetrieveScoreProductionServicePostResponse {
         .description(scoreProductionServicePost.getDescription())
         .serviceCostList(costPerUnits)
         .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(scoreProductionServicePost.getAverageDuration()))
         .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
         .softwareList(usingSoftwareList)
         .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
         .sampleScoreImageUrls(sampleScoreImageUrls)
-        .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
+        .teacherProfile(
+            RetrieveTeacherAuthorProfileResponse.from(scoreProductionServicePost.getUser()))
         .reviewRating(0.1f)
         .build();
   }

@@ -27,16 +27,13 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileRespons
 
 @RestController
 @RequestMapping("/api/v1/users")
+@Tag(name = "프로필 관리 API")
 @RequiredArgsConstructor
-public class UserController {
+public class ProfileController {
 
   private final UserService userService;
   private final ProfileService profileService;
 
-  // ****************
-  // * 프로필 관리 API *
-  // ****************
-  @Tag(name = "프로필 관리 API")
   @GetMapping("/me")
   public ResponseEntity<RetrieveFullProfileResponse> getCurrentUser(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
@@ -44,7 +41,6 @@ public class UserController {
     return ResponseEntity.ok(userService.getUserByLoginId(securityUserDetails.getUsername()));
   }
 
-  @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/teacher-profile")
   public ResponseEntity<RetrieveFullProfileResponse> patchTeacherProfile(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
@@ -57,7 +53,6 @@ public class UserController {
     return ResponseEntity.ok(teacherProfileResponse);
   }
 
-  @Tag(name = "프로필 관리 API")
   @PatchMapping("/me/student-profile")
   public ResponseEntity<RetrieveFullProfileResponse> patchStudentProfile(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
@@ -70,7 +65,6 @@ public class UserController {
     return ResponseEntity.ok(studentProfileDto);
   }
 
-  @Tag(name = "프로필 관리 API")
   @PatchMapping(value = "/me/default-profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<RetrieveFullProfileResponse> patchDefaultProfile(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,

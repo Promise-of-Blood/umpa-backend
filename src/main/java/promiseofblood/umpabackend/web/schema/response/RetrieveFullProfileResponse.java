@@ -7,7 +7,6 @@ import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
-import promiseofblood.umpabackend.dto.Oauth2UserDto;
 
 @Getter
 @Builder
@@ -39,7 +38,7 @@ public class RetrieveFullProfileResponse {
   private RetrieveStudentProfileResponse studentProfile;
 
   @Schema(nullable = true)
-  private Oauth2UserDto oauth2User;
+  private RetrieveOauth2ProfileResponse oauth2User;
 
   private LocalDateTime createdAt;
 
@@ -63,7 +62,10 @@ public class RetrieveFullProfileResponse {
             user.getStudentProfile() == null
                 ? null
                 : RetrieveStudentProfileResponse.from(user.getStudentProfile()))
-        .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
+        .oauth2User(
+            user.getOauth2User() == null
+                ? null
+                : RetrieveOauth2ProfileResponse.of(user.getOauth2User()))
         .createdAt(user.getCreatedAt())
         .updatedAt(user.getUpdatedAt())
         .build();

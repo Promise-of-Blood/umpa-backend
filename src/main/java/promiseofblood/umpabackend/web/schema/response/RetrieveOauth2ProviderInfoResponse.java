@@ -1,11 +1,11 @@
-package promiseofblood.umpabackend.dto;
+package promiseofblood.umpabackend.web.schema.response;
 
 import lombok.*;
 
 @Getter
 @Setter
 @Builder
-public class Oauth2ProviderDto {
+public class RetrieveOauth2ProviderInfoResponse {
 
   private String name;
 
