@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ import promiseofblood.umpabackend.application.command.CreateMrProductionServiceP
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.application.query.RetrieveMrServicePostQuery;
 import promiseofblood.umpabackend.application.service.MrProductionService;
+import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.application.service.ServicePostLikeService;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.filtertype.ServiceFilter;
@@ -35,6 +37,7 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveMrProductionServic
 @RequiredArgsConstructor
 public class MrProductionServiceController {
 
+  private final ServiceBoardService serviceBoardService;
   private final MrProductionService mrProductionService;
   private final ServicePostLikeService servicePostLikeService;
 
@@ -118,5 +121,23 @@ public class MrProductionServiceController {
 
     servicePostLikeService.unlikeServicePost(userDetails.getUsername(), id);
     return ResponseEntity.noContent().build();
+  }
+
+  @PatchMapping(path = "/{id}/pause")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<Void> pauseServicePost(
+      @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    serviceBoardService.pauseServicePost(id, securityUserDetails.getUsername());
+    return ResponseEntity.ok().build();
+  }
+
+  @PatchMapping(path = "/{id}/publish")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<Void> publishServicePost(
+      @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    serviceBoardService.publishServicePost(id, securityUserDetails.getUsername());
+    return ResponseEntity.ok().build();
   }
 }
