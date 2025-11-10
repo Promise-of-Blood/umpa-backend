@@ -8,7 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.query.RetrieveAccompanimentServicePostQuery;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
+import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.AccompanimentServicePostRepository;
+import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
+import promiseofblood.umpabackend.domain.repository.UserRepository;
+import promiseofblood.umpabackend.domain.vo.PublishStatus;
+import promiseofblood.umpabackend.domain.vo.ServiceCost;
+import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
 import promiseofblood.umpabackend.web.schema.response.ListAccompanimentServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 
@@ -17,6 +23,9 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServi
 public class AccompanimentService {
 
   private final AccompanimentServicePostRepository accompanimentServicePostRepository;
+  private final StorageService storageService;
+  private final UserRepository userRepository;
+  private final ServicePostRepository servicePostRepository;
 
   @Transactional(readOnly = true)
   public Page<ListAccompanimentServicePostResponse> getAllServices(int page, int size) {
@@ -25,6 +34,42 @@ public class AccompanimentService {
         accompanimentServicePostRepository.findAll(PageRequest.of(page, size));
 
     return servicePostPage.map(ListAccompanimentServicePostResponse::from);
+  }
+
+  @Transactional
+  public RetrieveAccompanimentServicePostResponse createAccompanimentServicePost(
+      String loginId, CreateAccompanimentServicePostRequest accompanimentPostRequest) {
+
+    User user =
+        userRepository
+            .findByLoginId(loginId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+    String filePath =
+        storageService.store(
+            accompanimentPostRequest.getThumbnailImage(),
+            "service/" + user.getId() + "/mr-production");
+
+    AccompanimentServicePost accompanimentServicePost =
+        AccompanimentServicePost.builder()
+            .user(user)
+            .title(accompanimentPostRequest.getTitle())
+            .description(accompanimentPostRequest.getDescription())
+            .thumbnailImageUrl(filePath)
+            .publishStatus(PublishStatus.PUBLISHED)
+            .serviceCost(
+                ServiceCost.builder().cost(accompanimentPostRequest.getCost()).unit("학교").build())
+            .additionalCostPolicy(accompanimentPostRequest.getAdditionalCostPolicy())
+            .instrument(accompanimentPostRequest.getInstrument())
+            .includedPracticeCount(accompanimentPostRequest.getIncludedPracticeCount())
+            .additionalPracticeCost(accompanimentPostRequest.getAdditionalPracticeCost())
+            .isMrIncluded(accompanimentPostRequest.getIsMrIncluded())
+            .practiceLocations(accompanimentPostRequest.getPracticeLocations())
+            .videoUrls(accompanimentPostRequest.getVideoUrls())
+            .build();
+    servicePostRepository.save(accompanimentServicePost);
+
+    return RetrieveAccompanimentServicePostResponse.from(accompanimentServicePost);
   }
 
   @Transactional(readOnly = true)

@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.query.RetrieveAccompanimentServicePostQuery;
 import promiseofblood.umpabackend.application.service.AccompanimentService;
-import promiseofblood.umpabackend.application.service.ServiceBoardService;
 import promiseofblood.umpabackend.infrastructure.security.IsTeacherProfileReady;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
@@ -31,7 +30,6 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServi
 @Tag(name = "서비스 관리 API(합주)")
 public class AccompanimentServiceController {
 
-  private final ServiceBoardService serviceBoardService;
   private final AccompanimentService accompanimentService;
 
   @IsTeacherProfileReady
@@ -42,7 +40,7 @@ public class AccompanimentServiceController {
     String loginId = securityUserDetails.getUsername();
 
     RetrieveAccompanimentServicePostResponse accompanimentPostResponse =
-        serviceBoardService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
+        accompanimentService.createAccompanimentServicePost(loginId, accompanimentPostRequest);
 
     return ResponseEntity.ok(accompanimentPostResponse);
   }
