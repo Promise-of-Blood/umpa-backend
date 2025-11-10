@@ -23,4 +23,8 @@ public class Oauth2User extends TimeStampedEntity {
   private String profileImageUrl;
 
   private String username;
+
+  public void assignUserId(Long userId) {
+    this.userId = userId;
+  }
 }
