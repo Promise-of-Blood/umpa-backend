@@ -13,10 +13,8 @@ import promiseofblood.umpabackend.application.exception.ResourceNotFoundExceptio
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
-import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
-import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordWithRoleRequest;
 import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
@@ -31,41 +29,6 @@ public class UserService {
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
   private final StorageService storageService;
-
-  @Transactional
-  public LoginCompleteResponse registerUser(
-      RegisterByLoginIdPasswordRequest loginIdPasswordRegisterRequest) {
-
-    if (this.isLoginIdAvailable(loginIdPasswordRegisterRequest.getLoginId())) {
-      throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
-    }
-
-    // TODO 이 더러운 코드를 해결하기
-    String storedFilePath = null;
-    if (loginIdPasswordRegisterRequest.getProfileImage() != null) {
-      storedFilePath =
-          this.uploadProfileImage(
-              loginIdPasswordRegisterRequest.getLoginId(),
-              loginIdPasswordRegisterRequest.getProfileImage());
-    }
-
-    User user =
-        User.register(
-            loginIdPasswordRegisterRequest.getLoginId(),
-            passwordEncoder.encode(loginIdPasswordRegisterRequest.getPassword()),
-            loginIdPasswordRegisterRequest.getGender(),
-            UserStatus.PENDING,
-            Role.USER,
-            loginIdPasswordRegisterRequest.getUsername(),
-            loginIdPasswordRegisterRequest.getProfileType(),
-            storedFilePath);
-    user = userRepository.save(user);
-
-    return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
-        jwtService.createAccessToken(user.getId(), user.getLoginId()),
-        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
-  }
 
   @Transactional
   public RetrieveFullProfileResponse registerAdmin(
@@ -99,13 +62,15 @@ public class UserService {
 
     user = userRepository.save(user);
 
-    return RetrieveFullProfileResponse.from(user);
+    return RetrieveFullProfileResponse.from(user, null);
   }
 
   @Transactional(readOnly = true)
   public List<RetrieveFullProfileResponse> getUsers() {
 
-    return userRepository.findAll().stream().map(RetrieveFullProfileResponse::from).toList();
+    return userRepository.findAll().stream()
+        .map(user -> RetrieveFullProfileResponse.from(user, null))
+        .toList();
   }
 
   @Transactional(readOnly = true)
@@ -116,7 +81,7 @@ public class UserService {
             .findByLoginId(loginId)
             .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
-    return RetrieveFullProfileResponse.from(user);
+    return RetrieveFullProfileResponse.from(user, null);
   }
 
   @Transactional
@@ -146,7 +111,7 @@ public class UserService {
     }
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
+        RetrieveFullProfileResponse.from(user, null),
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
@@ -167,17 +132,18 @@ public class UserService {
             .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
+        RetrieveFullProfileResponse.from(user, null),
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
   public CheckIsUsernameAvailableResponse isUsernameAvailable(String rawUsername) {
-    if (!isUsernamePatternValid(rawUsername)) {
+    try {
+      Username.validate(rawUsername);
+    } catch (IllegalArgumentException e) {
       return new CheckIsUsernameAvailableResponse(
           rawUsername, false, "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
     }
-
     Username username = new Username(rawUsername);
 
     if (!isUsernameDuplicated(username)) {
@@ -185,12 +151,6 @@ public class UserService {
     }
 
     return new CheckIsUsernameAvailableResponse(rawUsername, true, "사용 가능한 아이디입니다.");
-  }
-
-  public boolean isUsernamePatternValid(String username) {
-    String regex = "^[가-힣a-zA-Z0-9]{1,8}$";
-
-    return username != null && username.matches(regex);
   }
 
   public boolean isUsernameDuplicated(Username username) {

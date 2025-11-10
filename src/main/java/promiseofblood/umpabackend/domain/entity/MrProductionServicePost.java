@@ -37,11 +37,6 @@ public class MrProductionServicePost extends ServicePost {
 
   @ElementCollection private List<SampleMrUrl> sampleMrUrls;
 
-  @Override
-  public String getCostAndUnit() {
-    return serviceCost.getCost() + "원/" + serviceCost.getUnit();
-  }
-
   public static MrProductionServicePost create(
       // 공통 필드
       User user,

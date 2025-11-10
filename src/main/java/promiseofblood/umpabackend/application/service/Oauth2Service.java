@@ -79,13 +79,14 @@ public class Oauth2Service {
             Role.USER,
             oauth2RegisterRequest.getUsername(),
             oauth2RegisterRequest.getProfileType(),
-            storedFilePath,
-            newOauth2User);
+            storedFilePath);
 
     User user = userRepository.save(newUser);
+    newOauth2User.assignUserId(user.getId());
+    oauth2UserRepository.save(newOauth2User);
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
+        RetrieveFullProfileResponse.from(user, null),
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
@@ -105,17 +106,21 @@ public class Oauth2Service {
     Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 
-    User user =
-        userRepository
-            .findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
+    Oauth2User oauth2User =
+        oauth2UserRepository
+            .findByProviderNameAndProviderUid(
                 providerName,
                 oauth2Strategy
                     .getOauth2UserProfile(oauth2Provider, externalAccessToken, externalIdToken)
                     .getProviderUid())
             .orElseThrow(() -> new UnauthorizedException("가입하지 않은 Oauth2 사용자입니다."));
+    User user =
+        userRepository
+            .findById(oauth2User.getUserId())
+            .orElseThrow(() -> new UnauthorizedException("가입하지 않은 Oauth2 사용자입니다."));
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
+        RetrieveFullProfileResponse.from(user, null),
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
@@ -130,9 +135,8 @@ public class Oauth2Service {
         oauth2Strategy.getOauth2UserProfile(oauth2Provider, accessToken, idToken);
     String providerUid = oauth2ProfileResponse.getProviderUid();
 
-    Optional<User> user =
-        userRepository.findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
-            providerName, providerUid);
+    Optional<Oauth2User> user =
+        oauth2UserRepository.findByProviderNameAndProviderUid(providerName, providerUid);
 
     String message;
     if (user.isPresent()) {
