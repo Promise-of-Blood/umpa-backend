@@ -138,13 +138,12 @@ public class UserService {
   }
 
   public CheckIsUsernameAvailableResponse isUsernameAvailable(String rawUsername) {
-
-    // TODO: Username 객체 생성 시 이미 검증되는 부분임.
-    if (!isUsernamePatternValid(rawUsername)) {
+    try {
+      Username.validate(rawUsername);
+    } catch (IllegalArgumentException e) {
       return new CheckIsUsernameAvailableResponse(
           rawUsername, false, "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
     }
-
     Username username = new Username(rawUsername);
 
     if (!isUsernameDuplicated(username)) {
@@ -152,12 +151,6 @@ public class UserService {
     }
 
     return new CheckIsUsernameAvailableResponse(rawUsername, true, "사용 가능한 아이디입니다.");
-  }
-
-  public boolean isUsernamePatternValid(String username) {
-    String regex = "^[가-힣a-zA-Z0-9]{1,8}$";
-
-    return username != null && username.matches(regex);
   }
 
   public boolean isUsernameDuplicated(Username username) {

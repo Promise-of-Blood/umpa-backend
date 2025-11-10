@@ -20,10 +20,14 @@ public class Username {
   private String value;
 
   public Username(String value) {
+    validate(value);
+    this.value = value;
+  }
+
+  public static void validate(String value) {
     if (value == null || !PATTERN.matcher(value).matches()) {
       throw new IllegalArgumentException("닉네임은 한글/영문/숫자로 1~8자까지 가능합니다.");
     }
-    this.value = value;
   }
 
   @Override
