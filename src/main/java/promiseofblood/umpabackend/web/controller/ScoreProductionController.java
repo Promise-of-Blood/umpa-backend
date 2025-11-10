@@ -42,7 +42,7 @@ public class ScoreProductionController {
 
     String loginId = securityUserDetails.getUsername();
     RetrieveScoreProductionServicePostResponse scoreProductionServicePostResponse =
-        serviceBoardService.createScoreProductionServicePost(loginId, scoreProductionRequest);
+        scoreProductionService.createScoreProductionServicePost(loginId, scoreProductionRequest);
 
     return ResponseEntity.ok(scoreProductionServicePostResponse);
   }
@@ -65,7 +65,7 @@ public class ScoreProductionController {
       @PathVariable Long id) {
 
     RetrieveScoreProductionServicePostResponse scoreProductionResponse =
-        serviceBoardService.getScoreProductionServicePost(id);
+        scoreProductionService.getScoreProductionServicePost(id);
 
     return ResponseEntity.ok(scoreProductionResponse);
   }
