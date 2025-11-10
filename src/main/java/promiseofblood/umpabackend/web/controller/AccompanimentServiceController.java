@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.query.RetrieveAccompanimentServicePostQuery;
 import promiseofblood.umpabackend.application.service.AccompanimentService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
+import promiseofblood.umpabackend.infrastructure.security.IsTeacherProfileReady;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
@@ -34,12 +34,8 @@ public class AccompanimentServiceController {
   private final ServiceBoardService serviceBoardService;
   private final AccompanimentService accompanimentService;
 
-  // ************
-  // * 합주 서비스 *
-  // ************
-
+  @IsTeacherProfileReady
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveAccompanimentServicePostResponse> registerAccompaniment(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
       @ModelAttribute @Valid CreateAccompanimentServicePostRequest accompanimentPostRequest) {
