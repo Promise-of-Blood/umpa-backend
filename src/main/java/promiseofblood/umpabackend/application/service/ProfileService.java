@@ -36,7 +36,7 @@ public class ProfileService {
         patchDefaultProfileRequest.getProfileType());
     User updatedUser = userRepository.save(user);
 
-    return RetrieveFullProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser, null);
   }
 
   @Transactional
@@ -59,7 +59,7 @@ public class ProfileService {
     user.patchTeacherProfile(teacherProfile);
     User updatedUser = userRepository.save(user);
 
-    return RetrieveFullProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser, null);
   }
 
   @Transactional
@@ -82,7 +82,7 @@ public class ProfileService {
     user.patchStudentProfile(studentProfile);
     User updatedUser = userRepository.save(user);
 
-    return RetrieveFullProfileResponse.from(updatedUser);
+    return RetrieveFullProfileResponse.from(updatedUser, null);
   }
 
   public String uploadProfileImageIfExists(String loginId, MultipartFile profileImage) {

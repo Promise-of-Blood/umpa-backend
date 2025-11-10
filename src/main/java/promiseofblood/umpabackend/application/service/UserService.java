@@ -62,7 +62,7 @@ public class UserService {
     user = userRepository.save(user);
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
+        RetrieveFullProfileResponse.from(user, null),
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
@@ -99,13 +99,15 @@ public class UserService {
 
     user = userRepository.save(user);
 
-    return RetrieveFullProfileResponse.from(user);
+    return RetrieveFullProfileResponse.from(user, null);
   }
 
   @Transactional(readOnly = true)
   public List<RetrieveFullProfileResponse> getUsers() {
 
-    return userRepository.findAll().stream().map(RetrieveFullProfileResponse::from).toList();
+    return userRepository.findAll().stream()
+        .map(user -> RetrieveFullProfileResponse.from(user, null))
+        .toList();
   }
 
   @Transactional(readOnly = true)
@@ -116,7 +118,7 @@ public class UserService {
             .findByLoginId(loginId)
             .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
-    return RetrieveFullProfileResponse.from(user);
+    return RetrieveFullProfileResponse.from(user, null);
   }
 
   @Transactional
@@ -146,7 +148,7 @@ public class UserService {
     }
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
+        RetrieveFullProfileResponse.from(user, null),
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
@@ -167,7 +169,7 @@ public class UserService {
             .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
+        RetrieveFullProfileResponse.from(user, null),
         jwtService.createAccessToken(user.getId(), user.getLoginId()),
         jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
