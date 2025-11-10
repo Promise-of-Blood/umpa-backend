@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
-import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder
@@ -21,11 +18,11 @@ public class RetrieveMrProductionServicePostResponse {
 
   private String description;
 
-  private CostPerUnitDto costPerUnit;
+  private ServiceCostResponse serviceCost;
 
   private String additionalCostPolicy;
 
-  private AverageDurationDto averageDuration;
+  private RetrieveAverageDurationResponse averageDuration;
 
   private Integer freeRevisionCount;
 
@@ -35,7 +32,7 @@ public class RetrieveMrProductionServicePostResponse {
 
   private List<String> sampleMrUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
@@ -49,14 +46,19 @@ public class RetrieveMrProductionServicePostResponse {
         .id(mrProductionServicePost.getId())
         .title(mrProductionServicePost.getTitle())
         .description(mrProductionServicePost.getDescription())
-        .costPerUnit(CostPerUnitDto.from(mrProductionServicePost.getServiceCost()))
+        .serviceCost(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
         .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
-        .softwareList(mrProductionServicePost.getUsingSoftwareList())
+        .softwareList(
+            mrProductionServicePost.getUsingSoftwareList() != null
+                ? mrProductionServicePost.getUsingSoftwareList()
+                : List.of())
         .sampleMrUrls(sampleMrUrls)
-        .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
+        .teacherProfile(
+            RetrieveTeacherAuthorProfileResponse.from(mrProductionServicePost.getUser()))
         .reviewRating(0.0f)
         .build();
   }

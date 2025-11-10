@@ -41,6 +41,7 @@ dependencies {
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
     testImplementation 'org.springframework.security:spring-security-test'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -91,7 +92,7 @@ spotless {
 }
 
 tasks.named('compileJava') {
-    dependsOn 'spotlessCheck'
+    dependsOn 'spotlessApply'
 }
 
 tasks.named('test') {

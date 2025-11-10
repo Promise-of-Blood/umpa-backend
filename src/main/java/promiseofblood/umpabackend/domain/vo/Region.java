@@ -4,9 +4,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-public enum Region {
+@RequiredArgsConstructor
+public enum Region implements EnumVoType {
   // 서울특별시
   SEOUL_GANGNAMGU("강남구"),
   SEOUL_GANGDONGGU("강동구"),
@@ -293,17 +295,21 @@ public enum Region {
   JEJU_SEOGWIPOSI("서귀포시"),
   JEJU_JEJUSI("제주시");
 
-  private final String code;
   private final String koreanName;
-
-  Region(String koreanName) {
-    this.code = name();
-    this.koreanName = koreanName;
-  }
 
   public static List<Region> getRegionsByPrefix(String prefix) {
     return Arrays.stream(values())
         .filter(region -> region.name().startsWith(prefix))
         .collect(Collectors.toList());
+  }
+
+  @Override
+  public String getName() {
+    return this.getKoreanName();
+  }
+
+  @Override
+  public String getCode() {
+    return this.name();
   }
 }

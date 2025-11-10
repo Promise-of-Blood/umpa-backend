@@ -6,23 +6,24 @@ spring:
     hibernate:
       ddl-auto: validate
     defer-datasource-initialization: true
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
-        show_sql: true
-        format_sql: true
+        show_sql: false
+        format_sql: false
     open-in-view: false
 
 springdoc:
+
   api-docs:
     path: /api/docs/openapi-json
+    version: openapi_3_0
 
   swagger-ui:
     path: /api/docs
     layout: BaseLayout
     tags-sorter: alpha
     operations-sorter: alpha
-
 
 ---
 
@@ -42,8 +43,8 @@ spring:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-  access-token-expiration: 3600000
-  refresh-token-expiration: 604800000
+  access-token-expiration: 300000
+  refresh-token-expiration: 3600000
 
 oauth2:
   providers:
@@ -69,6 +70,9 @@ oauth2:
       profileUri: https://openapi.naver.com/v1/nid/me
       redirect-uri: https://um-pa.duckdns.org/api/v1/users/callback/naver
 
+discord:
+  webhook:
+    url: ${DISCORD_WEBHOOK_URL}
 ---
 
 spring:
@@ -79,9 +83,9 @@ spring:
     password: ${DB_PASSWORD}
 
 jwt:
-  secret-key: test-jwt-secret-key
-  access-token-expiration: 3600000
-  refresh-token-expiration: 604800000
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration: 300000
+  refresh-token-expiration: 3600000
 
 oauth2:
   providers:
@@ -107,6 +111,10 @@ oauth2:
       profileUri: https://openapi.naver.com/v1/nid/me
       redirect-uri: http://localhost:8080/api/v1/users/callback/naver
 
+discord:
+  webhook:
+    url: ""
+
 ---
 
 spring:
@@ -125,9 +133,13 @@ spring:
         format_sql: true
 
 jwt:
-  secret-key: test-jwt-secret-key
-  access-token-expiration: 3600000
-  refresh-token-expiration: 604800000
+  secret-key: ${JWT_SECRET_KEY}
+  access-token-expiration: 300000
+  refresh-token-expiration: 3600000
 
 oauth2:
   providers: [ ]
+
+discord:
+  webhook:
+    url: ""

@@ -16,15 +16,15 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.Oauth2Provider;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
-import promiseofblood.umpabackend.dto.LoginDto;
-import promiseofblood.umpabackend.dto.LoginDto.LoginCompleteResponse;
-import promiseofblood.umpabackend.dto.Oauth2ProviderDto;
 import promiseofblood.umpabackend.infrastructure.config.Oauth2ProvidersConfig;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2Strategy;
 import promiseofblood.umpabackend.infrastructure.oauth.Oauth2StrategyFactory;
 import promiseofblood.umpabackend.infrastructure.oauth.dto.Oauth2ProfileResponse;
 import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
+import promiseofblood.umpabackend.web.schema.response.CheckIsOauth2RegisterAvailableResponse;
+import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveFullProfileResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveOauth2ProviderInfoResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -79,16 +79,16 @@ public class Oauth2Service {
             Role.USER,
             oauth2RegisterRequest.getUsername(),
             oauth2RegisterRequest.getProfileType(),
-            storedFilePath,
-            newOauth2User);
+            storedFilePath);
 
     User user = userRepository.save(newUser);
+    newOauth2User.assignUserId(user.getId());
+    oauth2UserRepository.save(newOauth2User);
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(user.getId(), user.getLoginId()),
-            jwtService.createRefreshToken(user.getId(), user.getLoginId())));
+        RetrieveFullProfileResponse.from(user, null),
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
   @Transactional
@@ -106,23 +106,26 @@ public class Oauth2Service {
     Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
     Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(providerName);
 
-    User user =
-        userRepository
-            .findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
+    Oauth2User oauth2User =
+        oauth2UserRepository
+            .findByProviderNameAndProviderUid(
                 providerName,
                 oauth2Strategy
                     .getOauth2UserProfile(oauth2Provider, externalAccessToken, externalIdToken)
                     .getProviderUid())
             .orElseThrow(() -> new UnauthorizedException("가입하지 않은 Oauth2 사용자입니다."));
+    User user =
+        userRepository
+            .findById(oauth2User.getUserId())
+            .orElseThrow(() -> new UnauthorizedException("가입하지 않은 Oauth2 사용자입니다."));
 
     return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user),
-        LoginDto.JwtPairResponse.of(
-            jwtService.createAccessToken(user.getId(), user.getLoginId()),
-            jwtService.createRefreshToken(user.getId(), user.getLoginId())));
+        RetrieveFullProfileResponse.from(user, null),
+        jwtService.createAccessToken(user.getId(), user.getLoginId()),
+        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
   }
 
-  public LoginDto.IsOauth2RegisterAvailableResponse isOauth2RegisterAvailable(
+  public CheckIsOauth2RegisterAvailableResponse isOauth2RegisterAvailable(
       String providerName, String idToken, String accessToken) {
 
     Oauth2Provider oauth2Provider = oauth2ProvidersConfig.get(providerName);
@@ -132,9 +135,8 @@ public class Oauth2Service {
         oauth2Strategy.getOauth2UserProfile(oauth2Provider, accessToken, idToken);
     String providerUid = oauth2ProfileResponse.getProviderUid();
 
-    Optional<User> user =
-        userRepository.findByOauth2User_ProviderNameAndOauth2User_ProviderUid(
-            providerName, providerUid);
+    Optional<Oauth2User> user =
+        oauth2UserRepository.findByProviderNameAndProviderUid(providerName, providerUid);
 
     String message;
     if (user.isPresent()) {
@@ -143,18 +145,18 @@ public class Oauth2Service {
       message = "가입 가능한 사용자입니다.";
     }
 
-    return new LoginDto.IsOauth2RegisterAvailableResponse(providerName, user.isEmpty(), message);
+    return new CheckIsOauth2RegisterAvailableResponse(providerName, user.isEmpty(), message);
   }
 
-  public Map<String, Oauth2ProviderDto> generateAuthorizationUrls() {
-    Map<String, Oauth2ProviderDto> oauth2ProviderNameToInfo = new HashMap<>();
+  public Map<String, RetrieveOauth2ProviderInfoResponse> generateAuthorizationUrls() {
+    Map<String, RetrieveOauth2ProviderInfoResponse> oauth2ProviderNameToInfo = new HashMap<>();
 
     for (Oauth2Provider oauth2Provider : oauth2ProvidersConfig.getProviders()) {
       try {
         Oauth2Strategy oauth2Strategy = oauth2StrategyFactory.getStrategy(oauth2Provider.getName());
         oauth2ProviderNameToInfo.put(
             oauth2Provider.getName(),
-            Oauth2ProviderDto.builder()
+            RetrieveOauth2ProviderInfoResponse.builder()
                 .name(oauth2Provider.getName())
                 .clientId(oauth2Provider.getClientId())
                 .loginUrl(oauth2Strategy.getAuthorizationUrl(oauth2Provider))

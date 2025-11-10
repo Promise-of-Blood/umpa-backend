@@ -1,4 +1,4 @@
-package promiseofblood.umpabackend.dto;
+package promiseofblood.umpabackend.web.schema.response;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,7 +6,7 @@ import promiseofblood.umpabackend.domain.entity.Oauth2User;
 
 @Getter
 @Builder
-public class Oauth2UserDto {
+public class RetrieveOauth2ProfileResponse {
 
   private String providerName;
 
@@ -16,8 +16,8 @@ public class Oauth2UserDto {
 
   private String username;
 
-  public static Oauth2UserDto of(Oauth2User oauth2User) {
-    return Oauth2UserDto.builder()
+  public static RetrieveOauth2ProfileResponse of(Oauth2User oauth2User) {
+    return RetrieveOauth2ProfileResponse.builder()
         .providerName(oauth2User.getProviderName())
         .providerUid(oauth2User.getProviderUid())
         .profileImageUrl(oauth2User.getProfileImageUrl())

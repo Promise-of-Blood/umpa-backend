@@ -1,7 +1,23 @@
 package promiseofblood.umpabackend.domain.vo;
 
-public enum DurationUnit {
-  DAY,
-  WEEK,
-  MONTH
+import lombok.*;
+
+@Getter
+@RequiredArgsConstructor
+public enum DurationUnit implements EnumVoType {
+  DAY("일"),
+  WEEK("주"),
+  MONTH("개월");
+
+  private final String koreanName;
+
+  @Override
+  public String getName() {
+    return this.getKoreanName();
+  }
+
+  @Override
+  public String getCode() {
+    return this.name();
+  }
 }

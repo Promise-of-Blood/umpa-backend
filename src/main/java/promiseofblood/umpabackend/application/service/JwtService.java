@@ -19,6 +19,16 @@ public class JwtService {
 
   private final JwtConfig jwtConfig;
 
+  public boolean validateToken(String token) {
+    try {
+      verifyJwt(token);
+      return true;
+    } catch (Exception e) {
+      log.error("Invalid JWT token: {}", e.getMessage());
+      return false;
+    }
+  }
+
   public String createAccessToken(Long id, String loginId) {
 
     return createJwt("access", id, loginId, jwtConfig.getAccessTokenExpiration());
@@ -32,6 +42,11 @@ public class JwtService {
   public void verifyJwt(String token) {
     JWTVerifier verifier = JWT.require(this.jwtAlgorithm()).build();
     verifier.verify(token);
+  }
+
+  public String getTypeFromToken(String token) {
+    DecodedJWT jwt = this.decodeJwt(token);
+    return jwt.getClaim("type").asString();
   }
 
   public Long getUserIdFromToken(String token) {

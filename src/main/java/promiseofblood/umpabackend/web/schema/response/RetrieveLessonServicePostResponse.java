@@ -4,10 +4,10 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.LessonServicePost;
+import promiseofblood.umpabackend.domain.vo.LessonStyle;
+import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
-import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder
@@ -21,14 +21,15 @@ public class RetrieveLessonServicePostResponse {
 
   private String description;
 
-  private CostPerUnitDto costPerUnit;
+  private ServiceCostResponse serviceCost;
 
-  //
-  private Subject subject;
+  private ConstantResponse<Subject> subject; // 상수
 
-  private List<WeekDay> availableWeekDays;
+  private List<ConstantResponse<WeekDay>> availableWeekDays; // 상수
 
-  private String lessonStyle;
+  private ConstantResponse<LessonStyle> lessonStyle; // 상수
+
+  private List<ConstantResponse<Region>> availableRegions;
 
   private Boolean isDemoLessonProvided;
 
@@ -40,7 +41,7 @@ public class RetrieveLessonServicePostResponse {
 
   private List<String> studioPhotoUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
@@ -56,16 +57,19 @@ public class RetrieveLessonServicePostResponse {
         .thumbnailImage(lessonServicePost.getThumbnailImageUrl())
         .title(lessonServicePost.getTitle())
         .description(lessonServicePost.getDescription())
-        .costPerUnit(CostPerUnitDto.from(lessonServicePost.getServiceCost()))
-        .subject(lessonServicePost.getSubject())
-        .availableWeekDays(lessonServicePost.getAvailableWeekDays())
-        .lessonStyle(lessonServicePost.getLessonStyle().name())
+        .serviceCost(ServiceCostResponse.from(lessonServicePost.getServiceCost()))
+        .subject(new ConstantResponse<>(lessonServicePost.getSubject()))
+        .availableWeekDays(
+            lessonServicePost.getAvailableWeekDays().stream().map(ConstantResponse::new).toList())
+        .lessonStyle(new ConstantResponse<>(lessonServicePost.getLessonStyle()))
+        .availableRegions(
+            lessonServicePost.getAvailableRegions().stream().map(ConstantResponse::new).toList())
         .isDemoLessonProvided(lessonServicePost.getIsDemoLessonProvided())
         .demoLessonCost(lessonServicePost.getDemoLessonCost())
         .recommendedTargets(lessonServicePost.getRecommendedTargets())
         .curriculums(curriculumResponses)
         .studioPhotoUrls(lessonServicePost.getStudioPhotoUrls())
-        .teacherProfile(TeacherAuthorProfileDto.from(lessonServicePost.getUser()))
+        .teacherProfile(RetrieveTeacherAuthorProfileResponse.from(lessonServicePost.getUser()))
         .reviewRating(0.0f)
         .build();
   }

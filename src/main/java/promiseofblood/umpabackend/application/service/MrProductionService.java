@@ -1,6 +1,9 @@
 package promiseofblood.umpabackend.application.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.application.command.CreateMrProductionServicePostCommand;
@@ -13,15 +16,39 @@ import promiseofblood.umpabackend.domain.repository.MrProductionServicePostRepos
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
+import promiseofblood.umpabackend.web.schema.response.ListMrProductionServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveMrProductionServicePostResponse;
 
 @Service
 @RequiredArgsConstructor
 public class MrProductionService {
 
+  private final ServicePostLikeService servicePostLikeService;
   private final MrProductionServicePostRepository mrProductionServicePostRepository;
   private final UserRepository userRepository;
   private final StorageService storageService;
+
+  @Transactional(readOnly = true)
+  public Page<ListMrProductionServicePostResponse> getAllServices(int page, int size) {
+
+    Page<MrProductionServicePost> servicePostPage =
+        mrProductionServicePostRepository.findAll(PageRequest.of(page, size));
+
+    return servicePostPage.map(ListMrProductionServicePostResponse::of);
+  }
+
+  @Transactional(readOnly = true)
+  public Page<ListMrProductionServicePostResponse> getLikedServices(
+      String loginId, int page, int size) {
+
+    Pageable pageable = PageRequest.of(page, size);
+
+    Page<MrProductionServicePost> likedPosts =
+        servicePostLikeService.getLikedServicePostsByType(
+            loginId, MrProductionServicePost.class, pageable);
+
+    return likedPosts.map(ListMrProductionServicePostResponse::of);
+  }
 
   @Transactional
   public RetrieveMrProductionServicePostResponse createMrProductionServicePost(

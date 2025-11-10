@@ -12,8 +12,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import promiseofblood.umpabackend.domain.vo.AccompanimentPracticeLocation;
 import promiseofblood.umpabackend.domain.vo.Instrument;
+import promiseofblood.umpabackend.domain.vo.PracticeLocation;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
 
 @Entity
@@ -39,12 +39,7 @@ public class AccompanimentServicePost extends ServicePost {
 
   @ElementCollection
   @Enumerated(EnumType.STRING)
-  private List<AccompanimentPracticeLocation> practiceLocations;
+  private List<PracticeLocation> practiceLocations;
 
   @ElementCollection private List<String> videoUrls;
-
-  @Override
-  public String getCostAndUnit() {
-    return this.serviceCost.getCost() + "원/" + this.serviceCost.getUnit();
-  }
 }

@@ -8,18 +8,21 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import promiseofblood.umpabackend.application.service.ScoreProductionService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
-import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.request.CreateScoreProductionServicePosRequest;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
+import promiseofblood.umpabackend.web.schema.response.ListScoreProductionServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServicePostResponse;
 
 @RestController
@@ -29,13 +32,13 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionSer
 public class ScoreProductionController {
 
   private final ServiceBoardService serviceBoardService;
+  private final ScoreProductionService scoreProductionService;
 
   @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveScoreProductionServicePostResponse> registerScoreProduction(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-      @ModelAttribute
-          ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+      @ModelAttribute CreateScoreProductionServicePosRequest scoreProductionRequest) {
 
     String loginId = securityUserDetails.getUsername();
     RetrieveScoreProductionServicePostResponse scoreProductionServicePostResponse =
@@ -45,12 +48,14 @@ public class ScoreProductionController {
   }
 
   @GetMapping("")
-  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
+  public ResponseEntity<PaginatedResponse<ListScoreProductionServicePostResponse>>
+      getAllLessonServices(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.")
+              int size) {
 
-    Page<ServicePostResponse> servicePostResponsePage =
-        this.serviceBoardService.getAllServices("SCORE_PRODUCTION", page, size);
+    Page<ListScoreProductionServicePostResponse> servicePostResponsePage =
+        this.scoreProductionService.getAllServices(page, size);
 
     return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }
@@ -63,5 +68,32 @@ public class ScoreProductionController {
         serviceBoardService.getScoreProductionServicePost(id);
 
     return ResponseEntity.ok(scoreProductionResponse);
+  }
+
+  @PatchMapping(path = "/{id}/pause")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<Void> pauseServicePost(
+      @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    serviceBoardService.pauseServicePost(id, securityUserDetails.getUsername());
+    return ResponseEntity.ok().build();
+  }
+
+  @PatchMapping(path = "/{id}/publish")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<Void> publishServicePost(
+      @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    serviceBoardService.publishServicePost(id, securityUserDetails.getUsername());
+    return ResponseEntity.ok().build();
+  }
+
+  @DeleteMapping(path = "/{id}")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<Void> deleteServicePost(
+      @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    serviceBoardService.deleteServicePost(id, securityUserDetails.getUsername());
+    return ResponseEntity.ok().build();
   }
 }

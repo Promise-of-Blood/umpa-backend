@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum LessonStyle {
+public enum LessonStyle implements EnumVoType {
   FACE_TO_FACE("대면"),
 
   NON_FACE_TO_FACE("비대면"),
@@ -13,4 +13,14 @@ public enum LessonStyle {
   ALL("전체");
 
   private final String koreanName;
+
+  @Override
+  public String getName() {
+    return this.getKoreanName();
+  }
+
+  @Override
+  public String getCode() {
+    return this.name();
+  }
 }

@@ -63,11 +63,6 @@ public class User extends TimeStampedEntity {
   @JoinColumn(name = "teacher_profile_id")
   private TeacherProfile teacherProfile;
 
-  // 소셜 로그인 유저
-  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  @JoinColumn(name = "oauth2_user_id")
-  private Oauth2User oauth2User;
-
   public static User register(
       String loginId,
       String password,
@@ -97,8 +92,7 @@ public class User extends TimeStampedEntity {
       Role role,
       String username,
       ProfileType profileType,
-      String profileImageUrl,
-      Oauth2User oauth2User) {
+      String profileImageUrl) {
 
     return User.builder()
         .loginId(loginId)
@@ -108,7 +102,6 @@ public class User extends TimeStampedEntity {
         .username(new Username(username))
         .profileType(profileType)
         .profileImageUrl(profileImageUrl)
-        .oauth2User(oauth2User)
         .build();
   }
 
@@ -140,5 +133,9 @@ public class User extends TimeStampedEntity {
     if (profileType != null) {
       this.profileType = profileType;
     }
+  }
+
+  public void withdraw() {
+    this.userStatus = UserStatus.WITHDRAWN;
   }
 }

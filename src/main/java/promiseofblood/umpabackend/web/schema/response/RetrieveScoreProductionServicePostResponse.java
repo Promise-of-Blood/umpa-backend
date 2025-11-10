@@ -5,11 +5,10 @@ import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import promiseofblood.umpabackend.domain.entity.SampleScoreImageUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
+import promiseofblood.umpabackend.domain.vo.PostDisplayStatus;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.CostPerUnitDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder(access = AccessLevel.PRIVATE)
@@ -23,11 +22,13 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private String description;
 
-  private List<CostPerUnitDto> costsPerUnits;
+  private ConstantResponse<PostDisplayStatus> displayStatus;
+
+  private List<ServiceCostResponse> serviceCostList;
 
   private String additionalCostPolicy;
 
-  private AverageDurationDto averageDuration;
+  private RetrieveAverageDurationResponse averageDuration;
 
   private int freeRevisionCount;
 
@@ -35,32 +36,46 @@ public class RetrieveScoreProductionServicePostResponse {
 
   private List<String> softwareList;
 
-  private String sampleScoreImageUrl;
+  private List<String> sampleScoreImageUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
   public static RetrieveScoreProductionServicePostResponse from(
       ScoreProductionServicePost scoreProductionServicePost) {
 
-    List<CostPerUnitDto> costPerUnits = new ArrayList<>();
+    List<ServiceCostResponse> costPerUnits = new ArrayList<>();
     for (ServiceCost serviceCost : scoreProductionServicePost.getServiceCosts()) {
-      costPerUnits.add(CostPerUnitDto.from(serviceCost));
+      costPerUnits.add(ServiceCostResponse.from(serviceCost));
     }
-    System.out.println(scoreProductionServicePost.getAverageDuration());
+
+    List<String> usingSoftwareList =
+        scoreProductionServicePost.getUsingSoftwareList() != null
+            ? scoreProductionServicePost.getUsingSoftwareList()
+            : List.of();
+
+    List<String> sampleScoreImageUrls = new ArrayList<>();
+    for (SampleScoreImageUrl sampleScoreImageUrl :
+        scoreProductionServicePost.getSampleScoreImageUrls()) {
+      sampleScoreImageUrls.add(sampleScoreImageUrl.getUrl());
+    }
+
     return RetrieveScoreProductionServicePostResponse.builder()
         .id(scoreProductionServicePost.getId())
         .title(scoreProductionServicePost.getTitle())
         .description(scoreProductionServicePost.getDescription())
-        .costsPerUnits(costPerUnits)
+        .displayStatus(new ConstantResponse<>(scoreProductionServicePost.getDisplayStatus()))
+        .serviceCostList(costPerUnits)
         .additionalCostPolicy(scoreProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(AverageDurationDto.from(scoreProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(scoreProductionServicePost.getAverageDuration()))
         .freeRevisionCount(scoreProductionServicePost.getFreeRevisionCount())
-        .softwareList(scoreProductionServicePost.getUsingSoftwareList())
+        .softwareList(usingSoftwareList)
         .additionalRevisionCost(scoreProductionServicePost.getAdditionalRevisionCost())
-        .sampleScoreImageUrl(scoreProductionServicePost.getSampleScoreImageUrl())
-        .teacherProfile(TeacherAuthorProfileDto.from(scoreProductionServicePost.getUser()))
+        .sampleScoreImageUrls(sampleScoreImageUrls)
+        .teacherProfile(
+            RetrieveTeacherAuthorProfileResponse.from(scoreProductionServicePost.getUser()))
         .reviewRating(0.1f)
         .build();
   }

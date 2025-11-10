@@ -3,12 +3,12 @@ package promiseofblood.umpabackend.application.service;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
+import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.AccompanimentServicePost;
+import promiseofblood.umpabackend.domain.entity.SampleScoreImageUrl;
 import promiseofblood.umpabackend.domain.entity.ScoreProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.ServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
@@ -16,10 +16,10 @@ import promiseofblood.umpabackend.domain.repository.ScoreProductionServicePostRe
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.domain.vo.DurationRange;
+import promiseofblood.umpabackend.domain.vo.PublishStatus;
 import promiseofblood.umpabackend.domain.vo.ServiceCost;
-import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.ScoreProductionServicePostDto;
-import promiseofblood.umpabackend.dto.ServicePostDto;
+import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
+import promiseofblood.umpabackend.web.schema.request.CreateScoreProductionServicePosRequest;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveScoreProductionServicePostResponse;
 
@@ -33,34 +33,8 @@ public class ServiceBoardService {
   private final ServicePostRepository servicePostRepository;
 
   @Transactional
-  public Page<ServicePostDto.ServicePostResponse> getAllServices(
-      String serviceType, int page, int size) {
-    Page<ServicePost> servicePostPage =
-        servicePostRepository.findAllByServiceType(serviceType, PageRequest.of(page, size));
-
-    return servicePostPage.map(
-        servicePost -> {
-          User teacherUser =
-              userRepository
-                  .findById(servicePost.getUser().getId())
-                  .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
-
-          return ServicePostDto.ServicePostResponse.builder()
-              .id(servicePost.getId())
-              .title(servicePost.getTitle())
-              .tags(List.of("기타", "보컬"))
-              .teacherName(teacherUser.getUsername().getValue())
-              .thumbnailImageUrl(servicePost.getThumbnailImageUrl())
-              .costAndUnit(servicePost.getCostAndUnit())
-              .reviewRating(5.0f)
-              .build();
-        });
-  }
-
-  @Transactional
   public RetrieveAccompanimentServicePostResponse createAccompanimentServicePost(
-      String loginId,
-      AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+      String loginId, CreateAccompanimentServicePostRequest accompanimentPostRequest) {
 
     User user =
         userRepository
@@ -78,6 +52,7 @@ public class ServiceBoardService {
             .title(accompanimentPostRequest.getTitle())
             .description(accompanimentPostRequest.getDescription())
             .thumbnailImageUrl(filePath)
+            .publishStatus(PublishStatus.PUBLISHED)
             .serviceCost(
                 ServiceCost.builder().cost(accompanimentPostRequest.getCost()).unit("학교").build())
             .additionalCostPolicy(accompanimentPostRequest.getAdditionalCostPolicy())
@@ -95,8 +70,7 @@ public class ServiceBoardService {
 
   @Transactional
   public RetrieveScoreProductionServicePostResponse createScoreProductionServicePost(
-      String loginId,
-      ScoreProductionServicePostDto.ScoreProductionServicePosRequest scoreProductionRequest) {
+      String loginId, CreateScoreProductionServicePosRequest scoreProductionRequest) {
 
     User user =
         userRepository
@@ -108,10 +82,13 @@ public class ServiceBoardService {
             scoreProductionRequest.getThumbnailImage(),
             "service/" + user.getId() + "/score-production");
 
-    String sampleScoreFilePath =
-        storageService.store(
-            scoreProductionRequest.getSampleScoreImage(),
-            "service/" + user.getId() + "/score-production/sample-score");
+    List<SampleScoreImageUrl> sampleScoreFilePaths = new ArrayList<>();
+    for (var sampleScoreImage : scoreProductionRequest.getSampleScoreImages()) {
+      String sampleScoreFilePath =
+          storageService.store(
+              sampleScoreImage, "service/" + user.getId() + "/score-production/sample-score");
+      sampleScoreFilePaths.add(SampleScoreImageUrl.of(sampleScoreFilePath));
+    }
 
     List<ServiceCost> serviceCosts = new ArrayList<>();
     for (String costByScoreType : scoreProductionRequest.getCostByScoreType().split(",")) {
@@ -127,13 +104,14 @@ public class ServiceBoardService {
             .title(scoreProductionRequest.getTitle())
             .thumbnailImageUrl(thumbnailFilePath)
             .description(scoreProductionRequest.getDescription())
+            .publishStatus(PublishStatus.PUBLISHED)
             .serviceCosts(serviceCosts)
             .additionalCostPolicy(scoreProductionRequest.getAdditionalCostPolicy())
             .freeRevisionCount(scoreProductionRequest.getFreeRevisionCount())
             .additionalRevisionCost(scoreProductionRequest.getAdditionalRevisionCost())
             .averageDuration(DurationRange.of(scoreProductionRequest.getAverageDuration()))
             .usingSoftwareList(scoreProductionRequest.getSoftwareList())
-            .sampleScoreImageUrl(sampleScoreFilePath)
+            .sampleScoreImageUrls(sampleScoreFilePaths)
             .build();
     servicePostRepository.save(scoreProductionServicePost);
 
@@ -149,5 +127,40 @@ public class ServiceBoardService {
             .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 악보 제작 서비스 게시글이 존재하지 않습니다."));
 
     return RetrieveScoreProductionServicePostResponse.from(scoreProductionServicePost);
+  }
+
+  /** 게시물 모집 중단 */
+  @Transactional
+  public void pauseServicePost(Long postId, String loginId) {
+    ServicePost servicePost = getServicePostWithAuthorization(postId, loginId);
+    servicePost.pause();
+  }
+
+  /** 게시물 모집 재개 */
+  @Transactional
+  public void publishServicePost(Long postId, String loginId) {
+    ServicePost servicePost = getServicePostWithAuthorization(postId, loginId);
+    servicePost.publish();
+  }
+
+  /** 게시물 삭제 (Soft Delete) */
+  @Transactional
+  public void deleteServicePost(Long postId, String loginId) {
+    ServicePost servicePost = getServicePostWithAuthorization(postId, loginId);
+    servicePost.delete();
+  }
+
+  /** 게시물 조회 및 작성자 권한 확인 */
+  private ServicePost getServicePostWithAuthorization(Long postId, String loginId) {
+    ServicePost servicePost =
+        servicePostRepository
+            .findByIdAndNotDeleted(postId)
+            .orElseThrow(() -> new ResourceNotFoundException("게시물을 찾을 수 없습니다."));
+
+    if (!servicePost.getUser().getLoginId().equals(loginId)) {
+      throw new UnauthorizedException("게시물을 수정할 권한이 없습니다.");
+    }
+
+    return servicePost;
   }
 }

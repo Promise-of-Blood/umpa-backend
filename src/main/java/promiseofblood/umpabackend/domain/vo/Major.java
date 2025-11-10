@@ -4,7 +4,7 @@ import lombok.*;
 
 @Getter
 @RequiredArgsConstructor
-public enum Major {
+public enum Major implements EnumVoType {
   PIANO("피아노", "piano"),
 
   COMPOSITION("작곡", "composition"),
@@ -24,4 +24,14 @@ public enum Major {
   private final String koreanName;
 
   private final String assetName;
+
+  @Override
+  public String getName() {
+    return this.getKoreanName();
+  }
+
+  @Override
+  public String getCode() {
+    return this.name();
+  }
 }

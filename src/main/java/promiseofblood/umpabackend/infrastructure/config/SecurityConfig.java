@@ -5,6 +5,8 @@ import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 
+import java.util.Arrays;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.infrastructure.security.JwtAuthenticationEntryPoint;
 import promiseofblood.umpabackend.infrastructure.security.JwtFilter;
@@ -38,6 +43,8 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+    http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
     http.formLogin(AbstractHttpConfigurer::disable);
     http.logout(AbstractHttpConfigurer::disable);
     http.sessionManagement(
@@ -63,7 +70,11 @@ public class SecurityConfig {
                 .permitAll()
                 .requestMatchers("/api/v1/users/token/**")
                 .permitAll()
+                .requestMatchers("/api/v1/users/refresh-token/**")
+                .permitAll()
                 .requestMatchers("/api/v1/users/oauth2-authorization-urls")
+                .permitAll()
+                .requestMatchers("/ws/chat/**")
                 .permitAll()
                 // 서비스 API 접근 제어 - GET 요청은 모두 허용, POST/PUT/DELETE는 인증 필요
                 .requestMatchers(GET, "/api/v1/services/**")
@@ -73,6 +84,9 @@ public class SecurityConfig {
                 .requestMatchers(PUT, "/api/v1/services/**")
                 .authenticated()
                 .requestMatchers(DELETE, "/api/v1/services/**")
+                .authenticated()
+                // 어드민 api는 인증되어야지 가능함
+                .requestMatchers("/api/v1/admin/users/register")
                 .authenticated()
                 .anyRequest()
                 .authenticated());
@@ -88,6 +102,20 @@ public class SecurityConfig {
   public PasswordEncoder passwordEncoder() {
 
     return new BCryptPasswordEncoder();
+  }
+
+  @Bean
+  public CorsConfigurationSource corsConfigurationSource() {
+    CorsConfiguration configuration = new CorsConfiguration();
+    configuration.setAllowedOrigins(List.of("http://localhost:3000", "https://um-pa.duckdns.org"));
+    configuration.setAllowedMethods(
+        Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "STOMP"));
+    configuration.setAllowedHeaders(List.of("*"));
+    configuration.setAllowCredentials(true);
+
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/**", configuration);
+    return source;
   }
 
   @Bean

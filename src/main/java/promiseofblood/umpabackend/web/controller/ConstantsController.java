@@ -13,8 +13,10 @@ import promiseofblood.umpabackend.application.service.ConstantService;
 import promiseofblood.umpabackend.domain.vo.College;
 import promiseofblood.umpabackend.domain.vo.Grade;
 import promiseofblood.umpabackend.domain.vo.LessonStyle;
+import promiseofblood.umpabackend.domain.vo.PracticeLocation;
 import promiseofblood.umpabackend.domain.vo.RegionCategory;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
+import promiseofblood.umpabackend.web.schema.response.ConstantResponse;
 import promiseofblood.umpabackend.web.schema.response.ConstantResponses;
 import promiseofblood.umpabackend.web.schema.response.ConstantResponses.InstrumentIconResponse;
 import promiseofblood.umpabackend.web.schema.response.ConstantResponses.MajorIconResponse;
@@ -69,14 +71,25 @@ public class ConstantsController {
   }
 
   @GetMapping("lessonStyles")
-  public ResponseEntity<List<ConstantResponses.LessonStyleResponse>> getLessonStyles() {
+  public ResponseEntity<List<ConstantResponse<LessonStyle>>> getLessonStyles() {
 
-    List<ConstantResponses.LessonStyleResponse> lessonStyleResponses = new ArrayList<>();
+    List<ConstantResponse<LessonStyle>> responses = new ArrayList<>();
     for (LessonStyle lessonStyle : LessonStyle.values()) {
-      lessonStyleResponses.add(ConstantResponses.LessonStyleResponse.from(lessonStyle));
+      responses.add(new ConstantResponse<>(lessonStyle));
     }
 
-    return ResponseEntity.ok(lessonStyleResponses);
+    return ResponseEntity.ok(responses);
+  }
+
+  @GetMapping("/practiceLocations")
+  public ResponseEntity<List<ConstantResponse<PracticeLocation>>> getPracticeLocations() {
+
+    List<ConstantResponse<PracticeLocation>> responses = new ArrayList<>();
+    for (PracticeLocation practiceLocation : PracticeLocation.values()) {
+      responses.add(new ConstantResponse<>(practiceLocation));
+    }
+
+    return ResponseEntity.ok(responses);
   }
 
   @GetMapping("/grades")

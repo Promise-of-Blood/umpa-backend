@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum UserStatus {
+public enum UserStatus implements EnumVoType {
 
   // 1. 회원가입만 해 두고, 프로필은 아직 완료되지 않은 경우
   PENDING("대기"),
@@ -20,4 +20,14 @@ public enum UserStatus {
   SUSPENDED("정지");
 
   private final String koreanName;
+
+  @Override
+  public String getName() {
+    return this.getKoreanName();
+  }
+
+  @Override
+  public String getCode() {
+    return this.name();
+  }
 }

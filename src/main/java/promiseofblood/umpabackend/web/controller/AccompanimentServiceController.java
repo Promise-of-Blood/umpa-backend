@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -19,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.query.RetrieveAccompanimentServicePostQuery;
 import promiseofblood.umpabackend.application.service.AccompanimentService;
 import promiseofblood.umpabackend.application.service.ServiceBoardService;
-import promiseofblood.umpabackend.dto.AccompanimentServicePostDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.ServicePostResponse;
+import promiseofblood.umpabackend.infrastructure.security.IsTeacherProfileReady;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
+import promiseofblood.umpabackend.web.schema.request.CreateAccompanimentServicePostRequest;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
+import promiseofblood.umpabackend.web.schema.response.ListAccompanimentServicePostResponse;
 import promiseofblood.umpabackend.web.schema.response.RetrieveAccompanimentServicePostResponse;
 
 @RestController
@@ -34,16 +34,11 @@ public class AccompanimentServiceController {
   private final ServiceBoardService serviceBoardService;
   private final AccompanimentService accompanimentService;
 
-  // ************
-  // * 합주 서비스 *
-  // ************
-
+  @IsTeacherProfileReady
   @PostMapping(path = "/accompaniment", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-  @PreAuthorize("isAuthenticated()")
   public ResponseEntity<RetrieveAccompanimentServicePostResponse> registerAccompaniment(
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
-      @ModelAttribute @Valid
-          AccompanimentServicePostDto.AccompanimentPostRequest accompanimentPostRequest) {
+      @ModelAttribute @Valid CreateAccompanimentServicePostRequest accompanimentPostRequest) {
     String loginId = securityUserDetails.getUsername();
 
     RetrieveAccompanimentServicePostResponse accompanimentPostResponse =
@@ -53,12 +48,14 @@ public class AccompanimentServiceController {
   }
 
   @GetMapping("/accompaniment")
-  public ResponseEntity<PaginatedResponse<ServicePostResponse>> getAllLessonServices(
-      @RequestParam(defaultValue = "0") int page,
-      @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.") int size) {
+  public ResponseEntity<PaginatedResponse<ListAccompanimentServicePostResponse>>
+      getAllLessonServices(
+          @RequestParam(defaultValue = "0") int page,
+          @RequestParam(defaultValue = "10") @Min(value = 1, message = "size는 0보다 커야 합니다.")
+              int size) {
 
-    Page<ServicePostResponse> servicePostResponsePage =
-        this.serviceBoardService.getAllServices("ACCOMPANIMENT", page, size);
+    Page<ListAccompanimentServicePostResponse> servicePostResponsePage =
+        accompanimentService.getAllServices(page, size);
 
     return ResponseEntity.ok(PaginatedResponse.from(servicePostResponsePage));
   }

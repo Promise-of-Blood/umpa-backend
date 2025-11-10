@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum WeekDay {
+public enum WeekDay implements EnumVoType {
   MONDAY("월요일"),
 
   TUESDAY("화요일"),
@@ -21,4 +21,14 @@ public enum WeekDay {
   SUNDAY("일요일");
 
   private final String koreanName;
+
+  @Override
+  public String getName() {
+    return this.getKoreanName();
+  }
+
+  @Override
+  public String getCode() {
+    return this.name();
+  }
 }

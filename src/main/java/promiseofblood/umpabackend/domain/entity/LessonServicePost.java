@@ -107,9 +107,4 @@ public class LessonServicePost extends ServicePost {
 
     return post;
   }
-
-  @Override
-  public String getCostAndUnit() {
-    return serviceCost.getCost() + " " + serviceCost.getUnit();
-  }
 }
