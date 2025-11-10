@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.service.Oauth2Service;
+import promiseofblood.umpabackend.application.service.RegisterService;
 import promiseofblood.umpabackend.application.service.UserService;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.request.RegisterByOauth2Request;
@@ -28,6 +29,7 @@ import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
 public class RegisterController {
 
   private final UserService userService;
+  private final RegisterService registerService;
   private final Oauth2Service oauth2Service;
 
   @Tag(name = "회원가입 API")
@@ -35,7 +37,8 @@ public class RegisterController {
   public ResponseEntity<LoginCompleteResponse> registerUser(
       @Validated @ModelAttribute RegisterByLoginIdPasswordRequest loginIdPasswordRequest) {
 
-    LoginCompleteResponse loginCompleteResponse = userService.registerUser(loginIdPasswordRequest);
+    LoginCompleteResponse loginCompleteResponse =
+        registerService.registerUser(loginIdPasswordRequest);
 
     return ResponseEntity.ok(loginCompleteResponse);
   }

@@ -13,10 +13,8 @@ import promiseofblood.umpabackend.application.exception.ResourceNotFoundExceptio
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
-import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
 import promiseofblood.umpabackend.domain.vo.Username;
-import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordRequest;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordWithRoleRequest;
 import promiseofblood.umpabackend.web.schema.response.CheckIsUsernameAvailableResponse;
 import promiseofblood.umpabackend.web.schema.response.LoginCompleteResponse;
@@ -31,41 +29,6 @@ public class UserService {
   private final PasswordEncoder passwordEncoder;
   private final UserRepository userRepository;
   private final StorageService storageService;
-
-  @Transactional
-  public LoginCompleteResponse registerUser(
-      RegisterByLoginIdPasswordRequest loginIdPasswordRegisterRequest) {
-
-    if (this.isLoginIdAvailable(loginIdPasswordRegisterRequest.getLoginId())) {
-      throw new RegistrationException("이미 사용 중인 로그인ID 입니다.");
-    }
-
-    // TODO 이 더러운 코드를 해결하기
-    String storedFilePath = null;
-    if (loginIdPasswordRegisterRequest.getProfileImage() != null) {
-      storedFilePath =
-          this.uploadProfileImage(
-              loginIdPasswordRegisterRequest.getLoginId(),
-              loginIdPasswordRegisterRequest.getProfileImage());
-    }
-
-    User user =
-        User.register(
-            loginIdPasswordRegisterRequest.getLoginId(),
-            passwordEncoder.encode(loginIdPasswordRegisterRequest.getPassword()),
-            loginIdPasswordRegisterRequest.getGender(),
-            UserStatus.PENDING,
-            Role.USER,
-            loginIdPasswordRegisterRequest.getUsername(),
-            loginIdPasswordRegisterRequest.getProfileType(),
-            storedFilePath);
-    user = userRepository.save(user);
-
-    return LoginCompleteResponse.of(
-        RetrieveFullProfileResponse.from(user, null),
-        jwtService.createAccessToken(user.getId(), user.getLoginId()),
-        jwtService.createRefreshToken(user.getId(), user.getLoginId()));
-  }
 
   @Transactional
   public RetrieveFullProfileResponse registerAdmin(
@@ -175,6 +138,8 @@ public class UserService {
   }
 
   public CheckIsUsernameAvailableResponse isUsernameAvailable(String rawUsername) {
+
+    // TODO: Username 객체 생성 시 이미 검증되는 부분임.
     if (!isUsernamePatternValid(rawUsername)) {
       return new CheckIsUsernameAvailableResponse(
           rawUsername, false, "아이디는 한글, 영문, 숫자만 사용 가능하며 최대 8글자입니다.");
