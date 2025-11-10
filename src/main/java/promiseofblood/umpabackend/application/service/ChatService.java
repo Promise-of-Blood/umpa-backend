@@ -14,7 +14,8 @@ import promiseofblood.umpabackend.domain.repository.ChatMessageRepository;
 import promiseofblood.umpabackend.domain.repository.ChatRoomRepository;
 import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 import promiseofblood.umpabackend.domain.repository.UserRepository;
-import promiseofblood.umpabackend.dto.ChatDto;
+import promiseofblood.umpabackend.web.schema.response.ChatMessageResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveChatRoomResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -26,7 +27,7 @@ public class ChatService {
   private final ServicePostRepository servicePostRepository;
 
   @Transactional
-  public ChatDto.ChatRoomResponse createChatRoom(String loginId, Long servicePostId) {
+  public RetrieveChatRoomResponse createChatRoom(String loginId, Long servicePostId) {
     User student =
         userRepository
             .findByLoginId(loginId)
@@ -43,7 +44,7 @@ public class ChatService {
     ChatRoom chatRoom = ChatRoom.create(servicePost, student, teacher);
     chatRoomRepository.save(chatRoom);
 
-    ChatDto.ChatRoomResponse response = new ChatDto.ChatRoomResponse();
+    RetrieveChatRoomResponse response = new RetrieveChatRoomResponse();
     response.setId(chatRoom.getId());
     response.setServicePostId(servicePost.getId());
     response.setTeacherName(teacher.getUsername().getValue());
@@ -53,7 +54,7 @@ public class ChatService {
   }
 
   @Transactional(readOnly = true)
-  public List<ChatDto.ChatRoomResponse> getMyChatRooms(String loginId) {
+  public List<RetrieveChatRoomResponse> getMyChatRooms(String loginId) {
     User user =
         userRepository
             .findByLoginId(loginId)
@@ -64,7 +65,7 @@ public class ChatService {
     return chatRooms.stream()
         .map(
             chatRoom -> {
-              ChatDto.ChatRoomResponse response = new ChatDto.ChatRoomResponse();
+              RetrieveChatRoomResponse response = new RetrieveChatRoomResponse();
               response.setId(chatRoom.getId());
               response.setServicePostId(chatRoom.getServicePost().getId());
               response.setTeacherName(chatRoom.getTeacher().getUsername().getValue());
@@ -75,7 +76,7 @@ public class ChatService {
   }
 
   @Transactional(readOnly = true)
-  public List<ChatDto.ChatMessageResponse> getChatMessages(String loginId, Long roomId) {
+  public List<ChatMessageResponse> getChatMessages(String loginId, Long roomId) {
     User user =
         userRepository
             .findByLoginId(loginId)
@@ -95,7 +96,7 @@ public class ChatService {
     return chatMessages.stream()
         .map(
             chatMessage -> {
-              ChatDto.ChatMessageResponse response = new ChatDto.ChatMessageResponse();
+              ChatMessageResponse response = new ChatMessageResponse();
               response.setId(chatMessage.getId());
               response.setSenderName(chatMessage.getSender().getUsername().getValue());
               response.setMessage(chatMessage.getMessage());
@@ -106,7 +107,7 @@ public class ChatService {
   }
 
   @Transactional
-  public ChatDto.ChatMessageResponse sendMessage(String loginId, Long roomId, String message) {
+  public ChatMessageResponse sendMessage(String loginId, Long roomId, String message) {
     User sender =
         userRepository
             .findByLoginId(loginId)
@@ -124,7 +125,7 @@ public class ChatService {
     ChatMessage chatMessage = ChatMessage.create(chatRoom, sender, message);
     chatMessageRepository.save(chatMessage);
 
-    ChatDto.ChatMessageResponse response = new ChatDto.ChatMessageResponse();
+    ChatMessageResponse response = new ChatMessageResponse();
     response.setId(chatMessage.getId());
     response.setSenderName(sender.getUsername().getValue());
     response.setMessage(chatMessage.getMessage());

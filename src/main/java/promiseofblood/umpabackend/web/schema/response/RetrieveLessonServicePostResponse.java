@@ -8,7 +8,6 @@ import promiseofblood.umpabackend.domain.vo.LessonStyle;
 import promiseofblood.umpabackend.domain.vo.Region;
 import promiseofblood.umpabackend.domain.vo.Subject;
 import promiseofblood.umpabackend.domain.vo.WeekDay;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder
@@ -42,7 +41,7 @@ public class RetrieveLessonServicePostResponse {
 
   private List<String> studioPhotoUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
@@ -70,7 +69,7 @@ public class RetrieveLessonServicePostResponse {
         .recommendedTargets(lessonServicePost.getRecommendedTargets())
         .curriculums(curriculumResponses)
         .studioPhotoUrls(lessonServicePost.getStudioPhotoUrls())
-        .teacherProfile(TeacherAuthorProfileDto.from(lessonServicePost.getUser()))
+        .teacherProfile(RetrieveTeacherAuthorProfileResponse.from(lessonServicePost.getUser()))
         .reviewRating(0.0f)
         .build();
   }

@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
 import promiseofblood.umpabackend.domain.entity.SampleMrUrl;
-import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
-import promiseofblood.umpabackend.dto.ServicePostDto.TeacherAuthorProfileDto;
 
 @Getter
 @Builder
@@ -24,7 +22,7 @@ public class RetrieveMrProductionServicePostResponse {
 
   private String additionalCostPolicy;
 
-  private AverageDurationDto averageDuration;
+  private RetrieveAverageDurationResponse averageDuration;
 
   private Integer freeRevisionCount;
 
@@ -34,7 +32,7 @@ public class RetrieveMrProductionServicePostResponse {
 
   private List<String> sampleMrUrls;
 
-  private TeacherAuthorProfileDto teacherProfile;
+  private RetrieveTeacherAuthorProfileResponse teacherProfile;
 
   private float reviewRating;
 
@@ -50,7 +48,8 @@ public class RetrieveMrProductionServicePostResponse {
         .description(mrProductionServicePost.getDescription())
         .serviceCost(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
         .additionalCostPolicy(mrProductionServicePost.getAdditionalCostPolicy())
-        .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))
         .freeRevisionCount(mrProductionServicePost.getFreeRevisionCount())
         .additionalRevisionCost(mrProductionServicePost.getAdditionalRevisionCost())
         .softwareList(
@@ -58,7 +57,8 @@ public class RetrieveMrProductionServicePostResponse {
                 ? mrProductionServicePost.getUsingSoftwareList()
                 : List.of())
         .sampleMrUrls(sampleMrUrls)
-        .teacherProfile(TeacherAuthorProfileDto.from(mrProductionServicePost.getUser()))
+        .teacherProfile(
+            RetrieveTeacherAuthorProfileResponse.from(mrProductionServicePost.getUser()))
         .reviewRating(0.0f)
         .build();
   }

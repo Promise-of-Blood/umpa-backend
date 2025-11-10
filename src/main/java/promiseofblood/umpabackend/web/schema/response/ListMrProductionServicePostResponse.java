@@ -4,7 +4,7 @@ import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import promiseofblood.umpabackend.domain.entity.MrProductionServicePost;
-import promiseofblood.umpabackend.dto.ServicePostDto.AverageDurationDto;
+import promiseofblood.umpabackend.domain.vo.PostDisplayStatus;
 
 @Getter
 @Builder
@@ -18,9 +18,11 @@ public class ListMrProductionServicePostResponse {
 
   private String description;
 
+  private ConstantResponse<PostDisplayStatus> displayStatus;
+
   private ServiceCostResponse serviceCost;
 
-  private AverageDurationDto averageDuration;
+  private RetrieveAverageDurationResponse averageDuration;
 
   private List<String> softwareList;
 
@@ -35,8 +37,10 @@ public class ListMrProductionServicePostResponse {
         .id(mrProductionServicePost.getId())
         .title(mrProductionServicePost.getTitle())
         .description(mrProductionServicePost.getDescription())
+        .displayStatus(new ConstantResponse<>(mrProductionServicePost.getDisplayStatus()))
         .serviceCost(ServiceCostResponse.from(mrProductionServicePost.getServiceCost()))
-        .averageDuration(AverageDurationDto.from(mrProductionServicePost.getAverageDuration()))
+        .averageDuration(
+            RetrieveAverageDurationResponse.from(mrProductionServicePost.getAverageDuration()))
         .softwareList(
             mrProductionServicePost.getUsingSoftwareList() != null
                 ? mrProductionServicePost.getUsingSoftwareList()

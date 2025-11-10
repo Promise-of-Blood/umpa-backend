@@ -4,10 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Getter;
+import promiseofblood.umpabackend.domain.entity.Oauth2User;
 import promiseofblood.umpabackend.domain.entity.User;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.UserStatus;
-import promiseofblood.umpabackend.dto.Oauth2UserDto;
 
 @Getter
 @Builder
@@ -39,13 +39,13 @@ public class RetrieveFullProfileResponse {
   private RetrieveStudentProfileResponse studentProfile;
 
   @Schema(nullable = true)
-  private Oauth2UserDto oauth2User;
+  private RetrieveOauth2ProfileResponse oauth2User;
 
   private LocalDateTime createdAt;
 
   private LocalDateTime updatedAt;
 
-  public static RetrieveFullProfileResponse from(User user) {
+  public static RetrieveFullProfileResponse from(User user, Oauth2User oauth2User) {
     return RetrieveFullProfileResponse.builder()
         .id(user.getId())
         .loginId(user.getLoginId())
@@ -63,7 +63,7 @@ public class RetrieveFullProfileResponse {
             user.getStudentProfile() == null
                 ? null
                 : RetrieveStudentProfileResponse.from(user.getStudentProfile()))
-        .oauth2User(user.getOauth2User() == null ? null : Oauth2UserDto.of(user.getOauth2User()))
+        .oauth2User(oauth2User == null ? null : RetrieveOauth2ProfileResponse.of(oauth2User))
         .createdAt(user.getCreatedAt())
         .updatedAt(user.getUpdatedAt())
         .build();
