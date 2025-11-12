@@ -33,7 +33,7 @@ public class MrProductionServicePost extends ServicePost {
 
   @Embedded private DurationRange averageDuration;
 
-  private List<String> usingSoftwareList;
+  @ElementCollection private List<String> usingSoftwareList;
 
   @ElementCollection private List<SampleMrUrl> sampleMrUrls;
 
