@@ -43,6 +43,7 @@ public class LessonServicePost extends ServicePost {
 
   // 가능한 수업 요일들
   @Enumerated(EnumType.STRING)
+  @ElementCollection
   private List<WeekDay> availableWeekDays;
 
   // 수업 스타일(비대면/대면)
@@ -55,7 +56,7 @@ public class LessonServicePost extends ServicePost {
   private Integer demoLessonCost;
 
   // 추천 대상
-  private List<String> recommendedTargets;
+  @ElementCollection private List<String> recommendedTargets;
 
   // 커리큘럼
   @ElementCollection
@@ -65,7 +66,7 @@ public class LessonServicePost extends ServicePost {
   private List<LessonCurriculum> curriculums = new ArrayList<>();
 
   // 스튜디오 사진들
-  private List<String> studioPhotoUrls;
+  @ElementCollection private List<String> studioPhotoUrls;
 
   public static LessonServicePost create(
       // 공통 필드
