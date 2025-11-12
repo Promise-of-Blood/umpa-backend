@@ -30,8 +30,8 @@ public class ListTeacherCareerResponse {
         .id(teacherCareer.getId())
         .isRepresentative(teacherCareer.isRepresentative())
         .title(teacherCareer.getTitle())
-        .start(teacherCareer.getStart())
-        .end(teacherCareer.getEnd())
+        .start(teacherCareer.getStartAt())
+        .end(teacherCareer.getEndAt())
         .build();
   }
 }
