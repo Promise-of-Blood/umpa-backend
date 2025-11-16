@@ -33,11 +33,11 @@ public class TeacherCareer extends TimeStampedEntity {
   private String title;
 
   @Convert(converter = YearMonthConverter.class)
-  private YearMonth start;
+  private YearMonth startAt;
 
   @Column(name = "\"end\"")
   @Convert(converter = YearMonthConverter.class)
-  private YearMonth end;
+  private YearMonth endAt;
 
   @ManyToOne
   @JoinColumn(name = "teacher_profile_id")
@@ -47,8 +47,8 @@ public class TeacherCareer extends TimeStampedEntity {
     return TeacherCareer.builder()
         .isRepresentative(request.isRepresentative())
         .title(request.getTitle())
-        .start(request.getStart())
-        .end(request.getEnd())
+        .startAt(request.getStart())
+        .endAt(request.getEnd())
         .build();
   }
 
