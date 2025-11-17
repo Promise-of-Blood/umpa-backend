@@ -6,13 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,8 @@ import promiseofblood.umpabackend.application.command.CreateLessonServicePostCom
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand.CreateLessonCurriculumCommand;
 import promiseofblood.umpabackend.application.query.RetrieveLessonServicePostQuery;
 import promiseofblood.umpabackend.application.service.LessonService;
+import promiseofblood.umpabackend.application.service.ServiceBoardService;
+import promiseofblood.umpabackend.application.service.ServicePostLikeService;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateLessonServicePostRequest;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
@@ -35,6 +40,8 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostR
 public class LessonServiceController {
 
   private final LessonService lessonService;
+  private final ServiceBoardService serviceBoardService;
+  private final ServicePostLikeService servicePostLikeService;
 
   @Tag(name = "서비스 관리 API(레슨)")
   @PostMapping(value = "/lesson", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -91,5 +98,41 @@ public class LessonServiceController {
     var lessonServicePost = lessonService.retrieveLessonServicePost(query);
 
     return ResponseEntity.ok(lessonServicePost);
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @PostMapping(path = "/{id}/likes")
+  public ResponseEntity<Void> addLike(
+      @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails userDetails) {
+
+    servicePostLikeService.likeServicePost(userDetails.getUsername(), id);
+    return ResponseEntity.status(HttpStatus.CREATED).build();
+  }
+
+  @PreAuthorize("isAuthenticated()")
+  @DeleteMapping(path = "/{id}/likes")
+  public ResponseEntity<Void> unlikeServicePost(
+      @AuthenticationPrincipal SecurityUserDetails userDetails, @PathVariable Long id) {
+
+    servicePostLikeService.unlikeServicePost(userDetails.getUsername(), id);
+    return ResponseEntity.noContent().build();
+  }
+
+  @PatchMapping(path = "/{id}/pause")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<Void> pauseServicePost(
+      @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    serviceBoardService.pauseServicePost(id, securityUserDetails.getUsername());
+    return ResponseEntity.ok().build();
+  }
+
+  @PatchMapping(path = "/{id}/publish")
+  @PreAuthorize("isAuthenticated()")
+  public ResponseEntity<Void> publishServicePost(
+      @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
+
+    serviceBoardService.publishServicePost(id, securityUserDetails.getUsername());
+    return ResponseEntity.ok().build();
   }
 }
