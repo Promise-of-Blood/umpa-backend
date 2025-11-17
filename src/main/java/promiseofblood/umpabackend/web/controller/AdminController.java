@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import promiseofblood.umpabackend.application.command.DeleteUserCommand;
 import promiseofblood.umpabackend.application.service.UserService;
 import promiseofblood.umpabackend.web.schema.request.DeleteUserRequest;
 import promiseofblood.umpabackend.web.schema.request.RegisterByLoginIdPasswordWithRoleRequest;
@@ -50,7 +49,6 @@ public class AdminController {
   public void deleteUser(
       @PathVariable String loginId, @RequestBody DeleteUserRequest deleteUserRequest) {
 
-    var command = new DeleteUserCommand(loginId, deleteUserRequest.getIsHardDelete());
-    userService.deleteUser(command);
+    userService.deleteUser(loginId, deleteUserRequest.getIsHardDelete());
   }
 }

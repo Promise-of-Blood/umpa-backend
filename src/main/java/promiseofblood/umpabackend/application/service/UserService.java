@@ -7,7 +7,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import promiseofblood.umpabackend.application.command.DeleteUserCommand;
 import promiseofblood.umpabackend.application.exception.RegistrationException;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
 import promiseofblood.umpabackend.application.exception.UnauthorizedException;
@@ -85,12 +84,12 @@ public class UserService {
   }
 
   @Transactional
-  public void deleteUser(DeleteUserCommand command) {
+  public void deleteUser(String loginId, boolean isHardDelete) {
     User user =
         userRepository
-            .findByLoginId(command.getLoginId())
+            .findByLoginId(loginId)
             .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다."));
-    if (command.isHardDelete()) {
+    if (isHardDelete) {
       userRepository.delete(user);
     } else {
       user.withdraw();
