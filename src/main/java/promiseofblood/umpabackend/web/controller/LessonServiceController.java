@@ -25,7 +25,7 @@ import promiseofblood.umpabackend.application.command.CreateLessonServicePostCom
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand.CreateLessonCurriculumCommand;
 import promiseofblood.umpabackend.application.query.RetrieveLessonServicePostQuery;
 import promiseofblood.umpabackend.application.service.LessonService;
-import promiseofblood.umpabackend.application.service.ServiceBoardService;
+import promiseofblood.umpabackend.application.service.ServicePostManageService;
 import promiseofblood.umpabackend.application.service.ServicePostLikeService;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateLessonServicePostRequest;
@@ -40,7 +40,7 @@ import promiseofblood.umpabackend.web.schema.response.RetrieveLessonServicePostR
 public class LessonServiceController {
 
   private final LessonService lessonService;
-  private final ServiceBoardService serviceBoardService;
+  private final ServicePostManageService servicePostManageService;
   private final ServicePostLikeService servicePostLikeService;
 
   @Tag(name = "서비스 관리 API(레슨)")
@@ -123,7 +123,7 @@ public class LessonServiceController {
   public ResponseEntity<Void> pauseServicePost(
       @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
-    serviceBoardService.pauseServicePost(id, securityUserDetails.getUsername());
+    servicePostManageService.pauseServicePost(id, securityUserDetails.getUsername());
     return ResponseEntity.ok().build();
   }
 
@@ -132,7 +132,7 @@ public class LessonServiceController {
   public ResponseEntity<Void> publishServicePost(
       @PathVariable Long id, @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
-    serviceBoardService.publishServicePost(id, securityUserDetails.getUsername());
+    servicePostManageService.publishServicePost(id, securityUserDetails.getUsername());
     return ResponseEntity.ok().build();
   }
 }

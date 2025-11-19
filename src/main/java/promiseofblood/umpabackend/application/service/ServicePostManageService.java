@@ -10,7 +10,7 @@ import promiseofblood.umpabackend.domain.repository.ServicePostRepository;
 
 @Service
 @RequiredArgsConstructor
-public class ServiceBoardService {
+public class ServicePostManageService {
 
   private final ServicePostRepository servicePostRepository;
 
