@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand;
 import promiseofblood.umpabackend.application.exception.ResourceNotFoundException;
-import promiseofblood.umpabackend.application.query.RetrieveLessonServicePostQuery;
 import promiseofblood.umpabackend.domain.entity.LessonCurriculum;
 import promiseofblood.umpabackend.domain.entity.LessonServicePost;
 import promiseofblood.umpabackend.domain.entity.User;
@@ -86,11 +85,10 @@ public class LessonService {
   }
 
   @Transactional(readOnly = true)
-  public RetrieveLessonServicePostResponse retrieveLessonServicePost(
-      RetrieveLessonServicePostQuery query) {
+  public RetrieveLessonServicePostResponse retrieveLessonServicePost(Long postId) {
     LessonServicePost lessonServicePost =
         lessonServicePostRepository
-            .findById(query.id())
+            .findById(postId)
             .orElseThrow(() -> new ResourceNotFoundException("레슨 서비스 게시글을 찾을 수 없습니다."));
 
     return RetrieveLessonServicePostResponse.of(lessonServicePost);

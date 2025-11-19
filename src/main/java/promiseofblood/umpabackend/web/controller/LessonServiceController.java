@@ -23,10 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand;
 import promiseofblood.umpabackend.application.command.CreateLessonServicePostCommand.CreateLessonCurriculumCommand;
-import promiseofblood.umpabackend.application.query.RetrieveLessonServicePostQuery;
 import promiseofblood.umpabackend.application.service.LessonService;
-import promiseofblood.umpabackend.application.service.ServicePostManageService;
 import promiseofblood.umpabackend.application.service.ServicePostLikeService;
+import promiseofblood.umpabackend.application.service.ServicePostManageService;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateLessonServicePostRequest;
 import promiseofblood.umpabackend.web.schema.response.ApiResponse.PaginatedResponse;
@@ -94,8 +93,7 @@ public class LessonServiceController {
   public ResponseEntity<RetrieveLessonServicePostResponse> retrieveLessonServicePost(
       @PathVariable Long id) {
 
-    var query = new RetrieveLessonServicePostQuery(id);
-    var lessonServicePost = lessonService.retrieveLessonServicePost(query);
+    var lessonServicePost = lessonService.retrieveLessonServicePost(id);
 
     return ResponseEntity.ok(lessonServicePost);
   }
