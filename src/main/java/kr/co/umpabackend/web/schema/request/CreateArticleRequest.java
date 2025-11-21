@@ -2,6 +2,7 @@ package kr.co.umpabackend.web.schema.request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import kr.co.umpabackend.domain.vo.ArticleStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +20,5 @@ public class CreateArticleRequest {
   private final String content;
 
   @Schema(description = "아티클 상태", example = "DRAFT")
-  @NotBlank(message = "상태는 필수입니다")
-  private final ArticleStatus status;
+  @NotNull(message = "상태는 필수입니다") private final ArticleStatus status;
 }
