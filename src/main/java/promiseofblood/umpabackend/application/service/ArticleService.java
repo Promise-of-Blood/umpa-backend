@@ -15,8 +15,8 @@ import promiseofblood.umpabackend.domain.vo.ArticleStatus;
 import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.web.schema.request.CreateArticleRequest;
 import promiseofblood.umpabackend.web.schema.request.UpdateArticleRequest;
-import promiseofblood.umpabackend.web.schema.response.ArticleDetailResponse;
-import promiseofblood.umpabackend.web.schema.response.ArticleSummaryResponse;
+import promiseofblood.umpabackend.web.schema.response.ListArticleResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveArticleResponse;
 
 @Slf4j
 @Service
@@ -26,7 +26,7 @@ public class ArticleService {
   private final ArticleRepository articleRepository;
 
   @Transactional
-  public ArticleDetailResponse createArticle(CreateArticleRequest request, User user) {
+  public RetrieveArticleResponse createArticle(CreateArticleRequest request, User user) {
     Article article =
         Article.builder()
             .title(request.getTitle())
@@ -48,7 +48,7 @@ public class ArticleService {
   }
 
   @Transactional
-  public ArticleDetailResponse updateArticle(
+  public RetrieveArticleResponse updateArticle(
       Long articleId, UpdateArticleRequest request, User user) {
     Article article =
         articleRepository
@@ -85,7 +85,7 @@ public class ArticleService {
   }
 
   @Transactional
-  public ArticleDetailResponse getArticle(Long articleId) {
+  public RetrieveArticleResponse getArticle(Long articleId) {
     Article article =
         articleRepository
             .findById(articleId)
@@ -106,7 +106,7 @@ public class ArticleService {
   }
 
   @Transactional(readOnly = true)
-  public Page<ArticleSummaryResponse> getArticles(Pageable pageable) {
+  public Page<ListArticleResponse> getArticles(Pageable pageable) {
     Page<Article> articles =
         articleRepository.findAllByIsDeletedFalseAndStatusOrderByCreatedAtDesc(
             ArticleStatus.PUBLISHED, pageable);
@@ -123,8 +123,8 @@ public class ArticleService {
     }
   }
 
-  private ArticleDetailResponse toDetailResponse(Article article) {
-    return new ArticleDetailResponse(
+  private RetrieveArticleResponse toDetailResponse(Article article) {
+    return new RetrieveArticleResponse(
         article.getId(),
         article.getTitle(),
         article.getContent(),
@@ -134,8 +134,8 @@ public class ArticleService {
         article.getCreatedAt());
   }
 
-  private ArticleSummaryResponse toSummaryResponse(Article article) {
-    return new ArticleSummaryResponse(
+  private ListArticleResponse toSummaryResponse(Article article) {
+    return new ListArticleResponse(
         article.getId(),
         article.getTitle(),
         article.getAuthor().getUsername().getValue(),

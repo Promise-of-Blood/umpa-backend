@@ -7,7 +7,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ArticleSummaryResponse {
+public class ListArticleResponse {
 
   @Schema(description = "아티클 ID", example = "1")
   private Long id;

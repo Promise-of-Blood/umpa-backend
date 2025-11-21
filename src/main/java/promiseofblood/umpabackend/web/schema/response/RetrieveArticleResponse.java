@@ -8,7 +8,7 @@ import promiseofblood.umpabackend.domain.vo.ArticleStatus;
 
 @Getter
 @AllArgsConstructor
-public class ArticleDetailResponse {
+public class RetrieveArticleResponse {
 
   @Schema(description = "아티클 ID", example = "1")
   private Long id;

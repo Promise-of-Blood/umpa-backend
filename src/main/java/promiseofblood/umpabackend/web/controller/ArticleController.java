@@ -26,8 +26,8 @@ import promiseofblood.umpabackend.domain.repository.UserRepository;
 import promiseofblood.umpabackend.infrastructure.security.SecurityUserDetails;
 import promiseofblood.umpabackend.web.schema.request.CreateArticleRequest;
 import promiseofblood.umpabackend.web.schema.request.UpdateArticleRequest;
-import promiseofblood.umpabackend.web.schema.response.ArticleDetailResponse;
-import promiseofblood.umpabackend.web.schema.response.ArticleSummaryResponse;
+import promiseofblood.umpabackend.web.schema.response.ListArticleResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveArticleResponse;
 
 @RestController
 @RequestMapping("/api/v1/articles")
@@ -41,12 +41,12 @@ public class ArticleController {
   @PostMapping
   @PreAuthorize("hasRole('ADMIN')")
   @Operation(summary = "아티클 생성", description = "새로운 아티클을 생성합니다. (ADMIN 권한 필요)")
-  public ResponseEntity<ArticleDetailResponse> createArticle(
+  public ResponseEntity<RetrieveArticleResponse> createArticle(
       @Valid @RequestBody CreateArticleRequest request,
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
     User user = getUserFromSecurityDetails(securityUserDetails);
-    ArticleDetailResponse response = articleService.createArticle(request, user);
+    RetrieveArticleResponse response = articleService.createArticle(request, user);
 
     return ResponseEntity.status(201).body(response);
   }
@@ -54,13 +54,13 @@ public class ArticleController {
   @PatchMapping("/{articleId}")
   @PreAuthorize("hasRole('ADMIN')")
   @Operation(summary = "아티클 수정", description = "기존 아티클을 수정합니다. (ADMIN 권한 필요)")
-  public ResponseEntity<ArticleDetailResponse> updateArticle(
+  public ResponseEntity<RetrieveArticleResponse> updateArticle(
       @PathVariable Long articleId,
       @RequestBody UpdateArticleRequest request,
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails) {
 
     User user = getUserFromSecurityDetails(securityUserDetails);
-    ArticleDetailResponse response = articleService.updateArticle(articleId, request, user);
+    RetrieveArticleResponse response = articleService.updateArticle(articleId, request, user);
 
     return ResponseEntity.ok(response);
   }
@@ -80,20 +80,20 @@ public class ArticleController {
 
   @GetMapping("/{articleId}")
   @Operation(summary = "아티클 상세 조회", description = "아티클 상세 정보를 조회합니다. (전체 허용)")
-  public ResponseEntity<ArticleDetailResponse> getArticle(@PathVariable Long articleId) {
+  public ResponseEntity<RetrieveArticleResponse> getArticle(@PathVariable Long articleId) {
 
-    ArticleDetailResponse response = articleService.getArticle(articleId);
+    RetrieveArticleResponse response = articleService.getArticle(articleId);
 
     return ResponseEntity.ok(response);
   }
 
   @GetMapping
   @Operation(summary = "아티클 목록 조회", description = "발행된 아티클 목록을 페이징하여 조회합니다. (전체 허용)")
-  public ResponseEntity<Page<ArticleSummaryResponse>> getArticles(
+  public ResponseEntity<Page<ListArticleResponse>> getArticles(
       @PageableDefault(size = 10, sort = "createdAt", direction = Sort.Direction.DESC)
           Pageable pageable) {
 
-    Page<ArticleSummaryResponse> response = articleService.getArticles(pageable);
+    Page<ListArticleResponse> response = articleService.getArticles(pageable);
 
     return ResponseEntity.ok(response);
   }

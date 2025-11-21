@@ -28,8 +28,8 @@ import promiseofblood.umpabackend.domain.vo.Role;
 import promiseofblood.umpabackend.domain.vo.Username;
 import promiseofblood.umpabackend.web.schema.request.CreateArticleRequest;
 import promiseofblood.umpabackend.web.schema.request.UpdateArticleRequest;
-import promiseofblood.umpabackend.web.schema.response.ArticleDetailResponse;
-import promiseofblood.umpabackend.web.schema.response.ArticleSummaryResponse;
+import promiseofblood.umpabackend.web.schema.response.ListArticleResponse;
+import promiseofblood.umpabackend.web.schema.response.RetrieveArticleResponse;
 
 @ExtendWith(MockitoExtension.class)
 class ArticleServiceTest {
@@ -91,7 +91,7 @@ class ArticleServiceTest {
     when(articleRepository.save(any(Article.class))).thenReturn(savedArticle);
 
     // when
-    ArticleDetailResponse response = articleService.createArticle(request, testUser);
+    RetrieveArticleResponse response = articleService.createArticle(request, testUser);
 
     // then
     assertThat(response.getTitle()).isEqualTo("New Article");
@@ -110,7 +110,7 @@ class ArticleServiceTest {
     when(articleRepository.findById(1L)).thenReturn(Optional.of(testArticle));
 
     // when
-    ArticleDetailResponse response = articleService.updateArticle(1L, request, testUser);
+    RetrieveArticleResponse response = articleService.updateArticle(1L, request, testUser);
 
     // then
     assertThat(response.getTitle()).isEqualTo("Updated Title");
@@ -127,7 +127,7 @@ class ArticleServiceTest {
     when(articleRepository.findById(1L)).thenReturn(Optional.of(testArticle));
 
     // when
-    ArticleDetailResponse response = articleService.updateArticle(1L, request, adminUser);
+    RetrieveArticleResponse response = articleService.updateArticle(1L, request, adminUser);
 
     // then
     assertThat(response.getTitle()).isEqualTo("Admin Updated");
@@ -183,7 +183,7 @@ class ArticleServiceTest {
     when(articleRepository.findById(1L)).thenReturn(Optional.of(publishedArticle));
 
     // when
-    ArticleDetailResponse response = articleService.getArticle(1L);
+    RetrieveArticleResponse response = articleService.getArticle(1L);
 
     // then
     assertThat(response.getViewCount()).isEqualTo(6L);
@@ -222,7 +222,7 @@ class ArticleServiceTest {
         .thenReturn(articlePage);
 
     // when
-    Page<ArticleSummaryResponse> response = articleService.getArticles(pageable);
+    Page<ListArticleResponse> response = articleService.getArticles(pageable);
 
     // then
     assertThat(response.getTotalElements()).isEqualTo(1);
