@@ -31,18 +31,12 @@ public class ArticleService {
         Article.builder()
             .title(request.getTitle())
             .content(request.getContent())
-            .status(ArticleStatus.DRAFT)
+            .status(request.getStatus())
             .author(user)
             .viewCount(0L)
             .isDeleted(false)
             .build();
-
     Article saved = articleRepository.save(article);
-    log.info(
-        "Article created: id={}, title={}, author={}",
-        saved.getId(),
-        saved.getTitle(),
-        user.getLoginId());
 
     return toDetailResponse(saved);
   }
