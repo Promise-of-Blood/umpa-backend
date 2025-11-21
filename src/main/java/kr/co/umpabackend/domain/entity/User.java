@@ -1,0 +1,141 @@
+package kr.co.umpabackend.domain.entity;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import kr.co.umpabackend.domain.entity.abs.TimeStampedEntity;
+import kr.co.umpabackend.domain.vo.Gender;
+import kr.co.umpabackend.domain.vo.ProfileType;
+import kr.co.umpabackend.domain.vo.Role;
+import kr.co.umpabackend.domain.vo.UserStatus;
+import kr.co.umpabackend.domain.vo.Username;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+
+@Entity
+@Getter
+@SuperBuilder
+@Table(name = "users")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User extends TimeStampedEntity {
+
+  // 로그인용 ID, 비밀번호(일반 회원가입)
+  @Column(nullable = false, unique = true)
+  private String loginId;
+
+  private String password;
+
+  // 회원 상태, 역할
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private UserStatus userStatus;
+
+  @Enumerated(EnumType.STRING)
+  @Column(nullable = false)
+  private Role role;
+
+  // 닉네임, 성별, 프로필사진
+  @Embedded private Username username;
+
+  @Enumerated(EnumType.STRING)
+  private Gender gender;
+
+  private String profileImageUrl;
+
+  // 학생 프로필, 선생님 프로필
+  @Enumerated(EnumType.STRING)
+  private ProfileType profileType;
+
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "student_profile_id")
+  private StudentProfile studentProfile;
+
+  @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JoinColumn(name = "teacher_profile_id")
+  private TeacherProfile teacherProfile;
+
+  public static User register(
+      String loginId,
+      String password,
+      Gender gender,
+      UserStatus userStatus,
+      Role role,
+      String username,
+      ProfileType profileType,
+      String profileImageUrl) {
+
+    return User.builder()
+        .loginId(loginId)
+        .password(password)
+        .gender(gender)
+        .userStatus(userStatus)
+        .role(role)
+        .username(new Username(username))
+        .profileType(profileType)
+        .profileImageUrl(profileImageUrl)
+        .build();
+  }
+
+  public static User register(
+      String loginId,
+      Gender gender,
+      UserStatus userStatus,
+      Role role,
+      String username,
+      ProfileType profileType,
+      String profileImageUrl) {
+
+    return User.builder()
+        .loginId(loginId)
+        .gender(gender)
+        .userStatus(userStatus)
+        .role(role)
+        .username(new Username(username))
+        .profileType(profileType)
+        .profileImageUrl(profileImageUrl)
+        .build();
+  }
+
+  public void patchStudentProfile(StudentProfile studentProfile) {
+    this.studentProfile = studentProfile;
+  }
+
+  public void patchTeacherProfile(TeacherProfile teacherProfile) {
+    this.teacherProfile = teacherProfile;
+
+    if (this.teacherProfile.isProfileComplete()) {
+      this.userStatus = UserStatus.ACTIVE;
+    } else {
+      this.userStatus = UserStatus.PENDING;
+    }
+  }
+
+  public void patchDefaultProfile(
+      String username, Gender gender, String profileImageUrl, ProfileType profileType) {
+    if (username != null) {
+      this.username = new Username(username);
+    }
+    if (gender != null) {
+      this.gender = gender;
+    }
+    if (profileImageUrl != null) {
+      this.profileImageUrl = profileImageUrl;
+    }
+    if (profileType != null) {
+      this.profileType = profileType;
+    }
+  }
+
+  public void withdraw() {
+    this.userStatus = UserStatus.WITHDRAWN;
+  }
+}
