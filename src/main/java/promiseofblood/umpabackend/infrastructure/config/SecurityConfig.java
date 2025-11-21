@@ -2,6 +2,7 @@ package promiseofblood.umpabackend.infrastructure.config;
 
 import static org.springframework.http.HttpMethod.DELETE;
 import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.PATCH;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
 
@@ -85,6 +86,15 @@ public class SecurityConfig {
                 .authenticated()
                 .requestMatchers(DELETE, "/api/v1/services/**")
                 .authenticated()
+                // 아티클 API 접근 제어 - GET 요청은 모두 허용, POST/PATCH/DELETE는 ADMIN만 가능
+                .requestMatchers(GET, "/api/v1/articles/**")
+                .permitAll()
+                .requestMatchers(POST, "/api/v1/articles/**")
+                .hasRole("ADMIN")
+                .requestMatchers(PATCH, "/api/v1/articles/**")
+                .hasRole("ADMIN")
+                .requestMatchers(DELETE, "/api/v1/articles/**")
+                .hasRole("ADMIN")
                 // 어드민 api는 인증되어야지 가능함
                 .requestMatchers("/api/v1/admin/users/register")
                 .authenticated()
