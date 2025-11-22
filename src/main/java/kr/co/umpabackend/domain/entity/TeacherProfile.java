@@ -1,0 +1,84 @@
+package kr.co.umpabackend.domain.entity;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
+import kr.co.umpabackend.domain.entity.abs.TimeStampedEntity;
+import kr.co.umpabackend.domain.vo.Major;
+import kr.co.umpabackend.web.schema.request.PatchTeacherProfileRequest;
+import kr.co.umpabackend.web.schema.request.PatchTeacherProfileRequest.TeacherCareerRequest;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.experimental.SuperBuilder;
+
+@Entity
+@Getter
+@Setter
+@SuperBuilder
+@Table(name = "teacher_profiles")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class TeacherProfile extends TimeStampedEntity {
+
+  private String keyphrase;
+
+  private String description;
+
+  @Enumerated(EnumType.STRING)
+  private Major major;
+
+  @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<TeacherCareer> careers;
+
+  @OneToMany(mappedBy = "teacherProfile", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<TeacherLink> links;
+
+  public static TeacherProfile empty() {
+    var teacherProfile = new TeacherProfile();
+    teacherProfile.careers = new ArrayList<>();
+    teacherProfile.links = new ArrayList<>();
+    return teacherProfile;
+  }
+
+  public boolean isProfileComplete() {
+    return description != null
+        && !description.isEmpty()
+        && major != null
+        && careers != null
+        && !careers.isEmpty();
+  }
+
+  public void update(PatchTeacherProfileRequest request) {
+    if (request.getKeyphrase() != null) {
+      this.keyphrase = request.getKeyphrase();
+    }
+    if (request.getDescription() != null) {
+      this.description = request.getDescription();
+    }
+    if (request.getMajor() != null) {
+      this.major = request.getMajor();
+    }
+    if (request.getCareers() != null) {
+      this.careers.clear();
+      for (TeacherCareerRequest careerRequest : request.getCareers()) {
+        TeacherCareer career = TeacherCareer.from(careerRequest);
+        this.careers.add(career);
+        career.setTeacherProfile(this);
+      }
+    }
+    if (request.getLinks() != null) {
+      this.links.clear();
+      for (String link : request.getLinks()) {
+        TeacherLink teacherLink = TeacherLink.from(link);
+        this.links.add(teacherLink);
+        teacherLink.setTeacherProfile(this);
+      }
+    }
+  }
+}
