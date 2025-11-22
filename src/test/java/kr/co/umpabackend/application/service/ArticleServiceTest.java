@@ -76,7 +76,8 @@ class ArticleServiceTest {
   @DisplayName("아티클 생성 - 성공")
   void createArticle_Success() {
     // given
-    CreateArticleRequest request = new CreateArticleRequest("New Article", "New Content");
+    CreateArticleRequest request =
+        new CreateArticleRequest("New Article", "New Content", ArticleStatus.PUBLISHED);
     Article savedArticle =
         Article.builder()
             .id(1L)
