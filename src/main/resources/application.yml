@@ -1,7 +1,6 @@
 spring:
   application:
     name: umpa-backend
-
   jpa:
     hibernate:
       ddl-auto: validate
@@ -13,29 +12,34 @@ spring:
         format_sql: false
     open-in-view: false
 
-springdoc:
+  cloud:
+    aws:
+      credentials:
+        access-key: ${STORAGE_S3_CLIENT_ID}
+        secret-key: ${STORAGE_S3_CLIENT_SECRET}
+      region:
+        static: ap-northeast-2
 
+springdoc:
   api-docs:
     path: /api/docs/openapi-json
     version: openapi_3_0
-
   swagger-ui:
     path: /api/docs
     layout: BaseLayout
     tags-sorter: alpha
     operations-sorter: alpha
+    persist-authorization: true
 
 ---
 
 spring:
   config.activate.on-profile: prod
-
   jpa:
     show-sql: false
     properties:
       hibernate:
         show_sql: false
-
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -84,8 +88,8 @@ spring:
 
 jwt:
   secret-key: ${JWT_SECRET_KEY}
-  access-token-expiration: 300000
-  refresh-token-expiration: 3600000
+  access-token-expiration: 3600000
+  refresh-token-expiration: 604800000
 
 oauth2:
   providers:
