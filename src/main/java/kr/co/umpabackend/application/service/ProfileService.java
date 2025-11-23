@@ -4,6 +4,7 @@ import kr.co.umpabackend.domain.entity.StudentProfile;
 import kr.co.umpabackend.domain.entity.TeacherProfile;
 import kr.co.umpabackend.domain.entity.User;
 import kr.co.umpabackend.domain.repository.UserRepository;
+import kr.co.umpabackend.domain.vo.FileRole;
 import kr.co.umpabackend.web.schema.request.PatchDefaultProfileRequest;
 import kr.co.umpabackend.web.schema.request.PatchStudentProfileRequest;
 import kr.co.umpabackend.web.schema.request.PatchTeacherProfileRequest;
@@ -91,6 +92,7 @@ public class ProfileService {
       return null;
     }
 
-    return storageService.store(profileImage, "users", loginId, "default-profile");
+    String path = storageService.upload(profileImage, FileRole.USER_PROFILE);
+    return storageService.getFileUrl(path);
   }
 }
