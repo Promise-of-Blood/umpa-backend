@@ -2,10 +2,6 @@ package kr.co.umpabackend.web.controller;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.Min;
-import java.util.ArrayList;
-import java.util.List;
-import kr.co.umpabackend.application.command.CreateLessonServicePostCommand;
-import kr.co.umpabackend.application.command.CreateLessonServicePostCommand.CreateLessonCurriculumCommand;
 import kr.co.umpabackend.application.service.LessonService;
 import kr.co.umpabackend.application.service.ServicePostLikeService;
 import kr.co.umpabackend.application.service.ServicePostManageService;
@@ -49,31 +45,7 @@ public class LessonServiceController {
       @AuthenticationPrincipal SecurityUserDetails securityUserDetails,
       @Validated @ModelAttribute CreateLessonServicePostRequest request) {
 
-    List<CreateLessonCurriculumCommand> curriculumCommands = new ArrayList<>();
-    for (String oneLineValue : request.getCurriculums()) {
-      curriculumCommands.add(CreateLessonCurriculumCommand.of(oneLineValue));
-    }
-
-    CreateLessonServicePostCommand command =
-        CreateLessonServicePostCommand.builder()
-            .loginId(securityUserDetails.getLoginId())
-            .thumbnailImage(request.getThumbnailImage())
-            .title(request.getTitle())
-            .description(request.getDescription())
-            .serviceCostValue(request.getCost())
-            .serviceCostUnit("시간")
-            .subject(request.getSubject())
-            .availableRegions(request.getAvailableRegions())
-            .availableWeekDays(request.getAvailableWeekDays())
-            .lessonStyle(request.getLessonStyle())
-            .isDemoLessonProvided(request.getIsDemoLessonProvided())
-            .demoLessonCost(request.getDemoLessonCost())
-            .curriculums(curriculumCommands)
-            .recommendedTargets(request.getRecommendedTargets())
-            .studioPhotos(request.getStudioPhotos())
-            .build();
-
-    var post = lessonService.createLessonServicePost(command);
+    var post = lessonService.createLessonServicePost(request, securityUserDetails.getLoginId());
 
     return ResponseEntity.ok(post);
   }

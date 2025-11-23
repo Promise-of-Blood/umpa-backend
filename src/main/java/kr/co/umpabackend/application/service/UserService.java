@@ -6,6 +6,7 @@ import kr.co.umpabackend.application.exception.ResourceNotFoundException;
 import kr.co.umpabackend.application.exception.UnauthorizedException;
 import kr.co.umpabackend.domain.entity.User;
 import kr.co.umpabackend.domain.repository.UserRepository;
+import kr.co.umpabackend.domain.vo.FileRole;
 import kr.co.umpabackend.domain.vo.UserStatus;
 import kr.co.umpabackend.domain.vo.Username;
 import kr.co.umpabackend.web.schema.request.RegisterByLoginIdPasswordWithRoleRequest;
@@ -17,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -41,11 +41,11 @@ public class UserService {
       throw new RegistrationException("이미 사용 중인 닉네임입니다.");
     }
 
-    String storedFilePath = null;
+    String profileImageUrl = null;
     if (adminRegisterRequest.profileImage() != null) {
-      storedFilePath =
-          this.uploadProfileImage(
-              adminRegisterRequest.loginId(), adminRegisterRequest.profileImage());
+      String path =
+          storageService.upload(adminRegisterRequest.profileImage(), FileRole.USER_PROFILE);
+      profileImageUrl = storageService.getFileUrl(path);
     }
 
     User user =
@@ -57,7 +57,7 @@ public class UserService {
             adminRegisterRequest.role(),
             adminRegisterRequest.username(),
             adminRegisterRequest.profileType(),
-            storedFilePath);
+            profileImageUrl);
 
     user = userRepository.save(user);
 
@@ -155,11 +155,6 @@ public class UserService {
   public boolean isUsernameDuplicated(Username username) {
 
     return !userRepository.existsByUsername(username);
-  }
-
-  public String uploadProfileImage(String loginId, MultipartFile profileImage) {
-
-    return storageService.store(profileImage, "users", loginId, "default-profile");
   }
 
   private boolean isLoginIdAvailable(String loginId) {

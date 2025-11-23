@@ -10,6 +10,7 @@ import kr.co.umpabackend.domain.entity.Oauth2User;
 import kr.co.umpabackend.domain.entity.User;
 import kr.co.umpabackend.domain.repository.Oauth2UserRepository;
 import kr.co.umpabackend.domain.repository.UserRepository;
+import kr.co.umpabackend.domain.vo.FileRole;
 import kr.co.umpabackend.domain.vo.Oauth2Provider;
 import kr.co.umpabackend.domain.vo.Role;
 import kr.co.umpabackend.domain.vo.UserStatus;
@@ -33,9 +34,9 @@ public class Oauth2Service {
   private final Oauth2StrategyFactory oauth2StrategyFactory;
   private final Oauth2ProvidersConfig oauth2ProvidersConfig;
   private final UserRepository userRepository;
-  private final UserService userService;
   private final Oauth2UserRepository oauth2UserRepository;
   private final JwtService jwtService;
+  private final StorageService storageService;
 
   @Transactional
   public LoginCompleteResponse registerOauth2User(
@@ -64,11 +65,12 @@ public class Oauth2Service {
 
     String loginId = oauth2ProfileResponse.getProviderUid();
 
-    // TODO 이 더러운 코드를 해결하기
-    String storedFilePath = null;
+    // TODO: 추후 기본 이미지로 교체
+    String profileImageUrl = null;
     if (oauth2RegisterRequest.getProfileImage() != null) {
-      storedFilePath =
-          userService.uploadProfileImage(loginId, oauth2RegisterRequest.getProfileImage());
+      String storedFilePath =
+          storageService.upload(oauth2RegisterRequest.getProfileImage(), FileRole.USER_PROFILE);
+      profileImageUrl = storageService.getFileUrl(storedFilePath);
     }
 
     User newUser =
@@ -79,7 +81,7 @@ public class Oauth2Service {
             Role.USER,
             oauth2RegisterRequest.getUsername(),
             oauth2RegisterRequest.getProfileType(),
-            storedFilePath);
+            profileImageUrl);
 
     User user = userRepository.save(newUser);
     newOauth2User.assignUserId(user.getId());

@@ -54,6 +54,8 @@ public class SecurityConfig {
     http.authorizeHttpRequests(
         (authorizeRequests) ->
             authorizeRequests
+                .requestMatchers("/api/v1/storage/**")
+                .permitAll()
                 // 정적 리소스 접근 허용
                 .requestMatchers("/static/**")
                 .permitAll()
